@@ -1,9 +1,20 @@
-# 文本按 LF 入库，各平台检出各自的行尾。
-# tools/deploy_host.py 用 read_bytes() 的 sha256 和 Nano 比对，
-# 因此同一台机器的工作树必须字节稳定；不强制 eol，避免重写整个工作树。
-* text=auto
+# 行尾统一为 LF。
+#
+# 建库时工作树是混的：149 个文件 LF、71 个 CRLF，同一目录里两种并存。
+# 这不能放任——tools/deploy_host.py 用 read_bytes() 的 sha256 与 Nano 的
+# sha256sum 比对，行尾一旦随检出环境变化，整批文件都会被判定为"已修改"。
+# 它同步的 47 个文件现在全是 LF，Nano 是 Linux，Python/JS/C 工具链在
+# Windows 下读 LF 无问题，所以 LF 作为唯一事实。
+#
+# 代价：首次检出会重写那 71 个 CRLF 文件，之后稳定。
+* text=auto eol=lf
 
-# 实测原始帧、规格书、固件产物：禁止任何转换
+# Windows 批处理必须 CRLF，cmd.exe 对 LF 的续行和标签处理不可靠
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# 实测原始帧、规格书、固件产物、截图：禁止任何转换
 *.bin  binary
 *.hex  binary
 *.axf  binary
@@ -11,3 +22,6 @@
 *.png  binary
 *.gz   binary
 *.zip  binary
+*.pyd  binary
+*.o    binary
+*.crf  binary
