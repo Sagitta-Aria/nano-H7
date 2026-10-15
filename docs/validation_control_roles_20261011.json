@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-11",
+  "issue": "Browser remains readonly after controller handover; identical roles broadcast to multiple pages; absent inbound browser lease",
+  "fix": "Per-page role events, 2-second browser heartbeat, 6-second expiry, explicit takeover queues STOP, old SSE cleanup cannot remove replacement",
+  "local_tests": "45 passed",
+  "nano_tests": "45 passed",
+  "browser": {
+    "url": "http://127.0.0.1:18776/",
+    "stable_single_controller": true,
+    "explicit_takeover": true,
+    "silent_controller_handover": true,
+    "per_page_roles": true,
+    "reload": true,
+    "armed": false,
+    "errors": []
+  },
+  "nano_browser": {
+    "url": "http://192.168.1.197:8770/",
+    "lease_stable": true,
+    "explicit_takeover": true,
+    "previous_page_readonly": true,
+    "h743_armed": false,
+    "h723_state": "streaming",
+    "automatic_enabled": true,
+    "errors": []
+  },
+  "sha256": {
+    "host/webserver.py": "4f68aa684e583a8fd5a928d1efe6436140e39a452c0e6ef4daaa6b6a4a6f388e",
+    "host/static/app.js": "4c1a26083d70b2d864ac14dc3c80d28c98413935e102d4323b998184464dd9be",
+    "host/static/index.html": "312c0140a68fa6e849589cabf47a54e319491ae6bce8987b4a9b882f90e0b7e8",
+    "tests/test_webapp.py": "f276c8f6287ea3f491539e7f9fc5353ff847e381ee60632ad39d3c78396e4bdf"
+  },
+  "service": {
+    "host": "1",
+    "service_active": "active",
+    "service_enabled": "enabled",
+    "linger": "Linger=yes",
+    "execstart": "ExecStart={ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 -u -m host.webserver --host 0.0.0.0 --port 8770 --no-browser --auto-devices ; ignore_errors=no ; start_time=[Sun 2026-10-11 17:57:48 CST] ; stop_time=[n/a] ; pid=8486 ; code=(null) ; status=0/0 }",
+    "navigation_sha256": "b303487ab542fccf772498bba3a6bfd85efc6bad8f341c6fe25fc88b227fd993",
+    "saved_pairing": {
+      "enabled": true,
+      "h743_uid": "3637333530335109002A003A",
+      "h723_uid": "002600483134510438373332"
+    },
+    "h743_port": "/dev/ttyUSB0",
+    "h723_port": "/dev/ttyACM0",
+    "automatic": {
+      "enabled": true,
+      "message": "自动连接：H743 已连接 · H723 已连接",
+      "h743_uid": "3637333530335109002A003A",
+      "h723_uid": "002600483134510438373332"
+    },
+    "armed": false,
+    "imu_state": "streaming",
+    "imu_rejected": 0
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "port": "COM39",
+  "baud": 115200,
+  "records": [
+    {
+      "second": 1,
+      "bytes": 0,
+      "hex": ""
+    },
+    {
+      "second": 2,
+      "bytes": 0,
+      "hex": ""
+    },
+    {
+      "second": 3,
+      "bytes": 0,
+      "hex": ""
+    },
+    {
+      "second": 4,
+      "bytes": 0,
+      "hex": ""
+    },
+    {
+      "second": 5,
+      "bytes": 0,
+      "hex": ""
+    },
+    {
+      "second": 6,
+      "bytes": 0,
+      "hex": ""
+    }
+  ]
+}

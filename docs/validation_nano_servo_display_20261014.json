@@ -1,0 +1,73 @@
+{
+  "backup": "/home/a/h743/backups/servo_display_20261014_190017",
+  "parameter_hashes": {
+    "device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699",
+    "auxiliary.json": "9d0614a934d13fae97b58879efa0dfc1322ae63d0b53681481783f1c7c3de1a3",
+    "navigation.json": "b303487ab542fccf772498bba3a6bfd85efc6bad8f341c6fe25fc88b227fd993"
+  },
+  "before": {
+    "link": "offline",
+    "armed": false,
+    "imu": "streaming",
+    "servo": {
+      "cmd": "SERVO_STAT",
+      "raw": "OK cmd=SERVO_STAT ch=1 angle=135.0 us=1500 on=1 pin=PH9 timer=TIM12_CH2 OK cmd=SERVO_STAT ch=2 angle=90.0 us=1500 on=1 pin=PH6 timer=TIM12_CH1"
+    },
+    "firmware": "0.2.16"
+  },
+  "service_before": "MainPID=1761\nExecMainStartTimestamp=Wed 2026-10-14 18:37:18 CST\nActiveState=active",
+  "service_after": "MainPID=5184\nExecMainStartTimestamp=Wed 2026-10-14 19:04:14 CST\nActiveState=active",
+  "parameters_unchanged": true,
+  "after": {
+    "link": "connected",
+    "armed": false,
+    "imu": "streaming",
+    "servo": {
+      "cmd": "SERVO_STAT",
+      "raw": "OK cmd=SERVO_STAT ch=1 angle=0.0 us=500 on=1 pin=PH9 timer=TIM12_CH2 OK cmd=SERVO_STAT ch=2 angle=120.0 us=1833 on=1 pin=PH6 timer=TIM12_CH1"
+    },
+    "firmware": "0.2.16",
+    "auto_devices": {
+      "enabled": true,
+      "message": "自动连接：H743 等待设备 / 重试握手 · H723 等待设备 / 重试握手",
+      "h743_uid": "3637333530335109002A003A",
+      "h723_uid": "002600483134510438373332"
+    }
+  },
+  "ports": [
+    "/dev/ttyUSB0",
+    "/dev/ttyACM0"
+  ],
+  "feature": "Host S1 PH6/180 home120; S2 PH9/270 home0; initialize per serial connection",
+  "validation": {
+    "nano_tests": 153,
+    "nano_test_seconds": 54.814,
+    "pty_stages": 3,
+    "updated_files": 7,
+    "verified_files": 46
+  },
+  "browser": {
+    "labels": {
+      "1": {
+        "heading": "舵机 S1 · 180°",
+        "pin": "PH6 · TIM12_CH1",
+        "target": "120"
+      },
+      "2": {
+        "heading": "舵机 S2 · 270°",
+        "pin": "PH9 · TIM12_CH2",
+        "target": "0"
+      }
+    },
+    "javascript_errors": [],
+    "commands": [],
+    "link": "connected",
+    "imu": "streaming",
+    "servo": {
+      "cmd": "SERVO_STAT",
+      "raw": "OK cmd=SERVO_STAT ch=1 angle=0.0 us=500 on=1 pin=PH9 timer=TIM12_CH2 OK cmd=SERVO_STAT ch=2 angle=120.0 us=1833 on=1 pin=PH6 timer=TIM12_CH1"
+    },
+    "desktop_mobile": true
+  },
+  "firmware_modified": false
+}

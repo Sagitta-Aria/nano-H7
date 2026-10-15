@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-14",
+  "firmware": "0.2.12",
+  "toolchain": "Keil ARM Compiler 5",
+  "python_tests": 246,
+  "python_result": "passed",
+  "python_seconds": 81.21,
+  "web_browser": "Edge/Playwright passed, isolated SIM only, 1440/760/390 px",
+  "tk_smoke": "passed, SIM only",
+  "frontend_checks": "navigation, turn, flow and app.js syntax passed",
+  "flashed": false,
+  "deployed": false,
+  "grid": {
+    "x": [
+      0,
+      14000,
+      28000
+    ],
+    "y": [
+      0,
+      14000,
+      28000
+    ]
+  },
+  "hashes": {
+    "firmware/src/navigation.c": "0d9052d2c0645d4a6ded43589b871843487e43c64edaa656b45e3d16929c7120",
+    "firmware/include/navigation.h": "5ca5f41f20fb9ccd5b5db4ba1302087284b55b75e0ca784e06b11019462ce9b3",
+    "firmware/src/main.c": "0222915f9cd5dd033c71f7986b3e83147fffea0a23bea2951cd8180a28c8746a",
+    "firmware/include/app_config.h": "283f430f8fbb9898336aea234b0968ed7d954ca4a1c5cb76fa866d1ac61c29a9",
+    "firmware/build/robot_h743.axf": "237bef5aeea3886dff16c676facccfff27e3e1abfccb613b64ee4b6e8ba28c32",
+    "firmware/build/robot_h743.hex": "a9ef87038ad1bf55219901c406ee0a477a4615855f24cc4acfd7078849ba4825",
+    "firmware/build/robot_h743.bin": "7cb355326432d0e12d85a4daccb708bfe414b66066605df66bd0a4b270904126",
+    "host/navigation.py": "e0787cd1db48a3b801e323c955de040221df532257807fab0de77a12f0a8d23d",
+    "host/navigation_grid.py": "2657bf21e045d2b8f61faa42874b14caddba6c07cf98697baf1b8a1980523aab",
+    "host/navigation.json": "83cb2b55487e5c6527192a8fc99b664cfd8840febc8d8394690befb75e07f989",
+    "host/navigation_sim.py": "97ab4446c3d68df74fe9946ff22f76f5370f8ade03e05e2919b87c759c24b18b",
+    "host/navigation_panel.py": "70ca3bfe1fe9dabfc00a985281c660c65aed37b1ad02df572429ca48b1a1a28f",
+    "host/static/app.js": "389f8301b84736429afc0ecfbe4da7ecf878e56d7db7612e095f48ff9b76d2f3",
+    "host/static/index.html": "9c8f9922c4ea3e0ef135f360ff67394290d86a8d68187116d6b09e9807380a32",
+    "host/webapp.py": "bbfd641d474202e07a987883ec2297affcd554931aa29c5e1df8f1520ed7ee97",
+    "host/simulator.py": "3b61aa627f30a0a5fca80983e423afb1e9dc752892ce3e7d03879aec8169e935",
+    "tools/deploy_host.py": "e1762b0682337e5e9cb456df8b0f23691cfa8fd7faea1b0eb3421089c338fb42",
+    "tests/test_navigation.py": "7a02294def4c85b5df1fd5b18a69c0e803b7252c4bb765be4d04fa8835d6cc33",
+    "tests/test_navigation_frontend.cjs": "369d255a369ceca17e3ccbce738da253382e9bdd5d560ded2dc8aa86d9d2d7ff",
+    "docs/NAVIGATION.md": "4d5519e91008f3e1cb96e16af084d270b4d24e5c6ba5f3326826073486ac23e6"
+  }
+}

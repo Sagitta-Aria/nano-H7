@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-14",
+  "user_authorization": "现在重启",
+  "nano_service": "h743-web.service",
+  "status": "active",
+  "old_pid": 1755,
+  "new_pid": 10764,
+  "start": "2026-10-14 17:24:27 CST",
+  "h743_link": "connected /dev/ttyUSB0",
+  "h723": "streaming",
+  "armed": false,
+  "operator_settings_hashes_unchanged": true,
+  "new_routes_present": true,
+  "firmware": "0.2.15",
+  "turn_precision_supported": false,
+  "hardware_motion_commands_sent": false,
+  "remaining_operator_setup": [
+    "M5 down_sign=0: confirm/apply direction while disarmed at top",
+    "M5 input bounds not applied",
+    "M6 referenced but configured=0: apply range",
+    "0.2.16 required for adjustable yaw tolerance"
+  ]
+}

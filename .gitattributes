@@ -1,0 +1,13 @@
+# 文本按 LF 入库，各平台检出各自的行尾。
+# tools/deploy_host.py 用 read_bytes() 的 sha256 和 Nano 比对，
+# 因此同一台机器的工作树必须字节稳定；不强制 eol，避免重写整个工作树。
+* text=auto
+
+# 实测原始帧、规格书、固件产物：禁止任何转换
+*.bin  binary
+*.hex  binary
+*.axf  binary
+*.pdf  binary
+*.png  binary
+*.gz   binary
+*.zip  binary

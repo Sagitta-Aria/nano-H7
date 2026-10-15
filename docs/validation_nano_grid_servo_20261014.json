@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-14",
+  "timezone": "Asia/Shanghai",
+  "target": "a@192.168.1.197",
+  "ssh_alias": "nano",
+  "application": "H743 Web grid navigation and servo pin swap",
+  "files_verified": 38,
+  "files_updated": 8,
+  "backup": "/home/a/h743/backups/web_grid_servo_20261014_143000",
+  "tests": {
+    "unit_tests": 124,
+    "passed": true,
+    "pty_stages": 3,
+    "pty_passed": true
+  },
+  "parameters_preserved": true,
+  "parameters_sha256": {
+    "device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699",
+    "auxiliary.json": "6a95269e6d03626a836feae784b15c68166cb51baf9690f8d0203d5629260619",
+    "navigation.json": "b303487ab542fccf772498bba3a6bfd85efc6bad8f341c6fe25fc88b227fd993"
+  },
+  "service": "ExecStart={ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 -u -m host.webserver --host 0.0.0.0 --port 8770 --no-browser --auto-devices ; ignore_errors=no ; start_time=[Wed 2026-10-14 14:32:14 CST] ; stop_time=[n/a] ; pid=6621 ; code=(null) ; status=0/0 }\nActiveState=active\nSubState=running\nActiveEnterTimestamp=Wed 2026-10-14 14:32:14 CST\n",
+  "browser": {
+    "url": "http://192.168.1.197:8770/",
+    "s1": "PH9 · TIM12_CH2",
+    "s2": "PH6 · TIM12_CH1",
+    "grid": {
+      "x": [
+        0,
+        14000,
+        28000
+      ],
+      "y": [
+        0,
+        14000,
+        28000
+      ]
+    },
+    "javascript_errors": [],
+    "device_commands": [],
+    "link": "offline",
+    "armed": false,
+    "imu_state": "offline",
+    "desktop_mobile": true
+  },
+  "hardware": {
+    "link": "offline",
+    "armed": false,
+    "firmware": null,
+    "nav_grid": null,
+    "imu_state": "offline"
+  },
+  "serial_ports_after_restart": [],
+  "flashed": false
+}

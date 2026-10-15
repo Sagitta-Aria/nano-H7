@@ -1,0 +1,79 @@
+{
+  "version": "0.2.15",
+  "toolchain": "Keil ARM Compiler 5 Cortex-M7",
+  "build": "passed",
+  "local_python": {
+    "passed": 273,
+    "seconds": 85.112
+  },
+  "new_regression_tests": 7,
+  "remote_python": {
+    "passed": 137,
+    "seconds": 54.613
+  },
+  "remote_pty_stages": 3,
+  "remote_hashes_verified": 40,
+  "remote_changed_files": 10,
+  "remote_service": {
+    "restart": false,
+    "pid_before": 1755,
+    "pid_after": 1755,
+    "start": "2026-10-14 14:35:14 CST",
+    "status": "active"
+  },
+  "operator_settings_unchanged": [
+    "auxiliary.json",
+    "navigation.json",
+    "device_links.json"
+  ],
+  "mapping": {
+    "S1": {
+      "pin": "PH9",
+      "timer": "TIM12_CH2",
+      "travel_degrees": 270
+    },
+    "S2": {
+      "pin": "PH6",
+      "timer": "TIM12_CH1",
+      "travel_degrees": 180
+    }
+  },
+  "turn": {
+    "tolerance_cd": 20,
+    "stable_ms": 300,
+    "kp_default": 20,
+    "kp_min": 0.01,
+    "kp_max": 200,
+    "speed_max": "task requested sps"
+  },
+  "auxiliary": "ACK matching axis/min/max before save; armed idle allowed; busy and current exclusion rejected",
+  "node_frontend": "passed: servo/turn and syntax",
+  "edge_browser": "SIM full servo commands, AUX save/apply and armed idle limits, P40.25 and <=0.2 degree completion, full mission; passed",
+  "tk_gui": "full SIM smoke passed",
+  "backup_local": "backups/control_fixes_20261014",
+  "backup_nano": "/home/a/h743/backups/control_fixes_20261014",
+  "hardware_flashed": false,
+  "hardware_commands_sent": false,
+  "physical_accuracy_verified": false,
+  "artifacts": {
+    "firmware/build/robot_h743.hex": {
+      "bytes": 100782,
+      "sha256": "3d48f1996d95e1dcdca712861a2c6dc652ae48aea770784742294f4d83893913"
+    },
+    "firmware/build/robot_h743.bin": {
+      "bytes": 35812,
+      "sha256": "f44aacf1dd093e70f736fdf0b98b9d4410002d7a56102727a7e6da34cfd846ba"
+    },
+    "firmware/build/robot_h743.axf": {
+      "bytes": 1349280,
+      "sha256": "768857fefe14c9694bbd14904062ca579731a835cce092815a8fe811fdbd5aaf"
+    }
+  },
+  "final_frontend_recheck": {
+    "local_python": 18,
+    "remote_python": 18,
+    "node": "passed",
+    "edge_browser": "passed; confirmed current turn move_id, bounds success status, 1440/390 chassis and 1440/760/390 auxiliary screenshots verified"
+  },
+  "frontend_ack_race": "Waiting text set before request; board confirmed saved status cannot be overwritten by a late HTTP response."
+}

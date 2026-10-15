@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd \"d:/stm32H7\"; find . -maxdepth 3 -type d | head -100)",
+      "Read(//d/stm32H7/**)"
+    ]
+  }
+}

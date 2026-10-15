@@ -1,0 +1,50 @@
+{
+  "backup": "/home/a/h743/backups/host_restart_button_20261014_203121",
+  "parameter_hashes": {
+    "device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699",
+    "auxiliary.json": "2a88671d9044f8e7a0c62000cf3bace836c3fd73f6915baace96a1845c7db0f2",
+    "navigation.json": "236156461803ab9214ef7999c808ed6fe07bea57025dea1cfa9a8eb33f45782b"
+  },
+  "before": {
+    "link": "connected",
+    "armed": false,
+    "imu": "streaming",
+    "firmware": "0.2.18"
+  },
+  "service_before": "MainPID=1770\nExecMainStartTimestamp=Wed 2026-10-14 20:23:54 CST\nActiveState=active",
+  "date": "2026-10-14",
+  "feature": "Host service restart button",
+  "nano_tests": {
+    "count": 158,
+    "seconds": 57.942,
+    "passed": true
+  },
+  "pty_stages_passed": 3,
+  "deployment": {
+    "copied_files": 4,
+    "sha256_verified": true
+  },
+  "browser": {
+    "cancel_sends_no_request": true,
+    "refusal_allows_retry": true,
+    "restart_waits_for_new_instance": true,
+    "automatic_reload": true,
+    "readonly_disabled": true,
+    "desktop_mobile": true,
+    "javascript_errors": []
+  },
+  "nano_browser": {
+    "button_present": true,
+    "viewport_widths": [
+      1440,
+      390
+    ],
+    "javascript_errors": [],
+    "hardware_commands_sent": 0,
+    "restart_requests_sent": 0
+  },
+  "service_restarted": false,
+  "activation_pending": true,
+  "pending_reason": "Real chassis was armed and four axes were moving; waiting for the operator to stop and disarm.",
+  "hardware_motion_commands_sent": false
+}

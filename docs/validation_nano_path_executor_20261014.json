@@ -1,0 +1,46 @@
+{
+  "version": "0.2.14",
+  "toolchain": "Keil ARM Compiler 5 Cortex-M7",
+  "build": "passed",
+  "local_python": {
+    "passed": 266,
+    "seconds": 87.113
+  },
+  "route_transaction_tests": 20,
+  "remote_python": {
+    "passed": 135,
+    "seconds": 54.773,
+    "warning": "Existing camera-reader shutdown ProcessLookupError occurred in test run; camera source unchanged."
+  },
+  "remote_pty_stages": 3,
+  "remote_hashes_verified": 39,
+  "remote_changed_files": 9,
+  "node_frontend": "passed",
+  "edge_browser": "complete SIM mission, 1440/760/390 layouts; passed",
+  "tk_gui": "full SIM smoke passed",
+  "backup_local": "backups/nano_path_executor_20261014",
+  "backup_nano": "/home/a/h743/backups/nano_path_executor_20261014",
+  "nano_service_restarted": false,
+  "restart_pending_reason": "User explicitly requested waiting until hardware debugging ends.",
+  "firmware_flashed": false,
+  "hardware_motion_sent": false,
+  "nano": {
+    "link": "connected",
+    "armed": true,
+    "firmware": "0.2.13",
+    "nav_path": null,
+    "navigation_state": "idle",
+    "imu_state": "streaming",
+    "service": "ActiveState=active\nSubState=running\nActiveEnterTimestamp=Wed 2026-10-14 14:35:14 CST\n",
+    "settings": {
+      "device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699",
+      "auxiliary.json": "26d08af08cfb14755138335a1a8a46f553f6eecaf34de244ad3edb505797797c",
+      "navigation.json": "b303487ab542fccf772498bba3a6bfd85efc6bad8f341c6fe25fc88b227fd993"
+    }
+  },
+  "firmware_hashes": {
+    "robot_h743.axf": "771d492d2042609df637deefa05679b7507cd0c01426b8f54b5f3ba0c8aee00f",
+    "robot_h743.bin": "521ffa8f85fbd635033d33452a7b72096bb0a6ed65d9ee0d66c006c47c358716",
+    "robot_h743.hex": "1febe9198b427dddb3f3516d741c8c924271a10a15cac9eb77afa15dd6599472"
+  }
+}

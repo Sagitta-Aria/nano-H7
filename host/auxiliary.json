@@ -1,0 +1,4 @@
+{
+  "5": {"min": 0, "max": 8000, "sps": 300, "accel": 1000, "step": 100, "presets": [0, 0]},
+  "6": {"min": 0, "max": 0, "sps": 300, "accel": 1000, "step": 100, "presets": [0, 0]}
+}

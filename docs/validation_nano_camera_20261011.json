@@ -1,0 +1,109 @@
+{
+  "before": {
+    "state": "ready",
+    "message": "Nano 摄像头已打开，点击“拍照”获取一帧。",
+    "device": "/dev/video0",
+    "label": "USB 2.0 Camera: HD USB Camera",
+    "requested": "640x480",
+    "width": 640,
+    "height": 480,
+    "fps": 120.10136452241716,
+    "sequence": 0
+  },
+  "idle": {
+    "state": "ready",
+    "message": "Nano 摄像头已打开，点击“拍照”获取一帧。",
+    "device": "/dev/video0",
+    "label": "USB 2.0 Camera: HD USB Camera",
+    "requested": "640x480",
+    "width": 640,
+    "height": 480,
+    "fps": 120.10136452241716,
+    "sequence": 0
+  },
+  "first": {
+    "state": "ready",
+    "message": "拍照完成，画面为这一帧，不会持续传输。",
+    "device": "/dev/video0",
+    "label": "USB 2.0 Camera: HD USB Camera",
+    "requested": "640x480",
+    "width": 640,
+    "height": 480,
+    "fps": 120.10136452241716,
+    "sequence": 1,
+    "taken_at": 1791713955.8192465
+  },
+  "second": {
+    "state": "ready",
+    "message": "拍照完成，画面为这一帧，不会持续传输。",
+    "device": "/dev/video0",
+    "label": "USB 2.0 Camera: HD USB Camera",
+    "requested": "1920x1080",
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "sequence": 2,
+    "taken_at": 1791713960.2288976
+  },
+  "closed": {
+    "state": "idle",
+    "message": "Nano 摄像头已关闭，设备已释放。"
+  },
+  "image": {
+    "width": 1920,
+    "height": 1080
+  },
+  "mirror": true,
+  "modes": [
+    "320x240",
+    "640x480",
+    "800x600",
+    "1024x768",
+    "1280x720",
+    "1280x1024",
+    "1920x1080"
+  ],
+  "board": {
+    "before": {
+      "cmd": "STAT",
+      "uptime_ms": "3007957",
+      "heap_free": "37496",
+      "heap_min": "37496",
+      "tasks": "4",
+      "stack_comm": "5416",
+      "stack_motion": "1936",
+      "stack_super": "1960",
+      "led": "0",
+      "armed": "0",
+      "rx": "1657947",
+      "rx_err": "0",
+      "tx_err": "0",
+      "bad": "0",
+      "replay": "0",
+      "timeout": "0",
+      "motion_fault": "0"
+    },
+    "after": {
+      "cmd": "STAT",
+      "uptime_ms": "3013127",
+      "heap_free": "37496",
+      "heap_min": "37496",
+      "tasks": "4",
+      "stack_comm": "5416",
+      "stack_motion": "1936",
+      "stack_super": "1960",
+      "led": "0",
+      "armed": "0",
+      "rx": "1662365",
+      "rx_err": "0",
+      "tx_err": "0",
+      "bad": "0",
+      "replay": "0",
+      "timeout": "0",
+      "motion_fault": "0"
+    },
+    "imu": "streaming"
+  },
+  "photo_requests": 2,
+  "uncaught_errors": []
+}

@@ -1,0 +1,13 @@
+[Unit]
+Description=H743 robot web console
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/h743
+ExecStart=/usr/bin/python3 -u -m host.webserver --host 0.0.0.0 --port 8770 --no-browser --auto-devices
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=default.target

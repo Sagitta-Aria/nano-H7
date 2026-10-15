@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-14",
+  "change": "Auxiliary disabled controls display exact readiness prerequisite; unsaved bounds gate matches existing movement validation.",
+  "read_only_live_findings": {
+    "firmware": "0.2.15",
+    "armed": true,
+    "M5": {
+      "down_sign": 0,
+      "board_min": 0,
+      "board_max": 8000,
+      "input_min": 0,
+      "input_max": 7200
+    },
+    "M6": {
+      "referenced": 1,
+      "configured": 0,
+      "position": 1200
+    }
+  },
+  "browser": "SIM unknown direction/unapplied range disabled reasons, save/apply, re-enabled moves, bounds and mobile layout passed",
+  "local_markup_tests": 16,
+  "remote_markup_tests": 16,
+  "remote_changed_files": 3,
+  "remote_files_hash_verified": "changed files verified",
+  "operator_settings": "unchanged hashes",
+  "service_restarted": false,
+  "hardware_commands_sent": false,
+  "service_pid": 1755,
+  "remote_backup": "/home/a/h743/backups/aux_readiness_20261014"
+}

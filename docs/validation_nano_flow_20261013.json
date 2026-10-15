@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-13",
+  "timezone": "Asia/Shanghai",
+  "target": "a@192.168.1.197",
+  "ssh_alias": "nano",
+  "application": "H743 Web optical-flow update v0.2.11",
+  "files_verified": 37,
+  "files_updated": 13,
+  "backup": "/home/a/h743/backups/web_flow_20261013_204037",
+  "python": "3.8.10",
+  "tests": {
+    "unit_tests": 124,
+    "passed": true,
+    "pty_stages": 3,
+    "pty_passed": true
+  },
+  "parameters_preserved": true,
+  "parameters_sha256": {
+    "device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699",
+    "auxiliary.json": "6a95269e6d03626a836feae784b15c68166cb51baf9690f8d0203d5629260619",
+    "navigation.json": "b303487ab542fccf772498bba3a6bfd85efc6bad8f341c6fe25fc88b227fd993"
+  },
+  "firmware_release": "/home/a/h743/releases/v0.2.11/",
+  "firmware_sha256": {
+    "robot_h743.bin": "1c0558400526dc0bceb2ada0f00b407020099f0731eb5920397e119a0541a55c",
+    "robot_h743.hex": "fff5651542daa74cee034af1177287c27c772c3fb2d94fb0dfa195341cfa4f9d"
+  },
+  "flashed": false,
+  "service": {
+    "name": "h743-web.service",
+    "active": true,
+    "enabled": true,
+    "auto_devices": true,
+    "restarted_at": "2026-10-13 20:44:15 +08:00"
+  },
+  "browser": {
+    "url": "http://192.168.1.197:8770/",
+    "desktop_mobile": true,
+    "javascript_errors": [],
+    "flow_panel_present": true,
+    "both_modes_present": true,
+    "device_commands_sent": false
+  },
+  "hardware": {
+    "link": "offline",
+    "imu_state": "offline",
+    "armed": false
+  },
+  "evidence": {
+    "deployment_log": "tmp/nano_flow_deploy.log",
+    "browser": "tmp/nano_flow_browser_result.json",
+    "screenshots": [
+      "tmp/nano_flow_1440.png",
+      "tmp/nano_flow_390.png"
+    ]
+  }
+}

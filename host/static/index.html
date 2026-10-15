@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f4f6f9">
+<title>H743 机器人控制台</title>
+<link rel="stylesheet" href="/styles.css">
+<script>
+  /* Applied before the sheet paints so a saved theme never flashes the other one.
+     Light is the default because this is a bench tool read in daylight. */
+  (function () {
+    try {
+      var saved = localStorage.getItem("h743-theme");
+      document.documentElement.dataset.theme = saved === "dark" ? "dark" : "light";
+    } catch (error) {
+      document.documentElement.dataset.theme = "light";
+    }
+  })();
+</script>
+</head>
+<body>
+<div id="app" class="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="mark" aria-hidden="true"></span>
+      <span class="brand-text">H743<i>机器人控制台</i></span>
+    </div>
+    <div class="top-metrics">
+      <div class="metric"><label>运行时间</label><b id="m-uptime">—</b></div>
+      <div class="metric"><label>内核时钟</label><b id="m-cpu">—</b></div>
+      <div class="metric"><label>RTOS 空闲堆</label><b id="m-heap">—</b></div>
+      <div class="metric"><label>电机输出</label><b id="m-armed" class="state">未连接</b></div>
+    </div>
+    <div class="link-box">
+      <span id="link-dot" class="dot"></span>
+      <span id="link-text">未连接</span>
+      <button id="btn-theme" class="icon" title="切换浅色 / 深色主题">☾</button>
+      <button id="btn-ports" class="icon" title="刷新串口列表">⟳</button>
+    </div>
+  </header>
+
+  <section class="connectbar">
+    <label for="port">连接设备</label>
+    <select id="port"></select>
+    <button id="btn-connect" class="primary">连接</button>
+    <button id="btn-host-restart" title="先停止运动并取消使能；重启后页面自动刷新">重启上位机</button>
+    <span class="hint">115200 · 8N1 · 有线 COM 或无线 UART7</span>
+    <span id="role-badge" class="badge hidden">只读</span>
+    <button id="btn-take-control" class="hidden" title="接管时停止 H743 运动并解除使能">接管控制</button>
+    <span class="grow"></span>
+    <label class="ack"><input type="checkbox" id="ack"> 已核对驱动器接线与运动区域</label>
+  </section>
+
+  <section id="auto-devices-bar" class="connectbar hidden" aria-label="自动设备连接">
+    <label><input type="checkbox" id="auto-devices-enabled"> 自动连接设备 · 断线后持续重连</label>
+    <span id="auto-devices-status" class="hint"></span>
+  </section>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab active" data-tab="servo" role="tab">舵机</button>
+    <button class="tab" data-tab="chassis" role="tab">底盘运动</button>
+    <button class="tab" data-tab="navigation" role="tab">坐标巡航</button>
+    <button class="tab" data-tab="auxiliary" role="tab">升降与旋转</button>
+    <button class="tab" data-tab="axes" role="tab">七轴调试</button>
+    <button class="tab" data-tab="imu" role="tab">陀螺仪 · H723</button>
+    <button class="tab" data-tab="flow" role="tab">光流位移</button>
+    <button class="tab" data-tab="camera" role="tab">摄像头1</button>
+      <button class="tab" data-tab="camera2" role="tab">摄像头2</button>
+    <button class="tab" data-tab="board" role="tab">板级状态</button>
+    <button class="tab" data-tab="log" role="tab">通信记录<span id="log-count" class="pill">0</span></button>
+  </nav>
+
+  <main class="stage">
+    <section class="panel" id="tab-flow">
+      <p class="lead">光流接在 H743：PB11 接模块 TX，PB14 接模块 RX，共地，模块 5V 供电、UART 为 3.3V。默认安装高度 30 mm 为待校准值。累计由板端保存，断开上位机后继续接收，H743 重启归零。</p>
+      <div class="flow-controls">
+        <label>显示坐标 <select id="flow-mode"><option value="body">固定轴向 · 安装映射后的 X/Y</option><option value="world">地面坐标 · 结合 H723 航向</option></select></label>
+        <button id="flow-start" class="primary">从现在开始记录</button>
+        <button id="flow-stop">结束并保留记录</button>
+      </div>
+      <p id="flow-live" class="hint">等待光流固件连接。</p>
+      <div class="flow-grid">
+        <div class="card">
+          <div class="card-head"><h2>上电累计矢量</h2><span class="tag">mm</span></div>
+          <div class="flow-metrics"><span>X <b id="flow-x">—</b></span><span>Y <b id="flow-y">—</b></span><span>合成长度 <b id="flow-length">—</b></span></div>
+          <p class="hint">有正负方向的矢量和。来回运动会抵消；合成长度是净位移。</p>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>记录时段矢量</h2><span class="tag">mm</span></div>
+          <div class="flow-metrics"><span>X <b id="flow-rx">—</b></span><span>Y <b id="flow-ry">—</b></span><span>合成长度 <b id="flow-rlength">—</b></span></div>
+          <p id="flow-record-time" class="hint">尚未建立记录起点。开始记录保留上电累计值。</p>
+        </div>
+      </div>
+      <div class="card"><canvas id="flow-vector" class="flow-vector" width="700" height="300" aria-label="上电累计与记录时段的位移矢量"></canvas><p class="hint">蓝色：上电累计；绿色：记录时段。+X 向右、+Y 向上，视图自动缩放。</p></div>
+      <div class="card">
+        <div class="card-head"><h2>换算与安装方向</h2></div>
+        <div class="flow-form">
+          <label>镜头距地高度 mm<input id="flow-height" type="number" min="1" max="1000" step="0.001" value="30"></label>
+          <label>X 比例修正<input id="flow-gx" type="number" min="0.01" max="10" step="0.000001" value="1"></label>
+          <label>Y 比例修正<input id="flow-gy" type="number" min="0.01" max="10" step="0.000001" value="1"></label>
+          <label>顺时针安装角 °<input id="flow-angle" type="number" min="-180" max="180" step="0.01" value="0"></label>
+          <label>最低置信度<input id="flow-quality" type="number" min="1" max="255" step="1" value="1"></label>
+          <label><input id="flow-swap" type="checkbox">交换 X/Y</label>
+          <label><input id="flow-negx" type="checkbox">反转 X</label>
+          <label><input id="flow-negy" type="checkbox">反转 Y</label>
+        </div>
+        <div class="flow-controls"><button id="flow-save">保存参数</button><button id="flow-apply">应用已保存参数</button></div>
+        <p id="flow-applied" class="hint">等待板端参数回读。保存与应用是两个操作。</p>
+        <p class="hint">位移 = 原始光流 / 10000 × 高度 × 比例，再进行轴向映射与安装角旋转。新参数只影响后续增量，历史累计不重算；修改后建议重新开始记录进行校准。地面坐标以首次有效 H723 航向为 +Y；缺失航向时暂停地面累计并报告缺口，H723 会话变化后锁定该坐标，需重启 H743 建立新坐标。传感器偏离转动中心时还需考虑旋转产生的位移。</p>
+      </div>
+    </section>
+
+    <!-- ── 舵机 ─────────────────────────────────────────────────────── -->
+    <section class="panel active" id="tab-servo">
+      <p class="lead">连接后自动定位：S1（PH6）120°，S2（PH9）0°。舵机不受“使能输出”门控，也不会被“停止全部”切断——
+        必须持续收到 50 Hz 脉冲才能保持位置。角度写整数即为整度（<code>135</code> = 135.0°），
+        只有出现小数点才表示小数；越界会被板端拒绝（<code>ERR code=ANGLE_RANGE</code>），不会静默截断。</p>
+
+      <div class="servo-grid">
+        <div class="card servo-card" data-ch="1">
+          <div class="card-head">
+            <h2>舵机 S1 · 180°</h2>
+            <span class="tag">PH6 · TIM12_CH1</span>
+            <span class="grow"></span>
+            <span class="state servo-on">—</span>
+          </div>
+          <div class="servo-body">
+            <svg class="gauge" viewBox="0 0 260 190" role="img" aria-label="舵机 1 角度表">
+              <defs>
+                <linearGradient id="arcgrad1" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#38bdf8"/>
+                  <stop offset="50%" stop-color="#22d3a6"/>
+                  <stop offset="100%" stop-color="#f5a524"/>
+                </linearGradient>
+              </defs>
+              <path class="arc-track" d=""/>
+              <path class="arc-live" d="" style="stroke:url(#arcgrad1)"/>
+              <g class="ticks"></g>
+              <g class="needle">
+                <line x1="130" y1="140" x2="130" y2="42"/>
+                <circle cx="130" cy="140" r="7"/>
+              </g>
+              <text class="gauge-value" x="130" y="168">—</text>
+            </svg>
+            <div class="servo-controls">
+              <div class="big-read">
+                <span class="angle">—</span><i>°</i>
+                <small><span class="us">—</span> µs</small>
+              </div>
+              <div class="row">
+                <input type="text" class="num angle-input" value="120" inputmode="decimal" aria-label="舵机 1 目标角度">
+                <button class="primary servo-send">定位</button>
+              </div>
+              <p class="hint">抓取常用位置：90° / 120°。范围 0–180°，初始目标 120°。</p>
+              <div class="presets">
+                <button data-deg="0">0°</button>
+                <button data-deg="45">45°</button>
+                <button class="primary" data-deg="90">90°</button>
+                <button class="primary" data-deg="120">120°</button>
+                <button data-deg="135">135°</button>
+                <button data-deg="180">180°</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card servo-card" data-ch="2">
+          <div class="card-head">
+            <h2>舵机 S2 · 270°</h2>
+            <span class="tag">PH9 · TIM12_CH2</span>
+            <span class="grow"></span>
+            <span class="state servo-on">—</span>
+          </div>
+          <div class="servo-body">
+            <svg class="gauge" viewBox="0 0 260 190" role="img" aria-label="舵机 2 角度表">
+              <defs>
+                <linearGradient id="arcgrad2" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#38bdf8"/>
+                  <stop offset="50%" stop-color="#22d3a6"/>
+                  <stop offset="100%" stop-color="#f5a524"/>
+                </linearGradient>
+              </defs>
+              <path class="arc-track" d=""/>
+              <path class="arc-live" d="" style="stroke:url(#arcgrad2)"/>
+              <g class="ticks"></g>
+              <g class="needle">
+                <line x1="130" y1="140" x2="130" y2="42"/>
+                <circle cx="130" cy="140" r="7"/>
+              </g>
+              <text class="gauge-value" x="130" y="168">—</text>
+            </svg>
+            <div class="servo-controls">
+              <div class="big-read">
+                <span class="angle">—</span><i>°</i>
+                <small><span class="us">—</span> µs</small>
+              </div>
+              <div class="row">
+                <input type="text" class="num angle-input" value="0" inputmode="decimal" aria-label="舵机 2 目标角度">
+                <button class="primary servo-send">定位</button>
+              </div>
+              <p class="hint">范围 0–270°，初始目标 0°。</p>
+              <div class="presets">
+                <button data-deg="0">0°</button>
+                <button data-deg="45">45°</button>
+                <button data-deg="90">90°</button>
+                <button data-deg="135">135°</button>
+                <button data-deg="180">180°</button>
+                <button data-deg="225">225°</button>
+                <button data-deg="270">270°</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h2>手动脉宽校准</h2><span class="tag">按所选通道行程换算角度</span></div>
+        <div class="row wrap">
+          <label for="pulse-ch">通道</label>
+          <input type="text" id="pulse-ch" class="num sm" value="1" inputmode="numeric">
+          <label for="pulse-input">脉宽 µs</label>
+          <input type="text" id="pulse-input" class="num" value="1500" inputmode="numeric">
+          <button id="pulse-send">换算并发送</button>
+          <span class="hint">500–2500 µs。固件没有原始脉宽命令；实测满行程不是这个范围时，
+            改固件常量并同步重算脉宽表。</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 底盘 ─────────────────────────────────────────────────────── -->
+    <section class="panel" id="tab-chassis">
+      <div class="card">
+        <div class="card-head">
+          <h2>底盘动作</h2>
+          <span class="tag">前轮 M3 / M4 · 后轮 M1 / M2</span>
+          <span class="grow"></span>
+          <span class="state" id="chassis-state">—</span>
+        </div>
+        <div class="chassis-layout">
+          <div class="dpad">
+            <button class="pad" data-dir="FWD" style="grid-area:up">前进</button>
+            <button class="pad" data-dir="LEFT" style="grid-area:left">左移</button>
+            <button class="pad stop" data-dir="HALT" style="grid-area:mid">停止</button>
+            <button class="pad" data-dir="RIGHT" style="grid-area:right">右移</button>
+            <button class="pad" data-dir="BACK" style="grid-area:down">后退</button>
+            <button class="pad" data-dir="CCW" style="grid-area:ccw">左旋</button>
+            <button class="pad" data-dir="CW" style="grid-area:cw">右旋</button>
+          </div>
+          <div class="wheelview" id="wheelview">
+            <div class="wheel" data-wheel="3"><b>M3</b><span>左前 · I04 / I07</span><i class="dir">+</i></div>
+            <div class="wheel" data-wheel="4"><b>M4</b><span>右前 · C13 / I02</span><i class="dir">+</i></div>
+            <div class="wheel" data-wheel="1"><b>M1</b><span>左后 · I08 / I05</span><i class="dir">+</i></div>
+            <div class="wheel" data-wheel="2"><b>M2</b><span>右后 · I03 / I06</span><i class="dir">+</i></div>
+            <div class="nose">车头</div>
+          </div>
+        </div>
+        <div class="row wrap">
+          <label for="ch-steps">位移步数</label>
+          <input type="text" id="ch-steps" class="num" value="1000" inputmode="numeric">
+          <label for="ch-sps">最高 step/s</label>
+          <input type="text" id="ch-sps" class="num" value="500" inputmode="numeric">
+          <label for="ch-accel">加速度 step/s²</label>
+          <input type="text" id="ch-accel" class="num" value="2000" inputmode="numeric">
+          <button id="ch-move" class="primary">执行位移</button>
+        </div>
+        <div class="row wrap">
+          <label class="ack"><input type="checkbox" id="ch-assist"> 陀螺仪辅助直线</label>
+          <span class="hint" id="ch-assist-state">等待板端功能与航向状态</span>
+        </div>
+        <p class="note">勾选后，指定步数的前进、后退、左移、右移在起步时锁定航向，行驶中差速纠偏。
+          共用下方陀螺仪 P 与角度容差；步数按四轮合成平移量计程。原地旋转请取消勾选；按住点动保持原操作。</p>
+        <p class="note">方向键与 Q/E 可在本页按住点动；松开即停。切换页面、窗口失焦、输入框输入时都会自动取消点动。
+          1 step 不等于毫米、不等于角度——轮径、减速比与细分尚未确定。</p>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h2>陀螺仪闭环转角</h2><span class="state" id="turn-state">未连接</span></div>
+        <div class="row wrap">
+          <label for="turn-mode">角度基准</label>
+          <select id="turn-mode"><option value="REL">相对当前方向转动</option><option value="ABS">转到零点角度</option></select>
+          <label for="turn-angle">角度 °</label><input id="turn-angle" class="num" type="text" value="90" inputmode="decimal">
+          <label for="turn-sps">最高 step/s</label><input id="turn-sps" class="num" type="text" value="500" inputmode="numeric">
+          <label for="turn-accel">加速度 step/s²</label><input id="turn-accel" class="num" type="text" value="2000" inputmode="numeric">
+          <label for="turn-kp">陀螺仪 P / (step/s)/°</label><input id="turn-kp" class="num" type="text" inputmode="decimal" value="20">
+          <label for="turn-tolerance">角度容差 ±°</label><input id="turn-tolerance" class="num" type="text" inputmode="decimal" value="0.20">
+        </div>
+        <div class="row wrap">
+          <button id="turn-zero">当前方向设为零点</button><button id="turn-start" class="primary">执行转角</button>
+          <button id="turn-stop">停止转角</button><button id="turn-configure">应用陀螺仪参数</button><span class="hint" id="turn-zero-state">零点未设置</span>
+        </div>
+        <p class="note" id="turn-live">等待航向数据</p>
+        <p class="note">顺时针为正、逆时针为负，范围 −180～180°，最多两位小数。相对模式以执行时的车头方向为 0°；
+          零点模式按最短路径转到设定角度。误差在设定角度容差内稳定 300 ms 后完成，不持续保持角度。P 同时用于独立转角、直线纠偏和巡航，默认 20，不设调参上限，P 为非负数、最多两位小数，0 关闭纠偏；角度容差默认 ±0.2°、范围 0.01～10°，直线纠偏以此作为死区。输入后点击应用，以板端反馈为准。最高轮速按上方参数限制。
+          H723 重连后须重新设置零点；真实板需要持续有效的 H723 数据。</p>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h2>方向校准</h2><span class="tag">仅存于板端 RAM，重启复位</span></div>
+        <div class="row">
+          <label class="ack"><input type="checkbox" class="inv" value="0"> M1 反转</label>
+          <label class="ack"><input type="checkbox" class="inv" value="1"> M2 反转</label>
+          <label class="ack"><input type="checkbox" class="inv" value="2"> M3 反转</label>
+          <label class="ack"><input type="checkbox" class="inv" value="3"> M4 反转</label>
+          <button id="inv-apply">静止时应用</button>
+          <span class="hint" id="inv-state">—</span>
+        </div>
+        <p class="note">车轮离地、低速点动“前进”，四个轮子都应向前滚动。某轮相反就勾选它，停止后应用。
+          滚轮装配装错位置不能靠反转 DIR 修复。</p>
+      </div>
+    </section>
+
+    <section class="panel" id="tab-navigation">
+      <div class="nav-layout">
+        <div>
+          <div class="card-head"><h2>坐标巡航</h2><span class="tag">O → A → B → C → D → A</span></div>
+          <table class="grid" id="nav-points">
+            <thead><tr><th>点</th><th>x · 右为正</th><th>y · 前为正</th><th>到达姿态 °</th></tr></thead>
+            <tbody>
+              <tr data-point="O"><td class="name">O</td><td><input type="number" value="0" aria-label="O x"></td><td><input type="number" value="0" aria-label="O y"></td><td><input type="number" min="-180" max="180" step="0.01" value="0" aria-label="O 到达姿态" readonly></td></tr>
+              <tr data-point="A"><td class="name">A</td><td><input type="number" value="0" aria-label="A x"></td><td><input type="number" value="14000" aria-label="A y"></td><td><input type="number" min="-180" max="180" step="0.01" value="0" aria-label="A 到达姿态"></td></tr>
+              <tr data-point="B"><td class="name">B</td><td><input type="number" value="14000" aria-label="B x"></td><td><input type="number" value="0" aria-label="B y"></td><td><input type="number" min="-180" max="180" step="0.01" value="0" aria-label="B 到达姿态"></td></tr>
+              <tr data-point="C"><td class="name">C</td><td><input type="number" value="14000" aria-label="C x"></td><td><input type="number" value="28000" aria-label="C y"></td><td><input type="number" min="-180" max="180" step="0.01" value="0" aria-label="C 到达姿态"></td></tr>
+              <tr data-point="D"><td class="name">D</td><td><input type="number" value="28000" aria-label="D x"></td><td><input type="number" value="14000" aria-label="D y"></td><td><input type="number" min="-180" max="180" step="0.01" value="0" aria-label="D 到达姿态"></td></tr>
+            </tbody>
+          </table>
+          <div class="row wrap nav-parameters">
+            <label>竖线 x₁ <input id="nav-grid-x0" type="number" value="0" aria-label="左通道 x"></label>
+            <label>竖线 x₂ <input id="nav-grid-x1" type="number" value="14000" aria-label="中通道 x"></label>
+            <label>竖线 x₃ <input id="nav-grid-x2" type="number" value="28000" aria-label="右通道 x"></label>
+          </div>
+          <div class="row wrap nav-parameters">
+            <label>横线 y₁ <input id="nav-grid-y0" type="number" value="0" aria-label="下通道 y"></label>
+            <label>横线 y₂ <input id="nav-grid-y1" type="number" value="14000" aria-label="中通道 y"></label>
+            <label>横线 y₃ <input id="nav-grid-y2" type="number" value="28000" aria-label="上通道 y"></label>
+          </div>
+          <div class="row wrap nav-parameters">
+            <label>最大轮速 step/s <input id="nav-sps" type="number" min="1" max="5000" value="500"></label>
+            <label>加速度 step/s² <input id="nav-accel" type="number" min="1" max="20000" value="2000"></label>
+            <label>到点停留 s <input id="nav-dwell" type="number" min="0" max="60" step="0.001" value="3"></label>
+          </div>
+          <div class="row wrap nav-parameters">
+            <button id="nav-save">保存参数</button>
+            <button id="nav-origin">当前位置设为 O</button>
+            <button id="nav-start" class="primary">开始巡航</button>
+            <button id="nav-stop" class="danger">停止巡航</button>
+          </div>
+          <p class="note" id="nav-config-state">Nano 规划 · 整条路径上传 · H743 执行</p>
+          <p class="note" id="nav-assist-state">等待板端直线纠偏功能状态</p>
+          <p class="note">上位机规划完整路线并确认上传后启动 H743。三条竖线与三条横线为通道中心，坐标须递增，O/A/B/C/D 须在线上。沿横纵线前进，每段直线使用陀螺仪按地图目标航向纠偏，拐点停车转向，目标点调姿后停留。首次出发定义 +Y/0°，重新开始保留地图朝向。真实巡航需连接并校准 H723。</p>
+        </div>
+        <div>
+          <canvas id="nav-map" width="620" height="440" aria-label="坐标路线与当前位置"></canvas>
+          <dl class="kv">
+            <dt>巡航状态</dt><dd id="nav-state">未连接</dd>
+            <dt>当前位置</dt><dd id="nav-position">—</dd>
+            <dt>目标点</dt><dd id="nav-target">—</dd>
+            <dt>下一拐点</dt><dd id="nav-waypoint">—</dd>
+            <dt>停留剩余</dt><dd id="nav-wait">—</dd>
+            <dt>航向 → 目标</dt><dd id="nav-heading">—</dd><dt>到达姿态</dt><dd id="nav-arrival">—</dd><dt>故障原因</dt><dd id="nav-fault">—</dd><dt>定位</dt><dd>脉冲估算 · 出发朝向坐标系</dd>
+            <dt>避障</dt><dd>接口预留 · 未启用</dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h2>陀螺仪闭环参数</h2><span class="tag">底盘转角与巡航共用</span></div>
+        <div class="row wrap">
+          <label for="nav-turn-kp">P / (step/s)/°</label><input id="nav-turn-kp" class="num" type="text" inputmode="decimal" value="20">
+          <label for="nav-turn-tolerance">角度容差 ±°</label><input id="nav-turn-tolerance" class="num" type="text" inputmode="decimal" value="0.20">
+          <button id="nav-turn-configure">应用陀螺仪参数</button>
+        </div>
+        <p class="note" id="nav-turn-live">等待板端参数</p>
+        <p class="note">P 越大，同样角差下轮速越高，受任务最高轮速及加速度限制；P 不设调参上限，支持非负数和两位小数，0 关闭纠偏。角度容差范围 0.01～10°，越小越严格，收敛可能更慢。输入后点击应用，运动时禁止修改；三个新采样稳定 300 ms 后完成，MCU 重启恢复默认。</p>
+      </div>
+    </section>
+
+    <section class="panel" id="tab-auxiliary">
+      <p class="lead">M5 升降与 M6 旋转独立设置。先建立零位、保存参数并应用范围，再使能移动；两个常用位置均为绝对脉冲位置。</p>
+      <p id="aux-config-state" class="note">保存并应用后，以板端范围为准；修改范围要求该轴静止。确认升降方向及设置旋转零位须先解除使能。</p>
+      <div class="aux-grid"><div class="card aux-card" data-axis="5">
+          <div class="card-head"><h2>M5 升降</h2><span class="tag">最高点为 0 · 向下为正</span></div>
+          <div class="aux-position"><b class="aux-position-value">—</b><span>脉冲</span></div>
+          <p class="aux-live note">等待板端状态</p>
+          <p id="lift-state" class="note">等待连接；首次连接时升降机构应处于最高点。</p>
+          <div class="row wrap"><select id="lift-sign" aria-label="M5 向下方向">
+            <option value="0">方向未确认</option><option value="1">正步数向下</option><option value="-1">负步数向下</option>
+          </select><button id="lift-dir">应用方向</button></div>
+          <div class="aux-fields"><label for="aux-5-min">下限 / 脉冲<input id="aux-5-min" class="aux-setting" data-key="min" type="number" step="1" value="0"></label><label for="aux-5-max">上限 / 脉冲<input id="aux-5-max" class="aux-setting" data-key="max" type="number" step="1" value="8000"></label><label for="lift-sps">速度 / step/s<input id="lift-sps" class="aux-setting" data-key="sps" type="number" step="1" value="300"></label><label for="lift-accel">加速度 / step/s²<input id="lift-accel" class="aux-setting" data-key="accel" type="number" step="1" value="1000"></label><label for="lift-steps">单次移动 / 脉冲<input id="lift-steps" class="aux-setting" data-key="step" type="number" step="1" value="100"></label></div>
+          <div class="row wrap"><button data-action="save">保存并应用 M5 参数</button><button data-action="apply">重新应用 M5 范围</button></div>
+          <div class="row wrap"><button id="lift-up" data-action="negative">向上一步</button><button id="lift-down" class="primary" data-action="positive">向下一步</button><button id="lift-top" data-action="home">返回最高点</button><button id="lift-stop" class="danger" data-action="halt">停止 M5</button></div>
+          <p class="aux-readiness note" role="status">等待板端就绪状态</p>
+          <div class="aux-presets"><div class="aux-preset"><label for="aux-5-p0">常用位置 1<input id="aux-5-p0" class="aux-setting" data-key="p0" type="number" step="1" value="0"></label><button data-action="record-0">记录当前位置</button><button data-action="goto-0">前往</button></div><div class="aux-preset"><label for="aux-5-p1">常用位置 2<input id="aux-5-p1" class="aux-setting" data-key="p1" type="number" step="1" value="0"></label><button data-action="record-1">记录当前位置</button><button data-action="goto-1">前往</button></div></div>
+        </div><div class="card aux-card" data-axis="6">
+          <div class="card-head"><h2>M6 旋转</h2><span class="tag">自定零位 · 正反转脉冲</span></div>
+          <div class="aux-position"><b class="aux-position-value">—</b><span>脉冲</span></div>
+          <p class="aux-live note">等待板端状态</p>
+          <p class="note">将机构置于所需零位，解除使能后点击下方按钮。建立零位不会运动。</p>
+          <div class="row wrap"><button data-action="zero">当前位置设为零</button></div>
+          <div class="aux-fields"><label for="aux-6-min">下限 / 脉冲<input id="aux-6-min" class="aux-setting" data-key="min" type="number" step="1" value="0"></label><label for="aux-6-max">上限 / 脉冲<input id="aux-6-max" class="aux-setting" data-key="max" type="number" step="1" value="0"></label><label for="aux-6-sps">速度 / step/s<input id="aux-6-sps" class="aux-setting" data-key="sps" type="number" step="1" value="300"></label><label for="aux-6-accel">加速度 / step/s²<input id="aux-6-accel" class="aux-setting" data-key="accel" type="number" step="1" value="1000"></label><label for="aux-6-step">单次移动 / 脉冲<input id="aux-6-step" class="aux-setting" data-key="step" type="number" step="1" value="100"></label></div>
+          <div class="row wrap"><button data-action="save">保存并应用 M6 参数</button><button data-action="apply">重新应用 M6 范围</button></div>
+          <div class="row wrap"><button data-action="negative">反转一步 −</button><button class="primary" data-action="positive">正转一步 +</button><button class="danger" data-action="halt">停止 M6</button></div>
+          <p class="aux-readiness note" role="status">等待板端就绪状态</p>
+          <div class="aux-presets"><div class="aux-preset"><label for="aux-6-p0">常用位置 1<input id="aux-6-p0" class="aux-setting" data-key="p0" type="number" step="1" value="0"></label><button data-action="record-0">记录当前位置</button><button data-action="goto-0">前往</button></div><div class="aux-preset"><label for="aux-6-p1">常用位置 2<input id="aux-6-p1" class="aux-setting" data-key="p1" type="number" step="1" value="0"></label><button data-action="record-1">记录当前位置</button><button data-action="goto-1">前往</button></div></div>
+        </div></div>
+      <p class="note">位置为已发脉冲计数。断线重连保留板端零位与范围；MCU 重启后需重新建立参考并应用保存的范围。M6 初始范围为 0～0，请按实际机构设置。</p>
+    </section>
+
+    <!-- ── 七轴 ─────────────────────────────────────────────────────── -->
+    <section class="panel" id="tab-axes">
+      <div class="card">
+        <div class="card-head"><h2>轴状态</h2><span class="tag">每 200 ms 轮询两轴</span></div>
+        <table class="grid">
+          <thead><tr>
+            <th>轴</th><th>上限 step/s</th><th>已发脉冲位置</th><th>计划 step/s</th>
+            <th>剩余步数</th><th>状态</th><th>命令编号</th>
+          </tr></thead>
+          <tbody id="axis-body"></tbody>
+        </table>
+        <p class="note">位置来自脉冲计数，不是编码器反馈。运动中直接反向会被拒绝，需先减速到零。</p>
+      </div>
+
+      <div class="duo">
+        <div class="card">
+          <div class="card-head"><h2>单轴有限行程</h2></div>
+          <div class="row wrap">
+            <label for="ax-axis">轴</label><input type="text" id="ax-axis" class="num sm" value="5" inputmode="numeric">
+            <label for="ax-steps">步数</label><input type="text" id="ax-steps" class="num" value="200" inputmode="numeric">
+            <label for="ax-sps">step/s</label><input type="text" id="ax-sps" class="num" value="500" inputmode="numeric">
+            <label for="ax-accel">step/s²</label><input type="text" id="ax-accel" class="num" value="2000" inputmode="numeric">
+          </div>
+          <div class="row"><button id="ax-move" class="primary">提交运动</button>
+            <span class="hint">M1–M4 ≤5000，M5–M7 ≤3000 step/s；负数反向。</span></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>四轮速度</h2><span class="tag">原子提交</span></div>
+          <div class="row wrap">
+            <label for="w1">M1</label><input type="text" id="w1" class="num sm" value="0" inputmode="numeric">
+            <label for="w2">M2</label><input type="text" id="w2" class="num sm" value="0" inputmode="numeric">
+            <label for="w3">M3</label><input type="text" id="w3" class="num sm" value="0" inputmode="numeric">
+            <label for="w4">M4</label><input type="text" id="w4" class="num sm" value="0" inputmode="numeric">
+          </div>
+          <div class="row">
+            <button id="w-apply" class="primary">应用速度</button>
+            <button id="w-zero">四轮减速到零</button>
+            <span class="hint">±5000 step/s。运行中直接反向会被拒绝。</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 板级 ─────────────────────────────────────────────────────── -->
+    <section class="panel" id="tab-board">
+      <div class="duo">
+        <div class="card">
+          <div class="card-head"><h2>板载 LED</h2><span class="tag">回路测试</span></div>
+          <div class="lamps">
+            <div class="lamp fixed"><span class="bulb"></span><label>红 / 电源固定</label></div>
+            <div class="lamp"><span class="bulb" id="lamp-green"></span><label>绿 / PB0</label></div>
+            <div class="lamp"><span class="bulb" id="lamp-blue"></span><label>蓝 / PB1</label></div>
+          </div>
+          <div class="row">
+            <button data-led="1 0">绿灯</button>
+            <button data-led="0 1">蓝灯</button>
+            <button data-led="1 1">同时点亮</button>
+            <button data-led="0 0">关闭绿蓝</button>
+          </div>
+          <p class="note">红灯经电阻固定接地，上电常亮，软件无法控制。</p>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>设备信息</h2></div>
+          <dl class="kv">
+            <dt>固件 / 协议</dt><dd id="d-firmware">—</dd>
+            <dt>板卡</dt><dd id="d-board">—</dd>
+            <dt>芯片 UID</dt><dd id="d-uid" class="mono">—</dd>
+            <dt>Flash / RTOS</dt><dd id="d-flash">—</dd>
+            <dt>复位标志</dt><dd id="d-reset" class="mono">—</dd>
+          </dl>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h2>实时资源</h2><span class="tag">每秒刷新</span></div>
+        <dl class="kv two">
+          <dt>任务数 / 历史最小空闲堆</dt><dd id="r-tasks">—</dd>
+          <dt>协议坏帧 / 重放次数</dt><dd id="r-protocol">—</dd>
+          <dt>任务栈最小剩余<br><small>通信 / 运动 / 监督</small></dt><dd id="r-stacks">—</dd>
+          <dt>心跳超时 / 运动时序故障</dt><dd id="r-faults">—</dd>
+          <dt>串口接收字节 / 接收错误 / 发送超时</dt><dd id="r-serial">—</dd>
+        </dl>
+        <p class="note">模拟连接中的数值为演示值。空闲堆是 48 KiB FreeRTOS 堆的余量，不等于芯片全部剩余 RAM。</p>
+      </div>
+    </section>
+
+    <section class="panel" id="tab-imu">
+      <div class="card">
+        <div class="card-head"><h2>陀螺仪闭环参数</h2><span class="tag">底盘转角与巡航共用</span></div>
+        <div class="row wrap">
+          <label for="imu-turn-kp">P / (step/s)/°</label><input id="imu-turn-kp" class="num" type="text" inputmode="decimal" value="20">
+          <label for="imu-turn-tolerance">角度容差 ±°</label><input id="imu-turn-tolerance" class="num" type="text" inputmode="decimal" value="0.20">
+          <button id="imu-turn-configure">应用陀螺仪参数</button>
+        </div>
+        <p class="note" id="imu-turn-live">等待板端参数</p>
+        <p class="note">P 越大，同样角差下轮速越高，受任务最高轮速及加速度限制；P 不设调参上限，支持非负数和两位小数，0 关闭纠偏。角度容差范围 0.01～10°，越小越严格，收敛可能更慢。输入后点击应用，运动时禁止修改；三个新采样稳定 300 ms 后完成，MCU 重启恢复默认。</p>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h2>达妙 H723 · BMI088 陀螺仪</h2><span class="grow"></span><span id="imu-state" class="tag">未连接 H723</span></div>
+        <div class="imu-connect-row">
+          <label for="imu-port">USB 虚拟串口</label><select id="imu-port" aria-label="H723 候选串口"></select>
+          <button id="imu-refresh">刷新设备</button><button id="imu-connect" class="primary">握手连接 H723</button><button id="imu-disconnect">断开 H723</button>
+        </div>
+        <p id="imu-port-note" class="note">只列出 ST USB CDC 候选设备；握手后确认板型。</p>
+        <p id="imu-identity" class="mono">板型尚未确认</p>
+        <div class="imu-readouts">
+          <div><label>Roll · X 轴转角</label><b><span id="imu-roll">—</span><small> °</small></b></div>
+          <div><label>Pitch · Y 轴转角</label><b><span id="imu-pitch">—</span><small> °</small></b></div>
+          <div><label>Yaw · Z 轴转角</label><b><span id="imu-yaw">—</span><small> °</small></b></div>
+          <div><label>X 加速度</label><b><span id="imu-ax">—</span><small> m/s²</small></b></div>
+          <div><label>Y 加速度</label><b><span id="imu-ay">—</span><small> m/s²</small></b></div>
+        </div>
+        <p id="imu-sample-status" class="note">等待通过握手后的采样数据</p>
+      </div>
+      <div class="imu-toolbar"><label for="imu-accel-mode">加速度显示</label><select id="imu-accel-mode"><option value="linear_accel_ms2">线性加速度（去重力）</option><option value="accel_ms2">加速度计（含重力）</option></select><span class="grow"></span><button id="imu-clear">清空本页图形</button></div>
+      <div class="imu-grid">
+        <div class="card"><div class="card-head"><h2>姿态角 · 最近 15 秒</h2><span class="grow"></span><span class="imu-legend"><i class="imu-x">Roll</i><i class="imu-y">Pitch</i><i class="imu-z">Yaw</i></span></div><canvas id="imu-attitude-chart" class="imu-chart" role="img" aria-label="姿态角时间曲线，横轴时间秒，纵轴角度"></canvas></div>
+        <div class="card"><div class="card-head"><h2>X / Y 加速度 · 最近 15 秒</h2><span class="grow"></span><span class="imu-legend"><i class="imu-x">X</i><i class="imu-y">Y</i></span></div><canvas id="imu-accel-chart" class="imu-chart" role="img" aria-label="X Y 加速度时间曲线，横轴时间秒，纵轴加速度米每二次方秒"></canvas></div>
+        <div class="card"><div class="card-head"><h2>XY 加速度矢量</h2><span class="grow"></span><span class="tag">X 向前 · Y 向左</span></div><canvas id="imu-xy-chart" class="imu-chart" role="img" aria-label="二维加速度矢量，横轴X加速度，纵轴Y加速度"></canvas></div>
+        <div class="card imu-notes"><h2>读数说明</h2><p>上电后保持板子静止，完成零偏校准后显示有效读数。断流或失效时停止更新实时数值，保留历史曲线。</p><p>坐标沿用之前的水平安装：X 向前、Y 向左、Z 向上。矢量图表示加速度方向与大小；这里不显示位置估算。</p><p>Yaw 是相对航向，长时间会漂移。H723 与 H743 可同时连接，各自使用独立串口。</p></div>
+      </div>
+    </section>
+
+    <section class="panel" id="tab-camera">
+      <p class="lead">选择来源和设备，打开摄像头后点击“拍照”查看一帧。Nano 模式读取接在 Nano 上的 USB / CSI 摄像头，只有拍照时传输照片。</p>
+      <div class="card">
+        <div class="card-head"><h2>摄像头1 · 按需拍照</h2><span class="grow"></span><span id="camera-state" class="tag" role="status" aria-live="polite">未打开</span></div>
+        <div class="camera-toolbar">
+          <label for="camera-source">来源</label><select id="camera-source"><option value="local">本机（浏览器所在电脑）</option><option value="nano">Nano 摄像头（USB / CSI）</option></select>
+        </div>
+        <div class="camera-toolbar">
+          <label for="camera-device">摄像头</label>
+          <select id="camera-device" aria-label="选择摄像头1设备"><option value="">默认摄像头</option></select>
+          <button id="camera-refresh">刷新设备</button>
+          <button id="camera-bind">记住此摄像头</button>
+          <button id="camera-start" class="primary">打开摄像头</button>
+          <button id="camera-stop" disabled>关闭摄像头</button>
+          <button id="camera-snapshot" class="primary" disabled>拍照 · 获取一帧</button>
+        </div>
+        <div class="camera-toolbar">
+          <label for="camera-resolution">采集分辨率</label>
+          <select id="camera-resolution">
+            <option value="640x480">640 × 480</option>
+            <option value="800x600">800 × 600</option>
+            <option value="1280x720" selected>1280 × 720（720p）</option>
+            <option value="1920x1080">1920 × 1080（1080p）</option>
+            <option value="2560x1440">2560 × 1440（1440p）</option>
+            <option value="3840x2160">3840 × 2160（4K）</option>
+          </select>
+          <button id="camera-apply" disabled>应用分辨率</button>
+          <label class="ack"><input type="checkbox" id="camera-mirror"> 镜像预览</label>
+          <span class="grow"></span><span id="camera-actual" class="camera-actual">实际采集：—</span>
+        </div>
+        <p id="camera-identity" class="note camera-identity">尚未绑定 Nano 摄像头。</p>
+        <p id="camera-message" class="note" role="status" aria-live="polite">打开设备后选择分辨率，点击“拍照”获取一帧；没有持续视频传输。</p>
+        <div class="camera-preview">
+          <video id="camera-video" class="hidden" autoplay muted playsinline aria-label="本机拍照采集源"></video>
+          <img id="camera-image" class="hidden" alt="摄像头1拍摄的单帧照片">
+          <div id="camera-placeholder" class="camera-placeholder">点击“拍照”后，这里显示采集到的一帧</div>
+        </div>
+        <p class="note">Nano 模式只列出设备支持的分辨率；修改后点击“应用分辨率”，再拍照。照片保留供查看，关闭设备会释放摄像头。网页关闭后 Nano 不传输照片；设备持续打开到明确关闭或服务退出。</p>
+      </div>
+    </section>
+
+    <section class="panel" id="tab-camera2">
+      <p class="lead">选择来源和设备，打开摄像头后点击“拍照”查看一帧。Nano 模式读取接在 Nano 上的 USB / CSI 摄像头，只有拍照时传输照片。</p>
+      <div class="card">
+        <div class="card-head"><h2>摄像头2 · 按需拍照</h2><span class="grow"></span><span id="camera2-state" class="tag" role="status" aria-live="polite">未打开</span></div>
+        <div class="camera-toolbar">
+          <label for="camera2-source">来源</label><select id="camera2-source"><option value="local">本机（浏览器所在电脑）</option><option value="nano">Nano 摄像头（USB / CSI）</option></select>
+        </div>
+        <div class="camera-toolbar">
+          <label for="camera2-device">摄像头</label>
+          <select id="camera2-device" aria-label="选择摄像头2设备"><option value="">默认摄像头</option></select>
+          <button id="camera2-refresh">刷新设备</button>
+          <button id="camera2-bind">记住此摄像头</button>
+          <button id="camera2-start" class="primary">打开摄像头</button>
+          <button id="camera2-stop" disabled>关闭摄像头</button>
+          <button id="camera2-snapshot" class="primary" disabled>拍照 · 获取一帧</button>
+        </div>
+        <div class="camera-toolbar">
+          <label for="camera2-resolution">采集分辨率</label>
+          <select id="camera2-resolution">
+            <option value="640x480">640 × 480</option>
+            <option value="800x600">800 × 600</option>
+            <option value="1280x720" selected>1280 × 720（720p）</option>
+            <option value="1920x1080">1920 × 1080（1080p）</option>
+            <option value="2560x1440">2560 × 1440（1440p）</option>
+            <option value="3840x2160">3840 × 2160（4K）</option>
+          </select>
+          <button id="camera2-apply" disabled>应用分辨率</button>
+          <label class="ack"><input type="checkbox" id="camera2-mirror"> 镜像预览</label>
+          <span class="grow"></span><span id="camera2-actual" class="camera-actual">实际采集：—</span>
+        </div>
+        <p id="camera2-identity" class="note camera-identity">尚未绑定 Nano 摄像头。</p>
+        <p id="camera2-message" class="note" role="status" aria-live="polite">打开设备后选择分辨率，点击“拍照”获取一帧；没有持续视频传输。</p>
+        <div class="camera-preview">
+          <video id="camera2-video" class="hidden" autoplay muted playsinline aria-label="本机拍照采集源"></video>
+          <img id="camera2-image" class="hidden" alt="摄像头2拍摄的单帧照片">
+          <div id="camera2-placeholder" class="camera-placeholder">点击“拍照”后，这里显示采集到的一帧</div>
+        </div>
+        <p class="note">Nano 模式只列出设备支持的分辨率；修改后点击“应用分辨率”，再拍照。照片保留供查看，关闭设备会释放摄像头。网页关闭后 Nano 不传输照片；设备持续打开到明确关闭或服务退出。</p>
+      </div>
+    </section>
+
+    <!-- ── 日志 ─────────────────────────────────────────────────────── -->
+    <section class="panel" id="tab-log">
+      <div class="card fill">
+        <div class="card-head">
+          <h2>通信记录</h2>
+          <span class="grow"></span>
+          <label class="ack"><input type="checkbox" id="log-polls"> 显示心跳与轮询</label>
+          <button id="log-clear">清空</button>
+        </div>
+        <div class="log" id="log"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="actionbar">
+    <button id="btn-arm" class="primary">使能输出</button>
+    <button id="btn-stop" class="danger">停止全部 / 解除使能</button>
+    <span id="status" class="status">未连接 · 可先连接模拟板体验</span>
+    <span class="grow"></span>
+    <span class="hint" id="link-hint">本地 Web 控制台 · 单页面独占控制权</span>
+  </footer>
+</div>
+<script type="module" src="/app.js"></script>
+</body>
+</html>

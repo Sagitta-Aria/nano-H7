@@ -1,0 +1,78 @@
+{
+  "version": "0.2.16",
+  "build": "Keil ARM Compiler 5 passed",
+  "local_python": {
+    "passed": 280,
+    "seconds": 90.0
+  },
+  "new_regressions": 7,
+  "heading_parameters": {
+    "kp_default": 20,
+    "kp_range": [
+      0.01,
+      200
+    ],
+    "tolerance_default_degrees": 0.2,
+    "tolerance_range_degrees": [
+      0.01,
+      10
+    ],
+    "settle_ms": 300,
+    "scope": "standalone turn and navigation turning/arrival/waiting",
+    "protocol": "TURN CONFIG <kp_centi> <tolerance_cd>",
+    "legacy_p_only_preserves_tolerance": true,
+    "busy_rejects_atomic_change": true
+  },
+  "actual_arm_response": {
+    "error_degrees": 1,
+    "p20_sps": 20,
+    "p80_sps": 80,
+    "dynamic_completion_and_navigation_tolerance": "passed"
+  },
+  "frontend": "shared gyro/chassis/navigation inputs; board readback; drafts synced and retained across reload; read-only and busy guarded",
+  "browser": "gyro P80/tolerance0.5, tighter0.1, invalid tolerance rejection, navigation apply, refresh, 1440/390 layout passed",
+  "tk_gui": "SIM smoke and joint configuration test passed",
+  "node": "turn/navigation/syntax passed",
+  "hardware_flashed": false,
+  "hardware_commands_sent": false,
+  "physical_response_verified": false,
+  "backup_local": "backups/heading_tuning_20261014",
+  "backup_remote": "/home/a/h743/backups/heading_tuning_20261014",
+  "restart_policy": "User explicitly deferred service restart until real-car debugging ends.",
+  "artifacts": {
+    "firmware/build/robot_h743.axf": {
+      "bytes": 1350796,
+      "sha256": "a87d53b8d72133f6f7d0ea4584c79462a4ba471753e930088e528990085fbd21"
+    },
+    "firmware/build/robot_h743.hex": {
+      "bytes": 101248,
+      "sha256": "6b43f26817899a7d894bd79c14ec87ad8ae751dd4a215043df3ed4fdc8b49ca0"
+    },
+    "firmware/build/robot_h743.bin": {
+      "bytes": 35980,
+      "sha256": "35fc875b0b9a94d97053964c3e922c006cf7e23ec6689548aaad169cefcfa7d8"
+    }
+  },
+  "remote_python": {
+    "passed": 140,
+    "seconds": 54.611
+  },
+  "remote_pty_stages": 3,
+  "remote_hashes_verified": 41,
+  "remote_changed_files": 10,
+  "remote_service": {
+    "status": "active",
+    "pid_before": 1755,
+    "pid_after": 1755,
+    "start_before": "2026-10-14 14:35:14 CST",
+    "start_after": "2026-10-14 14:35:14 CST",
+    "restarted": false
+  },
+  "operator_settings_unchanged": [
+    "auxiliary.json",
+    "navigation.json",
+    "device_links.json"
+  ],
+  "actual_hello_max_sequence_frame_bytes": 370,
+  "full_navigation_browser": "passed at 1440/760/390"
+}

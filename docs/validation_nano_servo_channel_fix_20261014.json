@@ -1,0 +1,85 @@
+{
+  "backup": "/home/a/h743/backups/servo_channel_fix_20261014_191629",
+  "parameter_hashes": {
+    "device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699",
+    "auxiliary.json": "bda9529432d07b49bae96a6790995ca6559274aacc68bbbe93c7f71780a180f4",
+    "navigation.json": "b303487ab542fccf772498bba3a6bfd85efc6bad8f341c6fe25fc88b227fd993"
+  },
+  "before": {
+    "link": "connected",
+    "armed": true,
+    "imu": "streaming",
+    "servo": {
+      "cmd": "SERVO_STAT",
+      "raw": "OK cmd=SERVO_STAT ch=1 angle=135.0 us=1500 on=1 pin=PH9 timer=TIM12_CH2 OK cmd=SERVO_STAT ch=2 angle=90.0 us=1500 on=1 pin=PH6 timer=TIM12_CH1"
+    },
+    "firmware": "0.2.18"
+  },
+  "service_before": "MainPID=5184\nExecMainStartTimestamp=Wed 2026-10-14 19:04:14 CST\nActiveState=active",
+  "service_after": "MainPID=6901\nExecMainStartTimestamp=Wed 2026-10-14 19:20:00 CST\nActiveState=active",
+  "parameters_unchanged_across_restart": true,
+  "parameter_hashes_at_restart": {
+    "device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699",
+    "auxiliary.json": "2a88671d9044f8e7a0c62000cf3bace836c3fd73f6915baace96a1845c7db0f2",
+    "navigation.json": "b303487ab542fccf772498bba3a6bfd85efc6bad8f341c6fe25fc88b227fd993"
+  },
+  "parameter_changes_before_restart": {
+    "auxiliary.json": "2a88671d9044f8e7a0c62000cf3bace836c3fd73f6915baace96a1845c7db0f2"
+  },
+  "after": {
+    "link": "connected",
+    "armed": false,
+    "imu": "streaming",
+    "servo": {
+      "cmd": "SERVO_STAT",
+      "raw": "OK cmd=SERVO_STAT ch=1 angle=180.0 us=1833 on=1 pin=PH9 timer=TIM12_CH2 OK cmd=SERVO_STAT ch=2 angle=0.0 us=500 on=1 pin=PH6 timer=TIM12_CH1"
+    },
+    "firmware": "0.2.18",
+    "auto_devices": {
+      "enabled": true,
+      "message": "自动连接：H743 等待设备 / 重试握手 · H723 等待设备 / 重试握手",
+      "h743_uid": "3637333530335109002A003A",
+      "h723_uid": "002600483134510438373332"
+    }
+  },
+  "ports": [
+    "/dev/ttyUSB0",
+    "/dev/ttyACM0"
+  ],
+  "root_cause": "Host swapped wire channels from HELLO pin labels; user observed UI S1 moving physical S2.",
+  "fix": "Preserve physical channel IDs S1=1/S2=2; convert UI180/270 angle units to firmware270/180; decode pulse telemetry on the same channel.",
+  "validation": {
+    "failing_regression_before_fix": true,
+    "regression_after_fix": "passed",
+    "nano_tests": 153,
+    "nano_test_seconds": 54.791,
+    "pty_stages": 3,
+    "updated_files": 5,
+    "verified_files": 46
+  },
+  "browser": {
+    "labels": {
+      "1": {
+        "heading": "舵机 S1 · 180°",
+        "pin": "PH6 · TIM12_CH1",
+        "angle": "120.0"
+      },
+      "2": {
+        "heading": "舵机 S2 · 270°",
+        "pin": "PH9 · TIM12_CH2",
+        "angle": "0.0"
+      }
+    },
+    "intercepted_click_commands": [
+      "SERVO 1 180",
+      "SERVO 2 0",
+      "SERVO STAT",
+      "SERVO STAT"
+    ],
+    "device_commands_sent": 0,
+    "javascript_errors": [],
+    "desktop_mobile": true
+  },
+  "physical_identity_evidence": "User reports wire2 commanded by old S1 control moved physical servo2; no additional physical click testing by agent.",
+  "firmware_modified_by_agent": false
+}

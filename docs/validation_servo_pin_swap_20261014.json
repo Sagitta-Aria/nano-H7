@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-14",
+  "firmware": "0.2.13",
+  "toolchain": "Keil ARM Compiler 5",
+  "mapping": {
+    "S1": "PH9/TIM12_CH2/AF2, 270 degrees",
+    "S2": "PH6/TIM12_CH1/AF2, 180 degrees"
+  },
+  "home_degrees": {
+    "S1": 90,
+    "S2": 90
+  },
+  "tests": {
+    "servo_arm_web_contract_handshake": 28,
+    "result": "passed",
+    "frontend": "servo frontend passed",
+    "tk_smoke": "passed, SIM only"
+  },
+  "flashed": false,
+  "deployed": false,
+  "hashes": {
+    "firmware/src/servo.c": "9c5966f39a65de6ac652f8b6c330d25f896c9d2bcdbb44d37413d0b8be15ca90",
+    "firmware/include/app_config.h": "978c2af28bf296ab3603e7d0baf388be337a9be77f6deaf4a07d9d57356fdc21",
+    "firmware/build/robot_h743.hex": "e1be99092cce03340adeecee4546b05df72fe55ec2b9871f4f889a968e408b44",
+    "firmware/build/robot_h743.bin": "066fd435188f538e647298233e38bbc6c0d8d4f6336eb522f3efc52df0ba3a70",
+    "host/servo_panel.py": "ae36892919a0f8000b2aa615db00e9fad1645652d7b7ede2c83488c48a4a2f53",
+    "host/static/index.html": "9fe26ea896bc577a023f8fe4733874013a25c80ddde2111832cb3031586d15c8",
+    "host/simulator.py": "4b3a42d348cb2fda90989fa876a25d49bc7739836bb501caf2e8af87392d7a71"
+  }
+}

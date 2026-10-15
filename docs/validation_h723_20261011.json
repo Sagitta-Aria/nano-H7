@@ -1,0 +1,109 @@
+{
+  "date": "2026-10-11",
+  "scope": "Local Web and Tk H723 IMU support",
+  "python_suite": "173 passed",
+  "browser": "Passed: explicit selection, identity handshake, labeled plots, acceleration modes, light/dark/mobile, readonly permissions, stale data, wrong-board refusal",
+  "tk": "Existing GUI smoke and focused synthetic IMU smoke passed",
+  "firmware": "1.1.1 Keil build: 0 errors, 0 warnings",
+  "hardware_verified": true,
+  "flashed": true,
+  "nano_updated": true,
+  "observed_ports": [
+    {
+      "vid": "1366",
+      "pid": "0105",
+      "port": "COM30",
+      "candidate": false
+    },
+    {
+      "vid": "0483",
+      "pid": "5740",
+      "port": "COM40",
+      "candidate": true
+    }
+  ],
+  "physical_serial_ports_opened": [
+    "COM40"
+  ],
+  "screenshots": "D:\\stm32H7\\tmp\\h723_imu_local_20261011",
+  "firmware_validation": "D:\\stm32H7\\projects\\CtrBoard-H7_USB_Gyro\\release\\validation.json",
+  "backup": "D:\\stm32H7\\stm32H743IIT6\\backups\\h723_imu_local_20261011",
+  "hardware_verification_mode": "Programmed Flash, exact readback, independent reset and real Web handshake/plots passed; power cycle not tested",
+  "hardware_evidence": {
+    "date": "2026-10-11",
+    "mode": "Flash 1.1.1 after independent reset, debug sleep clock overrides cleared",
+    "identity": {
+      "board": "DM-MC02",
+      "mcu": "STM32H723VGT6",
+      "sensor": "BMI088",
+      "protocol": "IMU1",
+      "fw": "1.1.1",
+      "uid": "002600483134510438373332"
+    },
+    "state": "streaming",
+    "candidate_ports": [
+      {
+        "id": "COM40",
+        "description": "USB 串行设备 (COM40)",
+        "serial_number": "385D337A3134",
+        "verified": false,
+        "vid": 1155,
+        "pid": 22336
+      }
+    ],
+    "excluded_port": "COM30 SEGGER/J-Link",
+    "frames": 1006,
+    "elapsed_s": 10.03099999999904,
+    "rate_hz": 100.1894128202668,
+    "rejected": 0,
+    "all_samples_valid": true,
+    "latest": {
+      "timestamp_ms": 22375,
+      "sample_count": 44464,
+      "ready": true,
+      "calibrated": true,
+      "accel_trusted": true,
+      "error": 0,
+      "calibration_count": 2000,
+      "roll_deg": 0.92,
+      "pitch_deg": -3.445,
+      "yaw_deg": -0.017,
+      "gyro_dps": [
+        -0.162,
+        0.002,
+        -0.146
+      ],
+      "accel_ms2": [
+        0.6614,
+        0.1041,
+        9.8171
+      ],
+      "linear_accel_ms2": [
+        0.072,
+        -0.052,
+        0.0625
+      ],
+      "temperature_c": 30.5,
+      "quaternion_wxyz": [
+        0.997826,
+        0.00798,
+        -0.030114,
+        9.1e-05
+      ],
+      "valid": true,
+      "time_s": 10.03099999999904
+    },
+    "browser_errors": [],
+    "screenshot": "hardware-ui.png"
+  },
+  "focused_imu_tests": "10 passed after USB fix",
+  "nano_deployment": {
+    "url": "http://192.168.1.197:8770/",
+    "directory": "/home/a/h743",
+    "automatic_devices": true,
+    "hardware_verified": true,
+    "tests": "96 passed; PTY all 3 stages passed",
+    "evidence": "D:\\stm32H7\\stm32H743IIT6\\docs\\validation_nano_h723_20261011.json",
+    "h723_uid": "002600483134510438373332"
+  }
+}

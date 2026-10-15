@@ -1,0 +1,173 @@
+{
+  "feature": "gyro-assisted straight and automatic cruise segment heading correction",
+  "firmware": "0.2.17",
+  "toolchain": "Keil ARM Compiler 5 / STM32H743 Cortex-M7",
+  "local_full": {
+    "passed": 301,
+    "seconds": 95.117
+  },
+  "final_arm_regression": {
+    "passed": 47,
+    "seconds": 12.283
+  },
+  "nano_tests": {
+    "passed": 148,
+    "seconds": 54.631
+  },
+  "nano_pty_stages": 3,
+  "browser": [
+    "straight_browser.cjs",
+    "navigation_browser.cjs",
+    "heading_tuning_browser.cjs",
+    "auxiliary_browser.cjs"
+  ],
+  "tk_tests": 2,
+  "hello_max_sequence_frame_bytes": 381,
+  "firmware_artifacts": {
+    "robot_h743.axf": "dbe6377188774727938a8b758d889b92f4dd7bcd507dee768e4b240a12fe7ffc",
+    "robot_h743.hex": "4d477ccec6602d0bff406d745c40269850b33d50ffde7ff0681c3e0c41f4bb93",
+    "robot_h743.bin": "48b4adf2b111f0c751f17f24ab8a8d81def04b45aaf7b40c340fc15158a00c54"
+  },
+  "nano": {
+    "idle_before": true,
+    "before_fw": "0.2.16",
+    "config_before": {
+      "auxiliary.json": "9d0614a934d13fae97b58879efa0dfc1322ae63d0b53681481783f1c7c3de1a3",
+      "navigation.json": "b303487ab542fccf772498bba3a6bfd85efc6bad8f341c6fe25fc88b227fd993",
+      "device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699"
+    },
+    "restarted": true,
+    "service": "MainPID=12834\nExecMainStartTimestamp=Wed 2026-10-14 18:08:25 CST\nActiveState=active",
+    "after": {
+      "link": "connected",
+      "armed": false,
+      "device": {
+        "fw": "0.2.16",
+        "protocol": "1",
+        "board": "H743_CB_V1.5",
+        "led_mask": "3",
+        "red": "fixed",
+        "chassis_max": "5000",
+        "aux_max": "3000",
+        "chassis": "1",
+        "servo": "2",
+        "servo_travel": "2700",
+        "servo1_travel": "2700",
+        "servo2_travel": "1800",
+        "serial": "dual",
+        "lift": "1",
+        "lift_max": "8000",
+        "nav": "1",
+        "nav_heading": "1",
+        "nav_grid": "1",
+        "nav_path": "1",
+        "turn": "1",
+        "aux_control": "1",
+        "flow": "1",
+        "servo1_pin": "PH9",
+        "servo2_pin": "PH6",
+        "turn_tuning": "1",
+        "aux_live": "1",
+        "turn_precision": "1",
+        "cpu_hz": "400000000",
+        "apb_hz": "100000000",
+        "timer_hz": "200000000",
+        "flash_kb": "2048",
+        "uid": "3637333530335109002A003A",
+        "reset": "0x00460000",
+        "rtos": "11.2.0",
+        "baud": "115200",
+        "stat": {
+          "cmd": "STAT",
+          "uptime_ms": "2036504",
+          "heap_free": "37488",
+          "heap_min": "37488",
+          "tasks": "4",
+          "stack_comm": "5224",
+          "stack_motion": "1928",
+          "stack_super": "1960",
+          "led": "0",
+          "armed": "0",
+          "rx": "2792102",
+          "rx_err": "0",
+          "tx_err": "0",
+          "bad": "0",
+          "replay": "0",
+          "timeout": "0",
+          "motion_fault": "0"
+        }
+      },
+      "chassis": {
+        "cmd": "CHASSIS",
+        "state": "stopped",
+        "direction": "FWD",
+        "move_id": "0",
+        "total": "0",
+        "remaining": "0",
+        "active": "0",
+        "invert": "5"
+      },
+      "turn": {
+        "cmd": "TURN_STAT",
+        "state": "idle",
+        "mode": "REL",
+        "zero": "0",
+        "current_cd": "9836",
+        "target_cd": "0",
+        "error_cd": "-9836",
+        "imu": "1",
+        "move_id": "0",
+        "active": "0",
+        "fault": "none",
+        "kp_centi": "2000",
+        "tolerance_cd": "20"
+      },
+      "navigation": {
+        "cmd": "NAV_STAT",
+        "state": "idle",
+        "ready": "0",
+        "x": "0",
+        "y": "0",
+        "target": "A",
+        "tx": "0",
+        "ty": "0",
+        "leg": "1",
+        "wait_ms": "0",
+        "move_id": "0",
+        "obstacle": "0",
+        "planner": "host_grid",
+        "heading_cd": "0",
+        "target_cd": "0",
+        "arrival_cd": "0",
+        "imu": "1",
+        "fault": "none",
+        "wx": "0",
+        "wy": "0",
+        "segment": "0",
+        "segments": "0",
+        "path_id": "0",
+        "route_ready": "0"
+      },
+      "axes": {
+        "1": {
+          "cmd": "AXIS",
+          "axis": "1",
+          "pos": "0",
+          "sps": "0",
+          "remaining": "0",
+          "active": "0",
+          "move_id": "0"
+        }
+      }
+    },
+    "config_after": {
+      "auxiliary.json": "9d0614a934d13fae97b58879efa0dfc1322ae63d0b53681481783f1c7c3de1a3",
+      "navigation.json": "b303487ab542fccf772498bba3a6bfd85efc6bad8f341c6fe25fc88b227fd993",
+      "device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699"
+    },
+    "config_preserved": true
+  },
+  "flashed": false,
+  "real_motion_sent": false,
+  "limitations": "Pulse odometry and yaw feedback only; no measured XY, wheel-slip compensation or physical accuracy proof."
+}

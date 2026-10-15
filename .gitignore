@@ -1,0 +1,29 @@
+__pycache__/
+.pytest_cache/
+.venv/
+.testdeps/
+firmware/build/*
+!firmware/build/.gitkeep
+*.uvguix.*
+*.uvoptx
+*.bak
+host/.ui_state.json
+
+# 手工快照与调试残渣：历史由 git 接管，不再入库
+backups/
+tmp/
+
+# 调试器本机状态，同 uvoptx/uvguix
+firmware/MDK-ARM/JLinkLog.txt
+firmware/MDK-ARM/JLinkSettings.ini
+firmware/MDK-ARM/DebugConfig/
+
+# 虚拟环境（工创赛视觉识别/ 下带了一份装好 OpenCV 的 .venv，269MB）
+.venv/
+**/.venv/
+
+# 抓取的第三方页面，文档只引用原始 URL
+docs/*_taobao_*.html
+docs/upixels_item_*.html
+docs/optical_flow_upixels_home_*.html
+docs/optical_flow_upixels_public_session_*.json

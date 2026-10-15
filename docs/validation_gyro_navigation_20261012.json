@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-12",
+  "firmware": "0.2.9",
+  "toolchain": "Keil ARM Compiler 5.06 update 7",
+  "python_tests": 200,
+  "python_result": "passed",
+  "web_browser": "Edge/Playwright passed, SIM only, desktop/760/390 px",
+  "tk_smoke": "passed, SIM only",
+  "flashed": false,
+  "deployed": false,
+  "hashes": {
+    "firmware/src/navigation.c": "af318eb997c7961067a8308afbd3c9fb613ae764f98af3dab392e0b41614134b",
+    "firmware/include/navigation.h": "4f984babc70109629ad8b335931241da54dd3a2cca77cc5d65f20f415b06d0cb",
+    "firmware/src/main.c": "f23f0dc859e509f68734f922fec5f2a0b5f32d32afe4ae1515a2016d28f7a304",
+    "firmware/include/app_config.h": "23528d9ffcee836d94ffbca3ad4d40fcc99cd3c3cd4a52eafd42f0049b1af779",
+    "firmware/build/robot_h743.hex": "e66b9aed79b7f3253768562f07fa71f28b999adb9ab569ee705362e5a17d8042",
+    "firmware/build/robot_h743.bin": "8b76daea456a288790ce10b475e7dcedcb39fb64e5ae6ab06f83b77371d933b9",
+    "host/navigation.py": "d31892a5e7cd4a85406cf15954d24fb0b73476e2a1a83b6061af556eda26e1ae",
+    "host/navigation.json": "91f5882368f96eb15cfbfff1eea44fc38c177ceb63f4572d7dab4c1e62e7eaa8",
+    "host/transport.py": "735192e740775a0353049435bb067824bdba11a09ce1d82903879f68c52fe0d6",
+    "host/imu.py": "275760a0db549d44742c0ef83f9141e2c372fbb8aba9009004967ae4747e6f40",
+    "host/navigation_sim.py": "4502f99eeeaf7d1b3291a4714a33b591270a9c237a5b63d3106c9d456ce8dd41",
+    "host/webapp.py": "11276b15fcdd53462991939a1aecdf84a4b3f8b5846f99297495094ab64933ff",
+    "host/gui.py": "637f7a92881eb26a84cd34faa88953c9c8b9b89bee814ce760c8be67b9229bc5",
+    "host/navigation_panel.py": "c670e0e1f3735a03275a16b854282e621e90391090ca50b9e79db6f2aa1e62f3",
+    "host/static/app.js": "33a2027dea173dfc1797eeb0b2c2d7d4c01d8d4430c3fc9c28b02edc4efa602f",
+    "host/static/index.html": "af50c6e7a8577be28e05a0029c118a820b9549a4ddd44da2756c7a5e828e5795"
+  }
+}

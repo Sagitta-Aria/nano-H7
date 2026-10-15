@@ -1,0 +1,165 @@
+{
+  "captured_at": "2026-10-13T19:13:58.532471+08:00",
+  "port": "COM39",
+  "usb_id": "1A86:7523",
+  "mode": "passive_receive_no_commands",
+  "samples": [
+    {
+      "baud": 1200,
+      "duration_seconds": 1.5,
+      "bytes": 105,
+      "byte_counts": {
+        "0": 105
+      },
+      "first_96_hex": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+    },
+    {
+      "baud": 256000,
+      "duration_seconds": 1.5,
+      "bytes": 302,
+      "byte_counts": {
+        "0": 302
+      },
+      "first_96_hex": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+    },
+    {
+      "baud": 500000,
+      "duration_seconds": 1.5,
+      "bytes": 301,
+      "byte_counts": {
+        "0": 300,
+        "248": 1
+      },
+      "first_96_hex": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+    },
+    {
+      "baud": 1500000,
+      "duration_seconds": 1.5,
+      "bytes": 315,
+      "byte_counts": {
+        "0": 314,
+        "254": 1
+      },
+      "first_96_hex": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+    },
+    {
+      "baud": 2000000,
+      "duration_seconds": 1.5,
+      "bytes": 317,
+      "byte_counts": {
+        "0": 315,
+        "254": 1,
+        "252": 1
+      },
+      "first_96_hex": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+    },
+    {
+      "baud": 115200,
+      "duration_seconds": 25,
+      "bytes": 5158,
+      "byte_counts": {
+        "0": 4863,
+        "255": 19,
+        "1": 56,
+        "127": 6,
+        "63": 1,
+        "13": 3,
+        "12": 1,
+        "8": 2,
+        "4": 11,
+        "26": 2,
+        "3": 34,
+        "7": 10,
+        "231": 1,
+        "128": 4,
+        "6": 11,
+        "31": 1,
+        "130": 1,
+        "2": 13,
+        "14": 4,
+        "30": 1,
+        "15": 4,
+        "124": 1,
+        "148": 1,
+        "50": 2,
+        "72": 2,
+        "24": 1,
+        "55": 1,
+        "96": 2,
+        "201": 16,
+        "19": 25,
+        "11": 1,
+        "202": 4,
+        "16": 3,
+        "193": 2,
+        "247": 1,
+        "190": 2,
+        "189": 1,
+        "191": 1,
+        "192": 1,
+        "214": 1,
+        "36": 1,
+        "250": 1,
+        "224": 2,
+        "254": 1,
+        "9": 3,
+        "110": 17,
+        "5": 2,
+        "52": 1,
+        "114": 1,
+        "187": 1,
+        "135": 1,
+        "37": 1,
+        "47": 1,
+        "177": 1,
+        "56": 2,
+        "222": 2,
+        "240": 1,
+        "21": 1,
+        "220": 1,
+        "241": 1
+      },
+      "first_96_hex": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+    }
+  ],
+  "comm_error_probe": {
+    "baud": 115200,
+    "duration_seconds": 3,
+    "windows_comm_error_masks": {},
+    "bytes": 1043,
+    "nonzero_bytes": 394,
+    "error_flag_meanings": {
+      "0x01": "RXOVER",
+      "0x02": "OVERRUN",
+      "0x04": "RXPARITY",
+      "0x08": "FRAME",
+      "0x10": "BREAK"
+    }
+  },
+  "reported_sensor_model": "UP-F7-QX01",
+  "reported_connection": "USB-to-TTL adapter to PC",
+  "status": "COM38 at 115200 8N1 receives 14-byte Upix frames matching the manufacturer specification. X/Y require known height to convert into distance; ground_distance is reserved. Captured valid field ranges from 94 to 120. Some corrupt candidates are present.",
+  "observation": "Most bytes are zero, with occasional nonzero bytes; the available samples do not establish displacement, velocity, baud rate or a working sensor connection.",
+  "firmware_changed": false,
+  "commands_sent": false,
+  "related_captures": [
+    "optical_flow_com39_115200_20261013.bin",
+    "optical_flow_com39_baud_scan_20261013.json"
+  ],
+  "latest_capture": "optical_flow_com38_received_20261013.json",
+  "latest_bauds": [
+    115200,
+    19200,
+    9600,
+    57600,
+    38400,
+    230400
+  ],
+  "user_reported_loose_wire": true,
+  "current_port": "COM38",
+  "latest_valid_frames": 920,
+  "latest_rejected_candidates": 59,
+  "protocol_document": "UP-F7-QX01_product_specification.pdf",
+  "protocol_document_revision": "1.1 (2026-01-30)",
+  "field_semantics_confirmed": true
+}
