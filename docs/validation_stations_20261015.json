@@ -1,0 +1,87 @@
+{
+  "date": "2026-10-15",
+  "version": "0.2.19",
+  "change": "坐标巡航改为站点表+路线表，任意段数、站点可重复、到点可挂起；补上横移里程计",
+  "motivation": "实车路线为 O A B C D B C D A O（九段，B/C/D 各两次），写死的五段无法表达；视觉对准需要到点挂起",
+  "firmware": {
+    "built": true,
+    "flashed": false,
+    "compiler": "ARM Compiler 5 via tools/build_firmware.py",
+    "warnings": 0,
+    "artifacts": "firmware/build/robot_h743.{axf,hex,bin,map}",
+    "removed_hardcoding": [
+      "navigation.c route[]={1,2,3,4,1} 写死路线",
+      "navigation.c points[5]/attitudes[5] 定长表",
+      "navigation.c configured!=31U 五位掩码",
+      "navigation.c commit 的 expected!=5 与 expected>4",
+      "navigation.c tick 的 ++leg==5 完成判据",
+      "navigation.c start/commit 的 for(i<5) 点位校验",
+      "main.c NAV BEGIN 的 count 下限 5",
+      "main.c NAV WP 的腿号上限 4",
+      "main.c NAV POINT/ATTITUDE 的下标上限 4"
+    ],
+    "new_commands": ["NAV STATIONS", "NAV LEGS", "NAV LEG", "NAV GO"],
+    "report_change": "NAV_STAT 的 target=<标签> 改为 station=<下标>，新增 legs/stations/held"
+  },
+  "hello_frame": {
+    "capability_bit_added": false,
+    "reason": "正文已 364 字节，最坏帧 382，上限 384。加 nav_station=1 后最坏帧 395，会超长",
+    "evidence": "加字段后 test_lift/test_arm/test_auxiliary/test_dual_serial/test_straight 全部报 incomplete or oversized frame；撤销后恢复",
+    "capability_detection": "改用 NAV STAT 是否回报 stations 字段"
+  },
+  "lateral_odometry": {
+    "before": "四轮增量求标量和 × 0.25 投影到航向，只有一个自由度；横移符号组合 {1,-1,-1,1} 相加为零，位移恒为 0",
+    "after": "按正交基分别点乘前进 {1,1,1,1} 与左移 {1,-1,-1,1}，两分量一起转入地图坐标系",
+    "orthogonality_checked": "前进·左移=0，前进·逆时针=0，左移·逆时针=0",
+    "rotation_component": "不解码；需要轮距轮径，且原地旋转不产生位移",
+    "wheel_order": "M1 左后, M2 右后, M3 左前, M4 右前",
+    "lateral_scale": 1.0,
+    "lateral_scale_measured": false,
+    "lateral_scale_note": "麦轮侧移靠滚子滑动，每脉冲位移小于直行；必须现场实测，未实测前横移距离是偏大的估计"
+  },
+  "tests": {
+    "command": "python -m unittest discover -s tests -p \"test_*.py\"",
+    "total": 325,
+    "failures": 0,
+    "errors": 3,
+    "skipped": 1,
+    "preexisting_errors": "test_autolink 两项与 test_imu 一项，原因是本机解释器没有装 pyserial（import serial 失败），与本次改动无关",
+    "arm_image_coverage": "test_path_upload_arm 九项上传场景、test_navigation 的 ArmNavigationTests 十七项均在编译后的真实固件镜像上通过",
+    "new_tests": {
+      "file": "tests/test_stations.py",
+      "count": 6,
+      "covers": [
+        "九段路线含重复站点的规划与整条校验",
+        "重复站点两次到达坐标一致",
+        "单段路线与未被访问的站点仍合法",
+        "空路线/越界下标/缺字段/hold非0或1/超33段/重名/非法站点名被拒",
+        "计数命令先于行下发",
+        "模拟板跑完九段并按序到达九个站点",
+        "挂起段不被停留计时放行、错误腿号的放行被拒、正确放行后继续"
+      ]
+    }
+  },
+  "browser": {
+    "ran": false,
+    "reason": "本机未安装 playwright（node -e require('playwright') 失败）",
+    "updated": "tests/navigation_browser.cjs 选择器由 data-point 改为 data-station，并新增增删站点/路线段、挂起勾选、路线顺序标签的检查",
+    "pending": "需在装有 playwright 的环境或 NX 上实际跑一次"
+  },
+  "migration": {
+    "legacy_schema_accepted": true,
+    "evidence": "validated() 对 points/headings 旧结构返回与 DEFAULT 完全相等的站点表加五段路线；test_navigation 中有断言",
+    "field_file_safe": "现场 navigation.json 不需要手改"
+  },
+  "not_done": [
+    "未烧录固件，未部署到 NX，未重启现场服务",
+    "未下发任何实车运动命令",
+    "任务编排状态机尚未实现（这是原计划第 5 步）",
+    "NAV 名下的横移微调命令尚未实现；底盘命令仍会 navigation_invalidate()，所以到站对准还不能用底盘命令",
+    "横移标定系数未实测",
+    "playwright 浏览器检查未跑"
+  ],
+  "parallel_work_observed": {
+    "note": "本次会话外有另一个会话在改视觉侧，产生了 docs/VISION_ENV.md、docs/validation_nx_vision_gpu_20261015.json 以及 host/static/index.html 与 styles.css 的改动",
+    "action": "未触碰这些文件以避免冲突；本次只在 app.js 中改巡航相关渲染"
+  }
+}

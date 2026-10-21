@@ -129,14 +129,14 @@ class AutoLinkTests(unittest.TestCase):
                     self.assertFalse(console.armed)
                     self.assertFalse(console.device.get('_ack'))
                     for stream in robots:
-                        allowed = {'HELLO', 'INFO', 'STOP', 'LIFT INIT', 'PING',
-                                   'SERVO 1 180', 'SERVO 2 0', 'SERVO STAT'}
+                        allowed = {'HELLO', 'INFO', 'STOP', 'LIFT INIT', 'PING', 'MOTION STAT',
+                                   'SERVO 2 120', 'SERVO 1 0', 'SERVO STAT'}
                         self.assertTrue(all(body in allowed or body.startswith('NAV IMU ')
                                             for body in stream.writes))
                         self.assertFalse(stream.board.armed)
-                        self.assertEqual(stream.board.servo_steps, [360, 0])
-                        self.assertEqual(stream.writes.count('SERVO 1 180'), 1)
-                        self.assertEqual(stream.writes.count('SERVO 2 0'), 1)
+                        self.assertEqual(stream.board.servo_steps, [0, 240])
+                        self.assertEqual(stream.writes.count('SERVO 2 120'), 1)
+                        self.assertEqual(stream.writes.count('SERVO 1 0'), 1)
                     self.assertEqual(len(robots), 2)
                     self.assertEqual(len(imus), 2)
                     manager.set_enabled(False)

@@ -1,0 +1,288 @@
+{
+  "feature": "B pickup full-cycle debug action with independent B mechanism settings",
+  "result": "deployed_and_read_only_verified",
+  "url": "http://192.168.1.196:8770/debug",
+  "started_at": "2026-10-20 14:13:02 +0800",
+  "verified_at": "2026-10-20 14:17:46 +0800",
+  "backup": "/home/a/h743/backups/b_full_pickup_20261020_135056",
+  "deployment_scope": [
+    "host/pick_place.py",
+    "host/webserver.py",
+    "host/static/pick_place.js",
+    "host/static/index.html",
+    "host/static/app.js",
+    "tests/test_pick_place.py",
+    "tests/test_b_pickup.py"
+  ],
+  "files_before_after": {
+    "host/pick_place.py": {
+      "before": "feed24f97ebacd22ad20f1e3c6b1839d0c5c3e0e5b8417aa380496a7ae421bce",
+      "after": "efbec1225b521b85da2f0c084d32bcd87e00080172814c465b14ef6ae1a04fa4"
+    },
+    "host/webserver.py": {
+      "before": "8db98f07457af2143591086dd8c007b8ef4da65e8f14498813e0113b969f72a0",
+      "after": "47751e6e7ffdf281e49d76e64ed1d9ec2ccba79233335bece3ce3877792fb236"
+    },
+    "host/static/pick_place.js": {
+      "before": "2db7e883bd0fa970f97e9dd5a9c030abc0a86e0a7242c6cf1fb58d44b9b6c77f",
+      "after": "0b8d6e2eef56853b9e6232b0bf36c0d86cabe44f2358ec922573ac4ed382c78f"
+    },
+    "host/static/index.html": {
+      "before": "7dd45528de81b93a78bba25a5e39ed3adda560768008b6360b1884c302d4e1fa",
+      "after": "9ef23e1d970c0585c96d0c94b172b8d636df2999e2d0d15da98d3a520e78cccf"
+    },
+    "host/static/app.js": {
+      "before": "d2392f3954e04bd53c11729263717c3f88f133f03ac690d645ea5d27a504ad4f",
+      "after": "f2016a009ac948742345c578236d0d66cc1a9cf66455df17c68a54257d9ed22e"
+    },
+    "tests/test_pick_place.py": {
+      "before": "66bed914d683c45501ccfb5b255649d06416dd1e6be744c0339956d9fdd39762",
+      "after": "1ab3866d10b67d29032812240acfdc22f1f07d7bc54cb90fb99bea021d88c4b2"
+    },
+    "tests/test_b_pickup.py": {
+      "before": "af60fd44ffb73c1d8ffb1c428914c2eccc7ba6ff975bc8dffa06dfd1c349d69b",
+      "after": "f58f9eb318224a260d021ad6ea675ff0806bb8b8484e90d9bc56882081bccf1c"
+    }
+  },
+  "served_assets_sha256": {
+    "/": "9ef23e1d970c0585c96d0c94b172b8d636df2999e2d0d15da98d3a520e78cccf",
+    "/debug": "9ef23e1d970c0585c96d0c94b172b8d636df2999e2d0d15da98d3a520e78cccf",
+    "/pick_place.js": "0b8d6e2eef56853b9e6232b0bf36c0d86cabe44f2358ec922573ac4ed382c78f",
+    "/app.js": "f2016a009ac948742345c578236d0d66cc1a9cf66455df17c68a54257d9ed22e"
+  },
+  "remote_tests": {
+    "returncode": 0,
+    "output": "----------------------------------------------------------------------\nRan 29 tests in 19.394s\n\nOK\n"
+  },
+  "config_hashes_before": {
+    "auxiliary.json": "ad800cc3d7d6bd3240ef49d7f584905ea651e424a5c74c127167595c78f56445",
+    "b_pickup.json": "4a85ed4087fef093d58c9e78b054ea55ee1ff6835152a8e067db0b9b3403b36c",
+    "camera_alignment.json": "433ea822f2da0be30b3e43eba15039da9853e4b295a84d454f8f263d82bd2a36",
+    "cameras.json": "2ad6be879693aa2ca1556ef968328ac434b65b24e1cf7ab4448ee61005e5d56d",
+    "control_settings.json": "8491531a8b268c4551b03056089047c42f4cb55b5d8013465a261cf4b138b202",
+    "device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699",
+    "mission.json": "63ed3d492d38174a4deefd284d80f82c2900bc047eff367e73a0b7ae1df60cca",
+    "navigation.json": "4fecbb76d922f85938a30f7d875a146d2d5f7952ea97ace95a8bf940d719e68e",
+    "pick_place.json": "4703b12adf5bdc809420454e42a6907d7b38693f10a0af0ffbd2c9f996e56afd"
+  },
+  "config_hashes_after": {
+    "auxiliary.json": "ad800cc3d7d6bd3240ef49d7f584905ea651e424a5c74c127167595c78f56445",
+    "b_pickup.json": "4a85ed4087fef093d58c9e78b054ea55ee1ff6835152a8e067db0b9b3403b36c",
+    "camera_alignment.json": "433ea822f2da0be30b3e43eba15039da9853e4b295a84d454f8f263d82bd2a36",
+    "cameras.json": "2ad6be879693aa2ca1556ef968328ac434b65b24e1cf7ab4448ee61005e5d56d",
+    "control_settings.json": "8491531a8b268c4551b03056089047c42f4cb55b5d8013465a261cf4b138b202",
+    "device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699",
+    "mission.json": "63ed3d492d38174a4deefd284d80f82c2900bc047eff367e73a0b7ae1df60cca",
+    "navigation.json": "4fecbb76d922f85938a30f7d875a146d2d5f7952ea97ace95a8bf940d719e68e",
+    "pick_place.json": "4703b12adf5bdc809420454e42a6907d7b38693f10a0af0ffbd2c9f996e56afd"
+  },
+  "configurations_unchanged": true,
+  "b_pickup_config": {
+    "pick_down": 3500,
+    "pick_rotation": -1750,
+    "lift_sps": 1500,
+    "lift_accel": 5000,
+    "rotation_sps": 2000,
+    "rotation_accel": 2000,
+    "s1_open": 150,
+    "s1_closed": 70,
+    "s1_settle_ms": 600,
+    "s2_settle_ms": 1000,
+    "step_timeout_ms": 60000,
+    "ack_timeout_ms": 3000,
+    "roi_x_pct": 15,
+    "roi_y_pct": 15,
+    "roi_width_pct": 70,
+    "roi_height_pct": 70
+  },
+  "browser_validation": {
+    "b_fields": {
+      "ack_timeout_ms": 3000,
+      "lift_accel": 5000,
+      "lift_sps": 1500,
+      "pick_down": 3500,
+      "pick_rotation": -1750,
+      "roi_height_pct": 70,
+      "roi_width_pct": 70,
+      "roi_x_pct": 15,
+      "roi_y_pct": 15,
+      "rotation_accel": 2000,
+      "rotation_sps": 2000,
+      "s1_closed": 70,
+      "s1_open": 150,
+      "s1_settle_ms": 600,
+      "s2_settle_ms": 1000,
+      "step_timeout_ms": 60000
+    },
+    "button_text": "一键测试B点完整抓取",
+    "button_visible": true,
+    "generic_fields": {
+      "ack_timeout_ms": 3000,
+      "lift_accel": 5000,
+      "lift_sps": 1500,
+      "pick_down": 3500,
+      "pick_rotation": -1850,
+      "place_drop_down": 10000,
+      "place_rotation": -1850,
+      "place_take_down": 200,
+      "rotation_accel": 2000,
+      "rotation_sps": 2000,
+      "s1_closed": 70,
+      "s1_open": 150,
+      "s1_settle_ms": 600,
+      "s2_settle_ms": 1000,
+      "s2_slot_1": 270,
+      "s2_slot_2": 135,
+      "s2_slot_3": 0,
+      "step_timeout_ms": 60000,
+      "vision_timeout_ms": 30000
+    },
+    "overflow": false,
+    "state": "未启动",
+    "url": "http://192.168.1.196:8770/debug",
+    "viewport": {
+      "height": 719,
+      "width": 418
+    },
+    "logs": [],
+    "parameter_values_match_saved_configs": true,
+    "action_buttons_clicked": false,
+    "saved_configurations_modified": false
+  },
+  "browser_screenshot": "../localtmp/b_full_pickup_20261020_135056/nx_b_full_pickup.png",
+  "final_health": {
+    "verified_at": "2026-10-20 14:17:46 +0800",
+    "service": "MainPID=8913\nActiveState=active\n",
+    "link": "connected",
+    "imu": "streaming",
+    "armed": false,
+    "axes": {
+      "1": {
+        "cmd": "AXIS",
+        "axis": "1",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "2": {
+        "cmd": "AXIS",
+        "axis": "2",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "3": {
+        "cmd": "AXIS",
+        "axis": "3",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "4": {
+        "cmd": "AXIS",
+        "axis": "4",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "5": {
+        "cmd": "AXIS",
+        "axis": "5",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "6": {
+        "cmd": "AXIS",
+        "axis": "6",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "7": {
+        "cmd": "AXIS",
+        "axis": "7",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      }
+    },
+    "auxiliary": {
+      "5": {
+        "cmd": "AUX_STAT",
+        "axis": "5",
+        "pos": "0",
+        "min": "0",
+        "max": "11000",
+        "referenced": "1",
+        "configured": "1",
+        "active": "0"
+      },
+      "6": {
+        "cmd": "AUX_STAT",
+        "axis": "6",
+        "pos": "0",
+        "min": "0",
+        "max": "0",
+        "referenced": "0",
+        "configured": "0",
+        "active": "0"
+      }
+    },
+    "pickup": {
+      "state": "idle",
+      "active": false,
+      "error": "",
+      "job_id": null,
+      "context": {},
+      "step": 0,
+      "total": 0,
+      "label": "",
+      "request": null
+    },
+    "files_verified": {
+      "host/pick_place.py": "efbec1225b521b85da2f0c084d32bcd87e00080172814c465b14ef6ae1a04fa4",
+      "host/webserver.py": "47751e6e7ffdf281e49d76e64ed1d9ec2ccba79233335bece3ce3877792fb236",
+      "host/static/pick_place.js": "0b8d6e2eef56853b9e6232b0bf36c0d86cabe44f2358ec922573ac4ed382c78f",
+      "host/static/index.html": "9ef23e1d970c0585c96d0c94b172b8d636df2999e2d0d15da98d3a520e78cccf",
+      "host/static/app.js": "f2016a009ac948742345c578236d0d66cc1a9cf66455df17c68a54257d9ed22e",
+      "tests/test_pick_place.py": "1ab3866d10b67d29032812240acfdc22f1f07d7bc54cb90fb99bea021d88c4b2",
+      "tests/test_b_pickup.py": "f58f9eb318224a260d021ad6ea675ff0806bb8b8484e90d9bc56882081bccf1c"
+    },
+    "config_hashes_after": {
+      "auxiliary.json": "ad800cc3d7d6bd3240ef49d7f584905ea651e424a5c74c127167595c78f56445",
+      "b_pickup.json": "4a85ed4087fef093d58c9e78b054ea55ee1ff6835152a8e067db0b9b3403b36c",
+      "camera_alignment.json": "433ea822f2da0be30b3e43eba15039da9853e4b295a84d454f8f263d82bd2a36",
+      "cameras.json": "2ad6be879693aa2ca1556ef968328ac434b65b24e1cf7ab4448ee61005e5d56d",
+      "control_settings.json": "8491531a8b268c4551b03056089047c42f4cb55b5d8013465a261cf4b138b202",
+      "device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699",
+      "mission.json": "63ed3d492d38174a4deefd284d80f82c2900bc047eff367e73a0b7ae1df60cca",
+      "navigation.json": "4fecbb76d922f85938a30f7d875a146d2d5f7952ea97ace95a8bf940d719e68e",
+      "pick_place.json": "4703b12adf5bdc809420454e42a6907d7b38693f10a0af0ffbd2c9f996e56afd"
+    },
+    "configurations_unchanged": true,
+    "journal_warning_returncode": 0,
+    "journal_warnings": "-- No entries --\n",
+    "journal_stderr": "\u001b[0;1;39mNo journal files were found.\u001b[0m\n",
+    "hardware_pickup_started": false,
+    "firmware_flashed": false
+  },
+  "journal_check_limitation": "User journal has no log files; no log health conclusion is asserted.",
+  "physical_validation_pending": "M6 live referenced=0 and configured=0. An operator must establish its zero before a physical pickup test.",
+  "hardware_pickup_started": false,
+  "firmware_flashed": false
+}

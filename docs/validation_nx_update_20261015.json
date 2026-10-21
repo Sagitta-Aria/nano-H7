@@ -1,0 +1,309 @@
+{
+  "date": "2026-10-15",
+  "target": "a@192.168.1.197",
+  "url": "http://192.168.1.197:8770/",
+  "backup": "/home/a/h743/backups/nx_update_20261015_200536",
+  "service": {
+    "old_pid": "1746",
+    "new_pid": "19715",
+    "service": "active"
+  },
+  "host_sync": {
+    "files_verified": 51,
+    "files_updated": 26,
+    "sha256_check": "passed"
+  },
+  "extras": {
+    "files_verified_at_install": 78,
+    "sha256": {
+      "h743/tools/nx_vision_color.py": "d34a08e512b33c710330c40c5c85e0ace86885983ad098fb2c51b7821c4799be",
+      "vision-live/ring_digit/nx_vision_color.py": "d34a08e512b33c710330c40c5c85e0ace86885983ad098fb2c51b7821c4799be",
+      "h743/tools/nx_vision_fast.py": "c2206d3a3648627bf788a21fb4c7e115f87f7d7899a9e0b83371aa99c0f3717d",
+      "vision-live/ring_digit/nx_vision_fast.py": "c2206d3a3648627bf788a21fb4c7e115f87f7d7899a9e0b83371aa99c0f3717d",
+      "h743/tools/nx_vision_live.py": "5ede946806f4eea592246a1458357b0c1fe94fd92276d18de8b02100fb158062",
+      "vision-live/ring_digit/nx_vision_live.py": "5ede946806f4eea592246a1458357b0c1fe94fd92276d18de8b02100fb158062",
+      "h743/tools/nx_vision_roi.py": "aacc5ce7e8d370372d70a9c5bfeba01f1096382f5bda9e322a7f860352e74128",
+      "vision-live/ring_digit/nx_vision_roi.py": "aacc5ce7e8d370372d70a9c5bfeba01f1096382f5bda9e322a7f860352e74128",
+      "h743/tools/nx_vision_trt.py": "26b4fd9374de2d2d112a9b6f99fb7756b39b5dced251d15e6f9c6bf4c99b1116",
+      "vision-live/ring_digit/nx_vision_trt.py": "26b4fd9374de2d2d112a9b6f99fb7756b39b5dced251d15e6f9c6bf4c99b1116",
+      "h743/tools/nx_vision_ui.py": "b889b8e28151b127ac9829c39e654d2755fb0e7f3ca63506d93a3a343b49ba0d",
+      "vision-live/ring_digit/nx_vision_ui.py": "b889b8e28151b127ac9829c39e654d2755fb0e7f3ca63506d93a3a343b49ba0d",
+      "h743/tools/nx_mission_vision.py": "391fadbd4f59fbc9dcdb95392fad5908bfbc99e724e1ed1b8b37b1785e0d0b42",
+      "h743/tools/deploy_host.py": "28a96717c1fa0540db9b620a1ea213c3383f3de9b2e3d3c622867d6888ce9106",
+      "h743/tools/benchmark_vision_nx.py": "d757c90a92fdfba502503830fcc5a1d12985984702bc33465ad95e98bd9226c5",
+      "h743/tools/build_nx_vision_engine.py": "a556b4c9cd6b8c04abee5726b8e154286700c5078fc8d7de49cad4e357a6103f",
+      "h743/tools/validate_nx_vision_color.py": "1309cc45beb3c7bf81b616681b4561f781d05b484d84a9a829e4b6b3688053f9",
+      "h743/tools/validate_nx_vision_live.py": "60375dbd636afc3b4fb1e9d4cc9868e11309cffd1b0f9402476d2e97844a1307",
+      "h743/tools/validate_nx_vision_modes.py": "6e4c12e35bc5380002dae659e140084dafeacd0673389431de2b3c26d42fa292",
+      "h743/docs/ARCHITECTURE.md": "60f02f47ea59a8c07e7902248185f0bcf050acdc727b5da54584829f895efbdc",
+      "h743/docs/AUXILIARY.md": "967a75300f54923a0408458a751763b95a91486f30baf4332e230fd73c20c5a4",
+      "h743/docs/CAMERAS.md": "3020a632831c1f28392152204519a4e8b22b6b16b3f0ae4f3c0edf956c7a6568",
+      "h743/docs/CHASSIS.md": "b232fe5871f3c98c8b4e583d600a950673364b387f95e6c1447051e98d7fc053",
+      "h743/docs/H723_IMU.md": "47196364dd9a3c00c3b39fe948a1b3399d7408db5f7ca66230c8176381dd1f7c",
+      "h743/docs/JETSON.md": "d5ee1f0ef08f737c4a0d01a3b156a623bfa93d2b8f7de08723a0218e20301d82",
+      "h743/docs/LIFT.md": "45acf73479d7ebbe00f60fa0849fd45f09217bcbaa45ca0f1e94762326868bac",
+      "h743/docs/MISSION.md": "07cf758d29fe1f1e644ca9e497e9eb358a9c3db17b8e12fc9226b5c97a38158c",
+      "h743/docs/NAVIGATION.md": "d2aaba9121c7c7b2df7feab73ef8618912a98d9a6b8e9e103debb83ad4c59304",
+      "h743/docs/OPTICAL_FLOW_F7.md": "c16fe1fa88224f5b2922a51674cea41bad5596be4f901df8c502c5967226db52",
+      "h743/docs/PROTOCOL.md": "4f040ffe969fe2ac8e0c2a2176fef5ac79fcf3b450defb7be99f5404603e8dc2",
+      "h743/docs/RECOVERY.md": "9b64220ed98743c71b4f514f985575c977623a0cc40a70f1c9436a0abd2a470a",
+      "h743/docs/STRAIGHT.md": "b0718102777b5d08766ae8f207712cc50c267a40b8bef9b6243381fa66508a0e",
+      "h743/docs/THIRD_PARTY.md": "554a33d7ff1c1369974fbbc1f8dc2b1d7e2f0477d82d49638ac575a37eff8618",
+      "h743/docs/TURN.md": "67446f3c5fb3895236dc9664d214a28ec2cc84764770384e3cd810a3d78f925b",
+      "h743/docs/VALIDATION.md": "f669633ad38aebf06394ececa93db6972d3f4c6b7a0b52ea2ce9f08638e6ad84",
+      "h743/docs/VISION_ENV.md": "ae10c0919cbefc4ee39442afc84452cbea9778610e8ca45da99c829223b5f52d",
+      "h743/docs/WIRELESS.md": "7687f89a08b385fde49c5f7d99b29467aa91addad00105acce9fa78a9b245259",
+      "h743/README.md": "16acbb1d7cc4239c60bd62be6dc1f4c163f868e58f6457efe8b428c880648825",
+      "h743/CHANGELOG.md": "98339bbe00d9d76c4a490bb9ff730bb8b58139feb9d1a1fbe19e28788f61642e",
+      "h743/docs/validation_mission_20261015.json": "12959b9fd75a481ace4284aa04835e2c3331b88364c5431ba6e8f410544d3bb5",
+      "h743/docs/validation_nx_vision_color_20261015.json": "9d11e8c68c52dd3c75936a5acccc8f0a2916eb584440427b88b159c38dc0d9c4",
+      "h743/docs/validation_nx_vision_gpu_20261015.json": "4db00a4fa45859ca62a27cbd7e7aa6e3d3358970f56d65316a184bb763fe3be3",
+      "h743/docs/validation_nx_vision_grasp_20261015.json": "d0d4ba49f0ba609dd70d9e5adc5f308d6cd9115f1abbfa704701fedccf460f7d",
+      "h743/docs/validation_nx_vision_live_20261015.json": "3bc8e56ae585f673877e875821e8081e0156df5a5d01cd9b685dd14bd6cfaea2",
+      "h743/docs/validation_nx_vision_modes_20261015.json": "1c4897bf2a7c2b694b7f526cd9b16af04f3a7905bc4b7b81190d740f6bd44bb6",
+      "h743/docs/validation_nx_vision_one_20261015.json": "c6718588fd3bf257e989efe12e90ea77771bc5a162f23749b15a880c1d5f23ed",
+      "h743/docs/validation_nx_vision_roi_20261015.json": "5841745c7165e81427b70d17c12c9d4454581f085fafe3b3d422e406e4cebfb0",
+      "h743/docs/validation_nx_vision_touch_20261015.json": "eb8d8f575327d2f7e4afc53bf10591d52fbd268f61563a3881f6d784407c8d42",
+      "h743/docs/validation_recovery_20261015.json": "967655e39c1929f9372af8a09cc7ef92bf6b4b12d26b20760568e19e40e96112",
+      "h743/docs/validation_stations_20261015.json": "ab372da0fcaca88839ad6cd42d33599c2ecf43012d77b9686379d2e3d1f23c44",
+      "h743/releases/v0.2.21/robot_h743.axf": "de8ccd552c3ba6ecca67400f79106d311ed3bedddfbe7c7261ec102092687fda",
+      "h743/releases/v0.2.21/robot_h743.bin": "3e18fbfb37920477c9f04410c79e9358dd2deaed0f2950c896f01e6e867e2f40",
+      "h743/releases/v0.2.21/robot_h743.hex": "47f8c0966632964c142da455e5e0cee6079d9dd4d3d701f39e63910b822caab5",
+      "h743/releases/v0.2.21/robot_h743.map": "511844390e7a28cd8346b344b7109de2eeff7d14180232eae99d1a89726c4286",
+      "h743/releases/v0.2.21/source/firmware/src/board.c": "d18d18582183423a76bb6999d5c86d2f4f348e89c75ad2effe7976687b81f6d4",
+      "h743/releases/v0.2.21/source/firmware/src/chassis.c": "93558f1c6d8532fdf3e234a4cea49417036e263665e2ff7820bb2ca3955ec205",
+      "h743/releases/v0.2.21/source/firmware/src/main.c": "bd8eb376ba3c30f265131dd000ba676286b6f647200bebd1e61c4b748935080a",
+      "h743/releases/v0.2.21/source/firmware/src/motion.c": "49ef51c011b6f90f833f7a8d49a6a21fa54a2367f52e77bbb24c271a00272dd1",
+      "h743/releases/v0.2.21/source/firmware/src/motion_math.c": "91aa14844ad0e454b38577278be657bcfa6e7f64bd6e614e19f38733a0b33b21",
+      "h743/releases/v0.2.21/source/firmware/src/navigation.c": "b1e248eff718a406b76dfdf5b257d197c112f94862861ed2ff08e0dcfde0401c",
+      "h743/releases/v0.2.21/source/firmware/src/optical_flow.c": "acbcb019a382b001b08c216b2a32808155abb633428dcfd0b9ed06d6265b0466",
+      "h743/releases/v0.2.21/source/firmware/src/protocol.c": "f84acbb731eea5b2f5528e20d47af121f7d5e8ab3f9a4faba31d92c18b0037f0",
+      "h743/releases/v0.2.21/source/firmware/src/serial.c": "8e1923101fb65cd415358bbe250c1a1a85b72328a81287393fa36d9fd8d73723",
+      "h743/releases/v0.2.21/source/firmware/src/servo.c": "63f3849a18a16816c96285c1eaf914116640573c9892eaef3f9ef863d5484aff",
+      "h743/releases/v0.2.21/source/firmware/src/turn.c": "238882e08b0749a8cb581abd793d5a8200e520747e68929efda3d69be705c4b4",
+      "h743/releases/v0.2.21/source/firmware/include/app_config.h": "e477edde624dc7e1ec8ea78a81d373ce856ac946fbf08bbdbc108f15ce936e41",
+      "h743/releases/v0.2.21/source/firmware/include/board.h": "31eaca5077e42ed79105aff7e6fbeabfcfb02f424d8e828450176acff38a0853",
+      "h743/releases/v0.2.21/source/firmware/include/chassis.h": "9aaf189102c660ca07a72dbe863ac16e34c80610411ad3e66ffa1a8475399a86",
+      "h743/releases/v0.2.21/source/firmware/include/FreeRTOSConfig.h": "61cdb7634dd8c0f623332ddb5bd65c56133e90aa8749d7d28de53de42983838e",
+      "h743/releases/v0.2.21/source/firmware/include/motion.h": "22853573113791bdf17b0edb97db42c9ad419d01b8b68215a08c6ba661a701f2",
+      "h743/releases/v0.2.21/source/firmware/include/motion_math.h": "39b50b751f49efcb5adfe16bb01dc02748ac8d91a6ab033105b3ac2b8055fe3f",
+      "h743/releases/v0.2.21/source/firmware/include/navigation.h": "a97e4885314e4f83a153b8eced9a9165ebf5e39522de6e88e72c016e10729403",
+      "h743/releases/v0.2.21/source/firmware/include/optical_flow.h": "da20377a00a7b389d2e1df9fdd32f8cea02ff40535a6c29fbc5d4cc2787b4bda",
+      "h743/releases/v0.2.21/source/firmware/include/protocol.h": "b8151e6eead75259b101990a4545cb91219a41afaab016ffcd4ef2ad4829d91d",
+      "h743/releases/v0.2.21/source/firmware/include/serial.h": "25fe1b53980d59607985963461a5b43f5e6c398ce1c9b9107d42752f0c450c1d",
+      "h743/releases/v0.2.21/source/firmware/include/servo.h": "136fbcf64204ea23a6f90561e7842e8fc8f10b47707792644315b16cb636fb55",
+      "h743/releases/v0.2.21/source/firmware/include/turn.h": "2a090be59a79944168b9d6a1a59ac7bf7ca80f1017742a4289a0eaff5cc3a995",
+      "h743/releases/v0.2.21/source/tools/build_firmware.py": "14b42cd7bdbbeba5c17a425a7f03570f1e9017067e8d428d986227117f029eaa"
+    }
+  },
+  "original_vision_source_sha256": {
+    "color_block_center.py": "9119f332ad660419b7b7923eb26dc2cef4e47fc6b3fd592fb9e4ea1012fc3183",
+    "black_ring.py": "64dd7f72fdfe22bc18d7fdb2b50230e77ec0ab009ce02fd4833b714f8f146d42",
+    "digit_core.py": "a63344123ccb32b69832398567e459df9a1f6e588043b8f81a51d4636a80384e",
+    "ring_digit.py": "1179e5749a3a9b0c419565ff799d884c0e215e06c1d58d900c8bae5d7df38eb3"
+  },
+  "field_settings_sha256": {
+    "host/device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699",
+    "host/auxiliary.json": "8ecf3f9a8840dcef9db2fd91d8b8fa4f3bd1b65bcb052c20a3e2b0b17505c3cf",
+    "host/navigation.json": "236156461803ab9214ef7999c808ed6fe07bea57025dea1cfa9a8eb33f45782b"
+  },
+  "remote_tests": {
+    "python": "3.8.10",
+    "tests": 178,
+    "failures": 0,
+    "pty_stages_passed": 3
+  },
+  "vision_smoke": {
+    "ok": true,
+    "opencv": "4.9.0",
+    "color_detection": true,
+    "tensorrt_load_and_inference": true,
+    "mode_switch_and_close": true,
+    "camera_opened": false,
+    "serial_opened": false
+  },
+  "browser": {
+    "ok": true,
+    "task_panel_loaded": true,
+    "old_firmware_recovery_disabled": true,
+    "uncalibrated_task_preserved": true,
+    "viewport_widths": [
+      1440,
+      760,
+      390
+    ],
+    "page_errors": [],
+    "unexpected_mutations": [],
+    "robot_commands_sent": 0
+  },
+  "final_state": {
+    "link": "connected",
+    "armed": false,
+    "axes": {
+      "1": {
+        "cmd": "AXIS",
+        "axis": "1",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "2": {
+        "cmd": "AXIS",
+        "axis": "2",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "3": {
+        "cmd": "AXIS",
+        "axis": "3",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "4": {
+        "cmd": "AXIS",
+        "axis": "4",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "5": {
+        "cmd": "AXIS",
+        "axis": "5",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "6": {
+        "cmd": "AXIS",
+        "axis": "6",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "7": {
+        "cmd": "AXIS",
+        "axis": "7",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      }
+    },
+    "navigation": {
+      "cmd": "NAV_STAT",
+      "state": "idle",
+      "ready": "0",
+      "x": "0",
+      "y": "0",
+      "target": "A",
+      "tx": "0",
+      "ty": "0",
+      "leg": "1",
+      "wait_ms": "0",
+      "move_id": "0",
+      "obstacle": "0",
+      "planner": "host_grid",
+      "heading_cd": "0",
+      "target_cd": "0",
+      "arrival_cd": "0",
+      "imu": "0",
+      "fault": "none",
+      "wx": "0",
+      "wy": "0",
+      "segment": "0",
+      "segments": "0",
+      "path_id": "0",
+      "route_ready": "0"
+    },
+    "turn": {
+      "cmd": "TURN_STAT",
+      "state": "idle",
+      "mode": "REL",
+      "zero": "0",
+      "current_cd": "14243",
+      "target_cd": "0",
+      "error_cd": "-14243",
+      "imu": "0",
+      "move_id": "0",
+      "active": "0",
+      "fault": "none",
+      "kp_centi": "2000",
+      "tolerance_cd": "20"
+    },
+    "task": {
+      "state": "idle",
+      "active": false,
+      "error": "",
+      "run_id": "",
+      "leg": 0,
+      "action": 1,
+      "request": null,
+      "scans": {}
+    },
+    "task_config": {
+      "timeout_s": 480,
+      "leg_timeout_s": 120,
+      "action_timeout_s": 30,
+      "vision_max_age_ms": 500,
+      "calibration": {
+        "verified": false,
+        "matrix": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "tolerance_px": 3,
+        "stable_frames": 3,
+        "max_iterations": 12,
+        "max_step": 100,
+        "sps": 100,
+        "accel": 1000
+      },
+      "legs": {}
+    },
+    "imu": {
+      "state": "offline",
+      "message": "未连接 H723",
+      "port": null,
+      "identity": {},
+      "latest": null,
+      "generation": 0,
+      "rejected": 0,
+      "revision": 0
+    },
+    "auto_devices": {
+      "enabled": true,
+      "message": "自动连接：H743 已连接 · H723 等待设备 / 重试握手",
+      "h743_uid": "3637333530335109002A003A",
+      "h723_uid": "002600483134510438373332"
+    }
+  },
+  "board_firmware": "0.2.18",
+  "firmware_flashed": false,
+  "firmware_release": "/home/a/h743/releases/v0.2.21/",
+  "limitations": [
+    "H743 firmware remains 0.2.18; update MCU before task alignment and motion clear.",
+    "H723 offline; automatic reconnect continues.",
+    "Mission actions empty and visual calibration unverified; no robot task started."
+  ]
+}

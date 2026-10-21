@@ -1,0 +1,65 @@
+{
+  "completed_at": "2026-10-16T22:56:51.793892+08:00",
+  "toolchain": "Keil ARM Compiler 5 / Cortex-M7 / Unicorn ARM emulation",
+  "fixes": [
+    "Restart uses measured map heading instead of previous turn target",
+    "Vector launch speed and acceleration scale with wheel displacement",
+    "Station actions wait for matching runner arrival completion",
+    "Final visual task retires external navigation ownership and publishes UI state"
+  ],
+  "regressions": {
+    "file": "tests/test_navigation_regressions.py",
+    "original_cases_failed_before_fix": true,
+    "result": "passed"
+  },
+  "build": {
+    "command": "python tools/build_firmware.py",
+    "result": "passed"
+  },
+  "full_suite": {
+    "command": "python -m unittest discover -s tests -p 'test_*.py'",
+    "tests": 462,
+    "skipped": 1,
+    "result": "passed"
+  },
+  "after_final_changes": {
+    "command": "python -m unittest tests.test_navigation_regressions tests.test_turn_inset tests.test_ring_task tests.test_mission tests.test_webapp",
+    "tests": 73,
+    "result": "passed"
+  },
+  "additional_arm_sweep": {
+    "cases": 54,
+    "failed": 0,
+    "headings_cd": [
+      1000,
+      3000,
+      4500,
+      6000,
+      8900,
+      12345
+    ]
+  },
+  "frontend": {
+    "command": "node tests/test_navigation_frontend.cjs",
+    "result": "passed"
+  },
+  "diff_check": "passed",
+  "hardware": {
+    "flashed": false,
+    "nx_deployed": false,
+    "physical_motion_executed": false
+  },
+  "limits": [
+    "Synthetic feedback and peripheral emulation do not validate real STEP timing, wheel slip or physical clearance.",
+    "Endpoint guard remains 0.51 pulse per coordinate, at most three corrective moves, with existing timeouts."
+  ],
+  "sha256": {
+    "firmware/build/robot_h743.hex": "197331e67fb3221a58775d9868390d9f56332b13c798b55320e245daf21a0172",
+    "firmware/build/robot_h743.axf": "c03a3af8c7137827bf867b0b9087e3eaa21cef82fce0bf21bf3cedbf90bc7ae9",
+    "firmware/src/motion.c": "88daafe623bde55e70b1da0b270fd027b999ac1c39a7c8b119367254285b385b",
+    "host/navigation_runner.py": "6c13c8d926378863f724aaa58d33134af102b955d713b50830ccb86cf312d22d",
+    "host/mission.py": "b994ab01baa589da15f54e46b3813cd8e0bbb63e11f2e526c8dab88ae85601b5",
+    "host/webapp.py": "64745cb3818448a5774637d9d10ee01b27a204c2c92a0894deee116743ffbce6",
+    "tests/test_navigation_regressions.py": "651dbeae2c2da113ac7bae85363e9305d3b89b26bae2eecc5da0b945cb23df63"
+  }
+}

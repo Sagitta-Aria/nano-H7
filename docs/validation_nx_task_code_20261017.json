@@ -1,0 +1,432 @@
+{
+  "backup": "/home/a/h743/backups/task_code_20261017_175436",
+  "config_hashes_before": {
+    "device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699",
+    "auxiliary.json": "8ba910fb3e7bba676f3c4c0097a2c90f3b685a46dfd968d9a762c9c1b9480fba",
+    "navigation.json": "069219467f43151b6f396a41ea0569d3636514ce31904f441d4093332a177b43",
+    "camera_alignment.json": "48348200dd774edd4b0f136c15b974c068d4e970746fc004f42684ae407586a7",
+    "cameras.json": "f1ea92d8c9de95a3c9b4478d87b82c531e071bc30a6dc0d974ce2cb0f0b6f436"
+  },
+  "binding": {
+    "id": "/dev/v4l/by-id/usb-HD_Camera_Manufacturer_USB_2.0_Camera-video-index0",
+    "label": "USB 2.0 Camera: HD USB Camera",
+    "kind": "usb"
+  },
+  "physical_camera_switches": [
+    {
+      "slot": "2",
+      "other_closed": true,
+      "state": {
+        "state": "ready",
+        "message": "Nano 摄像头已打开，点击“拍照”获取一帧。",
+        "device": "/dev/video0",
+        "label": "Integrated Camera: Integrated C",
+        "requested": "1280x720",
+        "width": 1280,
+        "height": 720,
+        "fps": 60.0,
+        "sequence": 0,
+        "qr": {
+          "status": "searching",
+          "text": "",
+          "code": null,
+          "groups": [],
+          "digits": [],
+          "captured_at": 1792230968.343016,
+          "task_plan": null,
+          "task_error": "",
+          "last_code": null,
+          "last_seen_at": null,
+          "last_plan": null,
+          "frame_id": 1,
+          "processing_ms": 306.9
+        }
+      }
+    },
+    {
+      "slot": "1",
+      "other_closed": true,
+      "state": {
+        "state": "ready",
+        "message": "拍照完成，画面为这一帧，不会持续传输。",
+        "device": "/dev/video2",
+        "label": "USB 2.0 Camera: HD USB Camera",
+        "requested": "1280x720",
+        "width": 1280,
+        "height": 720,
+        "fps": 60.0,
+        "sequence": 1,
+        "vision": null,
+        "captured_at": 1792230977.5409746,
+        "taken_at": 1792230977.6445186
+      }
+    },
+    {
+      "slot": "2",
+      "other_closed": true,
+      "state": {
+        "state": "ready",
+        "message": "Nano 摄像头已打开，点击“拍照”获取一帧。",
+        "device": "/dev/video0",
+        "label": "Integrated Camera: Integrated C",
+        "requested": "1280x720",
+        "width": 1280,
+        "height": 720,
+        "fps": 60.0,
+        "sequence": 0,
+        "qr": {
+          "status": "searching",
+          "text": "",
+          "code": null,
+          "groups": [],
+          "digits": [],
+          "captured_at": 1792230979.3933892,
+          "task_plan": null,
+          "task_error": "",
+          "last_code": null,
+          "last_seen_at": null,
+          "last_plan": null,
+          "frame_id": 1,
+          "processing_ms": 312.9
+        }
+      }
+    }
+  ],
+  "route_before": {
+    "stations": [
+      {
+        "name": "O",
+        "x": 0,
+        "y": 0,
+        "heading": 0
+      },
+      {
+        "name": "A",
+        "x": 0,
+        "y": 14400,
+        "heading": 0
+      },
+      {
+        "name": "B",
+        "x": 14400,
+        "y": 0,
+        "heading": -90
+      },
+      {
+        "name": "C",
+        "x": 14400,
+        "y": 28800,
+        "heading": 90
+      },
+      {
+        "name": "D",
+        "x": 28800,
+        "y": 14400,
+        "heading": -180
+      }
+    ],
+    "route": [
+      {
+        "station": 1,
+        "hold": 0
+      },
+      {
+        "station": 2,
+        "hold": 0
+      },
+      {
+        "station": 3,
+        "hold": 1,
+        "task": 1,
+        "outward_steps": 400,
+        "right_steps": 800
+      },
+      {
+        "station": 4,
+        "hold": 1,
+        "task": 1,
+        "outward_steps": 400,
+        "right_steps": 800
+      },
+      {
+        "station": 1,
+        "hold": 0
+      },
+      {
+        "station": 0,
+        "hold": 0
+      }
+    ],
+    "grid": {
+      "x": [
+        0,
+        14400,
+        28800
+      ],
+      "y": [
+        0,
+        14400,
+        28800
+      ]
+    },
+    "sps": 3000,
+    "accel": 5000,
+    "dwell_ms": 3000,
+    "turn_inset_enabled": true,
+    "turn_inset_steps": 1000
+  },
+  "route_after": {
+    "stations": [
+      {
+        "name": "O",
+        "x": 0,
+        "y": 0,
+        "heading": 0
+      },
+      {
+        "name": "A",
+        "x": 0,
+        "y": 14400,
+        "heading": 0
+      },
+      {
+        "name": "B",
+        "x": 14400,
+        "y": 0,
+        "heading": -90
+      },
+      {
+        "name": "C",
+        "x": 14400,
+        "y": 28800,
+        "heading": 90
+      },
+      {
+        "name": "D",
+        "x": 28800,
+        "y": 14400,
+        "heading": -180
+      }
+    ],
+    "route": [
+      {
+        "station": 1,
+        "hold": 1,
+        "task": 4
+      },
+      {
+        "station": 2,
+        "hold": 0
+      },
+      {
+        "station": 3,
+        "hold": 1,
+        "task": 1,
+        "outward_steps": 400,
+        "right_steps": 800
+      },
+      {
+        "station": 4,
+        "hold": 1,
+        "task": 1,
+        "outward_steps": 400,
+        "right_steps": 800
+      },
+      {
+        "station": 1,
+        "hold": 0
+      },
+      {
+        "station": 0,
+        "hold": 0
+      }
+    ],
+    "grid": {
+      "x": [
+        0,
+        14400,
+        28800
+      ],
+      "y": [
+        0,
+        14400,
+        28800
+      ]
+    },
+    "sps": 3000,
+    "accel": 5000,
+    "dwell_ms": 3000,
+    "turn_inset_enabled": true,
+    "turn_inset_steps": 1000
+  },
+  "configured_qr_leg": 1,
+  "camera2_after_restart": {
+    "state": "ready",
+    "message": "Nano 摄像头已打开，点击“拍照”获取一帧。",
+    "device": "/dev/video0",
+    "label": "Integrated Camera: Integrated C",
+    "requested": "1280x720",
+    "width": 1280,
+    "height": 720,
+    "fps": 60.0,
+    "sequence": 0,
+    "qr": {
+      "status": "searching",
+      "text": "",
+      "code": null,
+      "groups": [],
+      "digits": [],
+      "captured_at": 1792230981.759665,
+      "task_plan": null,
+      "task_error": "",
+      "last_code": null,
+      "last_seen_at": null,
+      "last_plan": null,
+      "frame_id": 1,
+      "processing_ms": 294.4
+    }
+  },
+  "camera1_after_restart": {
+    "state": "idle",
+    "message": "Nano 摄像头已关闭，设备已释放。"
+  },
+  "config_hashes_after": {
+    "device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699",
+    "auxiliary.json": "8ba910fb3e7bba676f3c4c0097a2c90f3b685a46dfd968d9a762c9c1b9480fba",
+    "navigation.json": "862d4134227ad64dae088d0adc8cc6a8ebe23ddd4ae7f21be175500e242946f1",
+    "camera_alignment.json": "48348200dd774edd4b0f136c15b974c068d4e970746fc004f42684ae407586a7",
+    "cameras.json": "2ad6be879693aa2ca1556ef968328ac434b65b24e1cf7ab4448ee61005e5d56d"
+  },
+  "bindings": {
+    "2": {
+      "id": "/dev/v4l/by-id/usb-XHH-260202-H_Integrated_Camera-video-index0",
+      "label": "Integrated Camera: Integrated C",
+      "kind": "usb"
+    },
+    "1": {
+      "id": "/dev/v4l/by-id/usb-HD_Camera_Manufacturer_USB_2.0_Camera-video-index0",
+      "label": "USB 2.0 Camera: HD USB Camera",
+      "kind": "usb"
+    }
+  },
+  "service": "MainPID=14998\nActiveState=active\n",
+  "final_service": "MainPID=16000\nActiveState=active\n",
+  "final_camera1": {
+    "state": "idle",
+    "message": "Nano 摄像头已关闭，设备已释放。"
+  },
+  "final_camera2": {
+    "state": "ready",
+    "message": "Nano 摄像头已打开，点击“拍照”获取一帧。",
+    "device": "/dev/video0",
+    "label": "Integrated Camera: Integrated C",
+    "requested": "1280x720",
+    "width": 1280,
+    "height": 720,
+    "fps": 60.0,
+    "sequence": 0,
+    "qr": {
+      "status": "searching",
+      "text": "",
+      "code": null,
+      "groups": [],
+      "digits": [],
+      "captured_at": 1792231226.754133,
+      "task_plan": null,
+      "task_error": "",
+      "last_code": null,
+      "last_seen_at": null,
+      "last_plan": null,
+      "frame_id": 1,
+      "processing_ms": 364.9
+    }
+  },
+  "validation": {
+    "local_suite": 93,
+    "local_skipped": 1,
+    "nx_full_suite": 290,
+    "nx_skipped": 1,
+    "final_affected_nx_tests": 37,
+    "nx_qr_vision_tests": 5,
+    "pty_stages": 3,
+    "live_motion_started": false,
+    "manifest_files_sha256_matched": 81
+  },
+  "robot_after": {
+    "armed": false,
+    "link": "connected",
+    "axes": {
+      "1": {
+        "cmd": "AXIS",
+        "axis": "1",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "2": {
+        "cmd": "AXIS",
+        "axis": "2",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "3": {
+        "cmd": "AXIS",
+        "axis": "3",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "4": {
+        "cmd": "AXIS",
+        "axis": "4",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      }
+    },
+    "task": {
+      "state": "idle",
+      "active": false,
+      "error": "",
+      "run_id": "",
+      "leg": 0,
+      "action": 1,
+      "request": null,
+      "scans": {},
+      "ring_task": null,
+      "task_plan": null,
+      "qr_status": "",
+      "uses_task_code": false
+    }
+  },
+  "browser": {
+    "checks": [
+      {
+        "width": 1440,
+        "rows": 6
+      },
+      {
+        "width": 760,
+        "rows": 6
+      },
+      {
+        "width": 390,
+        "rows": 6
+      }
+    ],
+    "errors": [],
+    "blocked": [
+      "http://192.168.55.1:8770/api/session/heartbeat"
+    ],
+    "fixture_code": "156+231+516+123"
+  }
+}

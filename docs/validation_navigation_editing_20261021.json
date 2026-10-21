@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-21",
+  "feature": "Remove navigation draft diagram and apply-before-save gate; persist intermediate station coordinates",
+  "scope": "Host only. Existing local X reference firmware changes are separate and still require nav_reference=1 for X.",
+  "unit_checks": [
+    {"command": "python -m unittest tests.test_navigation_editing tests.test_stations tests.test_x_navigation tests.test_competition -q", "passed": 29},
+    {"command": "python -m unittest tests.test_navigation tests.test_webpage -q", "passed": 42},
+    {"command": "node tests/test_navigation_frontend.cjs", "result": "passed"}
+  ],
+  "browser_checks": [
+    {"command": "python -m tests.navigation_editing_browser", "result": "passed: no draft map or apply button, off-lane save/reload, direct dimensions, one-time remap, invalid execution rejected before commands, narrow layout"},
+    {"command": "python -m tests.navigation_browser", "result": "passed: existing cruise/task route, persistence, stop and desktop/mobile layout"},
+    {"command": "python -m tests.x_navigation_browser", "result": "passed: X save/reload/reference/inward/turn/direct A"},
+    {"command": "python -m tests.field_camera_browser", "result": "field editing checks passed; unrelated camera preview check timed out twice at line 70", "cause": "Synthetic pixel HSV [170,255,255] is excluded by current default red interval H=12. The standalone existing detector also reports no target. No production camera behavior changed."}
+  ],
+  "syntax_and_diff_checks": "Python compile, frontend syntax and diff whitespace checks passed",
+  "nx_deployed": false,
+  "hardware_executed": false,
+  "flashed": false
+}

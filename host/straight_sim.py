@@ -60,7 +60,7 @@ def correction(board, error):
 
 
 class StraightSim:
-    """Standalone controller; IMU errors latch and never resume on a later sample."""
+    """Preserve finite translation on same-session holds; epoch resets fault."""
     def __init__(self, board):
         self.board, self.line = board, None
         self.target = self.error = 0.
@@ -82,10 +82,6 @@ class StraightSim:
             return
         if epoch != self.epoch:
             self.stop('imu_changed')
-        elif not previously_fresh:
-            self.stop('imu_stale')
-        elif not valid:
-            self.stop('imu_invalid')
 
     def start(self, signs, yaw, steps, sps, accel, move_id):
         self.target, self.epoch = self.board.turn.heading, self.board.turn.epoch
@@ -98,13 +94,8 @@ class StraightSim:
         if not self.board.armed:
             self.stop()
             return
-        if not self.board.turn.fresh(now):
-            self.stop('imu_stale')
-            return
+        if self.board.turn.paused: return
         self.error = wrap(self.target-self.board.turn.heading)
-        if abs(self.error) > 5:
-            self.stop('heading_deviation')
-            return
         rotation = self.line.advance(dt, correction(self.board, self.error))
         if self.board.navigation.auto_imu and rotation:
             self.board.navigation.feedback(self.board.turn.heading+rotation*.08, True, self.epoch, now)

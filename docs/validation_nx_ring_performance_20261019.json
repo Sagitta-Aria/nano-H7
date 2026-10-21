@@ -1,0 +1,2100 @@
+{
+  "date": "2026-10-19",
+  "deployment": {
+    "backup": "/home/a/h743/backups/ring_performance_20261019_145303",
+    "files": {
+      "工创赛视觉识别/黑色圆环识别与数字识别/black_ring.py": "feb6df6d99cbf796827c0b4e7fe7106dbb6fa28fd93686af699a400fbfc2d30a",
+      "工创赛视觉识别/黑色圆环识别与数字识别/ring_digit.py": "e8ed1a477da0ae489691144bfbd8e9a0a6c285d8c0076ec4aeed9f62f5197a5e",
+      "工创赛视觉识别/黑色圆环识别与数字识别/digit_core.py": "49de63d869ee31a6076fa46ec9f807b75ab0ca92780c692fb8296365353d6c9a",
+      "host/vision_tuning.py": "b4be104741c65fe1f2d35544b577b7d8c725600dced3c5ba058374f3c0799c51",
+      "host/camera_monitor.py": "d78b9a0ec7c6c184c670366fc625654d4fbc6e81f084802ef1953ca39125546f",
+      "tests/test_ring_performance.py": "e6846536209c833ff59eb965a1775b0259819e46a88bd1651fa05a25586022e3"
+    },
+    "camera": {
+      "state": "opening",
+      "message": "正在打开 Nano 摄像头…",
+      "device": "/dev/video0",
+      "label": "USB 2.0 Camera: HD USB Camera",
+      "requested": "1024x768"
+    },
+    "config": {
+      "kind": "ring",
+      "target": "red",
+      "min_area": 300,
+      "black_max": 140,
+      "target_offset_px": [
+        0,
+        -30
+      ],
+      "tracking": {
+        "sps": 3000,
+        "deadzone_px": 40,
+        "reverse_x": false,
+        "reverse_y": false,
+        "kp": 1.2,
+        "ki": 0,
+        "kd": 0.1,
+        "min_sps": 400,
+        "accel": 4000,
+        "camera_yaw_deg": 90
+      },
+      "ring_sequence": {
+        "spacing_steps": 2200,
+        "range_steps": 4000,
+        "scan_step": 500,
+        "sps": 2000,
+        "angle_tolerance_deg": 10,
+        "max_turn_deg": 30
+      },
+      "detector": {
+        "colors": {
+          "red": {
+            "color": "red",
+            "min_area": 300,
+            "ranges": [
+              [
+                [
+                  0,
+                  80,
+                  46
+                ],
+                [
+                  10,
+                  255,
+                  255
+                ]
+              ]
+            ]
+          },
+          "green": {
+            "color": "green",
+            "min_area": 300,
+            "ranges": [
+              [
+                [
+                  35,
+                  50,
+                  46
+                ],
+                [
+                  84,
+                  255,
+                  255
+                ]
+              ]
+            ]
+          },
+          "blue": {
+            "color": "blue",
+            "min_area": 300,
+            "ranges": [
+              [
+                [
+                  100,
+                  160,
+                  46
+                ],
+                [
+                  135,
+                  255,
+                  255
+                ]
+              ]
+            ]
+          },
+          "yellow": {
+            "color": "yellow",
+            "min_area": 300,
+            "ranges": [
+              [
+                [
+                  15,
+                  80,
+                  46
+                ],
+                [
+                  34,
+                  255,
+                  255
+                ]
+              ]
+            ]
+          },
+          "black": {
+            "color": "black",
+            "min_area": 300,
+            "ranges": [
+              [
+                [
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  179,
+                  255,
+                  45
+                ]
+              ]
+            ]
+          },
+          "light_blue": {
+            "color": "light_blue",
+            "min_area": 300,
+            "ranges": [
+              [
+                [
+                  85,
+                  50,
+                  46
+                ],
+                [
+                  99,
+                  255,
+                  255
+                ]
+              ]
+            ]
+          }
+        },
+        "ring": {
+          "black_max": 140,
+          "min_area": 300,
+          "canny_low": 40,
+          "canny_high": 120,
+          "min_coverage": 0.6,
+          "shape_tolerance": 0.2,
+          "detect_width": 800,
+          "nearby_distance": 100
+        }
+      }
+    }
+  },
+  "tests": {
+    "local_passed": 71,
+    "nx_passed": 71
+  },
+  "acceptance": {
+    "cases": [
+      {
+        "name": "0-1",
+        "expected": [
+          "1"
+        ],
+        "actual": [
+          "1"
+        ],
+        "known_baseline_error": false
+      },
+      {
+        "name": "0-2",
+        "expected": [
+          "2"
+        ],
+        "actual": [
+          "2"
+        ],
+        "known_baseline_error": false
+      },
+      {
+        "name": "0-3",
+        "expected": [
+          "3"
+        ],
+        "actual": [
+          "3"
+        ],
+        "known_baseline_error": false
+      },
+      {
+        "name": "0-4",
+        "expected": [],
+        "actual": [],
+        "known_baseline_error": false
+      },
+      {
+        "name": "0-7",
+        "expected": [],
+        "actual": [],
+        "known_baseline_error": false
+      },
+      {
+        "name": "0-12",
+        "expected": [],
+        "actual": [],
+        "known_baseline_error": false
+      },
+      {
+        "name": "0-",
+        "expected": [],
+        "actual": [],
+        "known_baseline_error": false
+      },
+      {
+        "name": "0-I",
+        "expected": [],
+        "actual": [],
+        "known_baseline_error": false
+      },
+      {
+        "name": "0-l",
+        "expected": [],
+        "actual": [],
+        "known_baseline_error": false
+      },
+      {
+        "name": "2-1",
+        "expected": [
+          "1"
+        ],
+        "actual": [
+          "1"
+        ],
+        "known_baseline_error": false
+      },
+      {
+        "name": "2-2",
+        "expected": [
+          "2"
+        ],
+        "actual": [
+          "2"
+        ],
+        "known_baseline_error": false
+      },
+      {
+        "name": "2-3",
+        "expected": [
+          "3"
+        ],
+        "actual": [
+          "3"
+        ],
+        "known_baseline_error": false
+      },
+      {
+        "name": "2-4",
+        "expected": [],
+        "actual": [],
+        "known_baseline_error": false
+      },
+      {
+        "name": "2-7",
+        "expected": [],
+        "actual": [],
+        "known_baseline_error": false
+      },
+      {
+        "name": "2-12",
+        "expected": [],
+        "actual": [],
+        "known_baseline_error": false
+      },
+      {
+        "name": "2-",
+        "expected": [],
+        "actual": [],
+        "known_baseline_error": false
+      },
+      {
+        "name": "2-I",
+        "expected": [],
+        "actual": [],
+        "known_baseline_error": false
+      },
+      {
+        "name": "2-l",
+        "expected": [],
+        "actual": [],
+        "known_baseline_error": false
+      },
+      {
+        "name": "4-1",
+        "expected": [
+          "1"
+        ],
+        "actual": [
+          "1"
+        ],
+        "known_baseline_error": false
+      },
+      {
+        "name": "4-2",
+        "expected": [
+          "2"
+        ],
+        "actual": [
+          "2"
+        ],
+        "known_baseline_error": false
+      },
+      {
+        "name": "4-3",
+        "expected": [
+          "3"
+        ],
+        "actual": [
+          "3"
+        ],
+        "known_baseline_error": false
+      },
+      {
+        "name": "4-4",
+        "expected": [],
+        "actual": [],
+        "known_baseline_error": false
+      },
+      {
+        "name": "4-7",
+        "expected": [],
+        "actual": [],
+        "known_baseline_error": false
+      },
+      {
+        "name": "4-12",
+        "expected": [],
+        "actual": [],
+        "known_baseline_error": false
+      },
+      {
+        "name": "4-",
+        "expected": [],
+        "actual": [],
+        "known_baseline_error": false
+      },
+      {
+        "name": "4-I",
+        "expected": [],
+        "actual": [],
+        "known_baseline_error": false
+      },
+      {
+        "name": "4-l",
+        "expected": [],
+        "actual": [
+          "1"
+        ],
+        "known_baseline_error": true
+      },
+      {
+        "name": "1792051945478247274_frame.png",
+        "expected": [
+          "1"
+        ],
+        "actual": [
+          "1"
+        ]
+      },
+      {
+        "name": "1792051946402762714_frame.png",
+        "expected": [
+          "1"
+        ],
+        "actual": [
+          "1"
+        ]
+      },
+      {
+        "name": "1792052637998556742_frame.png",
+        "expected": [
+          "1"
+        ],
+        "actual": [
+          "1"
+        ]
+      },
+      {
+        "name": "1792052638722056295_frame.png",
+        "expected": [
+          "1"
+        ],
+        "actual": [
+          "1"
+        ]
+      },
+      {
+        "name": "1792052639394072657_frame.png",
+        "expected": [
+          "1"
+        ],
+        "actual": [
+          "1"
+        ]
+      },
+      {
+        "name": "1792053545907893305_frame.png",
+        "expected": [
+          "1",
+          "2"
+        ],
+        "actual": [
+          "1",
+          "2"
+        ]
+      },
+      {
+        "name": "1792053546297121077_frame.png",
+        "expected": [
+          "1",
+          "2"
+        ],
+        "actual": [
+          "1",
+          "2"
+        ]
+      },
+      {
+        "name": "1792053546709903378_frame.png",
+        "expected": [
+          "1",
+          "2"
+        ],
+        "actual": [
+          "1",
+          "2"
+        ]
+      },
+      {
+        "name": "1792053547087267283_frame.png",
+        "expected": [
+          "1",
+          "2"
+        ],
+        "actual": [
+          "1",
+          "2"
+        ]
+      },
+      {
+        "name": "1792053547495734424_frame.png",
+        "expected": [
+          "1",
+          "2"
+        ],
+        "actual": [
+          "1",
+          "2"
+        ]
+      },
+      {
+        "name": "1792053547901855005_frame.png",
+        "expected": [
+          "1",
+          "2"
+        ],
+        "actual": [
+          "1",
+          "2"
+        ]
+      },
+      {
+        "name": "1792053548311071944_frame.png",
+        "expected": [
+          "1",
+          "2"
+        ],
+        "actual": [
+          "1",
+          "2"
+        ]
+      },
+      {
+        "name": "1792053548706866421_frame.png",
+        "expected": [
+          "1",
+          "2"
+        ],
+        "actual": [
+          "1",
+          "2"
+        ]
+      }
+    ],
+    "stream": [
+      {
+        "ms": 237.7612200002659,
+        "digits": []
+      },
+      {
+        "ms": 198.41683899994678,
+        "digits": []
+      },
+      {
+        "ms": 207.36100400017676,
+        "digits": []
+      },
+      {
+        "ms": 206.56284599999708,
+        "digits": [
+          {
+            "digit": "2",
+            "center": [
+              726,
+              319
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 225.43013099993914,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              357,
+              318
+            ],
+            "confidence": 0.697
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              320
+            ],
+            "confidence": 0.998
+          }
+        ]
+      },
+      {
+        "ms": 194.27489899999273,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              359,
+              314
+            ],
+            "confidence": 0.731
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              316
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 197.06894700038902,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              359,
+              315
+            ],
+            "confidence": 0.664
+          },
+          {
+            "digit": "2",
+            "center": [
+              726,
+              318
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 237.70991299988964,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              357,
+              316
+            ],
+            "confidence": 0.747
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              318
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 217.0158230001107,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              352,
+              320
+            ],
+            "confidence": 0.702
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              319
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 207.36589099988123,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              359,
+              318
+            ],
+            "confidence": 0.798
+          },
+          {
+            "digit": "2",
+            "center": [
+              726,
+              320
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 207.18406399964806,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              360,
+              314
+            ],
+            "confidence": 0.798
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              316
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 200.41399999990972,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              359,
+              315
+            ],
+            "confidence": 0.785
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              316
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 255.2198009998392,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              357,
+              316
+            ],
+            "confidence": 0.82
+          },
+          {
+            "digit": "2",
+            "center": [
+              726,
+              318
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 236.80887400041684,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              357,
+              316
+            ],
+            "confidence": 0.701
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              319
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 244.07250400008706,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              359,
+              318
+            ],
+            "confidence": 0.749
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              320
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 241.97753399994326,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              360,
+              314
+            ],
+            "confidence": 0.696
+          },
+          {
+            "digit": "2",
+            "center": [
+              726,
+              316
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 213.2269400003679,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              357,
+              315
+            ],
+            "confidence": 0.696
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              316
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 239.80810299963196,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              360,
+              316
+            ],
+            "confidence": 0.652
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              318
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 202.28463599960378,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              359,
+              316
+            ],
+            "confidence": 0.717
+          },
+          {
+            "digit": "2",
+            "center": [
+              726,
+              319
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 209.36209199999212,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              357,
+              318
+            ],
+            "confidence": 0.697
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              320
+            ],
+            "confidence": 0.998
+          }
+        ]
+      },
+      {
+        "ms": 198.40260899991335,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              359,
+              314
+            ],
+            "confidence": 0.731
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              316
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 207.7627769999708,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              359,
+              315
+            ],
+            "confidence": 0.664
+          },
+          {
+            "digit": "2",
+            "center": [
+              726,
+              318
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 250.01463799981138,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              357,
+              316
+            ],
+            "confidence": 0.747
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              318
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 240.7352059999539,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              352,
+              320
+            ],
+            "confidence": 0.702
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              319
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 222.79330899982597,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              359,
+              318
+            ],
+            "confidence": 0.798
+          },
+          {
+            "digit": "2",
+            "center": [
+              726,
+              320
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 218.1858630001443,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              360,
+              314
+            ],
+            "confidence": 0.798
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              316
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 221.01193999969837,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              359,
+              315
+            ],
+            "confidence": 0.785
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              316
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 212.7536399998462,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              357,
+              316
+            ],
+            "confidence": 0.82
+          },
+          {
+            "digit": "2",
+            "center": [
+              726,
+              318
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 215.43575000032433,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              357,
+              316
+            ],
+            "confidence": 0.701
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              319
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 206.57171199991353,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              359,
+              318
+            ],
+            "confidence": 0.749
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              320
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 212.8209960001186,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              360,
+              314
+            ],
+            "confidence": 0.696
+          },
+          {
+            "digit": "2",
+            "center": [
+              726,
+              316
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 189.51897700026166,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              357,
+              315
+            ],
+            "confidence": 0.696
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              316
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 213.22084100029315,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              360,
+              316
+            ],
+            "confidence": 0.652
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              318
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 180.12814899975638,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              359,
+              316
+            ],
+            "confidence": 0.717
+          },
+          {
+            "digit": "2",
+            "center": [
+              726,
+              319
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 201.27555099998062,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              357,
+              318
+            ],
+            "confidence": 0.697
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              320
+            ],
+            "confidence": 0.998
+          }
+        ]
+      },
+      {
+        "ms": 186.88131099997918,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              359,
+              314
+            ],
+            "confidence": 0.731
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              316
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 210.624230999656,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              359,
+              315
+            ],
+            "confidence": 0.664
+          },
+          {
+            "digit": "2",
+            "center": [
+              726,
+              318
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 193.98385199974655,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              357,
+              316
+            ],
+            "confidence": 0.747
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              318
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 245.31193899974824,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              352,
+              320
+            ],
+            "confidence": 0.702
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              319
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 206.1609130000761,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              359,
+              318
+            ],
+            "confidence": 0.798
+          },
+          {
+            "digit": "2",
+            "center": [
+              726,
+              320
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 197.87307700016754,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              360,
+              314
+            ],
+            "confidence": 0.798
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              316
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 203.56200100013666,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              359,
+              315
+            ],
+            "confidence": 0.785
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              316
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 207.1672550000585,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              357,
+              316
+            ],
+            "confidence": 0.82
+          },
+          {
+            "digit": "2",
+            "center": [
+              726,
+              318
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 211.7489709999063,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              357,
+              316
+            ],
+            "confidence": 0.701
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              319
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 203.35943700001735,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              359,
+              318
+            ],
+            "confidence": 0.749
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              320
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 238.96542800002862,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              360,
+              314
+            ],
+            "confidence": 0.696
+          },
+          {
+            "digit": "2",
+            "center": [
+              726,
+              316
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 202.73885000005976,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              357,
+              315
+            ],
+            "confidence": 0.696
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              316
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 219.91763200003334,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              360,
+              316
+            ],
+            "confidence": 0.652
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              318
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 229.07165400010854,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              359,
+              316
+            ],
+            "confidence": 0.717
+          },
+          {
+            "digit": "2",
+            "center": [
+              726,
+              319
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 242.08692799993514,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              357,
+              318
+            ],
+            "confidence": 0.697
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              320
+            ],
+            "confidence": 0.998
+          }
+        ]
+      },
+      {
+        "ms": 230.92536500007554,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              359,
+              314
+            ],
+            "confidence": 0.731
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              316
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 214.2149410001366,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              359,
+              315
+            ],
+            "confidence": 0.664
+          },
+          {
+            "digit": "2",
+            "center": [
+              726,
+              318
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 228.076147000138,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              357,
+              316
+            ],
+            "confidence": 0.747
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              318
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 211.84182200022406,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              352,
+              320
+            ],
+            "confidence": 0.702
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              319
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 185.83926300016174,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              359,
+              318
+            ],
+            "confidence": 0.798
+          },
+          {
+            "digit": "2",
+            "center": [
+              726,
+              320
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 188.26057000023866,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              360,
+              314
+            ],
+            "confidence": 0.798
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              316
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 207.97601800040866,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              359,
+              315
+            ],
+            "confidence": 0.785
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              316
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 240.84680799978742,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              357,
+              316
+            ],
+            "confidence": 0.82
+          },
+          {
+            "digit": "2",
+            "center": [
+              726,
+              318
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 242.30272799968589,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              357,
+              316
+            ],
+            "confidence": 0.701
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              319
+            ],
+            "confidence": 0.999
+          }
+        ]
+      },
+      {
+        "ms": 236.95159699991564,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              359,
+              318
+            ],
+            "confidence": 0.749
+          },
+          {
+            "digit": "2",
+            "center": [
+              727,
+              320
+            ],
+            "confidence": 0.999
+          }
+        ]
+      }
+    ]
+  },
+  "live_samples": [
+    {
+      "time": 1792392820.5964391,
+      "camera": {
+        "state": "ready",
+        "message": "Nano 摄像头已打开，点击“拍照”获取一帧。",
+        "device": "/dev/video0",
+        "label": "USB 2.0 Camera: HD USB Camera",
+        "requested": "1024x768",
+        "width": 1024,
+        "height": 768,
+        "fps": 30.0,
+        "sequence": 1
+      },
+      "file": "live_0.png"
+    },
+    {
+      "time": 1792392823.043584,
+      "camera": {
+        "state": "ready",
+        "message": "Nano 摄像头已打开，点击“拍照”获取一帧。",
+        "device": "/dev/video0",
+        "label": "USB 2.0 Camera: HD USB Camera",
+        "requested": "1024x768",
+        "width": 1024,
+        "height": 768,
+        "fps": 30.0,
+        "sequence": 1
+      },
+      "file": "live_1.png"
+    },
+    {
+      "time": 1792392825.4374046,
+      "camera": {
+        "state": "ready",
+        "message": "Nano 摄像头已打开，点击“拍照”获取一帧。",
+        "device": "/dev/video0",
+        "label": "USB 2.0 Camera: HD USB Camera",
+        "requested": "1024x768",
+        "width": 1024,
+        "height": 768,
+        "fps": 30.0,
+        "sequence": 1
+      },
+      "file": "live_2.png"
+    },
+    {
+      "time": 1792392827.8807685,
+      "camera": {
+        "state": "ready",
+        "message": "Nano 摄像头已打开，点击“拍照”获取一帧。",
+        "device": "/dev/video0",
+        "label": "USB 2.0 Camera: HD USB Camera",
+        "requested": "1024x768",
+        "width": 1024,
+        "height": 768,
+        "fps": 30.0,
+        "sequence": 1
+      },
+      "file": "live_3.png"
+    },
+    {
+      "time": 1792392830.2743804,
+      "camera": {
+        "state": "ready",
+        "message": "Nano 摄像头已打开，点击“拍照”获取一帧。",
+        "device": "/dev/video0",
+        "label": "USB 2.0 Camera: HD USB Camera",
+        "requested": "1024x768",
+        "width": 1024,
+        "height": 768,
+        "fps": 30.0,
+        "sequence": 1
+      },
+      "file": "live_4.png"
+    },
+    {
+      "time": 1792392832.6260204,
+      "camera": {
+        "state": "ready",
+        "message": "Nano 摄像头已打开，点击“拍照”获取一帧。",
+        "device": "/dev/video0",
+        "label": "USB 2.0 Camera: HD USB Camera",
+        "requested": "1024x768",
+        "width": 1024,
+        "height": 768,
+        "fps": 30.0,
+        "sequence": 1
+      },
+      "file": "live_5.png"
+    }
+  ],
+  "screen_fps": [
+    3.9,
+    4.2,
+    4.0,
+    3.9,
+    4.7,
+    4.2
+  ],
+  "screen_both_digits_visible": 6,
+  "known_model_limitation": {
+    "font": "HERSHEY_TRIPLEX",
+    "input": "l",
+    "old_result": [
+      "1",
+      0.9179390668869019
+    ],
+    "new_result": [
+      "1",
+      0.9179390668869019
+    ]
+  },
+  "scope": "Screen FPS is processing throughput, not capture FPS; live scene moved between before and after.",
+  "final_revision": {
+    "deployment": {
+      "backup": "/home/a/h743/backups/ring_fast_20261019_155921",
+      "files": {
+        "工创赛视觉识别/黑色圆环识别与数字识别/black_ring.py": "7cef9df4083494a1fa5f2ff2bec31c1eb8f9dc9a753d818ea4be8d288f5b2d51",
+        "工创赛视觉识别/黑色圆环识别与数字识别/ring_digit.py": "e8ed1a477da0ae489691144bfbd8e9a0a6c285d8c0076ec4aeed9f62f5197a5e",
+        "工创赛视觉识别/黑色圆环识别与数字识别/digit_core.py": "49de63d869ee31a6076fa46ec9f807b75ab0ca92780c692fb8296365353d6c9a",
+        "host/ring_detector.py": "5e7d36b06ddd9fdac5993d9f39e1a581d67b789154aa187683b35a79d0eef7e6",
+        "host/camera.py": "1fe94221b999b6b12c1ff4107290698579895911897f0d3fcf318d7e7881b63d",
+        "host/camera_vision.py": "68012c00767968f8dbf2caa0d5761b581ee248804a56762bef11cb1596a2a784",
+        "host/vision_tuning.py": "b4be104741c65fe1f2d35544b577b7d8c725600dced3c5ba058374f3c0799c51",
+        "host/camera_monitor.py": "01c09ea38a4a47385b461495bb5befb41cc4aa1f24aa12075d4fb959ebc9b80b",
+        "tests/test_ring_performance.py": "7498b057d456d1b0618b037c374ec62780ced94fe7f65f86958111e83236f54c"
+      },
+      "camera": {
+        "state": "opening",
+        "message": "正在打开 Nano 摄像头…",
+        "device": "/dev/video0",
+        "label": "USB 2.0 Camera: HD USB Camera",
+        "requested": "1024x768"
+      },
+      "config": {
+        "kind": "ring",
+        "target": "red",
+        "min_area": 300,
+        "black_max": 140,
+        "target_offset_px": [
+          0,
+          -30
+        ],
+        "tracking": {
+          "sps": 3000,
+          "deadzone_px": 40,
+          "reverse_x": false,
+          "reverse_y": false,
+          "kp": 1.2,
+          "ki": 0,
+          "kd": 0.1,
+          "min_sps": 400,
+          "accel": 4000,
+          "camera_yaw_deg": 90
+        },
+        "ring_sequence": {
+          "spacing_steps": 2200,
+          "range_steps": 4000,
+          "scan_step": 500,
+          "sps": 2000,
+          "angle_tolerance_deg": 10,
+          "max_turn_deg": 30
+        },
+        "detector": {
+          "colors": {
+            "red": {
+              "color": "red",
+              "min_area": 300,
+              "ranges": [
+                [
+                  [
+                    0,
+                    80,
+                    46
+                  ],
+                  [
+                    10,
+                    255,
+                    255
+                  ]
+                ]
+              ]
+            },
+            "green": {
+              "color": "green",
+              "min_area": 300,
+              "ranges": [
+                [
+                  [
+                    35,
+                    50,
+                    46
+                  ],
+                  [
+                    84,
+                    255,
+                    255
+                  ]
+                ]
+              ]
+            },
+            "blue": {
+              "color": "blue",
+              "min_area": 300,
+              "ranges": [
+                [
+                  [
+                    100,
+                    160,
+                    46
+                  ],
+                  [
+                    135,
+                    255,
+                    255
+                  ]
+                ]
+              ]
+            },
+            "yellow": {
+              "color": "yellow",
+              "min_area": 300,
+              "ranges": [
+                [
+                  [
+                    15,
+                    80,
+                    46
+                  ],
+                  [
+                    34,
+                    255,
+                    255
+                  ]
+                ]
+              ]
+            },
+            "black": {
+              "color": "black",
+              "min_area": 300,
+              "ranges": [
+                [
+                  [
+                    0,
+                    0,
+                    0
+                  ],
+                  [
+                    179,
+                    255,
+                    45
+                  ]
+                ]
+              ]
+            },
+            "light_blue": {
+              "color": "light_blue",
+              "min_area": 300,
+              "ranges": [
+                [
+                  [
+                    85,
+                    50,
+                    46
+                  ],
+                  [
+                    99,
+                    255,
+                    255
+                  ]
+                ]
+              ]
+            }
+          },
+          "ring": {
+            "black_max": 140,
+            "min_area": 300,
+            "canny_low": 40,
+            "canny_high": 120,
+            "min_coverage": 0.6,
+            "shape_tolerance": 0.2,
+            "detect_width": 800,
+            "nearby_distance": 100
+          }
+        }
+      }
+    },
+    "capture_buffer_comparison": [
+      {
+        "buffers": 1,
+        "width": 1024,
+        "height": 768,
+        "requested_fps": 30,
+        "format_first": true,
+        "reported_fps": 30.0,
+        "actual_fps": 14.920102783491918,
+        "grab_ms": [
+          50.2195130002292,
+          50.99479849941417
+        ],
+        "decode_ms": [
+          17.425464000098145,
+          18.788468799994007
+        ]
+      },
+      {
+        "buffers": 2,
+        "width": 1024,
+        "height": 768,
+        "requested_fps": 30,
+        "format_first": true,
+        "reported_fps": 30.0,
+        "actual_fps": 29.820132232450344,
+        "grab_ms": [
+          14.724377499987895,
+          18.635642299977917
+        ],
+        "decode_ms": [
+          17.591272000117897,
+          18.94113979960821
+        ]
+      },
+      {
+        "buffers": 3,
+        "width": 1024,
+        "height": 768,
+        "requested_fps": 30,
+        "format_first": true,
+        "reported_fps": 30.0,
+        "actual_fps": 29.834797689465702,
+        "grab_ms": [
+          14.955417000237503,
+          18.968343000597088
+        ],
+        "decode_ms": [
+          17.785543999707443,
+          19.315882199953194
+        ]
+      },
+      {
+        "buffers": 4,
+        "width": 1024,
+        "height": 768,
+        "requested_fps": 30,
+        "format_first": true,
+        "reported_fps": 30.0,
+        "actual_fps": 29.82705573095256,
+        "grab_ms": [
+          14.953929000057542,
+          18.72275269988677
+        ],
+        "decode_ms": [
+          17.530183999951987,
+          19.15591100059828
+        ]
+      }
+    ],
+    "screen_fps": [
+      12.4,
+      19.2,
+      18.5,
+      17.5,
+      18.3,
+      18.6
+    ],
+    "screen_age_ms": [
+      223,
+      173,
+      124,
+      194,
+      162,
+      109
+    ],
+    "both_digits_all_six_samples": true,
+    "tests_windows": 94,
+    "tests_nx": 94,
+    "perturbed_frames": 150,
+    "settled_both_digits": 110,
+    "settled_frames": 110,
+    "limitation": "Short field sample; occasional drop to 12.4 FPS; not a sustained 20 FPS guarantee. Existing Triplex lowercase l/1 confusion remains.",
+    "artifacts": "localtmp/ring_fast_20261019"
+  }
+}

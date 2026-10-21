@@ -1,0 +1,46 @@
+{
+  "version": "0.2.25",
+  "change": "User-requested swap of remaining 180-degree output from PH6/TIM12_CH1 to PH9/TIM12_CH2; PE4/TIM15_CH1N 270-degree output unchanged.",
+  "mapping": {
+    "UI_S1": {
+      "protocol_channel": 2,
+      "pin": "PH9",
+      "timer": "TIM12_CH2",
+      "travel": 180,
+      "connection_target": 120
+    },
+    "UI_S2": {
+      "protocol_channel": 1,
+      "pin": "PE4",
+      "timer": "TIM15_CH1N",
+      "travel": 270,
+      "connection_target": 0
+    }
+  },
+  "toolchain": "Keil ARM Compiler 5",
+  "validation": {
+    "build": "passed",
+    "python_tests": 26,
+    "javascript_suites": 2,
+    "compiled_ARM_register_tests": "PH9 AF2, TIM12 CCR2/CC2E/PWM1, PH6 not configured, PE4 CH1N unchanged; channel independence and waveform sampler passed",
+    "hardware_motion_verified": false,
+    "flashed_by_agent": false
+  },
+  "deployment": {
+    "backup": "/home/a/h743/backups/servo_ph9_180_20261018_172520",
+    "updated": [
+      "host/servo_config.py",
+      "host/static/app.js",
+      "host/static/index.html"
+    ],
+    "service_restarted": false,
+    "servo_commands_sent": 0,
+    "served_js_verified": true,
+    "board_firmware": "0.2.24"
+  },
+  "sha256": {
+    "robot_h743.hex": "09adbb4ef98231925abf1b77a16072dc52c49baae6ca94f84b75b1c79f23f3d8",
+    "robot_h743.axf": "dafddfcc8adaf0715c8c65b5f306b7a5a0ddd2d9153e94e59853ad6c43a25d7b",
+    "robot_h743.bin": "619b0a78b7323005449c53422698b765d41d495f447d54ef5ccb3cb1506d6f9f"
+  }
+}

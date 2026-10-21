@@ -6,7 +6,7 @@ const assert=require('node:assert/strict'),path=require('node:path');
   const page=await browser.newPage({viewport:{width:1440,height:1000}});
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   try {
-    await page.goto('http://127.0.0.1:8786/');
+    await page.goto(new URL('/debug', 'http://127.0.0.1:8786/').href);
     await page.getByRole('tab',{name:'光流位移'}).click();
     await page.waitForFunction(()=>!document.getElementById('flow-start').disabled);
     await page.locator('#flow-height').fill('30.125');

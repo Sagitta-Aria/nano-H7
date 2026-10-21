@@ -11,6 +11,7 @@ import unittest
 import urllib.error
 import urllib.request
 from unittest.mock import Mock
+from types import SimpleNamespace
 
 from host.webserver import Handler, Session
 from http.server import ThreadingHTTPServer
@@ -23,6 +24,8 @@ class IdleConsole:
         self.lock = threading.RLock()
         self.nav_pending = False
         self.aux_pending = {}
+        self.task = SimpleNamespace(active=False)
+        self.camera_alignment = SimpleNamespace(active=False, hub=None)
         self.frame = {"armed": False, "turn": {}, "navigation": {}, "axes": {}}
 
     def hello(self):

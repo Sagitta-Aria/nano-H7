@@ -1,5 +1,9 @@
 import { ImuView } from "/imu.js";
 import { CameraView } from "/camera.js";
+import { CameraAlignmentView } from "/camera_alignment.js";
+import { PickPlaceView } from "/pick_place.js";
+import { BPickupView } from "/b_pickup.js";
+import { MaterialFlowView } from "/material_flow.js";
 /* H743 robot console — front end.
    No framework: one state object, one SSE stream, and explicit render passes.
    The page never talks to the board directly; every command is POSTed to the
@@ -30,9 +34,18 @@ const state = {
   liftRenderedSign: null,
   navigation: {},
   turn: {},
+  motion: {},
   flow: {},
   flowSettings: null,
   mission: null,
+  fieldDirty: false,
+  task: {},
+  competition: {},
+  cameraAlignment: {},
+  pickPlace: {},
+  pickPlaceConfig: null,
+  bPickupConfig: null,
+  materialFlowConfig: null,
   travel: 270,
   ledMask: 0,
   logs: [],
@@ -45,6 +58,7 @@ const state = {
 const QUIET_REPLY = /^(PING|STAT|AXIS \d|SERVO STAT|CHASSIS STAT|CHASSIS JOG|NAV STAT|AUX STAT [56]) →/;
 
 const $ = (id) => document.getElementById(id);
+const manualReadonly = () => state.role === "readonly" || !!state.task?.active || !!state.cameraAlignment?.active || !!state.pickPlace?.active;
 const num = (value, fallback = null) => {
   const parsed = Number.parseInt(value, 10);
   return Number.isFinite(parsed) ? parsed : fallback;
@@ -115,11 +129,13 @@ function command(body) {
 
 /* Held-direction intent: the worker expires it, so a dropped link stops the
    wheels instead of latching a direction. */
-function jog(body) {
+async function jog(body) {
   if (body === state.jogBody) return Promise.resolve({ ok: true });
   state.jogBody = body;
   syncPad();
-  return post("/api/jog", { body });
+  const result = await post("/api/jog", { body });
+  if (!result.ok && state.jogBody === body) { state.jogBody = null; syncPad(); }
+  return result;
 }
 
 function stopMotion() {
@@ -187,6 +203,7 @@ function apply(event) {
         state.lift = {};
         state.chassis = {};
         state.turn = {};
+        state.motion = {};
         state.invertDraft = null;
         state.liftRenderedSign = null;
         state.auxiliary = {};
@@ -206,6 +223,7 @@ function apply(event) {
       renderServo();
       renderLift();
       renderAuxiliary();
+      renderPickPlace();
       if (state.role === 'controller') status('当前页面可控制 · 设备连接保持不变');
       break;
     case "device":
@@ -246,9 +264,12 @@ function apply(event) {
       adoptAuxiliary(event.config);
       $("aux-config-state").textContent = "板端范围已确认 · 参数已保存";
       break;
+    case "navigation_runner":
+      state.navigationRunner = event.fields; renderNavigation(); break;
     case "navigation":
       state.navigation = event.fields || {};
       renderNavigation();
+      renderRecovery();
       break;
     case "flow":
       state.flow = {...state.flow, ...event.fields};
@@ -263,9 +284,13 @@ function apply(event) {
       renderTurn();
       renderChassis();
       renderNavigation();
+      renderRecovery();
       break;
     case "mission":
       adoptMission(event.config);
+      break;
+    case "task_config":
+      $("task-config").value = JSON.stringify(event.config, null, 2);
       break;
     case "led":
       state.ledMask = event.mask;
@@ -273,7 +298,17 @@ function apply(event) {
       break;
     case "arm":
       state.armed = event.armed;
+      if (!state.armed) { state.jogBody = null; syncPad(); }
       renderArm();
+      renderPickPlace();
+      break;
+    case "motion":
+      state.motion = event.fields || {};
+      if (state.motion.latched === "1") { state.jogBody = null; syncPad(); }
+      renderRecovery();
+      break;
+    case "jog_cancel":
+      state.jogBody = null; syncPad(); renderChassis();
       break;
     case "log":
       pushLog(event.entry);
@@ -281,18 +316,61 @@ function apply(event) {
     case "status":
       status(event.text, "warn");
       break;
+    case "camera2":
+      camera2View.updateRemote(event.frame);
+      break;
+    case "task_progress":
+      state.task = event.task;
+      renderTask();
+      renderPickPlace();
+      break;
+    case "pick_place":
+      state.pickPlace = event.status || {};
+      renderAll();
+      break;
+    case "pick_place_config":
+      state.pickPlaceConfig = event.config;
+      renderPickPlace();
+      break;
+    case "b_pickup_config":
+      state.bPickupConfig = event.config;
+      renderPickPlace();
+      break;
+    case "material_flow_config":
+      state.materialFlowConfig = event.config;
+      renderTask();
+      break;
     case "ping":
       break;
   }
 }
 
 function adopt(frame) {
+  if (frame.control_settings?.turn && !state.controlSettingsLoaded) {
+    state.controlSettingsLoaded = true;
+    const [kp, tolerance, minimum] = frame.control_settings.turn;
+    for (const prefix of ['turn','nav-turn','imu-turn']) {
+      $(`${prefix}-kp`).value = String(kp / 100);
+      $(`${prefix}-tolerance`).value = String(tolerance / 100);
+      $(`${prefix}-min-sps`).value = String(minimum);
+    }
+  }
+  if (frame.pick_place) state.pickPlace = frame.pick_place;
+  if (frame.pick_place_config) state.pickPlaceConfig = frame.pick_place_config;
+  if (frame.b_pickup_config) state.bPickupConfig = frame.b_pickup_config;
+  if (frame.material_flow_config) state.materialFlowConfig = frame.material_flow_config;
+  if (frame.task) state.task = frame.task;
+  if (frame.competition) state.competition = frame.competition;
+  if (frame.camera_alignment) { state.cameraAlignment = frame.camera_alignment; cameraAlignmentView.update(frame.camera_alignment); }
+  if (frame.task_config && !$("task-config").value) $("task-config").value = JSON.stringify(frame.task_config, null, 2);
   if (frame.imu) imuView.update(frame.imu);
   if (frame.auto_devices !== undefined) state.automatic = frame.auto_devices;
   state.link = frame.link === "connected" ? "connected" : "offline";
   state.port = frame.port;
   state.demo = !!frame.demo;
   state.armed = !!frame.armed;
+  if (!state.armed) state.jogBody = null;
+  if (frame.motion) state.motion = frame.motion;
   if (typeof frame.wiring_ack === "boolean" && !state.wiringAck) {
     state.wiringAck = frame.wiring_ack;
     $("ack").checked = frame.wiring_ack;
@@ -311,6 +389,7 @@ function adopt(frame) {
   if (frame.auxiliary) state.auxiliary = frame.auxiliary;
   if (frame.aux_settings && !state.auxSettings) adoptAuxiliary(frame.aux_settings);
   if (frame.navigation) state.navigation = frame.navigation;
+  if (frame.navigation_runner) state.navigationRunner = frame.navigation_runner;
   if (frame.turn) state.turn = frame.turn;
   if (frame.flow) state.flow = frame.flow;
   if (frame.flow_settings && !state.flowSettings) adoptFlowSettings(frame.flow_settings);
@@ -337,6 +416,66 @@ function renderAll() {
   renderNavigation();
   renderFlow();
   renderLog();
+  renderTask();
+  renderPickPlace();
+}
+
+function renderPickPlace() {
+  if (typeof pickPlaceView === 'undefined') return;
+  pickPlaceView.update(state.pickPlace, state.pickPlaceConfig);
+  pickPlaceView.render(state);
+  bPickupView.update(state.bPickupConfig, state);
+}
+
+function renderTask() {
+  materialFlowView.update(state.materialFlowConfig, state);
+  const task = state.task || {};
+  const labels = {idle:"未启动",uploading:"下发路线",travel:"前往站点",actions:"执行站点动作",vision:"等待视觉",qr_wait:"A点扫码与搜索",qr_switch:"任务相机切换",qr_return:"扫码完成，返回A点",nudge_wait:"视觉微调",aux_wait:"等待辅助轴",servo_wait:"等待舵机稳定",wait:"等待",departing:"离开站点",done:"任务完成",stopped:"已停止",fault:"任务故障"};
+  const ringLabels = {ring_start:"交接视觉控制",ring_begin:"交接视觉控制",ring_vision:"圆列 1→2→3→2",ring_fix:"建立数字2基准",ring_exit_accept:"开始右移",ring_exit:"执行右移",ring_end:"确认右移完成",ring_replan:"重算剩余路线",ring_upload:"下发剩余路线"};
+  $("task-state").textContent = labels[task.state] || ringLabels[task.state] || "未启动";
+  $("task-detail").textContent = task.error || (task.active ? `第 ${task.leg || "—"} 段 · 动作 ${task.action}` : "请核对路线与任务配置后启动");
+  if (task.active && task.material && task.state.startsWith("material_")) {
+    const m = task.material;
+    const phases = {suspend:"交接控制",camera:"打开摄像头1",align:"视觉校准",cycle:"抓取/放置",move:"点间移动",arrived:"确认到点",return:"返回通道"};
+    $("task-state").textContent = "物料搬运";
+    $("task-detail").textContent = `第${m.batch}批 · ${m.station}点 · ${phases[m.phase] || m.phase}` + (m.item ? ` · ${m.item.color_name} · 转盘${m.item.angle_deg}° → 点${m.item.target}` : "");
+  }
+  if (state.competition.active && !task.active) {
+    $("task-state").textContent = "全流程准备中";
+    $("task-detail").textContent = "正在连接设备、检查机构零位与行程并建立O点";
+  } else if (state.competition.full_flow && state.competition.error) {
+    $("task-state").textContent = "全流程已中止";
+    $("task-detail").textContent = state.competition.error;
+  }
+  $("material-start").disabled = state.role === "readonly" || state.competition.active || task.active || !!state.navigationRunner?.active || state.pickPlace.active || state.cameraAlignment.active;
+  $("task-request").textContent = task.request ? `等待识别：${task.request.kind} · ${task.request.target} · 站点 ${task.request.station}` : "没有视觉请求";
+  $("task-start").disabled = state.role === "readonly" || task.active || !state.armed || state.link !== "connected";
+  if (state.cameraAlignment.active || state.navigationRunner?.active || state.pickPlace.active) $("task-start").disabled = true;
+  $("task-stop").disabled = state.role === "readonly" || (!task.active && !state.competition.active);
+  $("task-save").disabled = state.role === "readonly" || task.active;
+  $("task-config").disabled = state.role === "readonly" || task.active;
+  camera2View.setTask(task);
+  const plan = task.task_plan;
+  $("task-code-status").textContent = task.qr_status || '在A点路线段选择“读取任务码并切换相机”后启用。';
+  $("task-code-locked").textContent = plan?.code || '尚未锁定任务码';
+  const search = task.qr_search;
+  const searchPhases = {watch:'停车识别',suspend:'交接底盘',pose:'建立搜索起点',accept:'开始移动',moving:'移动中',verify:'确认回位',done:'已回到A点'};
+  $("task-code-search").textContent = search
+    ? `${search.returning ? '返回A点' : '持续前后搜索'} · ${searchPhases[search.phase] || search.phase} · 相对起点 ${search.position_steps} 脉冲 · 范围 ±${search.range_steps} · 步长 ${search.step} · 速度 ${search.speed} step/s`
+    : 'A点未识别时持续前后搜索，直到识别成功或手动停止：速度2500 step/s，范围±3200脉冲，每步800脉冲。';
+  const rows = plan ? plan.batches.flatMap(batch => batch.items.map(item =>
+    [batch.batch, `${item.angle_deg}°`, `${item.color_name}（${item.color_id}）`, item.target])) : [];
+  const table = $("task-code-rows");
+  const signature = JSON.stringify(rows);
+  if (table.dataset.plan !== signature) {
+    table.dataset.plan = signature;
+    table.replaceChildren(...rows.map(values => {
+      const row = document.createElement('tr');
+      values.forEach(value => { const cell = document.createElement('td'); cell.textContent = String(value); row.appendChild(cell); });
+      return row;
+    }));
+  }
+  $("nav-go").disabled = manualReadonly() || state.navigation.held !== "1";
 }
 
 function renderLink() {
@@ -348,31 +487,39 @@ function renderLink() {
 }
 
 function renderRole() {
-  const readonly = state.role === "readonly";
+  const readonly = manualReadonly();
   $("btn-host-restart").disabled = readonly || state.restarting;
-  imuView.setRole(state.role);
+  imuView.setRole(manualReadonly() ? "readonly" : state.role);
   cameraView.setRole(state.role);
+  cameraAlignmentView.setRole(state.role, !!state.task.active);
+  if (state.cameraAlignment.busy) {
+    for (const id of ["camera-start", "camera-stop", "camera-apply", "camera-source", "camera-device", "camera-resolution", "camera-bind"]) $(id).disabled = true;
+  }
   camera2View.setRole(state.role);
   $("auto-devices-bar").classList.toggle("hidden", !state.automatic);
   $("auto-devices-enabled").checked = !!state.automatic?.enabled;
   $("auto-devices-enabled").disabled = readonly;
   $("auto-devices-status").textContent = state.automatic?.message || "";
   $("role-badge").classList.toggle("hidden", !readonly);
-  $("role-badge").textContent = "其他页面持有控制权";
-  $("btn-take-control").classList.toggle('hidden', !readonly);
-  /* Disconnect and the theme switch stay available so a second page is never
-     trapped; only the commands that touch the board are locked out. */
-  for (const id of ["btn-arm", "btn-stop", "pulse-send", "ch-move",
-                    "ax-move", "w-apply", "w-zero", "inv-apply", "btn-theme"]) {
+  $("role-badge").textContent = state.navigationRunner?.active ? "坐标巡航正在控制" : state.cameraAlignment.active ? "摄像头对准正在控制" : state.task.active ? "自动任务正在控制" : "其他页面持有控制权";
+  $("btn-take-control").classList.toggle('hidden', !readonly || !!state.task.active || !!state.cameraAlignment.active);
+  /* Disconnect and the view switches (theme, notes) stay available so a second
+     page is never trapped; only the commands that touch the board are locked
+     out. btn-theme used to be in this list, which contradicted the comment. */
+  for (const id of ["pulse-send", "ch-move",
+                    "ax-move", "w-apply", "w-zero", "inv-apply"]) {
     const node = $(id);
     if (node) node.disabled = readonly;
   }
   document.querySelectorAll("[data-led], .pad, .presets button").forEach((node) => {
     node.disabled = readonly;
   });
-  if (readonly) status("当前页面仅查看；点击“接管控制”即可操作。", "warn");
+  $("btn-stop").disabled = state.role === "readonly";
+  $("btn-arm").disabled = state.role === "readonly" || (!!state.task.active && !state.armed);
+  if (readonly && !state.task.active && !state.cameraAlignment.active) status("当前页面仅查看；点击“接管控制”即可操作。", "warn");
   renderNavigation();
   renderChassis();
+  renderRecovery();
 }
 
 function renderArm() {
@@ -383,6 +530,27 @@ function renderArm() {
   renderAuxiliary();
   renderNavigation();
   renderChassis();
+  renderRecovery();
+}
+
+/* Acknowledgement never enables outputs or resumes the canceled task.
+   Live faults and historical reason are displayed separately. */
+function renderRecovery() {
+  const button = $("btn-recover"), note = $("motion-status");
+  if (!button || !note) return;
+  const f = state.motion || {}, supported = f.v === "1";
+  button.disabled = state.role === "readonly" || state.link !== "connected" ||
+    state.armed || !!state.task.active || !supported || f.active !== "0";
+  const reasons = {step_deadline:"步进定时超期",position_overflow:"脉冲位置溢出"};
+  const fault = f.latched === "1" ? reasons[f.reason] || f.reason :
+    [state.chassis,state.navigation,state.turn].find(s => s.state === "fault")?.fault;
+  const uncertain = [5,6].filter(axis => Number(f.uncertain || 0) & (1 << (axis-1)));
+  note.textContent = state.link !== "connected" ? "" : fault ?
+    `故障已停车：${fault}。停止全部 → 排除原因 → 故障复位。` : uncertain.length ?
+    `请先人工恢复 M${uncertain.join("、M")} 位置参考，再建立 O 点。` :
+    f.total !== undefined && Number(f.total) > 0 ? `历史运动故障 ${f.total} 次 · 当前已复位` : "";
+  button.title = !supported ? "需要 H743 0.2.21 或更新固件" :
+    "排除故障后复位；保持停止，随后需重新建立 O 点。";
 }
 
 /* Auxiliary presets and limits are operator settings. Only AUX_STAT supplies
@@ -402,7 +570,7 @@ function adoptAuxiliary(config) {
       input.value = input.dataset.key.startsWith("p") ? value.presets[Number(input.dataset.key[1])] : value[input.dataset.key];
     });
   });
-  $("aux-config-state").textContent = "参数已载入 · 保存并应用后以板端返回的范围为准。";
+  $("aux-config-state").textContent = "已读取保存参数 · 重连后在零位参考有效、轴静止时自动恢复范围，无需重复应用。";
 }
 
 function readAuxiliary(selected = null) {
@@ -438,15 +606,16 @@ async function saveAuxiliary(axis = null) {
     const result = await post("/api/auxiliary/config", {config});
     if (!result.ok) return null;
     adoptAuxiliary(result.config);
-    $("aux-config-state").textContent = "离线参数已保存 · 连接后请应用到板卡。";
+    $("aux-config-state").textContent = "离线参数已保存 · 连接后在位置参考有效、轴静止时自动恢复范围。";
     status("离线保存完成，板端范围尚未修改。");
     return result.config;
   } catch (error) { status(error.message, "warn"); return null; }
 }
 
 /* Use board state to explain the same prerequisites that gate motion buttons.
-   No polling or reconnect may infer direction, zero or configured limits. */
+   Only acknowledged board state can establish readiness. */
 function auxiliaryBlockedReason(axis, f, sameBounds) {
+  if (state.task.active) return "自动任务正在控制辅助轴。";
   if (state.role === "readonly") return "当前页面只读，请点击“接管控制”。";
   if (state.link !== "connected") return "尚未连接 H743。";
   if (state.device.aux_control !== "1") return "固件不支持辅助轴控制。";
@@ -462,7 +631,7 @@ function auxiliaryBlockedReason(axis, f, sameBounds) {
 function renderAuxiliary() {
   auxCards().forEach(card => {
     const axis = card.dataset.axis, f = state.auxiliary[axis] || {};
-    const writable = state.role !== "readonly", connected = writable && state.link === "connected" && state.device.aux_control === "1";
+    const writable = !manualReadonly(), connected = writable && state.link === "connected" && state.device.aux_control === "1";
     const idle = f.active === "0", referenced = f.referenced === "1";
     const sameBounds = Number(card.querySelector('[data-key="min"]').value) === Number(f.min) && Number(card.querySelector('[data-key="max"]').value) === Number(f.max);
     const blockedReason = auxiliaryBlockedReason(axis, f, sameBounds);
@@ -477,7 +646,9 @@ function renderAuxiliary() {
       const action = button.dataset.action;
       button.disabled = action === "save" ? !writable :
         action === "apply" ? !(connected && idle && referenced && (!state.armed || state.device.aux_live === "1")) :
-        action === "zero" ? !(connected && idle && !state.armed) :
+        action === "zero" ? !(connected && idle && !state.armed && state.motion.latched !== "1" &&
+          (axis === "6" || (state.motion.v === "1" && !referenced))) :
+        action === "reference" ? !(connected && idle && !state.armed && state.motion.latched !== "1" && state.motion.v === "1" && !referenced) :
         action === "halt" ? !connected :
         action.startsWith("record-") ? !(connected && idle && referenced) :
         action === "home" ? !(ready && Number(f.min) <= 0 && Number(f.max) >= 0 && Number(f.pos) !== 0) : !ready;
@@ -495,6 +666,14 @@ async function auxiliaryAction(card, action) {
   if (state.link !== "connected" || state.device.aux_control !== "1") { status("请连接支持升降与旋转控制的固件。", "warn"); return; }
   if (action === "halt") { await command(`AUX HALT ${axis}`); return; }
   if (action === "apply") { await saveAuxiliary(axis); return; }
+  if (action === "reference") {
+    const input = card.querySelector('.aux-reference-position').value;
+    const value = input.trim() === "" ? NaN : Number(input);
+    if (state.armed || f.active !== "0" || !Number.isSafeInteger(value) || value < Number(f.min) || value > Number(f.max)) {
+      status("请先排除故障并解除使能；人工确认的位置须在板端范围内。", "warn");return;
+    }
+    await command(`AUX REFERENCE ${axis} ${value}`);return;
+  }
   if (action === "zero") {
     if (state.armed || f.active !== "0") { status("请先停止该轴并解除使能。", "warn"); return; }
     if (action === "zero") { await command(`AUX ZERO ${axis}`); return; }
@@ -584,7 +763,7 @@ function renderFlow() {
     state.device.flow!=="1" ? "固件不支持光流，请使用 0.2.11 或更新版本。" :
     `${state.demo ? "模拟数据 · " : ""}${f.online==="1" ? "传感器在线" : "未收到新数据"} · 置信度 ${f.valid ?? "—"} · 周期 ${f.dt_us ?? "—"} µs · 接收 ${f.frames || 0} / 采用 ${f.accepted || 0} / 坏帧 ${f.bad || 0} / 过滤 ${f.low || 0} / UART错误 ${f.uart || 0}${warning}`;
   if (f.height_um !== undefined) $("flow-applied").textContent = `板端参数版本 ${f.rev || 0} · 高度 ${Number(f.height_um)/1000} mm · 比例 ${Number(f.gx_ppm)/1e6} / ${Number(f.gy_ppm)/1e6} · 映射 ${f.map} · 安装角 ${Number(f.angle_cd)/100}° · 最低置信度 ${f.minq}`;
-  const writable = state.role!=="readonly", connected = writable && state.link==="connected" && state.device.flow==="1";
+  const writable = !manualReadonly(), connected = writable && state.link==="connected" && state.device.flow==="1";
   $("flow-start").disabled = !connected; $("flow-stop").disabled = !connected || f.recording!=="1";
   $("flow-apply").disabled = !connected || !state.flowSettings; $("flow-save").disabled = !writable;
   document.querySelectorAll(".flow-form input").forEach(input => { input.disabled = !writable; });
@@ -619,7 +798,7 @@ function renderLift() {
   }
   const supported = state.device.lift === "1";
   const connected = state.link === "connected" && supported;
-  const writable = connected && state.role !== "readonly";
+  const writable = connected && !manualReadonly();
   const initialized = f.initialized === "1";
   const directionKnown = Number(f.down_sign) === 1 || Number(f.down_sign) === -1;
   const idle = f.active === "0";
@@ -678,6 +857,7 @@ function renderStat(f) {
   $("r-faults").textContent = `${f.timeout} / ${f.motion_fault}`;
   $("r-serial").textContent = `${f.rx} / ${f.rx_err} / ${f.tx_err}`;
   state.armed = f.armed === "1";
+  if (!state.armed) { state.jogBody = null; syncPad(); }
   renderArm();
 }
 
@@ -754,15 +934,18 @@ function channelOf(card) {
   return Number(card.dataset.ch);
 }
 
-/* Physical observation establishes S1=wire1, S2=wire2. Do not swap commands
-   from HELLO pin labels. Adapt angle units while preserving pulse endpoints. */
+/* UI S1 moves to PH9/180 degrees; UI S2 stays on PE4/270 degrees.
+   Firmware channel IDs differ from UI IDs; route commands and readback by pin. */
 const SERVO_LAYOUT = {
-  1: { pin: "PH6", timer: "TIM12_CH1", travel: 180, home: 120, wireTravel: 270 },
-  2: { pin: "PH9", timer: "TIM12_CH2", travel: 270, home: 0, wireTravel: 180 },
+  1: { pin: "PH9", timer: "TIM12_CH2", travel: 180, home: 120, wireTravel: 180, wire: 2 },
+  2: { pin: "PE4", timer: "TIM15_CH1N", travel: 270, home: 0, wireTravel: 270, wire: 1 },
 };
 
 function servoProtocolChannel(channel) {
-  return channel;
+  // PH9 belonged to the 270-degree channel on firmware predating PE4.
+  const hasPE4 = [1, 2].some(wire => state.device[`servo${wire}_pin`] === "PE4");
+  const pins = hasPE4 ? (channel === 1 ? ["PH9", "PH6"] : ["PE4"]) : (channel === 1 ? ["PH6"] : ["PH9"]);
+  return [1, 2].find(wire => pins.includes(state.device[`servo${wire}_pin`])) || SERVO_LAYOUT[channel].wire;
 }
 
 /* User-confirmed physical travel is independent of firmware angle units. */
@@ -770,9 +953,10 @@ function servoTravel(channel) {
   return SERVO_LAYOUT[channel]?.travel || state.travel || 270;
 }
 
-/* Convert only units, never channel IDs. Match firmware half-degree rounding. */
+/* Convert using the resolved wire channel, with firmware half-degree rounding. */
 function servoWireAngle(channel, degrees) {
-  const travel = Number(state.device[`servo${channel}_travel`]) / 10 || SERVO_LAYOUT[channel]?.wireTravel || state.travel;
+  const wire = servoProtocolChannel(channel);
+  const travel = Number(state.device[`servo${wire}_travel`]) / 10 || SERVO_LAYOUT[channel]?.wireTravel || state.travel;
   return String(Math.round(Number(degrees) * travel / servoTravel(channel) * 2) / 2);
 }
 
@@ -858,8 +1042,9 @@ function renderServo() {
       else renderServoCard(card, state.servoFrames[wire]);
     }
   });
-  const sendable = state.link === "connected" && state.role !== "readonly";
+  const sendable = state.link === "connected" && !manualReadonly();
   $("pulse-send").disabled = !sendable;
+  $("servo-diagnose").disabled = !sendable;
   cards.forEach((card) => {
     card.querySelector(".servo-send").disabled = !sendable;
     card.querySelectorAll("[data-deg]").forEach((button) => {
@@ -871,6 +1056,19 @@ function renderServo() {
 
 /* Angle text: whole degrees or one decimal, exactly what the firmware accepts. */
 const ANGLE_RE = /^\d{1,3}(\.\d)?$/;
+
+/* Read both physical outputs twice to inspect live registers/CNT in the log.
+   Queries only: never set angles, reconnect, arm, or take another page's role. */
+async function diagnoseServo() {
+  if (state.link !== "connected" || manualReadonly()) return;
+  for (let sample = 0; sample < 2; sample += 1) {
+    for (const channel of [1, 2]) {
+      if (!(await command(`SERVO DIAG ${channel}`)).ok) return;
+    }
+    if (sample === 0) await new Promise(resolve => setTimeout(resolve, 130));
+  }
+  status("已请求两路 PWM 诊断，请在通信记录中查看 SERVO_DIAG 回复。");
+}
 
 async function sendAngle(channel, text) {
   const value = String(text).trim();
@@ -931,14 +1129,14 @@ function renderChassis() {
   const assisted = $("ch-assist").checked;
   const assistSupported = state.device.straight === "1";
   const assistReady = state.turn.imu === "1";
-  $("ch-assist").disabled = state.role === "readonly";
+  $("ch-assist").disabled = manualReadonly();
   $("ch-assist-state").textContent = !assistSupported ? "辅助直线需要 H743 0.2.17 固件" :
     f.assist === "1" ? `锁定航向 ${(Number(f.target_cd)/100).toFixed(2)}° · 偏差 ${(Number(f.error_cd)/100).toFixed(2)}°` :
       assistReady ? "航向可用 · 起步时锁定当前方向" : "等待有效 H723 航向";
   if (f.assist === "1" && f.fault !== "none") $("ch-assist-state").textContent += ` · ${f.fault}`;
   const busy = moving || !!state.jogBody || state.turn.state === "turning" ||
-    ["turning","moving","orienting","waiting","blocked"].includes(state.navigation.state);
-  $("ch-move").disabled = state.role === "readonly" || state.link !== "connected" || !state.armed || busy ||
+    ["turning","moving","orienting","waiting","nudging","blocked","checkpoint"].includes(state.navigation.state);
+  $("ch-move").disabled = manualReadonly() || state.link !== "connected" || !state.armed || busy ||
     (assisted && (!assistSupported || !assistReady || ["CW","CCW"].includes(state.selected)));
   if (f.invert !== undefined && f.invert !== null) {
     const confirmed = Number(f.invert);
@@ -961,7 +1159,9 @@ function renderChassis() {
 
 function chassisTick(f) {
   state.chassis = f;
+  if (f.state === "fault") { state.jogBody = null; syncPad(); }
   renderChassis();
+  renderRecovery();
 }
 
 function chassisMove() {
@@ -982,42 +1182,261 @@ function chassisMove() {
 }
 
 /* ── log ───────────────────────────────────────────────────────────────── */
-/* Host edits are saved for the next mission. Only MCU telemetry moves the
- * current-position marker; the diagram never infers arrival from elapsed time. */
+/* Host edits are saved for the next mission; live position comes from the MCU. */
 function adoptMission(config) {
   if (!config) return;
   state.mission = config;
-  document.querySelectorAll("#nav-points [data-point]").forEach((row) => {
-    row.querySelectorAll("input").forEach((input, index) => {
-      input.value = index < 2 ? config.points[row.dataset.point][index] : config.headings[row.dataset.point];
-    });
-  });
+  renderStations(config);
+  renderRoute(config);
   $("nav-sps").value = config.sps;
   $("nav-accel").value = config.accel;
   $("nav-dwell").value = config.dwell_ms / 1000;
+  $("nav-inset-enabled").checked = !!config.turn_inset_enabled;
+  $("nav-inset-steps").value = config.turn_inset_steps ?? 1000;
+  renderStartStation(config);
   for (const axis of ["x", "y"]) config.grid[axis].forEach((value, index) => { $(`nav-grid-${axis}${index}`).value = value; });
+  syncFieldEditor(config.grid);
   $("nav-config-state").textContent = "参数已保存 · 田字格通道 · 下次巡航生效";
   renderNavigation();
 }
 
-function readMission() {
-  const points = {}, headings = {};
-  document.querySelectorAll("#nav-points [data-point]").forEach((row) => {
-    points[row.dataset.point] = Array.from(row.querySelectorAll("input"), (input) =>
-      input.value.trim() === "" ? NaN : Number(input.value));
-    headings[row.dataset.point] = points[row.dataset.point].pop();
+/* Station rows carry their own name, so the table is the source of both the
+   coordinates and the order the route indices refer to. */
+function renderStations(config) {
+  const body = document.querySelector("#nav-points tbody");
+  body.innerHTML = "";
+  config.stations.forEach((station, index) => {
+    const row = document.createElement("tr");
+    row.dataset.station = String(index);
+    const name = document.createElement("td");
+    const field = document.createElement("input");
+    field.type = "text";
+    field.maxLength = 8;
+    field.value = station.name;
+    field.setAttribute("aria-label", `站点 ${index + 1} 名称`);
+    /* The origin is established by a physical RESET, so its name may change
+       but its row may not be reordered away from index 0. */
+    name.appendChild(field);
+    row.appendChild(name);
+    for (const [key, label] of [["x", "x"], ["y", "y"], ["heading", "到达姿态"]]) {
+      const cell = document.createElement("td");
+      const input = document.createElement("input");
+      input.type = "number";
+      if (key === "heading") { input.min = "-180"; input.max = "180"; input.step = "0.01"; }
+      if (key === "heading" && index === 0) input.readOnly = true;
+      input.value = station[key];
+      input.setAttribute("aria-label", `${station.name} ${label}`);
+      cell.appendChild(input);
+      row.appendChild(cell);
+    }
+    const modeCell = document.createElement("td");
+    const enabled = document.createElement("input"); enabled.type = "checkbox";
+    enabled.className = "nav-arrival-enabled";
+    enabled.checked = station.arrival_enabled ?? false;
+    enabled.setAttribute("aria-label", `${station.name} 到点调姿`);
+    modeCell.appendChild(enabled); row.appendChild(modeCell);
+    body.appendChild(row);
   });
+}
+
+/* Starting pose is explicit operator input; this never resets or moves MCU. */
+function renderStartStation(config) {
+  const select = $("nav-start-station");
+  select.replaceChildren();
+  config.stations.forEach((station, index) => {
+    if (index !== 0 && station.name !== 'X') return;
+    const option = document.createElement('option');
+    option.value = String(index); option.textContent = `${station.name} (${station.x}, ${station.y}) · ${station.heading}°`;
+    select.appendChild(option);
+  });
+  select.value = String(config.start_station ?? 0);
+  $("nav-origin").textContent = `当前位置设为 ${config.stations[Number(select.value)]?.name || 'O'}`;
+}
+
+function renderRoute(config) {
+  const body = document.querySelector("#nav-route tbody");
+  body.innerHTML = "";
+  config.route.forEach((leg, index) => {
+    const row = document.createElement("tr");
+    row.dataset.leg = String(index);
+    const order = document.createElement("td");
+    order.textContent = String(index + 1);
+    row.appendChild(order);
+    const pick = document.createElement("td");
+    const select = document.createElement("select");
+    select.setAttribute("aria-label", `第 ${index + 1} 段目标站点`);
+    config.stations.forEach((station, position) => {
+      const option = document.createElement("option");
+      option.value = String(position);
+      option.textContent = station.name;
+      if (position === leg.station) option.selected = true;
+      select.appendChild(option);
+    });
+    pick.appendChild(select);
+    row.appendChild(pick);
+    const arrivalCell = document.createElement("td");
+    const arrivalMode = document.createElement("select"); arrivalMode.className = "nav-arrival-mode";
+    arrivalMode.setAttribute("aria-label", `第 ${index + 1} 段到点调姿`);
+    [["inherit","跟随站点"],["off","不调姿"],["on","调到指定角度"]].forEach(([value,label]) => {
+      const option = document.createElement("option"); option.value = value; option.textContent = label;
+      option.selected = value === (leg.arrival_enabled === undefined ? "inherit" : leg.arrival_enabled ? "on" : "off");
+      arrivalMode.appendChild(option);
+    });
+    const arrivalAngle = document.createElement("input"); arrivalAngle.type = "number";
+    arrivalAngle.className = "nav-arrival-angle"; arrivalAngle.min = "-180"; arrivalAngle.max = "180"; arrivalAngle.step = "0.01";
+    arrivalAngle.value = leg.heading ?? ""; arrivalAngle.placeholder = "留空使用站点角度";
+    arrivalAngle.setAttribute("aria-label", `第 ${index + 1} 段到达角度`);
+    arrivalCell.appendChild(arrivalMode); arrivalCell.appendChild(arrivalAngle); row.appendChild(arrivalCell);
+    const holdCell = document.createElement("td");
+    const hold = document.createElement("input");
+    hold.type = "checkbox";
+    hold.checked = Number(leg.hold) === 1;
+    hold.setAttribute("aria-label", `第 ${index + 1} 段到点挂起`);
+    holdCell.appendChild(hold);
+    const task = document.createElement("select");
+    task.className = "nav-subtask";
+    task.setAttribute("aria-label", `第 ${index + 1} 段视觉子任务`);
+    [[0,"手动放行 / 已配置动作"],[4,"A点：读取任务码并切换相机"],[1,"子任务1：圆列 1→2→3→2"],[2,"子任务2：预留动作"],[3,"子任务3：预留动作"]].forEach(([value,label]) => {
+      const option = document.createElement("option"); option.value = String(value); option.textContent = label;
+      option.selected = value === Number(leg.task || 0); task.appendChild(option);
+    });
+    holdCell.appendChild(task);
+    const parameters = document.createElement("div");
+    parameters.className = "nav-subtask-parameters";
+    for (const [key,label,fallback] of [["outward_steps","补搜外移脉冲",400],["right_steps","完成右移脉冲",800]]) {
+      const wrapper = document.createElement("label"); wrapper.textContent = label;
+      const input = document.createElement("input"); input.type = "number"; input.min = "0"; input.max = "100000";
+      input.dataset.parameter = key; input.value = String(leg[key] ?? fallback);
+      input.setAttribute("aria-label", `第 ${index + 1} 段${label}`); wrapper.appendChild(input); parameters.appendChild(wrapper);
+    }
+    holdCell.appendChild(parameters);
+    const refresh = () => { task.disabled = !hold.checked; parameters.hidden = !hold.checked || task.value !== "1"; };
+    hold.addEventListener("change", refresh); task.addEventListener("change", refresh); refresh();
+    row.appendChild(holdCell);
+    body.appendChild(row);
+  });
+  const names = config.stations.map((s) => s.name);
+  $("nav-route-tag").textContent = [names[config.start_station ?? 0] || "?"]
+    .concat(config.route.map((leg) => names[leg.station] || "?")).join(" → ");
+}
+
+/* Convert field dimensions into the existing six absolute lane coordinates.
+   No units are inferred: all values remain integer wheel pulses. */
+function fieldGrid({x, y, width, height, middleX, middleY}) {
+  const grid = {x: [x, x + middleX, x + width], y: [y, y + middleY, y + height]};
+  if (![x, y, width, height, middleX, middleY].every(Number.isSafeInteger) ||
+      !validGrid(grid)) throw new Error("宽、高须为正整数，中间通道须在两边界之间；绝对坐标范围 ±1000000 脉冲。");
+  return grid;
+}
+
+/* Used by the field editor; backend validation remains authoritative. */
+function validGrid(grid) {
+  return ["x", "y"].every(axis => grid[axis].length === 3 && grid[axis].every(value => Number.isSafeInteger(value) && Math.abs(value) <= 1000000) &&
+    grid[axis][0] < grid[axis][1] && grid[axis][1] < grid[axis][2]);
+}
+
+/* Remap each lane interval separately, preserving lane membership and route
+   indices. This edits coordinates only; it never moves or resets the vehicle. */
+function remapField(config, grid, remap) {
+  if (!validGrid(config.grid) || !validGrid(grid)) throw new Error("请先填写有效的通道坐标。");
+  const draft = structuredClone(config);
+  if (remap) draft.stations.forEach(station => {
+    for (const axis of ["x", "y"]) {
+      const before = config.grid[axis], after = grid[axis], value = station[axis];
+      const lane = before.indexOf(value);
+      if (lane >= 0) station[axis] = after[lane];
+      else {
+        const i = value < before[1] ? 0 : 1;
+        station[axis] = Math.round(after[i] + (value - before[i]) * (after[i + 1] - after[i]) / (before[i + 1] - before[i]));
+      }
+    }
+  });
+  draft.grid = structuredClone(grid);
+  return draft;
+}
+
+/* Quick editor is refreshed only by loading/applying a grid, never by polling,
+   so half-typed dimensions survive telemetry updates. */
+function syncFieldEditor(grid) {
+  state.fieldDirty = false;
+  const values = {x: grid.x[0], y: grid.y[0], width: grid.x[2] - grid.x[0], height: grid.y[2] - grid.y[0],
+    "middle-x": grid.x[1] - grid.x[0], "middle-y": grid.y[1] - grid.y[0]};
+  for (const [key, value] of Object.entries(values)) $(`nav-field-${key}`).value = value;
+  renderFieldSummary(grid);
+}
+
+/* Width is the difference between boundaries, including for negative origins. */
+function renderFieldSummary(grid = state.mission?.grid) {
+  if (!grid) return;
+  const width = grid.x[2] - grid.x[0], height = grid.y[2] - grid.y[0];
+  const mm = mmPerPulse() ? ` · 约 ${formatMm(width)} × ${formatMm(height)}` : "";
+  $("nav-field-summary").textContent = `X：${grid.x[0]}～${grid.x[2]} · Y：${grid.y[0]}～${grid.y[2]} · 宽 × 高：${width} × ${height} 脉冲${mm}`;
+}
+
+/* Editing never plans a route or rewrites half-typed station coordinates. */
+function navigationChanged() {
+  $("nav-config-state").textContent = "参数已修改 · 尚未保存";
+}
+
+/* Width/height edits are consumed by 保存参数 without a separate apply step. */
+function readFieldGrid() {
+  const value = key => { const input = $(`nav-field-${key}`); return input.value.trim() ? Number(input.value) : NaN; };
+  return fieldGrid({x: value("x"), y: value("y"), width: value("width"), height: value("height"), middleX: value("middle-x"), middleY: value("middle-y")});
+}
+
+/* Structural edits consume a pending field edit once, avoiding double remaps. */
+function writeMissionGrid(grid) {
+  for (const axis of ["x", "y"]) grid[axis].forEach((value, index) => { $(`nav-grid-${axis}${index}`).value = value; });
+  syncFieldEditor(grid);
+}
+
+function readMission() {
+  const stations = Array.from(document.querySelectorAll("#nav-points tbody tr"), (row) => {
+    const inputs = row.querySelectorAll("input");
+    const value = (input) => input.value.trim() === "" ? NaN : Number(input.value);
+    return { name: inputs[0].value.trim(), x: value(inputs[1]), y: value(inputs[2]),
+             heading: value(inputs[3]), arrival_enabled: row.querySelector(".nav-arrival-enabled")?.checked ?? false };
+  });
+  const route = Array.from(document.querySelectorAll("#nav-route tbody tr"), (row) => {
+    const leg = {station: Number(row.querySelector("select").value), hold: row.querySelector("input[type=checkbox]").checked ? 1 : 0};
+    const mode = row.querySelector(".nav-arrival-mode")?.value;
+    if (mode && mode !== "inherit") leg.arrival_enabled = mode === "on";
+    const angle = row.querySelector(".nav-arrival-angle")?.value;
+    if (angle !== undefined && angle.trim() !== "") {
+      leg.heading = Number(angle);
+      if (!Number.isFinite(leg.heading) || Math.abs(leg.heading) > 180 || Math.abs(leg.heading*100-Math.round(leg.heading*100)) > 1e-7) throw new Error("路线段到达角度为 -180～180°，最多两位小数。");
+    }
+    const task = row.querySelector(".nav-subtask");
+    if (task && leg.hold && Number(task.value)) {
+      leg.task = Number(task.value);
+      if (leg.task === 1) for (const key of ["outward_steps","right_steps"]) {
+        const input = row.querySelector(`[data-parameter="${key}"]`);
+        leg[key] = input.value.trim() === "" ? NaN : Number(input.value);
+        if (!Number.isSafeInteger(leg[key]) || leg[key] < 0 || leg[key] > 100000) throw new Error("子任务位移必须为 0～100000 的整数脉冲。");
+      }
+    }
+    return leg;
+  });
+  const points = Object.fromEntries(stations.map((s) => [s.name, [s.x, s.y]]));
+  const headings = Object.fromEntries(stations.map((s) => [s.name, s.heading]));
   const grid = {};
   for (const axis of ["x", "y"]) grid[axis] = [0, 1, 2].map(index => {
     const input = $(`nav-grid-${axis}${index}`);
     return input.value.trim() === "" ? NaN : Number(input.value);
   });
-  const config = { points, headings, grid, sps: Number($("nav-sps").value), accel: Number($("nav-accel").value),
-    dwell_ms: Number($("nav-dwell").value) * 1000 };
+  const config = { stations, route, grid, start_station: Number($("nav-start-station")?.value || 0), sps: Number($("nav-sps").value), accel: Number($("nav-accel").value),
+    dwell_ms: Number($("nav-dwell").value) * 1000,
+    turn_inset_enabled: $("nav-inset-enabled").checked,
+    turn_inset_steps: $("nav-inset-steps").value.trim() === "" ? NaN : Number($("nav-inset-steps").value) };
+  if (!Number.isSafeInteger(config.turn_inset_steps) || config.turn_inset_steps < 1 || config.turn_inset_steps > 100000) throw new Error("转前内移范围 1～100000 整数脉冲。");
+  if (stations.length < 2) throw new Error("至少需要两个站点。");
+  if (!route.length) throw new Error("路线至少需要一段。");
+  if (stations.some((s) => !/^[A-Za-z0-9_]{1,8}$/.test(s.name))) throw new Error("站点名为 1～8 个字母、数字或下划线。");
+  if (new Set(stations.map((s) => s.name)).size !== stations.length) throw new Error("站点名不能重复。");
   const integers = [...Object.values(points).flat(), ...Object.values(grid).flat(), config.sps, config.accel, config.dwell_ms];
   if (integers.some((value) => !Number.isSafeInteger(value))) throw new Error("坐标和运动参数必须为有效整数；停留精确到毫秒。");
   if (Object.values(headings).some((value) => !Number.isFinite(value) || Math.abs(value) > 180 || Math.abs(value * 100 - Math.round(value * 100)) > 1e-7)) throw new Error("到达姿态为 -180～180°，最多两位小数。");
-  return config;
+  return state.fieldDirty ? remapField(config, readFieldGrid(), $("nav-field-remap").checked) : config;
 }
 
 async function saveMission() {
@@ -1031,98 +1450,28 @@ async function saveMission() {
   }
 }
 
-/* Preview only: same 11-node ordering and shortest-path ties as the Nano planner. Never
- * sends movement commands; off-network endpoints produce no diagonal fallback. */
-function planGridRoute(start, goal, grid) {
-  const onGrid = ([x, y]) => x >= grid.x[0] && x <= grid.x[2] && y >= grid.y[0] && y <= grid.y[2] && (grid.x.includes(x) || grid.y.includes(y));
-  if (!onGrid(start) || !onGrid(goal)) return null;
-  const nodes = grid.x.flatMap(x => grid.y.map(y => [x, y])).concat([start, goal]);
-  const distances = Array(11).fill(Infinity), previous = Array(11).fill(-1), used = Array(11).fill(false);
-  distances[9] = 0;
-  for (let pass = 0; pass < 11; pass++) {
-    let current = -1;
-    for (let j = 0; j < 11; j++) if (!used[j] && distances[j] < Infinity && (current < 0 || distances[j] < distances[current])) current = j;
-    if (current < 0) return null;
-    if (current === 10) break;
-    used[current] = true;
-    const a = nodes[current];
-    for (let j = 0; j < 11; j++) {
-      const b = nodes[j];
-      if (used[j] || !((a[0] === b[0] && grid.x.includes(a[0])) || (a[1] === b[1] && grid.y.includes(a[1])))) continue;
-      const candidate = distances[current] + Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]);
-      if (candidate < distances[j]) { distances[j] = candidate; previous[j] = current; }
-    }
-  }
-  const reverse = [];
-  for (let current = 10; current !== 9; current = previous[current]) {
-    if (previous[current] < 0) return null;
-    reverse.push(nodes[current]);
-  }
-  const result = []; let last = start;
-  for (const point of reverse.reverse()) if (point[0] !== last[0] || point[1] !== last[1]) { result.push(point); last = point; }
-  return result;
-}
-
-function drawNavigation() {
-  const canvas = $("nav-map"), context = canvas.getContext("2d");
-  if (!context) return;
-  const palette = getComputedStyle(document.documentElement);
-  const color = (name) => palette.getPropertyValue(name).trim();
-  const points = state.mission?.points;
-  context.clearRect(0, 0, canvas.width, canvas.height);
-  if (!points) return;
-  const position = [Number(state.navigation.x ?? points.O[0]), Number(state.navigation.y ?? points.O[1])];
-  const grid = state.mission.grid;
-  const all = [...Object.values(points), position, [grid.x[0], grid.y[0]], [grid.x[2], grid.y[2]]];
-  const xmin = Math.min(0, ...all.map((p) => p[0])), xmax = Math.max(1, ...all.map((p) => p[0]));
-  const ymin = Math.min(0, ...all.map((p) => p[1])), ymax = Math.max(1, ...all.map((p) => p[1]));
-  const scale = Math.min(480 / (xmax - xmin), 310 / (ymax - ymin));
-  const at = ([x, y]) => [70 + (x - xmin) * scale, 370 - (y - ymin) * scale];
-  context.strokeStyle = color("--line"); context.lineWidth = 1;
-  for (const x of grid.x) {
-    context.beginPath(); context.moveTo(...at([x, grid.y[0]])); context.lineTo(...at([x, grid.y[2]])); context.stroke();
-  }
-  for (const y of grid.y) {
-    context.beginPath(); context.moveTo(...at([grid.x[0], y])); context.lineTo(...at([grid.x[2], y])); context.stroke();
-  }
-  context.strokeStyle = color("--teal"); context.lineWidth = 3; context.beginPath();
-  let previous = points.O;
-  context.moveTo(...at(previous));
-  for (const name of ["A", "B", "C", "D", "A"]) {
-    const path = planGridRoute(previous, points[name], grid);
-    if (!path) break;
-    for (const point of path) context.lineTo(...at(point));
-    previous = points[name];
-  }
-  context.stroke(); context.font = "13px sans-serif";
-  for (const [name, point] of Object.entries(points)) {
-    const [x, y] = at(point);
-    context.fillStyle = color("--ink"); context.beginPath(); context.arc(x, y, 4, 0, Math.PI * 2); context.fill();
-    const angle = Number(state.mission.headings[name]) * Math.PI / 180;
-    context.strokeStyle = color("--teal"); context.lineWidth = 2;
-    context.beginPath(); context.moveTo(x, y); context.lineTo(x + 16 * Math.sin(angle), y - 16 * Math.cos(angle)); context.stroke();
-    context.fillText(`${name} (${point[0]}, ${point[1]})`, Math.min(x + 8, 440), Math.max(24, y - 9));
-  }
-  if (state.navigation.ready === "1") {
-    const [x, y] = at(position);
-    context.fillStyle = color("--red"); context.beginPath(); context.arc(x, y, 7, 0, Math.PI * 2); context.fill();
-    const angle = Number(state.navigation.heading_cd || 0) * Math.PI / 18000;
-    context.strokeStyle = color("--red"); context.lineWidth = 3;
-    context.beginPath(); context.moveTo(x, y); context.lineTo(x + 24 * Math.sin(angle), y - 24 * Math.cos(angle)); context.stroke();
-  }
-  context.fillStyle = color("--muted"); context.fillText("+x 右", 555, 396); context.fillText("+y 前", 18, 28);
-}
-
 function renderNavigation() {
   renderTurn();
   const f = state.navigation || {};
-  const names = { idle: "就绪", turning: "转向并确认", moving: "向前行驶", orienting: "调整到达姿态", waiting: "到点停留", done: "巡航完成", stopped: "已停止", blocked: "障碍暂停", fault: "巡航故障" };
-  const writable = state.role !== "readonly";
+  const names = { checkpoint: "等待 NX 下令", idle: "就绪", turning: "转向并确认", moving: "向前行驶", nudging: "视觉微调", orienting: "调整到达姿态", waiting: "到点停留", suspended: "底盘已交给任务控制", done: "巡航完成", stopped: "已停止", blocked: "障碍暂停", fault: "巡航故障" };
+  const writable = !manualReadonly();
   const connected = state.link === "connected" && state.device.nav_heading === "1" && state.device.nav_grid === "1" && state.device.nav_path === "1";
-  const busy = ["turning", "moving", "orienting", "waiting", "blocked"].includes(f.state) || state.turn.state === "turning";
-  $("nav-state").textContent = state.link === "connected" && state.device.nav_path !== "1" ? "请更新 H743 至 0.2.14" : !connected ? "未连接或固件不支持" : f.ready !== "1" ? "待建立 O 点" : names[f.state] || "待查询";
+  const busy = ["turning", "moving", "orienting", "waiting", "nudging", "blocked", "suspended", "checkpoint"].includes(f.state) || state.turn.state === "turning";
+  $("nav-state").textContent = state.link === "connected" && state.device.nav_path !== "1" ? "请更新 H743 至 0.2.14" : !connected ? "未连接或固件不支持" : f.ready !== "1" ? "待建立所选起点" : names[f.state] || "待查询";
+  if (state.navigationRunner?.active) {
+    const phases = { inward:"向中心内移", turn:"转向", return:"返回原通道", settle:"回位后纠偏", correct:"航向纠偏", travel:"沿路线行驶", arrival:"到点确认", leave:"离开站点" };
+    $("nav-state").textContent += ` · NX：${phases[state.navigationRunner.phase] || state.navigationRunner.state}`;
+  }
   $("nav-position").textContent = f.ready === "1" ? `(${f.x}, ${f.y})` : "—";
-  $("nav-target").textContent = f.target ? `${f.target} (${f.tx}, ${f.ty}) · ${f.leg}/5` : "—";
+  /* The board reports a station index, not a name: names live only in the
+     host config. Leg count comes from the board so the page cannot disagree
+     with the route the board actually committed. */
+  const stations = (state.mission && state.mission.stations) || [];
+  const station = stations[Number(f.station)];
+  const label = station ? station.name : f.station;
+  const legs = Number(f.legs) > 0 ? f.legs : stations.length ? String(stations.length) : "?";
+  $("nav-target").textContent = f.station != null && f.ready === "1" ?
+    `${label} (${f.tx}, ${f.ty}) · ${f.leg}/${legs}${f.held === "1" ? " · 等待放行" : ""}` : "—";
   $("nav-waypoint").textContent = f.planner === "host_grid" && Number(f.segments) > 0 ? `(${f.wx}, ${f.wy}) · 小段 ${f.segment}/${f.segments}` : "—";
   $("nav-wait").textContent = f.state === "waiting" ? `${(Number(f.wait_ms) / 1000).toFixed(1)} s` : "—";
   $("nav-heading").textContent = f.imu === "1" ? `${(Number(f.heading_cd) / 100).toFixed(2)}° → ${(Number(f.target_cd) / 100).toFixed(2)}°` : "等待有效 H723 航向";
@@ -1135,8 +1484,10 @@ function renderNavigation() {
   $("nav-origin").disabled = !writable || !connected || state.armed || busy;
   $("nav-start").disabled = !writable || !connected || !state.armed || f.ready !== "1" || busy;
   $("nav-stop").disabled = !writable || state.link !== "connected" || state.device.nav_heading !== "1";
-  document.querySelectorAll("#tab-navigation input").forEach((input) => { input.disabled = !writable; });
-  drawNavigation();
+  document.querySelectorAll("#tab-navigation input, #nav-route select, #nav-start-station").forEach((input) => { input.disabled = !writable; });
+  $("nav-add-x").disabled = !writable;
+  for (const id of ["nav-station-add", "nav-station-remove", "nav-leg-add", "nav-leg-remove"]) $(id).disabled = !writable;
+  renderTask();
 }
 
 /* Standalone task status uses its own origin and never edits route parameters.
@@ -1144,8 +1495,8 @@ function renderNavigation() {
 function renderTurn() {
   const f = state.turn || {};
   const connected = state.link === "connected" && state.device.turn === "1";
-  const writable = state.role !== "readonly";
-  const busy = f.state === "turning" || ["turning", "moving", "orienting", "waiting", "blocked"].includes(state.navigation.state) ||
+  const writable = !manualReadonly();
+  const busy = f.state === "turning" || ["turning", "moving", "orienting", "waiting", "nudging", "blocked", "suspended", "checkpoint"].includes(state.navigation.state) ||
     ["moving", "jogging", "switching"].includes(state.chassis.state) || !!state.jogBody;
   const labels = {idle:"空闲", turning:"闭环转动中", done:"转角完成", stopped:"已停止", fault:"转角故障"};
   const faults = {imu_stale:"航向数据过期", imu_invalid:"航向数据失效", imu_changed:"H723 会话变化", turn_timeout:"转向超时", turn_start:"启动失败", turn_update:"更新失败"};
@@ -1154,6 +1505,7 @@ function renderTurn() {
   $("turn-live").textContent = f.imu === "1" ? `本次基准角 ${(Number(f.current_cd)/100).toFixed(2)}° · 目标 ${(Number(f.target_cd)/100).toFixed(2)}° · 误差 ${(Number(f.error_cd)/100).toFixed(2)}°` : "等待有效 H723 航向";
   if (f.fault && f.fault !== "none") $("turn-live").textContent += ` · ${faults[f.fault] || f.fault}`;
   if (f.kp_centi != null) $("turn-live").textContent += ` · 板端 P=${Number(f.kp_centi)/100} · 角度容差 ±${(Number(f.tolerance_cd)/100).toFixed(2)}°`;
+  if (f.min_sps != null) $("turn-live").textContent += ` · 最低转向 ${f.min_sps} step/s`;
   $("turn-zero").disabled = !connected || !writable || busy || f.imu !== "1";
   $("turn-start").disabled = !connected || !writable || !state.armed || busy || f.imu !== "1" ||
     ($("turn-mode").value === "ABS" && f.zero !== "1");
@@ -1161,14 +1513,14 @@ function renderTurn() {
   for (const prefix of ['turn','nav-turn','imu-turn']) {
     const apply = $(`${prefix}-configure`);
     if (!apply) continue;
-    apply.disabled = !connected || !writable || busy || state.device.turn_precision !== '1';
-    for (const key of ['kp','tolerance']) $(`${prefix}-${key}`).disabled = !writable;
+    apply.disabled = !connected || !writable || busy || state.device.turn_precision !== '1' || f.min_sps == null;
+    for (const key of ['kp','tolerance','min-sps']) $(`${prefix}-${key}`).disabled = !writable;
     const live = $(`${prefix}-live`);
     if (prefix !== 'turn' && live) {
-      const supported = state.device.turn_precision === '1';
-      const pending = Number($(`${prefix}-kp`).value)*100 !== Number(f.kp_centi) || Number($(`${prefix}-tolerance`).value)*100 !== Number(f.tolerance_cd);
-      live.textContent = !supported ? '可调 P 与角度容差需要 0.2.16 固件及新版 Nano 后台。' :
-        f.kp_centi == null ? '等待板端参数' : `板端 P=${Number(f.kp_centi)/100} · 角度容差 ±${(Number(f.tolerance_cd)/100).toFixed(2)}° · ${pending ? '输入尚未应用' : '输入已生效'}`;
+      const supported = state.device.turn_precision === '1' && f.min_sps != null;
+      const pending = Number($(`${prefix}-kp`).value)*100 !== Number(f.kp_centi) || Number($(`${prefix}-tolerance`).value)*100 !== Number(f.tolerance_cd) || Number($(`${prefix}-min-sps`).value) !== Number(f.min_sps);
+      live.textContent = !supported ? '最低转向轮速需要新版固件及参数回读。' :
+        `板端 P=${Number(f.kp_centi)/100} · 角度容差 ±${(Number(f.tolerance_cd)/100).toFixed(2)}° · 最低转向 ${f.min_sps} step/s · ${pending ? '输入尚未应用' : '输入已生效'}`;
     }
   }
   for (const id of ["turn-mode", "turn-angle", "turn-sps", "turn-accel", "turn-kp"]) $(id).disabled = !writable;
@@ -1191,6 +1543,11 @@ async function turnAction(action, tuningPrefix = "turn") {
     }
     payload.kp = text;
     payload.tolerance = tolerance;
+    const minimum = $(`${tuningPrefix}-min-sps`).value.trim();
+    if (!/^\d+$/.test(minimum) || Number(minimum) < 1 || Number(minimum) > 5000) {
+      status('最低转向轮速范围 1～5000 step/s，必须是整数。', 'warn'); return;
+    }
+    payload.min_sps = Number(minimum);
   }
   if (action === "start") {
     const text = $("turn-angle").value.trim();
@@ -1243,6 +1600,67 @@ function renderLog() {
   $("log-count").textContent = String(rows.length);
 }
 
+/* ── mm calibration ────────────────────────────────────────────────────────
+   Display-only. The firmware speaks pulses and keeps speaking pulses; this
+   just lets a pulse count carry an approximate millimetre reading so grid
+   coordinates are imaginable. Stored per browser, never sent to the board. */
+
+const MM_KEY = "h743-mm-per-pulse";
+
+function mmPerPulse() {
+  try {
+    const saved = Number(localStorage.getItem(MM_KEY));
+    return Number.isFinite(saved) && saved > 0 ? saved : 0;
+  } catch (error) {
+    return 0;
+  }
+}
+
+function formatMm(pulses) {
+  const scale = mmPerPulse();
+  if (!scale || !Number.isFinite(pulses)) return "";
+  const mm = Math.abs(pulses) * scale;
+  if (mm >= 1000) return `${(mm / 1000).toFixed(2)} m`;
+  return `${mm.toFixed(mm < 100 ? 1 : 0)} mm`;
+}
+
+/* Any <span class="mm" data-mm-for="some-input-id"> mirrors that input's value
+   in millimetres, so adding a readout is markup-only. */
+function renderMm() {
+  const scale = mmPerPulse();
+  document.querySelectorAll("[data-mm-for]").forEach((node) => {
+    const source = $(node.dataset.mmFor);
+    const text = source ? formatMm(Number(source.value)) : "";
+    const prefix = node.dataset.mmPrefix;
+    node.textContent = text ? (prefix ? `${prefix} ≈ ${text}` : `≈ ${text}`) : "";
+  });
+  const state = $("mm-state");
+  if (state) {
+    state.textContent = scale ? `1000 步 ≈ ${formatMm(1000)}` : "未标定";
+    state.dataset.state = scale ? "set" : "unset";
+  }
+  renderFieldSummary();
+}
+
+function saveMmCalibration() {
+  const pulses = Number($("mm-pulses").value);
+  const measured = Number($("mm-measured").value);
+  if (!Number.isFinite(pulses) || pulses <= 0 || !Number.isFinite(measured) || measured <= 0) {
+    status("毫米标定需要正的步数和实测距离。", "warn");
+    return;
+  }
+  try { localStorage.setItem(MM_KEY, String(measured / pulses)); } catch (error) { /* private mode */ }
+  renderMm();
+  status(`已标定：${pulses} 步 = ${measured} mm。`, "ok");
+}
+
+function clearMmCalibration() {
+  try { localStorage.removeItem(MM_KEY); } catch (error) { /* private mode */ }
+  $("mm-measured").value = "";
+  renderMm();
+  status("已清除毫米标定，界面恢复只显示脉冲。", "ok");
+}
+
 /* ── theme ─────────────────────────────────────────────────────────────── */
 
 const THEME_COLOR = { light: "#f4f6f9", dark: "#0a0e13" };
@@ -1263,6 +1681,19 @@ function toggleTheme() {
   try { localStorage.setItem("h743-theme", next); } catch (error) { /* private mode */ }
 }
 
+function applyNotes(mode) {
+  document.documentElement.dataset.notes = mode;
+  const button = $("btn-notes");
+  button.setAttribute("aria-pressed", mode === "on" ? "true" : "false");
+  button.title = mode === "on" ? "隐藏页面上的说明文字" : "显示页面上的说明文字";
+}
+
+function toggleNotes() {
+  const next = document.documentElement.dataset.notes === "on" ? "off" : "on";
+  applyNotes(next);
+  try { localStorage.setItem("h743-notes", next); } catch (error) { /* private mode */ }
+}
+
 /* ── wiring ────────────────────────────────────────────────────────────── */
 
 function tab(name) {
@@ -1273,6 +1704,7 @@ function tab(name) {
   if (name !== "chassis" && state.jogBody) stopMotion();
   if (name === "imu") { imuView.refreshPorts(); imuView.drawSoon(); }
   if (name === "camera") cameraView.refreshDevices();
+  if (name !== "vision") cameraAlignmentView.tuning.stop();
   if (name === "camera2") camera2View.refreshDevices();
 }
 
@@ -1314,6 +1746,73 @@ function bind() {
     if (result.ok) apply({type: 'role', role: result.role});
   });
   $("nav-save").addEventListener("click", saveMission);
+  document.querySelectorAll("#nav-field-editor input").forEach(input => input.addEventListener("input", () => {
+    if (input.id !== "nav-field-remap") state.fieldDirty = true;
+    navigationChanged();
+  }));
+  document.querySelectorAll('[id^="nav-grid-"]').forEach(input => input.addEventListener("input", () => {
+    const grid = {};
+    for (const axis of ["x", "y"]) grid[axis] = [0, 1, 2].map(i => { const text = $(`nav-grid-${axis}${i}`).value.trim(); return text ? Number(text) : NaN; });
+    if (validGrid(grid)) syncFieldEditor(grid);
+    navigationChanged();
+  }));
+  for (const id of ["nav-points", "nav-route"]) $(id).addEventListener("input", navigationChanged);
+  /* Structural edits redraw from the in-page draft so an unsaved coordinate is
+     not silently discarded by adding a row. Nothing is sent until 保存参数. */
+  const redraw = (mutate) => () => {
+    let draft;
+    try { draft = readMission(); } catch (error) { status(error.message, "warn"); return; }
+    if (!draft) return;
+    try { mutate(draft); } catch (error) { status(error.message, "warn"); return; }
+    renderStations(draft);
+    renderStartStation(draft);
+    renderRoute(draft);
+    writeMissionGrid(draft.grid);
+    navigationChanged();
+    renderNavigation();
+  };
+  $("nav-station-add").addEventListener("click", redraw((draft) => {
+    if (draft.stations.length >= 32) throw new Error("站点上限 32 个。");
+    const used = new Set(draft.stations.map((s) => s.name));
+    let name = "S" + draft.stations.length;
+    while (used.has(name)) name += "_";
+    draft.stations.push({ name, x: draft.stations[0].x, y: draft.stations[0].y, heading: 0, arrival_enabled: false });
+  }));
+  $("nav-add-x").addEventListener("click", () => {
+    try {
+      const draft = readMission();
+      if (draft.stations.some(s => s.name === 'X')) throw new Error('X 点已存在。');
+      if (draft.stations.length >= 32) throw new Error('站点上限 32 个。');
+      draft.stations.push({name:'X',x:0,y:28800,heading:-180,arrival_enabled:true});
+      if (!draft.grid.x.includes(0)) throw new Error('X 点需要 x=0 的竖向通道。');
+      draft.grid.y[2] = Math.max(draft.grid.y[2], 28800);
+      renderStations(draft); renderStartStation(draft); renderRoute(draft);
+      writeMissionGrid(draft.grid); navigationChanged();
+      $("nav-config-state").textContent = '已添加 X 点 · 尚未保存';
+    } catch (error) { status(error.message, 'warn'); }
+  });
+  $("nav-start-station").addEventListener('change', () => {
+    try {
+      const draft = readMission();
+      renderStations(draft); renderStartStation(draft); renderRoute(draft);
+      writeMissionGrid(draft.grid); navigationChanged();
+      $("nav-config-state").textContent = '起点已修改 · 尚未保存';
+    } catch (error) { status(error.message, 'warn'); }
+  });
+  $("nav-station-remove").addEventListener("click", redraw((draft) => {
+    if (draft.stations.length <= 2) return;
+    const last = draft.stations.length - 1;
+    if (draft.start_station === last) throw new Error('请先切换巡航起点，再删除此站点。');
+    if (draft.route.some((leg) => leg.station === last)) throw new Error("请先修改引用末站点的路线段，再删除站点。");
+    draft.stations.pop();
+  }));
+  $("nav-leg-add").addEventListener("click", redraw((draft) => {
+    if (draft.route.length >= 32) return;
+    draft.route.push({ station: 0, hold: 0 });
+  }));
+  $("nav-leg-remove").addEventListener("click", redraw((draft) => {
+    if (draft.route.length > 1) draft.route.pop();
+  }));
   $("nav-origin").addEventListener("click", async () => {
     if (await saveMission()) post("/api/navigation/action", { action: "origin" });
   });
@@ -1321,15 +1820,26 @@ function bind() {
     if (await saveMission()) post("/api/navigation/action", { action: "start" });
   });
   $("nav-stop").addEventListener("click", () => post("/api/navigation/action", { action: "stop" }));
+  $("nav-go").addEventListener("click", () => post("/api/navigation/action", { action: "go" }));
+  $("task-save").addEventListener("click", async () => {
+    try { await post("/api/mission/config", { config: JSON.parse($("task-config").value) }); }
+    catch (error) { status(error.message, "warn"); }
+  });
+  $("task-start").addEventListener("click", () => post("/api/mission/action", { action: "start" }));
+  $("material-start").addEventListener("click", async () => {
+    if (materialFlowView.dirty && !await materialFlowView.save()) return;
+    await post("/api/competition/start", { full_flow: true });
+  });
+  $("task-stop").addEventListener("click", () => post("/api/mission/action", { action: "stop" }));
   $("turn-zero").addEventListener("click", () => turnAction("zero"));
   $("turn-start").addEventListener("click", () => turnAction("start"));
   $("turn-stop").addEventListener("click", () => turnAction("stop"));
   // The three pages edit one shared draft. Polling only updates board readback.
   for (const prefix of ['turn','nav-turn','imu-turn']) {
     $(`${prefix}-configure`).addEventListener('click', () => turnAction('configure', prefix));
-    for (const key of ['kp','tolerance']) {
+    for (const key of ['kp','tolerance','min-sps']) {
       const node = $(`${prefix}-${key}`);
-      try { node.value = localStorage.getItem(`h743-turn-${key}`) || (key === 'kp' ? '20' : '0.20'); } catch {}
+      try { node.value = localStorage.getItem(`h743-turn-${key}`) || ({kp:'20',tolerance:'0.20','min-sps':'200'}[key]); } catch {}
       node.addEventListener('input', () => {
         for (const other of ['turn','nav-turn','imu-turn']) $(`${other}-${key}`).value = node.value;
         try { localStorage.setItem(`h743-turn-${key}`, node.value); } catch {}
@@ -1344,10 +1854,21 @@ function bind() {
   document.querySelectorAll(".tab").forEach((node) => {
     node.addEventListener("click", () => tab(node.dataset.tab));
   });
+  document.querySelectorAll("[data-open-tab]").forEach(node => {
+    node.addEventListener("click", () => tab(node.dataset.openTab));
+  });
 
   $("btn-ports").addEventListener("click", loadPorts);
   $("btn-host-restart").addEventListener("click", restartHost);
   $("btn-theme").addEventListener("click", toggleTheme);
+  $("btn-notes").addEventListener("click", toggleNotes);
+  $("mm-save").addEventListener("click", saveMmCalibration);
+  $("mm-clear").addEventListener("click", clearMmCalibration);
+  /* Keep the millimetre readouts live while the pulse fields are being typed. */
+  document.querySelectorAll("[data-mm-for]").forEach((node) => {
+    const source = $(node.dataset.mmFor);
+    if (source) source.addEventListener("input", renderMm);
+  });
   $("btn-connect").addEventListener("click", () => {
     if (state.link === "connected") post("/api/disconnect");
     else post("/api/connect", { port: $("port").value });
@@ -1360,6 +1881,7 @@ function bind() {
     else command("ARM 1");
   });
   $("btn-stop").addEventListener("click", () => { state.jogBody = null; syncPad(); command("STOP"); });
+  $("btn-recover").addEventListener("click", () => command("MOTION CLEAR"));
 
   /* One wiring pass per gauge card, so a third servo needs markup and nothing
      else here. */
@@ -1377,6 +1899,7 @@ function bind() {
       sendAngle(channel, deg);
     });
   });
+  $("servo-diagnose").addEventListener("click", diagnoseServo);
   $("pulse-send").addEventListener("click", () => {
     const us = num($("pulse-input").value);
     const channel = num($("pulse-ch").value, 1);
@@ -1503,9 +2026,19 @@ function bind() {
 /* ── boot ──────────────────────────────────────────────────────────────── */
 
 applyTheme(document.documentElement.dataset.theme === "dark" ? "dark" : "light");
+applyNotes(document.documentElement.dataset.notes === "on" ? "on" : "off");
+renderMm();
 const imuView = new ImuView(post);
 const cameraView = new CameraView(post);
+const cameraAlignmentView = new CameraAlignmentView(post, cameraView, status => { state.cameraAlignment = status; });
 const camera2View = new CameraView(post, "camera2", "/api/camera2");
+const bPickupView = new BPickupView(post, config => { state.bPickupConfig = config; });
+const materialFlowView = new MaterialFlowView(post, config => { state.materialFlowConfig = config; });
+const pickPlaceView = new PickPlaceView(post, (progress, config) => {
+  state.pickPlace = progress;
+  if (config) state.pickPlaceConfig = config;
+  renderAll();
+}, async () => bPickupView.dirty ? bPickupView.save() : true);
 $("auto-devices-enabled").addEventListener("change", async (event) => {
   const result = await post("/api/devices/automatic", { enabled: event.target.checked });
   if (result.ok) state.automatic = result.automatic;

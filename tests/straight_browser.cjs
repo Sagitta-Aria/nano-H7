@@ -17,7 +17,7 @@ const path=require('node:path');
     throw Error('timed out waiting for board state');
   };
   try {
-    await page.goto(process.env.STRAIGHT_URL||'http://127.0.0.1:18774/');
+    await page.goto(new URL('/debug', process.env.STRAIGHT_URL||'http://127.0.0.1:18774/').href);
     const initial=await until(s=>s.device.straight==='1'&&s.turn.imu==='1');
     assert.equal(initial.demo,true,'requires isolated SIM fixture');
     await page.getByRole('tab',{name:'底盘运动',exact:true}).click();

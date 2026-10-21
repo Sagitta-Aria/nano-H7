@@ -1,0 +1,64 @@
+{
+  "date": "2026-10-20",
+  "change": "B camera startup/frame/color waits have no timeout; standalone B test opens camera and uses lowered three-frame color gate",
+  "backup": "/home/a/h743/backups/b_camera_wait_20261020_144603",
+  "files": {
+    "host/camera_alignment.py": "9e1066a3231be0b16697ad6005ab7821e93816183e469b64dda88995462065cf",
+    "host/material_flow.py": "c46238c867cec744630dab6c83195a3fe9dfc7944bdb181ed57f01201af66481",
+    "host/pick_place.py": "d8d8f19903ac063b2c4b15de047d32cd4fd1ec194e9c2559b6c2e3f11cea7348",
+    "host/task_camera.py": "270d362dca5624f9be6cbaafd7cf77cbd83ac93eee62f2436a2225d216ce4586",
+    "host/static/pick_place.js": "5e788224107a82dbb6dea79d0b8679d7391c36dc4680ad4d2e3f6bbbea97759d",
+    "host/static/index.html": "f6b6a36b18d90130ade0d52ee6bc7b8aac3e16187ce8f6fa307536acdb8ae301",
+    "tests/test_b_pickup.py": "f0e5ea646f95f110dceff4f43a7f968efbb566a6b7c5447115dfd60a6d131ce0",
+    "tests/test_pick_place.py": "73222cbf87a795d663dc480afdaa9be4f0f4d3be8f8fa5fa19b7cc5d77399f81",
+    "tests/test_material_flow.py": "8df3d84323217af9ffefd8aa8847b002aaca5cfe3ee0d4fab62801e91f65698e",
+    "tests/test_task_code.py": "ef92e1dfa9dca99ff674f180302da25d2e4e927835528a6a3eff96829a71a105",
+    "tests/test_camera_alignment.py": "5499021cd4d1a3c6eb891d1fa64d63f308d3353b17bd7db435a6799fdd800ca5"
+  },
+  "local_validation": {
+    "backend_groups": "passed",
+    "sim_browser": "passed at 1440/390 px",
+    "checks": [
+      "blue ignores red inside ROI and blue outside ROI",
+      "five-second initial silence",
+      "opening beyond former timeout",
+      "three fresh frames after interruption",
+      "operator stop cancels late results",
+      "no chassis motion"
+    ]
+  },
+  "nx_validation": {
+    "tests": 42,
+    "result": "passed",
+    "health": {
+      "service": "MainPID=10468\nActiveState=active\n",
+      "link": "connected",
+      "imu": "streaming",
+      "armed": false,
+      "axes_stationary": true,
+      "configurations_unchanged": true,
+      "warning_journal": "-- No entries --\n",
+      "b_config": {
+        "pick_down": 3500,
+        "pick_rotation": -1850,
+        "lift_sps": 1200,
+        "lift_accel": 5000,
+        "rotation_sps": 2000,
+        "rotation_accel": 2000,
+        "s1_open": 150,
+        "s1_closed": 70,
+        "s1_settle_ms": 600,
+        "s2_settle_ms": 1000,
+        "step_timeout_ms": 60000,
+        "ack_timeout_ms": 3000,
+        "roi_x_pct": 15,
+        "roi_y_pct": 15,
+        "roi_width_pct": 70,
+        "roi_height_pct": 70
+      }
+    }
+  },
+  "hardware_pickup_started": false,
+  "firmware_flashed": false,
+  "diagnostic_limit": "The injected five-second delay reproduces the old timeout. Isolated real-camera probes produced the first result in 1.4 to 2.3 seconds after TRACK; physical pickup was not executed."
+}

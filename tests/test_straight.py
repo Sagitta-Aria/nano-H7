@@ -25,7 +25,7 @@ class StraightArmTests(unittest.TestCase):
         reply = self.request('HELLO', sequence=4294967295)
         self.assertTrue(reply.ok)
         self.assertEqual(reply.fields['straight'], '1')
-        self.assertEqual(reply.fields['fw'], '0.2.18')
+        self.assertEqual(reply.fields['fw'], '0.2.29')
         self.assertLessEqual(len(self.arm.transmitted), 384)
 
     def test_requires_fresh_yaw_and_translation_only(self):
@@ -48,7 +48,8 @@ class StraightArmTests(unittest.TestCase):
         self.assertEqual([abs(self.arm.status(i)[1]) for i in range(4)],[500]*4)
         self.assertEqual(self.request('CHASSIS STAT').fields['state'],'moving')
         self.arm.call('chassis_tick',700)
-        self.assertEqual(self.request('CHASSIS STAT').fields['fault'],'imu_stale')
+        status = self.request('CHASSIS STAT').fields
+        self.assertEqual((status['fault'], status['paused']), ('none', '1'))
 
     def test_yaw_mix_forward_backward_lateral_and_all_inversion_masks(self):
         matrix = {'FWD':(1,1,1,1),'BACK':(-1,-1,-1,-1),'LEFT':(1,-1,-1,1),'RIGHT':(-1,1,1,-1)}
@@ -124,8 +125,8 @@ class StraightArmTests(unittest.TestCase):
         self.assertEqual(self.arm.call('motion_armed'), 1)
         self.assertNotEqual(self.request('CHASSIS STAT').fields['remaining'], '0')
 
-    def test_feedback_failures_latch_even_if_good_data_arrives_before_tick(self):
-        for failure in ('invalid','epoch','gap','stale','deviation'):
+    def test_feedback_loss_holds_even_if_one_good_sample_arrives_before_tick(self):
+        for failure in ('invalid','epoch','gap','stale'):
             with self.subTest(failure=failure):
                 self.setUp(); self.feedback()
                 self.request('CHASSIS STRAIGHT FWD 1000 500 2000')
@@ -133,12 +134,26 @@ class StraightArmTests(unittest.TestCase):
                 elif failure == 'epoch': self.feedback(epoch=2, now=1)
                 elif failure == 'gap': self.feedback(now=300)
                 elif failure == 'stale': self.arm.call('chassis_tick',300)
-                else: self.feedback(501,1); self.arm.call('chassis_tick',1)
                 self.feedback(now=301, epoch=2 if failure == 'epoch' else 1)
                 self.arm.call('chassis_tick',301)
                 result = self.request('CHASSIS STAT').fields
-                self.assertEqual(result['state'],'fault')
-                self.assertEqual(self.arm.call('motion_chassis_active'),0)
+                if failure == 'epoch':
+                    self.assertEqual(result['state'],'fault')
+                    self.assertEqual(self.arm.call('motion_chassis_active'),0)
+                else:
+                    self.assertEqual((result['state'], result['fault'], result['paused']), ('moving', 'none', '1'))
+                    self.feedback(now=361); self.feedback(now=421)
+                    self.arm.call('chassis_tick',421)
+                    self.assertEqual(self.request('CHASSIS STAT').fields['paused'], '0')
+
+    def test_large_heading_error_stays_under_closed_loop_control(self):
+        self.feedback()
+        self.request('CHASSIS STRAIGHT FWD 1000 500 2000')
+        self.ramp(1200)
+        result = self.request('CHASSIS STAT').fields
+        self.assertEqual(result['fault'], 'none')
+        self.assertEqual(result['state'], 'moving')
+        self.assertGreater(abs(self.arm.status(1)[1]), abs(self.arm.status(0)[1]))
 
     def test_busy_stop_disarm_and_duplicate_id(self):
         self.feedback()
@@ -210,7 +225,8 @@ class CruiseStraightArmTests(unittest.TestCase):
         self.assertEqual(self.nav()['target_cd'],'0')
         self.assertEqual(self.nav()['state'],'moving')
         self.tick(self.now+1,501)
-        self.assertEqual(self.nav()['fault'],'heading_deviation')
+        self.assertEqual(self.nav()['fault'],'none')
+        self.assertEqual(self.nav()['state'],'turning')
 
     def test_cruise_does_not_recapture_residual_alignment_error(self):
         self.configure(initial=17950)

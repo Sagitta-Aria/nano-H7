@@ -1,0 +1,16 @@
+{
+  "backup": "/home/a/h743/backups/restore_debug_home_20261018_203438",
+  "default_page": "full debug interface",
+  "no_service_restart": true,
+  "config_hashes_unchanged": {
+    "device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699",
+    "control_settings.json": "b50856d715c2bbb9be32415b69f8ee2c240b1ab431871fa8f086d4dd4b556970",
+    "auxiliary.json": "ad800cc3d7d6bd3240ef49d7f584905ea651e424a5c74c127167595c78f56445",
+    "navigation.json": "3cef35975029af77f41d1af4bacf6eee7ca0a3df96c39dc76b116da28de132f5",
+    "camera_alignment.json": "3749ced9734d6902f57154807c00d796e6b6c601c7f9b10591a0633aba7ec9b9",
+    "pick_place.json": "5a8b5b23ed62a8de4a91243228cb5bdfd136c4107bff9dc3cd3cca2e015cae64",
+    "cameras.json": "2ad6be879693aa2ca1556ef968328ac434b65b24e1cf7ab4448ee61005e5d56d"
+  },
+  "service": "MainPID=5222\n",
+  "live_browser": "passed: full debug page at /, saved settings visible, no JS errors, no motor commands"
+}

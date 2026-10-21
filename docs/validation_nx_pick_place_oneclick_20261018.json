@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-18",
+  "change": "One-click pick/place saves edits, restores saved auxiliary ranges and arms; preserves references/direction and shows local errors.",
+  "local_unittests": {
+    "count": 82,
+    "passed": true
+  },
+  "nx_unittests": {
+    "returncode": 0,
+    "output": "----------------------------------------------------------------------\nRan 51 tests in 53.206s\n\nOK\n",
+    "physical_motion_started": false
+  },
+  "browser": {
+    "button_labels_verified": true,
+    "parameters": {
+      "pick_down": 9300,
+      "pick_rotation": -1750,
+      "place_take_down": 9200,
+      "place_rotation": -1750,
+      "place_drop_down": 9200,
+      "lift_sps": 3000,
+      "lift_accel": 2000,
+      "rotation_sps": 2000,
+      "rotation_accel": 2000,
+      "s1_open": 120,
+      "s1_closed": 80,
+      "s2_slot_1": 270,
+      "s2_slot_2": 135,
+      "s2_slot_3": 0,
+      "s1_settle_ms": 600,
+      "s2_settle_ms": 1000,
+      "step_timeout_ms": 60000,
+      "ack_timeout_ms": 3000,
+      "vision_timeout_ms": 30000
+    },
+    "detail": "当前页面为只读，请点击顶部“接管控制”。",
+    "layouts": [
+      {
+        "width": 1440,
+        "overflow": false
+      },
+      {
+        "width": 390,
+        "overflow": false
+      }
+    ],
+    "errors": [],
+    "motion_requests_sent": 0
+  },
+  "service": "MainPID=6830\nActiveState=active\n",
+  "configurations_unchanged": true,
+  "files_verified": 8,
+  "backup": "/home/a/h743/backups/pick_place_oneclick_20261018_182352",
+  "hardware_pick_place_started": false,
+  "firmware_flashed": false
+}

@@ -82,23 +82,46 @@ class StraightDemoTests(unittest.TestCase):
         self.assertGreater(abs(speeds[1]),abs(speeds[0]))
         self.assertGreater(speeds[0],0); self.assertLess(speeds[1],0)
 
-    def test_invalid_session_gap_and_stale_feedback_stop_without_resuming(self):
-        for reason in ('imu_invalid','imu_changed','imu_stale'):
+    def test_same_session_invalid_or_stale_holds_and_resumes_original_motion(self):
+        for reason in ('imu_invalid', 'imu_stale'):
             self.setUp()
             self.send('CHASSIS STRAIGHT FWD 1000 500 2000')
-            self.advance(17950,ms=301 if reason=='imu_stale' else 100,
-                         valid=reason!='imu_invalid', epoch=2 if reason=='imu_changed' else 1)
-            self.assertEqual(self.send('CHASSIS STAT').fields['fault'],reason)
-            self.advance(17950,epoch=2 if reason=='imu_changed' else 1)
-            self.assertEqual(self.send('CHASSIS STAT').fields['state'],'fault')
-            self.assertFalse(any(a['active'] for a in self.board.axes[:4]))
+            self.advance(17950)
+            original = self.send('CHASSIS STAT').fields
+            if reason == 'imu_invalid':
+                self.advance(17950, valid=0)
+            else:
+                self.now += .301
+                self.board.heartbeat = self.now
+                self.board.update()
+            paused = self.send('CHASSIS STAT').fields
+            self.assertEqual((paused['paused'], paused['fault']), ('1', 'none'))
+            positions = [a['pos'] for a in self.board.axes[:4]]
+            self.now += 120
+            self.board.heartbeat = self.now
+            self.board.update()
+            self.assertEqual([a['pos'] for a in self.board.axes[:4]], positions)
+            for _ in range(3): self.advance(17950, ms=60)
+            resumed = self.send('CHASSIS STAT').fields
+            self.assertEqual((resumed['paused'], resumed['fault']), ('0', 'none'))
+            self.assertEqual(resumed['move_id'], original['move_id'])
+            self.assertTrue(any(a['pos'] != p for a,p in zip(self.board.axes[:4], positions)))
+
+    def test_changed_yaw_session_remains_terminal(self):
+        self.send('CHASSIS STRAIGHT FWD 1000 500 2000')
+        self.advance(17950, epoch=2)
+        self.assertEqual(self.send('CHASSIS STAT').fields['fault'], 'imu_changed')
+        for _ in range(3): self.advance(17950, epoch=2)
+        self.assertEqual(self.send('CHASSIS STAT').fields['state'], 'fault')
+        self.assertFalse(any(a['active'] for a in self.board.axes[:4]))
 
     def test_large_error_and_motor_ownership(self):
         self.send('CHASSIS STRAIGHT FWD 1000 500 2000')
         self.assertFalse(self.send('TURN MOVE REL 1000 500 2000').ok)
         self.assertFalse(self.send('WHEELS 100 100 100 100 2000').ok)
         self.advance(17349)
-        self.assertEqual(self.send('CHASSIS STAT').fields['fault'],'heading_deviation')
+        self.assertEqual(self.send('CHASSIS STAT').fields['fault'],'none')
+        self.assertEqual(self.send('CHASSIS STAT').fields['state'],'moving')
 
 
 if __name__=='__main__': unittest.main()

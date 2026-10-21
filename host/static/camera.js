@@ -4,6 +4,13 @@ export class CameraView {
   constructor(post, prefix = "camera", api = "/api/camera") {
     this.post = post;
     this.api = api;
+    this.qrNodes = prefix === 'camera2' ? {
+      code: document.getElementById('camera2-qr-code'),
+      status: document.getElementById('camera2-qr-status'),
+      seen: document.getElementById('camera2-qr-seen'),
+      plan: document.getElementById('camera2-task-plan'),
+      validation: document.getElementById('camera2-task-validation'),
+    } : null;
     this.nodes = {};
     for (const name of ["source", "device", "refresh", "start", "stop", "resolution", "apply",
                         "snapshot", "mirror", "actual", "state", "message", "video", "image", "placeholder", "bind", "identity"]) {
@@ -291,13 +298,54 @@ export class CameraView {
 
   showFrame(frame) {
     this.frame = frame;
-    this.message(frame.message || "Nano 摄像头未打开。", frame.state);
+    this.message(this.qrNodes && this.nano && frame.state === 'ready'
+      ? 'NX 摄像头2正在持续识别二维码，任务码自动更新；拍照仅用于查看画面。'
+      : frame.message || "Nano 摄像头未打开。", frame.state);
     this.nodes.actual.textContent = frame.width ? `实际采集：${frame.width} × ${frame.height}` : "实际采集：—";
+    this.controls();
+    this.showQR(frame);
+  }
+
+  /* Server events carry only QR metadata; photos and motor control stay independent. */
+  updateRemote(frame) {
+    if (this.nano) this.showFrame(frame);
+  }
+
+  /* A locked run plan outlives camera shutdown; previews never overwrite it. */
+  setTask(task) {
+    this.task = task;
     this.controls();
   }
 
+  showQR(frame = this.frame) {
+    if (!this.qrNodes) return;
+    const qr = this.nano ? frame.qr : null;
+    this.qrNodes.code.textContent = qr?.last_code || '—';
+    const labels = {valid: '当前已识别有效任务码', searching: '正在寻找二维码',
+      located: '已找到二维码，正在解码', invalid: '二维码内容不是有效任务码',
+      decode_error: '本帧解码失败，正在重试', stale: '识别数据已过期'};
+    this.qrNodes.status.textContent = !this.nano ? '任务码识别使用 NX 摄像头2，请选择 NX 来源。'
+      : frame.state !== 'ready' ? (frame.state === 'error' ? '摄像头离线或识别停止' : '等待摄像头2打开')
+      : labels[qr?.status] || '正在启动二维码识别';
+    this.qrNodes.seen.textContent = qr?.last_seen_at
+      ? `上次有效识别：${new Date(qr.last_seen_at * 1000).toLocaleTimeString()}${qr.status === 'valid' && frame.state === 'ready' ? '' : ' · 显示保留结果'}`
+      : '尚未识别到有效任务码';
+    const locked = this.task?.task_plan;
+    const plan = locked || qr?.task_plan || qr?.last_plan;
+    this.qrNodes.validation.textContent = locked ? `本次执行已锁定：${locked.code} · ${this.task.qr_status || ''}`
+      : qr?.task_error || (plan ? `扫码预览（尚未锁定）：${plan.code}` : '等待四组比赛任务码：颜色1～6，放置位置为1、2、3的排列。');
+    this.qrNodes.plan.textContent = plan ? plan.batches.map(batch =>
+      `第${batch.batch}批：` + batch.items.map(item => `${item.angle_deg}° ${item.color_name} → 位置${item.target}`).join('；')
+    ).join('\n') : '';
+    if (locked) {
+      this.qrNodes.code.textContent = locked.code;
+      this.qrNodes.status.textContent = '本次运行任务码已锁定';
+      this.qrNodes.seen.textContent = this.task.qr_status || '任务码保留至下次运行';
+    }
+  }
+
   controls() {
-    const readonly = this.nano && this.role === "readonly";
+    const readonly = this.nano && (this.role === "readonly" || (this.task?.active && this.task?.uses_task_code));
     const available = this.nano ? this.nanoSupported && !!this.nodes.device.value : window.isSecureContext && !!this.media?.getUserMedia;
     const ready = this.nano ? this.frame.state === "ready" : !!this.stream;
     const wrongBinding = this.nano && this.binding && this.nodes.device.value !== this.boundDevice;
@@ -309,12 +357,14 @@ export class CameraView {
     this.nodes.source.disabled = this.busy;
     this.nodes.device.disabled = this.busy || readonly;
     this.nodes.resolution.disabled = this.busy || readonly;
+    this.showQR();
   }
 
   message(text, state = "idle") {
     this.nodes.message.textContent = text;
     this.nodes.state.dataset.state = state;
     this.nodes.state.textContent = ({idle: "未打开", opening: "正在打开", ready: "已打开 · 按需拍照", error: "操作提示"})[state] || "未打开";
+    if (this.qrNodes && this.nano && state === 'ready') this.nodes.state.textContent = '已打开 · 二维码识别';
   }
 
   errorText(error) {

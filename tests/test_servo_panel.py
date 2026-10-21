@@ -27,22 +27,22 @@ class ServoPanelTests(unittest.TestCase):
         self.panel.select_channel()
         self.assertEqual(self.panel.angle.get(), "0")
         self.assertEqual(self.panel.travel, 270)
-        self.assertIn("PH9 / TIM12_CH2", self.panel.heading.get())
+        self.assertIn("PE4 / TIM15_CH1N", self.panel.heading.get())
         self.app.send.assert_not_called()
 
     def test_commands_and_replies_route_to_correct_pins(self):
         self.panel.send()
-        self.app.send.assert_called_with("SERVO 1 180")
-        self.panel.reply("SERVO 1 180", Reply(2, "OK cmd=SERVO ch=1 angle=180.0 us=1833 pin=PH9"))
+        self.app.send.assert_called_with("SERVO 2 120")
+        self.panel.reply("SERVO 2 120", Reply(2, "OK cmd=SERVO ch=2 angle=120.0 us=1833 pin=PH6"))
         self.assertIn("120.0°", self.panel.state.get())
         self.panel.channel.set("2")
         self.panel.select_channel()
         self.panel.send()
-        self.app.send.assert_called_with("SERVO 2 0")
-        self.panel.reply("SERVO 2 0", Reply(3, "OK cmd=SERVO ch=2 angle=0.0 us=500 pin=PH6"))
+        self.app.send.assert_called_with("SERVO 1 0")
+        self.panel.reply("SERVO 1 0", Reply(3, "OK cmd=SERVO ch=1 angle=0.0 us=500 pin=PE4"))
         self.assertIn("0.0°", self.panel.state.get())
         self.panel.send(270)
-        self.app.send.assert_called_with("SERVO 2 180")
+        self.app.send.assert_called_with("SERVO 1 270")
 
     @patch("host.servo_panel.messagebox.showerror")
     def test_ph6_limit_and_calibration(self, showerror):
@@ -51,11 +51,11 @@ class ServoPanelTests(unittest.TestCase):
         showerror.assert_called_once()
         self.panel.pulse.set("1500")
         self.panel.send_pulse()
-        self.app.send.assert_called_with("SERVO 1 135")
+        self.app.send.assert_called_with("SERVO 2 90")
         self.panel.channel.set("2")
         self.panel.select_channel()
         self.panel.send_pulse()
-        self.app.send.assert_called_with("SERVO 2 90")
+        self.app.send.assert_called_with("SERVO 1 135")
 
     def test_pin_metadata_already_in_ui_order_is_not_swapped_twice(self):
         self.panel.reply("HELLO", Reply(4, "OK cmd=HELLO servo=2 servo1_travel=1800 servo2_travel=2700 servo1_pin=PH6 servo2_pin=PH9"))

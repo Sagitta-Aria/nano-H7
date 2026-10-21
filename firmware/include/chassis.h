@@ -10,8 +10,11 @@ int chassis_straight(unsigned direction, uint32_t steps, unsigned sps, unsigned 
                      uint32_t id, uint32_t now_ms);
 /* Called before replacing IMU feedback; failures latch and cannot auto-resume. */
 void chassis_imu_guard(unsigned valid, uint32_t epoch, unsigned previously_fresh);
+unsigned chassis_imu_required(void);
 int chassis_jog(unsigned direction, unsigned sps, unsigned accel, uint32_t id, uint32_t now_ms);
 void chassis_halt(void);
+/* Called by MOTION CLEAR after its low-level idle/disarmed check. */
+void chassis_clear_fault(void);
 void chassis_tick(uint32_t now_ms);
 int chassis_config(unsigned invert_mask);
 unsigned chassis_busy(void);

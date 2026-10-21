@@ -1,0 +1,125 @@
+{
+  "status": "deployed",
+  "backup": "/home/a/h743/backups/b_delay_20261021",
+  "stage": "/home/a/h743/staging/b_delay_20261021",
+  "files": {
+    "host/b_pickup.py": {
+      "before": "7a6a7b17ef72597df326eb8780b7dd396d28b08f37f1b4bc5e25d8aa253233d8",
+      "after": "2c78ffe400437faad447ed12e9189a68d32591414baf7dfeeb999501bc1e4768"
+    },
+    "host/pick_place.py": {
+      "before": "5a416124ecb21f369d558ed93c5792efd7cc7717e73c087629fa7ba97d9fc4c8",
+      "after": "385c7e79f8ad9df1c9072854e3c50eef8610ae5be7dad2f52466c34abc9dfec1"
+    },
+    "host/static/b_pickup.js": {
+      "before": "e184eb855c02843b95b054ae40003f77d505422e968e895f39a5c4ecedb2f0d4",
+      "after": "cc4d8c8476cfdc02ad19cc26e66295d9531588ace47f771db2ebce8e2cd6e6a7"
+    },
+    "host/static/pick_place.js": {
+      "before": "37bdce920c9b010c67995242d0e746d2c7cdee17c61c80f77bbb73480d3fa5a8",
+      "after": "b473f9e0ed487319d360d5b81bf047a4cd45999b841acb31e12cda0b0673d2ce"
+    },
+    "host/static/index.html": {
+      "before": "ec2870e7c7903e2b5cdcadf21ad98bca8742844d0d00514f820507cc39d3893e",
+      "after": "a0a5f1f07b9fa570c448942c2ef3dc41862a3e336e0c1effa23a934dc2025369"
+    },
+    "tests/test_b_pickup.py": {
+      "before": "a0842b9707f3d6a68829b353764063dae2305c7f49b78f8977c055702d39904c",
+      "after": "94344f4eef33d9cb0de298a5de7ea0a7011a61fa33b18e51fe7d22287cdc0fb6"
+    }
+  },
+  "remote_tests": {
+    "returncode": 0,
+    "initial": {
+      "returncode": 1,
+      "output": "======================================================================\nERROR: test_live_digit_and_color_search_full_frame_despite_old_roi_environment (tests.test_camera_alignment.DetectionTests)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/a/h743/staging/b_delay_20261021/tests/test_camera_alignment.py\", line 126, in test_live_digit_and_color_search_full_frame_despite_old_roi_environment\n    from nx_vision_live import VisionModes\nModuleNotFoundError: No module named 'nx_vision_live'\n\n======================================================================\nERROR: test_monitor_restores_digit_telemetry_and_uses_native_alignment_pixels (tests.test_camera_alignment.DetectionTests)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/a/h743/staging/b_delay_20261021/tests/test_camera_alignment.py\", line 180, in test_monitor_restores_digit_telemetry_and_uses_native_alignment_pixels\n    monitor=RecognitionMonitor()\n  File \"/home/a/h743/staging/b_delay_20261021/host/camera_monitor.py\", line 20, in __init__\n    from nx_vision_ui import TouchModePanel\nModuleNotFoundError: No module named 'nx_vision_ui'\n\n----------------------------------------------------------------------\nRan 91 tests in 243.804s\n\nFAILED (errors=2)\n",
+      "tests": [
+        "test_b_pickup",
+        "test_pick_place",
+        "test_material_flow",
+        "test_camera_alignment",
+        "test_material_settings",
+        "test_imu_pause_host",
+        "test_competition"
+      ]
+    },
+    "followup": {
+      "tests": [
+        "tests.test_camera_alignment.DetectionTests.test_live_digit_and_color_search_full_frame_despite_old_roi_environment",
+        "tests.test_camera_alignment.DetectionTests.test_monitor_restores_digit_telemetry_and_uses_native_alignment_pixels"
+      ],
+      "output": "{\"event\": \"mode_changed\", \"mode\": \"color\", \"ocr_loaded\": false, \"roi_size\": 0, \"bottom_trim\": 0, \"grasp_offset\": [0, 30]}\n{\"event\": \"mode_changed\", \"mode\": \"digit\", \"ocr_loaded\": false, \"roi_size\": 0, \"bottom_trim\": 0, \"grasp_offset\": [0, 30]}\n----------------------------------------------------------------------\nRan 2 tests in 1.124s\n\nOK\n",
+      "returncode": 0
+    },
+    "environment_fix": "Read-only tools symlink added to isolated sandbox; production unchanged",
+    "passed_unique_tests": 91
+  },
+  "config_hashes": {
+    "host/device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699",
+    "host/control_settings.json": "656e42f3b0c922264a0c90ee752795a514f6688f1ee1505ab1f49e80d3e14c9b",
+    "host/auxiliary.json": "229d4c2dfeffcaf22a16556b2e3932e92f41e8f8627e42bfa35681580699859c",
+    "host/mission.json": "63ed3d492d38174a4deefd284d80f82c2900bc047eff367e73a0b7ae1df60cca",
+    "host/navigation.json": "adedff07cf974342f368d8d366b5b86cc3e8d9c25ab3d0b5998a782acedd6759",
+    "host/b_pickup.json": "22b0c9177fae001bda41ef1dfc9151083c13842e7c3a4851d7f12a69df3c0c91",
+    "host/camera_alignment.json": "2d33d2bfb78cb558c576b1b093624325783310e4c042c902fe561b2d8af70529",
+    "host/material_flow.json": "79ac0d429603b7389219efeef60a8ecbaa9a69e2fde205f5b60bf2bed1de5c08",
+    "host/pick_place.json": "d4c82890adc58555d6940d43892649f44c759b8ab932941f3f658cb3999dbdd8",
+    "host/cameras.json": "2ad6be879693aa2ca1556ef968328ac434b65b24e1cf7ab4448ee61005e5d56d",
+    "工创赛视觉识别/色块识别/yellow_thresholds.json": "36eba9b849ebcac98dbcc5b0cfed0d752243102506e720958d6c33ccfedfc22f",
+    "工创赛视觉识别/色块识别/blue_thresholds.json": "e40e20632533b9b3ea56f902d23087f477dff8edd16e6f4b24fde97d1197a354",
+    "工创赛视觉识别/色块识别/red_thresholds.json": "b391fcaedea7eee63a184e11bd1d53f058e0be9bd6d34287f7c78fa8dd3bb4b6",
+    "工创赛视觉识别/色块识别/light_blue_thresholds.json": "9f883b522bf89b64ca63f8d2a135bffbfd10f3f828cc4b3eaed65f7163e6c389",
+    "工创赛视觉识别/色块识别/green_thresholds.json": "fd3ec87bb238342759bd349b5a6deac6fd08925c86d92e02c9da3d89e07f646a",
+    "工创赛视觉识别/色块识别/black_thresholds.json": "b367ecc5779cb483b25951c329f1dbccac53faa1cdb85d5ad570556b320edc3f"
+  },
+  "configurations_unchanged": true,
+  "b_pickup_config": {
+    "pick_down": 3500,
+    "pick_rotation": -1800,
+    "lift_sps": 3000,
+    "lift_accel": 5000,
+    "rotation_sps": 2000,
+    "rotation_accel": 2000,
+    "s1_open": 150,
+    "s1_closed": 70,
+    "s1_settle_ms": 600,
+    "s2_settle_ms": 1000,
+    "step_timeout_ms": 60000,
+    "ack_timeout_ms": 3000,
+    "roi_x_pct": 15,
+    "roi_y_pct": 15,
+    "roi_width_pct": 70,
+    "roi_height_pct": 70,
+    "recognition_delay_ms": 2000
+  },
+  "link": "connected",
+  "imu": "streaming",
+  "armed": false,
+  "all_axes_stopped": true,
+  "hardware_task_started": false,
+  "firmware_flashed": false,
+  "service": "MainPID=11878\nActiveState=active\n",
+  "browser": {
+    "status": "passed",
+    "default_ms": 2000,
+    "fields": 17,
+    "widths": [
+      1440,
+      390
+    ],
+    "errors": [],
+    "blockedWrites": [],
+    "snapshots": [
+      "live-b-delay-1440.png",
+      "live-b-delay-390.png"
+    ],
+    "config_saved": false,
+    "motion_requested": false
+  },
+  "ssh_alias": "nx-bird",
+  "url": "http://192.168.1.196:8770/debug",
+  "recorded_at": "2026-10-21T09:06:52.300779+00:00",
+  "local_regression_tests": 91,
+  "host_settings_count": 10,
+  "vision_settings_count": 6
+}

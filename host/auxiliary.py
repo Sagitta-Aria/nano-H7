@@ -1,7 +1,8 @@
 """Saved M5/M6 operator settings; saving never moves or re-references hardware.
 
 Presets are absolute logical pulse positions, not angles/mm or encoder readings.
-Firmware owns the live limits. Reapply saved ranges explicitly after MCU reset.
+Firmware owns the live limits. The Web session restores saved ranges after
+reconnection when the axis is idle and its position reference is valid.
 """
 import copy
 import json

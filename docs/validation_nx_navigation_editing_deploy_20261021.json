@@ -1,0 +1,78 @@
+{
+  "date": "2026-10-21",
+  "feature": "Navigation draft diagram and apply-before-save gate removed; field and station coordinates saved directly; deployed to NX",
+  "scope": "Host only. Firmware untouched (0.2.28); X start stay rejected because INFO has no nav_reference.",
+  "note": "Completes the deployment that was cut off at the end of the previous session: files were staged and hashed but never copied.",
+  "deploy": {
+    "transport": "ssh nx-bird (192.168.1.196)",
+    "root": "/home/a/h743",
+    "files": [
+      "host/navigation.py",
+      "host/navigation_runner.py",
+      "host/webapp.py",
+      "host/static/index.html",
+      "host/static/app.js",
+      "host/static/styles.css"
+    ],
+    "preflight": {
+      "service": "active, MainPID 4997",
+      "armed": false,
+      "axes": "seven axes stationary, active=0",
+      "navigation": "idle",
+      "task_active": false,
+      "competition_active": false,
+      "firmware": "0.2.28",
+      "nav_reference": null
+    },
+    "backup": "/home/a/h743/backups/nav_editing_20261021_20261021_2049/ (host, tests, tools, docs, CHANGELOG; 316 files)",
+    "hash_verification": "all six files match local SHA-256 after scp",
+    "remote_syntax": "python3 -m py_compile passed"
+  },
+  "post_checks": {
+    "service": "active, MainPID 5835, started 2026-10-21 20:54:05 CST",
+    "devices": "H743 connected, H723 streaming",
+    "armed": false,
+    "axes": "seven axes stationary",
+    "navigation": "idle, ready=0",
+    "page": "GET / returns 200, 75100 bytes",
+    "markers": {
+      "nav-field-apply": 0,
+      "previewMission": 0,
+      "applyFieldEditor": 0,
+      "nav-field-editor": 1,
+      "function fieldGrid": 1,
+      "readFieldGrid": 2
+    },
+    "config_hashes_unchanged": 10
+  },
+  "remote_tests": {
+    "passed": [
+      "tests.test_stations",
+      "tests.test_webapp",
+      "tests.test_webpage",
+      "tests.test_competition",
+      "tests.test_path_upload",
+      "tests.test_mission",
+      "tests.test_center_navigation",
+      "tests.test_pick_place",
+      "tests.test_task_code"
+    ],
+    "unavailable": {
+      "modules": ["tests.test_navigation", "tests.test_navigation_timing", "tests.test_navigation_regressions"],
+      "reason": "ModuleNotFoundError: unicorn (ARM emulation dependency) is not installed on the NX box; unrelated to this change"
+    }
+  },
+  "hardware_executed": false,
+  "flashed": false,
+  "remaining_local_drift": [
+    "host/webserver.py",
+    "host/servo_config.py",
+    "host/competition.py",
+    "host/static/competition.html",
+    "host/static/competition.js",
+    "host/simulator.py",
+    "host/navigation_sim.py",
+    "tests/test_webapp.py",
+    "tests/test_servo_connection.py"
+  ]
+}

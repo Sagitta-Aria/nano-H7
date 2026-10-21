@@ -1,0 +1,230 @@
+{
+  "version": "0.2.24",
+  "source": "RM0433 Rev 6, page 1814, Table 337: CC1E=0, CC1NE=1 => OC1N = OC1REF XOR CC1NP",
+  "confirmed_bug": "v0.2.23 CC1NP inverted the standalone CH1N output; now CCER=4.",
+  "evidence": {
+    "PE4": [
+      {
+        "ccer": "c",
+        "ccr": 500,
+        "cnt": 102,
+        "idr": 0
+      },
+      {
+        "ccer": "c",
+        "ccr": 500,
+        "cnt": 5101,
+        "idr": 1
+      }
+    ],
+    "PH6": [
+      {
+        "ccer": "1",
+        "ccr": 2000,
+        "cnt": 2099,
+        "idr": 0
+      },
+      {
+        "ccer": "1",
+        "ccr": 2000,
+        "cnt": 8098,
+        "idr": 0
+      }
+    ]
+  },
+  "PH6_status": "User confirms no motion on v0.2.24 when commanding 120 to 135 degrees. MCU GPIO samples track the change (1833 to 1999 us, approximately 20 ms period); inverted polarity is not supported by these observations. External connector measurements pending.",
+  "verification": "37 local tests passed; compiled ARM sampling tests cover both pins, pulses, inverted pulses, stuck levels and stalled cycle counter.",
+  "hardware_verified": false,
+  "files": {
+    "robot_h743.axf": "b408570c17a2cc0a5ca3abc18b5ac2f8a045e3a557b04ba863806aaf166f46ec",
+    "robot_h743.bin": "3e5a226fd7ff678fe94496923a507839d67e92cc3d1cf77ece4e965f143ddffb",
+    "robot_h743.hex": "c53fa3b47a54f65bda7838ac2655d45abb7c2c90aa3204db2c3d0cdb5925526e"
+  },
+  "hardware_observation_163931": {
+    "firmware": "0.2.24",
+    "date": "2026-10-18",
+    "source": "NX /api/state log; read-only SERVO DIAG invoked by user",
+    "PH6": [
+      {
+        "seq": 110426,
+        "sample": 1,
+        "high_us": 1832,
+        "period_us": 20000,
+        "rise": 3,
+        "fall": 3,
+        "levels": 3,
+        "gap_us": 8,
+        "ccr": 1833,
+        "ccer": "1"
+      },
+      {
+        "seq": 110454,
+        "sample": 1,
+        "high_us": 1833,
+        "period_us": 20000,
+        "rise": 2,
+        "fall": 2,
+        "levels": 3,
+        "gap_us": 7,
+        "ccr": 1833,
+        "ccer": "1"
+      }
+    ],
+    "PE4": [
+      {
+        "seq": 110424,
+        "sample": 1,
+        "high_us": 2500,
+        "period_us": 20000,
+        "rise": 3,
+        "fall": 2,
+        "levels": 3,
+        "gap_us": 8,
+        "ccr": 2500,
+        "ccer": "4"
+      },
+      {
+        "seq": 110429,
+        "sample": 1,
+        "high_us": 2499,
+        "period_us": 19999,
+        "rise": 2,
+        "fall": 3,
+        "levels": 3,
+        "gap_us": 7,
+        "ccr": 2500,
+        "ccer": "4"
+      }
+    ],
+    "interpretation": "Both MCU GPIO inputs observe short-high pulses matching configured widths with approximately 20 ms period. This does not measure connector voltage, servo power or mechanical motion."
+  },
+  "hardware_observation_165337": {
+    "firmware": "0.2.24",
+    "date": "2026-10-18",
+    "source": "NX /api/state log; user changed PH6 120 to 135 degrees and clicked diagnostic",
+    "command_sequence": [
+      {
+        "seq": 3633,
+        "time": "16:53:33",
+        "command": "SERVO 2 120",
+        "ack_us": 1833
+      },
+      {
+        "seq": 3658,
+        "time": "16:53:33",
+        "command": "SERVO 2 135",
+        "ack_us": 2000
+      }
+    ],
+    "PH6": [
+      {
+        "seq": 3791,
+        "sample": 1,
+        "high_us": 1999,
+        "period_us": 19999,
+        "rise": 2,
+        "fall": 3,
+        "levels": 3,
+        "gap_us": 7,
+        "ccr": 2000,
+        "ccer": "1"
+      },
+      {
+        "seq": 3795,
+        "sample": 1,
+        "high_us": 1999,
+        "period_us": 19999,
+        "rise": 2,
+        "fall": 2,
+        "levels": 3,
+        "gap_us": 8,
+        "ccr": 2000,
+        "ccer": "1"
+      }
+    ],
+    "PE4": [
+      {
+        "seq": 3788,
+        "sample": 1,
+        "high_us": 2500,
+        "period_us": 20000,
+        "gap_us": 8,
+        "ccr": 2500,
+        "ccer": "4"
+      },
+      {
+        "seq": 3793,
+        "sample": 1,
+        "high_us": 2500,
+        "period_us": 20000,
+        "gap_us": 7,
+        "ccr": 2500,
+        "ccer": "4"
+      }
+    ],
+    "user_observation": "PH6 still completely motionless",
+    "interpretation": "PH6 pad pulse changed from approximately 1833 us at 120 degrees to 1999 us at 135 degrees. Short-high polarity is consistent with the original TIM12_CH1 configuration. Connector waveform, voltage and servo response remain unverified."
+  },
+  "backup_audit": {
+    "source": "NX releases/v0.2.21 and backups/servo_pe4_20261018_153902",
+    "old_ui_H06": "wire 1 -> PH9/TIM12_CH2; 180 degree UI scaled to 270 degree wire range",
+    "old_ui_H09": "wire 2 -> PH6/TIM12_CH1; 270 degree UI scaled to 180 degree wire range",
+    "compiled_images_PH6_comparison": {
+      "current_v0.2.24": [
+        {
+          "degrees": 120,
+          "tim12_ccr1": 1833,
+          "tim12_psc": 199,
+          "tim12_arr": 19999,
+          "ch1_mode": 104,
+          "ch1_enable_polarity": 1,
+          "ph6_mode": 2,
+          "ph6_af": 2,
+          "ph6_open_drain": 0
+        },
+        {
+          "degrees": 135,
+          "tim12_ccr1": 2000,
+          "tim12_psc": 199,
+          "tim12_arr": 19999,
+          "ch1_mode": 104,
+          "ch1_enable_polarity": 1,
+          "ph6_mode": 2,
+          "ph6_af": 2,
+          "ph6_open_drain": 0
+        }
+      ],
+      "backup_v0.2.21": [
+        {
+          "degrees": 120,
+          "tim12_ccr1": 1833,
+          "tim12_psc": 199,
+          "tim12_arr": 19999,
+          "ch1_mode": 104,
+          "ch1_enable_polarity": 1,
+          "ph6_mode": 2,
+          "ph6_af": 2,
+          "ph6_open_drain": 0
+        },
+        {
+          "degrees": 135,
+          "tim12_ccr1": 2000,
+          "tim12_psc": 199,
+          "tim12_arr": 19999,
+          "ch1_mode": 104,
+          "ch1_enable_polarity": 1,
+          "ph6_mode": 2,
+          "ph6_af": 2,
+          "ph6_open_drain": 0
+        }
+      ]
+    },
+    "limitation": "ARM emulation verifies register writes only. Physical connector identity and remaining PH6 failure are not established by the backup audit."
+  },
+  "user_cross_test": {
+    "report": "Same servo operates when moved from H06 connector to E04 connector",
+    "supply_V": 5,
+    "H06_signal_DC_V": 0.02,
+    "interpretation": "Focus on H06 path and historical mapping; no conclusion of failed servo or connector from this observation alone."
+  }
+}

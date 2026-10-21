@@ -1,0 +1,26 @@
+{
+  "timeout_s": 480,
+  "leg_timeout_s": 120,
+  "action_timeout_s": 30,
+  "vision_max_age_ms": 500,
+  "calibration": {
+    "verified": false,
+    "matrix": [
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        0
+      ]
+    ],
+    "tolerance_px": 3,
+    "stable_frames": 3,
+    "max_iterations": 12,
+    "max_step": 100,
+    "sps": 100,
+    "accel": 1000
+  },
+  "legs": {}
+}

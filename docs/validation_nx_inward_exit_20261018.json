@@ -1,0 +1,75 @@
+{
+  "service": "MainPID=8385\nActiveState=active\n",
+  "files_verified": 3,
+  "configurations_unchanged": true,
+  "hardware_pick_place_started": false,
+  "firmware_flashed": false,
+  "backup": "/home/a/h743/backups/inward_exit_20261018_213054",
+  "local_tests": 44,
+  "remote_validation": {
+    "returncode": 0,
+    "output": "----------------------------------------------------------------------\nRan 26 tests in 51.015s\n\nOK\n",
+    "previous_suite": {
+      "returncode": 1,
+      "output": "======================================================================\nERROR: test_turn_inset (unittest.loader._FailedTest)\n----------------------------------------------------------------------\nImportError: Failed to import test module: test_turn_inset\nTraceback (most recent call last):\n  File \"/usr/lib/python3.8/unittest/loader.py\", line 154, in loadTestsFromName\n    module = __import__(module_name)\nModuleNotFoundError: No module named 'tests.test_turn_inset'\n\n\n----------------------------------------------------------------------\nRan 153 tests in 105.757s\n\nFAILED (errors=1)\nrace arrival -> done (simulation): 0.000s\nring position -> next motion (simulation): 0.050s\nshort serial reply timeout padding: 0.000s\n"
+    },
+    "scope_note": "Turn inset/compiled ARM suite passed locally; that test module is not installed on NX. Other 152 NX cases passed; targeted deployable suite rerun below."
+  },
+  "field_geometry": {
+    "inset_steps": 1000,
+    "stations": {
+      "3": {
+        "outward_steps": 400,
+        "right_steps": 0,
+        "outward_direction": "LEFT",
+        "reference": [
+          14400,
+          27800
+        ],
+        "exit": [
+          14400,
+          27800
+        ]
+      },
+      "4": {
+        "outward_steps": 400,
+        "right_steps": 0,
+        "outward_direction": "LEFT",
+        "reference": [
+          28800,
+          13400
+        ],
+        "exit": [
+          28800,
+          13400
+        ]
+      },
+      "6": {
+        "outward_steps": 400,
+        "right_steps": 0,
+        "outward_direction": "LEFT",
+        "reference": [
+          14400,
+          27800
+        ],
+        "exit": [
+          14400,
+          27800
+        ]
+      },
+      "7": {
+        "outward_steps": 400,
+        "right_steps": 0,
+        "outward_direction": "LEFT",
+        "reference": [
+          28800,
+          13400
+        ],
+        "exit": [
+          28800,
+          13400
+        ]
+      }
+    }
+  }
+}

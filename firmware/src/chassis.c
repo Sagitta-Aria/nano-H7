@@ -33,9 +33,11 @@ void chassis_imu_guard(unsigned valid, uint32_t epoch, unsigned previously_fresh
 {
     if (mode != MOVING || !assisted) return;
     if (epoch != straight_epoch) straight_fail("imu_changed");
-    else if (!previously_fresh) straight_fail("imu_stale");
-    else if (!valid) straight_fail("imu_invalid");
+    /* Same-session loss is a hold, handled centrally by turn.c. */
+    (void)valid; (void)previously_fresh;
 }
+unsigned chassis_imu_required(void)
+{ return (mode == MOVING && assisted) || navigation_busy() || navigation_suspended() || turn_busy(); }
 
 int chassis_parse_direction(const char *text)
 {
@@ -52,6 +54,14 @@ static int launch(unsigned dir, uint32_t steps, unsigned sps, unsigned accel, ui
     return motion_chassis_start(physical, steps, sps, accel, id);
 }
 
+/* Called only after MOTION CLEAR verifies all outputs are idle/disarmed. */
+void chassis_clear_fault(void)
+{
+    uint32_t key = board_lock();
+    chassis_halt(); navigation_clear_fault(); turn_clear_fault();
+    straight_fault = "none"; straight_error = 0;
+    board_unlock(key);
+}
 /* Owning a jog also blocks raw wheel commands during a pending direction change. */
 unsigned chassis_busy(void) { return mode == MOVING || mode == JOGGING || mode == SWITCHING || navigation_busy() || turn_busy(); }
 unsigned chassis_invert_mask(void) { return invert_mask; }
@@ -120,7 +130,7 @@ void chassis_halt(void)
 {
     uint32_t key = board_lock();
     motion_chassis_stop(); mode = STOPPED;
-    navigation_stop();
+    if (!navigation_suspended()) navigation_stop();
     turn_stop();
     board_unlock(key);
 }
@@ -134,6 +144,7 @@ void chassis_tick(uint32_t now_ms)
     if ((mode == JOGGING || mode == SWITCHING) && (uint32_t)(now_ms - last_jog) >= CHASSIS_JOG_TIMEOUT_MS) {
         chassis_halt(); board_unlock(key); return;
     }
+    if (turn_imu_waiting(now_ms)) { board_unlock(key); return; }
     if (mode == SWITCHING && !motion_chassis_active()) {
         if (launch(pending_direction, 0, speed, acceleration, move_id)) {
             direction = pending_direction; mode = JOGGING;
@@ -141,13 +152,12 @@ void chassis_tick(uint32_t now_ms)
     }
     if (mode == MOVING && assisted) {
         int32_t angle; uint32_t epoch;
-        if (!turn_heading(now_ms, &angle, &epoch)) straight_fail("imu_stale");
+        if (!turn_heading(now_ms, &angle, &epoch)) { board_unlock(key); return; }
         else if (epoch != straight_epoch) straight_fail("imu_changed");
         else {
             straight_error = wrap(straight_target - angle);
-            if (straight_error > NAV_TRAVEL_TOLERANCE_CD || straight_error < -NAV_TRAVEL_TOLERANCE_CD)
-                straight_fail("heading_deviation");
-            else motion_assist_correct(turn_heading_correction(straight_error, speed));
+            /* Heading error is the controller input, not a terminal fault. */
+            motion_assist_correct(turn_heading_correction(straight_error, speed));
         }
     }
     if (mode == MOVING && !motion_chassis_active()) {
@@ -165,7 +175,7 @@ void chassis_tick(uint32_t now_ms)
 int chassis_config(unsigned mask)
 {
     uint32_t key = board_lock();
-    if (mask > 15 || chassis_busy() || motion_chassis_active()) { board_unlock(key); return 0; }
+    if (mask > 15 || navigation_suspended() || chassis_busy() || motion_chassis_active()) { board_unlock(key); return 0; }
     invert_mask = mask;
     navigation_invalidate();
     board_unlock(key);
@@ -175,10 +185,11 @@ int chassis_config(unsigned mask)
 void chassis_report(char *out, unsigned capacity)
 {
     axis_status_t s;
-    unsigned i, saved_mode, saved_dir, saved_mask, active, saved_assisted;
+    unsigned i, saved_mode, saved_dir, saved_mask, active, saved_assisted, paused;
     int32_t saved_target, saved_error;
     const char *saved_fault;
     uint32_t id, total, remaining = 0, key = board_lock();
+    paused = turn_imu_paused();
     saved_mode = mode; saved_dir = direction; saved_mask = invert_mask;
     active = motion_chassis_active(); id = move_id; total = total_steps;
     saved_assisted = assisted; saved_target = straight_target;
@@ -188,8 +199,8 @@ void chassis_report(char *out, unsigned capacity)
         if (s.command_id == id && s.remaining > remaining) remaining = s.remaining;
     }
     board_unlock(key); /* Formatting must not delay STEP timer interrupts. */
-    snprintf(out, capacity, "OK cmd=CHASSIS state=%s direction=%s move_id=%lu total=%lu remaining=%lu active=%u invert=%u assist=%u target_cd=%ld error_cd=%ld fault=%s",
+    snprintf(out, capacity, "OK cmd=CHASSIS state=%s direction=%s move_id=%lu total=%lu remaining=%lu active=%u invert=%u assist=%u target_cd=%ld error_cd=%ld fault=%s paused=%u",
              states[saved_mode], names[saved_dir], (unsigned long)id, (unsigned long)total,
              (unsigned long)remaining, active, saved_mask, saved_assisted, (long)saved_target,
-             (long)saved_error, saved_fault);
+             (long)saved_error, saved_fault, paused);
 }

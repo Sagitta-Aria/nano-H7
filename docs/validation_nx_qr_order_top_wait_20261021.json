@@ -1,0 +1,120 @@
+{
+  "status": "deployed",
+  "backup": "/home/a/h743/backups/qr_order_top_wait_20261021",
+  "stage": "/home/a/h743/staging/qr_order_top_wait_20261021",
+  "files": {
+    "host/task_code.py": {
+      "before": "1fd8dd32ee4f281ef1f032349350a2c6ed861010a17c0b1a4063521801a91b40",
+      "after": "dd0a96c18807b10219b498253e99f84c15d01fa6a6df6307bb18c1265e1baa58"
+    },
+    "host/pick_place.py": {
+      "before": "385c7e79f8ad9df1c9072854e3c50eef8610ae5be7dad2f52466c34abc9dfec1",
+      "after": "bdb8f32538763b9f06f9d032b73453f6a9dde08caed731c3799a611ef4853696"
+    },
+    "tests/test_task_code.py": {
+      "before": "aaa10a5817a2bd8ce6435b9044792a82d1d433d3df2401222a11865e5b03aa4e",
+      "after": "ca57de8545047877f3b2e45abbfc86ea6f95ffc7d9c00c19bb059abe96d0990b"
+    },
+    "tests/test_pick_place.py": {
+      "before": "73222cbf87a795d663dc480afdaa9be4f0f4d3be8f8fa5fa19b7cc5d77399f81",
+      "after": "bf2811f7788658c7568b7106a6c7d4f23f536d34b27c629c971730fad2b0241a"
+    },
+    "tests/test_material_flow.py": {
+      "before": "65617b050936dd56a1fdae25f452813a8e96f1e09b22998d9d63afb1e477efae",
+      "after": "7afb6029b66e6c94937f7f10d257aebdd6fa6ad5ca113646f8332ec69be0c04b"
+    }
+  },
+  "remote_tests": {
+    "returncode": 0,
+    "modules": [
+      "tests.test_task_code",
+      "tests.test_pick_place",
+      "tests.test_material_flow",
+      "tests.test_b_pickup",
+      "tests.test_competition"
+    ],
+    "output": "----------------------------------------------------------------------\nRan 95 tests in 292.972s\n\nOK\n"
+  },
+  "config_hashes": {
+    "host/device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699",
+    "host/control_settings.json": "656e42f3b0c922264a0c90ee752795a514f6688f1ee1505ab1f49e80d3e14c9b",
+    "host/auxiliary.json": "229d4c2dfeffcaf22a16556b2e3932e92f41e8f8627e42bfa35681580699859c",
+    "host/mission.json": "63ed3d492d38174a4deefd284d80f82c2900bc047eff367e73a0b7ae1df60cca",
+    "host/navigation.json": "7e25f6ee2562bc57617c8c7e5eddc169beb74846f46083517549bb2cab087a12",
+    "host/b_pickup.json": "22b0c9177fae001bda41ef1dfc9151083c13842e7c3a4851d7f12a69df3c0c91",
+    "host/camera_alignment.json": "2d33d2bfb78cb558c576b1b093624325783310e4c042c902fe561b2d8af70529",
+    "host/material_flow.json": "79ac0d429603b7389219efeef60a8ecbaa9a69e2fde205f5b60bf2bed1de5c08",
+    "host/pick_place.json": "b98fe1dfac3e18d0334ce51dd511656ba81736e08abe56f11509f47828649007",
+    "host/cameras.json": "2ad6be879693aa2ca1556ef968328ac434b65b24e1cf7ab4448ee61005e5d56d",
+    "工创赛视觉识别/色块识别/yellow_thresholds.json": "36eba9b849ebcac98dbcc5b0cfed0d752243102506e720958d6c33ccfedfc22f",
+    "工创赛视觉识别/色块识别/blue_thresholds.json": "e40e20632533b9b3ea56f902d23087f477dff8edd16e6f4b24fde97d1197a354",
+    "工创赛视觉识别/色块识别/red_thresholds.json": "b391fcaedea7eee63a184e11bd1d53f058e0be9bd6d34287f7c78fa8dd3bb4b6",
+    "工创赛视觉识别/色块识别/light_blue_thresholds.json": "9f883b522bf89b64ca63f8d2a135bffbfd10f3f828cc4b3eaed65f7163e6c389",
+    "工创赛视觉识别/色块识别/green_thresholds.json": "fd3ec87bb238342759bd349b5a6deac6fd08925c86d92e02c9da3d89e07f646a",
+    "工创赛视觉识别/色块识别/black_thresholds.json": "b367ecc5779cb483b25951c329f1dbccac53faa1cdb85d5ad570556b320edc3f"
+  },
+  "configurations_unchanged": true,
+  "b_pickup_config": {
+    "pick_down": 3500,
+    "pick_rotation": -1800,
+    "lift_sps": 3000,
+    "lift_accel": 5000,
+    "rotation_sps": 2000,
+    "rotation_accel": 2000,
+    "s1_open": 150,
+    "s1_closed": 70,
+    "s1_settle_ms": 600,
+    "s2_settle_ms": 1000,
+    "step_timeout_ms": 60000,
+    "ack_timeout_ms": 3000,
+    "roi_x_pct": 15,
+    "roi_y_pct": 15,
+    "roi_width_pct": 70,
+    "roi_height_pct": 70,
+    "recognition_delay_ms": 2000
+  },
+  "link": "connected",
+  "imu": "streaming",
+  "armed": false,
+  "all_axes_stopped": true,
+  "hardware_task_started": false,
+  "firmware_flashed": false,
+  "service": "MainPID=12414\nActiveState=active\n",
+  "mapping_example": [
+    [
+      [
+        0,
+        6,
+        1
+      ],
+      [
+        135,
+        5,
+        3
+      ],
+      [
+        270,
+        1,
+        2
+      ]
+    ],
+    [
+      [
+        0,
+        6,
+        3
+      ],
+      [
+        135,
+        1,
+        2
+      ],
+      [
+        270,
+        5,
+        1
+      ]
+    ]
+  ],
+  "placement_top_wait_ms": 500
+}

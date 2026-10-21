@@ -1,0 +1,30 @@
+{
+  "service": "MainPID=7241\nActiveState=active\n",
+  "files_verified": 5,
+  "configurations_unchanged": true,
+  "hardware_pick_place_started": false,
+  "firmware_flashed": false,
+  "backup": "/home/a/h743/backups/start_reference_20261018_211641",
+  "local_tests": 59,
+  "remote_validation": {
+    "returncode": 0,
+    "output": "----------------------------------------------------------------------\nRan 147 tests in 89.810s\n\nOK\nrace arrival -> done (simulation): 0.000s\nring position -> next motion (simulation): 0.050s\nshort serial reply timeout padding: 0.000s\n"
+  },
+  "web_check": {
+    "updated_start_note": true
+  },
+  "config_hashes": {
+    "device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699",
+    "control_settings.json": "b50856d715c2bbb9be32415b69f8ee2c240b1ab431871fa8f086d4dd4b556970",
+    "auxiliary.json": "ad800cc3d7d6bd3240ef49d7f584905ea651e424a5c74c127167595c78f56445",
+    "mission.json": "63ed3d492d38174a4deefd284d80f82c2900bc047eff367e73a0b7ae1df60cca",
+    "navigation.json": "3cef35975029af77f41d1af4bacf6eee7ca0a3df96c39dc76b116da28de132f5",
+    "camera_alignment.json": "1f7a8bc1c9ea90a84dec9c608730a05c43d477e2e222fba2bb789f83a1f071c5",
+    "pick_place.json": "5a8b5b23ed62a8de4a91243228cb5bdfd136c4107bff9dc3cd3cca2e015cae64",
+    "cameras.json": "2ad6be879693aa2ca1556ef968328ac434b65b24e1cf7ab4448ee61005e5d56d"
+  },
+  "behavior": {
+    "lift_down_sign": -1,
+    "rotation_zero": "current stationary pose at each full-flow start"
+  }
+}

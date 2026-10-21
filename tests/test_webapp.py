@@ -6,6 +6,7 @@ the HTTP layer refuses a second page's commands. The page's own behaviour is
 covered separately by tests/test_webpage.py, which validates the DOM contract.
 """
 import json
+import tempfile
 import time
 import unittest
 import urllib.error
@@ -31,7 +32,10 @@ class ConsoleTests(unittest.TestCase):
     """No HTTP: the session object on its own."""
 
     def setUp(self):
-        self.console = Console()
+        self.settings_dir = tempfile.TemporaryDirectory()
+        self.addCleanup(self.settings_dir.cleanup)
+        root = Path(self.settings_dir.name)
+        self.console = Console(root/'navigation.json', root/'auxiliary.json', root/'optical_flow.json')
         self.seen = []
         self.ready = False
 
@@ -77,7 +81,7 @@ class ConsoleTests(unittest.TestCase):
         hello = self.console.hello()
         self.assertEqual(hello["link"], "connected")
         self.assertTrue(hello["demo"])
-        self.assertEqual(hello["device"]["fw"], "0.2.18")
+        self.assertEqual(hello["device"]["fw"], "0.2.29")
         self.assertEqual(hello["device"]["nav_grid"], "1")
         self.assertEqual(hello["device"]["servo1_travel"], "2700")
         self.assertEqual(hello["device"]["servo2_travel"], "1800")
@@ -92,8 +96,8 @@ class ConsoleTests(unittest.TestCase):
         self.assertTrue(self.console.servo, "SERVO STAT should populate the servo snapshot")
         raw = self.console.servo.get("raw", "")
         # Both wired channels must appear in the one packed reply body.
-        self.assertIn("ch=1 angle=180.0 us=1833", raw)
-        self.assertIn("ch=2 angle=0.0 us=500", raw)
+        self.assertIn("ch=2 angle=120.0 us=1833", raw)
+        self.assertIn("ch=1 angle=0.0 us=500", raw)
         self.assertEqual(self.console.servo_count(), 2)
         self.assertTrue(self.console.chassis, "CHASSIS STAT should populate the chassis snapshot")
         self.assertEqual(self.console.chassis["state"], "idle")
@@ -414,11 +418,11 @@ class HttpTests(unittest.TestCase):
         with patch.object(self.console, "turn_action", return_value=(True,"queued")) as action:
             status, reply = self.call("/api/turn/action", {"action":"start", "mode":"ABS", "angle":"-90.25", "sps":300, "accel":1000})
             self.assertEqual((status,reply["ok"]),(200,True))
-            action.assert_called_once_with("start","ABS","-90.25",300,1000,20,None)
+            action.assert_called_once_with("start","ABS","-90.25",300,1000,20,None,None)
             action.reset_mock()
-            status, reply = self.call('/api/turn/action', {'action':'configure','kp':'80','tolerance':'0.50'})
+            status, reply = self.call('/api/turn/action', {'action':'configure','kp':'80','tolerance':'0.50','min_sps':350})
             self.assertEqual((status,reply['ok']),(200,True))
-            action.assert_called_once_with('configure','REL',0,500,2000,'80','0.50')
+            action.assert_called_once_with('configure','REL',0,500,2000,'80','0.50',350)
             action.reset_mock()
             self.assertEqual(self.call("/api/turn/action", {"action":"stop"}, token="page-two")[0],409)
             self.assertEqual(self.call("/api/turn/action", {"action":"zero"}, token=None)[0],400)

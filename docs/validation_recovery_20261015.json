@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-15",
+  "firmware": "0.2.21",
+  "scope": "Local build, compiled ARM emulation, SIM protocol, loopback HTTP and Edge browser; no hardware flash or NX deployment",
+  "build": {"command": "python tools/build_firmware.py", "ok": true, "toolchain": "Keil ARM Compiler 5 / MicroLIB", "warnings": 0},
+  "python_suite": {"command": "python -m unittest discover -s tests -p test_*.py -q", "run": 348, "passed": 347, "skipped": 1, "failed": 0},
+  "additional_regression": {"test": "tests.test_chassis.ArmChassisTests.test_controller_fault_clear_does_not_fabricate_fresh_imu", "passed": true},
+  "frontend_suites": {"passed": 7, "names": ["navigation", "servo", "servo_identity", "turn", "lift", "flow", "camera"]},
+  "browser": {
+    "command": "python -m tests.recovery_browser",
+    "ok": true,
+    "page_errors": [],
+    "checks": [
+      "Motor fault cancels task, disarms and shows actionable cause",
+      "Readonly and reload snapshots retain fault and permissions",
+      "Explicit reset preserves history, invalidates pose and never resumes",
+      "Operator can start a new task after reference and explicit arm",
+      "Expired and faulted jogs release local busy; manual move becomes available",
+      "Recovery controls fit desktop and 760/390px layouts"
+    ]
+  },
+  "regressions": [
+    "Session before: frames 50/51; new session: frame 0 accepted and stable count reset; late retired session and duplicate new-session frame rejected",
+    "Actual loopback VisionPublisher recreation stamps a different session and accepts frame 0 after frame 50",
+    "Compiled ARM delayed STEP IRQ latches step_deadline; STOP cannot clear; ARM reports MOTION_FAULT_LATCHED",
+    "CLEAR requires all axes idle and disarmed, cannot truncate a stopping STEP high, retains fault total/reason and revokes navigation pose",
+    "An active lift loses its reference without resetting its estimated position; LIFT INIT on reconnect cannot restore it",
+    "Explicit known-position reference recovery supports nonzero configured lift bounds and rejects out-of-range or healthy-reference overwrite",
+    "CLEAR discards queued movement and held jog without implicit ARM",
+    "Controller acknowledgement cannot fabricate valid IMU feedback"
+  ]
+}

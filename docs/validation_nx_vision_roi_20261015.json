@@ -1,0 +1,601 @@
+{
+  "backend": "fast",
+  "roi_size": 360,
+  "passed": true,
+  "cases": [
+    {
+      "name": "font-0-digit-1",
+      "expected": "1",
+      "actual": "1",
+      "score": 0.88,
+      "passed": true,
+      "ring": true,
+      "median_ms": {
+        "ring": 7.88,
+        "crop": 5.53,
+        "ocr": 41.91,
+        "total": 57.04
+      }
+    },
+    {
+      "name": "font-0-digit-2",
+      "expected": "2",
+      "actual": "2",
+      "score": 0.982,
+      "passed": true,
+      "ring": true,
+      "median_ms": {
+        "ring": 7.49,
+        "crop": 5.41,
+        "ocr": 5.67,
+        "total": 18.73
+      }
+    },
+    {
+      "name": "font-0-digit-3",
+      "expected": "3",
+      "actual": "3",
+      "score": 0.996,
+      "passed": true,
+      "ring": true,
+      "median_ms": {
+        "ring": 8.21,
+        "crop": 5.37,
+        "ocr": 7.09,
+        "total": 20.6
+      }
+    },
+    {
+      "name": "font-2-digit-1",
+      "expected": "1",
+      "actual": "1",
+      "score": 0.966,
+      "passed": true,
+      "ring": true,
+      "median_ms": {
+        "ring": 9.4,
+        "crop": 6.22,
+        "ocr": 22.22,
+        "total": 37.84
+      }
+    },
+    {
+      "name": "font-2-digit-2",
+      "expected": "2",
+      "actual": "2",
+      "score": 0.993,
+      "passed": true,
+      "ring": true,
+      "median_ms": {
+        "ring": 7.53,
+        "crop": 5.34,
+        "ocr": 8.45,
+        "total": 21.32
+      }
+    },
+    {
+      "name": "font-2-digit-3",
+      "expected": "3",
+      "actual": "3",
+      "score": 1.0,
+      "passed": true,
+      "ring": true,
+      "median_ms": {
+        "ring": 7.21,
+        "crop": 5.28,
+        "ocr": 5.61,
+        "total": 17.98
+      }
+    },
+    {
+      "name": "font-4-digit-1",
+      "expected": "1",
+      "actual": "1",
+      "score": 0.827,
+      "passed": true,
+      "ring": true,
+      "median_ms": {
+        "ring": 7.28,
+        "crop": 5.22,
+        "ocr": 22.14,
+        "total": 34.62
+      }
+    },
+    {
+      "name": "font-4-digit-2",
+      "expected": "2",
+      "actual": "2",
+      "score": 0.995,
+      "passed": true,
+      "ring": true,
+      "median_ms": {
+        "ring": 7.24,
+        "crop": 5.07,
+        "ocr": 7.52,
+        "total": 19.22
+      }
+    },
+    {
+      "name": "font-4-digit-3",
+      "expected": "3",
+      "actual": "3",
+      "score": 0.999,
+      "passed": true,
+      "ring": true,
+      "median_ms": {
+        "ring": 7.21,
+        "crop": 5.15,
+        "ocr": 5.59,
+        "total": 18.15
+      }
+    },
+    {
+      "name": "blank",
+      "expected": null,
+      "actual": null,
+      "score": 0.0,
+      "passed": true,
+      "ring": false,
+      "median_ms": {
+        "ring": 8.29,
+        "crop": 0.01,
+        "ocr": 0.0,
+        "total": 8.3
+      }
+    },
+    {
+      "name": "solid",
+      "expected": null,
+      "actual": null,
+      "score": 0.0,
+      "passed": true,
+      "ring": false,
+      "median_ms": {
+        "ring": 13.09,
+        "crop": 0.0,
+        "ocr": 0.0,
+        "total": 13.09
+      }
+    },
+    {
+      "name": "empty-ring",
+      "expected": null,
+      "actual": null,
+      "score": 0.0,
+      "passed": true,
+      "ring": true,
+      "median_ms": {
+        "ring": 6.89,
+        "crop": 5.15,
+        "ocr": 0.17,
+        "total": 12.21
+      }
+    },
+    {
+      "name": "digit-4",
+      "expected": null,
+      "actual": null,
+      "score": 0.0,
+      "passed": true,
+      "ring": true,
+      "median_ms": {
+        "ring": 8.57,
+        "crop": 5.54,
+        "ocr": 45.93,
+        "total": 60.05
+      }
+    },
+    {
+      "name": "digit-12",
+      "expected": null,
+      "actual": null,
+      "score": 0.0,
+      "passed": true,
+      "ring": true,
+      "median_ms": {
+        "ring": 7.58,
+        "crop": 6.1,
+        "ocr": 49.05,
+        "total": 63.02
+      }
+    },
+    {
+      "name": "roi-outside",
+      "expected": null,
+      "actual": null,
+      "score": 0.0,
+      "passed": true,
+      "ring": false,
+      "median_ms": {
+        "ring": 8.04,
+        "crop": 0.01,
+        "ocr": 0.0,
+        "total": 8.05
+      }
+    },
+    {
+      "name": "roi-cut-ring",
+      "expected": null,
+      "actual": null,
+      "score": 0.0,
+      "passed": true,
+      "ring": false,
+      "median_ms": {
+        "ring": 9.25,
+        "crop": 0.01,
+        "ocr": 0.0,
+        "total": 9.26
+      }
+    },
+    {
+      "name": "roi-center-and-outside",
+      "expected": "1",
+      "actual": "1",
+      "score": 0.787,
+      "passed": true,
+      "ring": true,
+      "median_ms": {
+        "ring": 6.87,
+        "crop": 5.43,
+        "ocr": 26.37,
+        "total": 38.67
+      }
+    },
+    {
+      "name": "1792051945478247274_frame.png",
+      "expected": "1",
+      "actual": "1",
+      "score": 0.846,
+      "passed": true,
+      "ring": true,
+      "median_ms": {
+        "ring": 14.37,
+        "crop": 4.56,
+        "ocr": 23.22,
+        "total": 42.08
+      }
+    },
+    {
+      "name": "1792051946402762714_frame.png",
+      "expected": "1",
+      "actual": "1",
+      "score": 0.872,
+      "passed": true,
+      "ring": true,
+      "median_ms": {
+        "ring": 12.38,
+        "crop": 4.38,
+        "ocr": 23.07,
+        "total": 40.81
+      }
+    },
+    {
+      "name": "1792052637998556742_frame.png",
+      "expected": "1",
+      "actual": "1",
+      "score": 0.7,
+      "passed": true,
+      "ring": true,
+      "median_ms": {
+        "ring": 13.99,
+        "crop": 4.58,
+        "ocr": 24.16,
+        "total": 42.25
+      }
+    },
+    {
+      "name": "1792052638722056295_frame.png",
+      "expected": "1",
+      "actual": "1",
+      "score": 0.751,
+      "passed": true,
+      "ring": true,
+      "median_ms": {
+        "ring": 13.7,
+        "crop": 4.31,
+        "ocr": 24.0,
+        "total": 42.74
+      }
+    },
+    {
+      "name": "1792052639394072657_frame.png",
+      "expected": "1",
+      "actual": "1",
+      "score": 0.717,
+      "passed": true,
+      "ring": true,
+      "median_ms": {
+        "ring": 12.1,
+        "crop": 4.95,
+        "ocr": 27.16,
+        "total": 44.21
+      }
+    }
+  ],
+  "live": {
+    "pid": 12142,
+    "roi": [
+      140,
+      60,
+      360,
+      360
+    ],
+    "log": "/home/a/vision-live/ring_digit/live-roi.log",
+    "samples": [
+      {
+        "processing_fps": 26.7,
+        "ocr_ms": 44.8,
+        "ring": true,
+        "digit": "1",
+        "confidence": 0.65,
+        "roi": [
+          140,
+          60,
+          360,
+          360
+        ]
+      },
+      {
+        "processing_fps": 27.8,
+        "ocr_ms": 37.1,
+        "ring": true,
+        "digit": "1",
+        "confidence": 0.689,
+        "roi": [
+          140,
+          60,
+          360,
+          360
+        ]
+      },
+      {
+        "processing_fps": 27.7,
+        "ocr_ms": 37.8,
+        "ring": true,
+        "digit": "1",
+        "confidence": 0.689,
+        "roi": [
+          140,
+          60,
+          360,
+          360
+        ]
+      },
+      {
+        "processing_fps": 23.6,
+        "ocr_ms": 72.4,
+        "ring": true,
+        "digit": "1",
+        "confidence": 0.678,
+        "roi": [
+          140,
+          60,
+          360,
+          360
+        ]
+      },
+      {
+        "processing_fps": 26.6,
+        "ocr_ms": 36.9,
+        "ring": true,
+        "digit": "1",
+        "confidence": 0.746,
+        "roi": [
+          140,
+          60,
+          360,
+          360
+        ]
+      },
+      {
+        "processing_fps": 28.5,
+        "ocr_ms": 36.3,
+        "ring": true,
+        "digit": "1",
+        "confidence": 0.753,
+        "roi": [
+          140,
+          60,
+          360,
+          360
+        ]
+      },
+      {
+        "processing_fps": 27.5,
+        "ocr_ms": 35.4,
+        "ring": true,
+        "digit": "1",
+        "confidence": 0.682,
+        "roi": [
+          140,
+          60,
+          360,
+          360
+        ]
+      },
+      {
+        "processing_fps": 26.0,
+        "ocr_ms": 29.0,
+        "ring": true,
+        "digit": "1",
+        "confidence": 0.679,
+        "roi": [
+          140,
+          60,
+          360,
+          360
+        ]
+      },
+      {
+        "processing_fps": 25.7,
+        "ocr_ms": 32.5,
+        "ring": true,
+        "digit": "1",
+        "confidence": 0.696,
+        "roi": [
+          140,
+          60,
+          360,
+          360
+        ]
+      },
+      {
+        "processing_fps": 25.5,
+        "ocr_ms": 51.1,
+        "ring": true,
+        "digit": "1",
+        "confidence": 0.725,
+        "roi": [
+          140,
+          60,
+          360,
+          360
+        ]
+      },
+      {
+        "processing_fps": 25.2,
+        "ocr_ms": 31.3,
+        "ring": true,
+        "digit": "1",
+        "confidence": 0.695,
+        "roi": [
+          140,
+          60,
+          360,
+          360
+        ]
+      },
+      {
+        "processing_fps": 25.0,
+        "ocr_ms": 31.8,
+        "ring": true,
+        "digit": "1",
+        "confidence": 0.716,
+        "roi": [
+          140,
+          60,
+          360,
+          360
+        ]
+      },
+      {
+        "processing_fps": 25.8,
+        "ocr_ms": 54.8,
+        "ring": true,
+        "digit": "1",
+        "confidence": 0.696,
+        "roi": [
+          140,
+          60,
+          360,
+          360
+        ]
+      },
+      {
+        "processing_fps": 26.4,
+        "ocr_ms": 30.2,
+        "ring": true,
+        "digit": "1",
+        "confidence": 0.707,
+        "roi": [
+          140,
+          60,
+          360,
+          360
+        ]
+      },
+      {
+        "processing_fps": 25.9,
+        "ocr_ms": 31.7,
+        "ring": true,
+        "digit": "1",
+        "confidence": 0.696,
+        "roi": [
+          140,
+          60,
+          360,
+          360
+        ]
+      },
+      {
+        "processing_fps": 25.6,
+        "ocr_ms": 31.1,
+        "ring": true,
+        "digit": "1",
+        "confidence": 0.736,
+        "roi": [
+          140,
+          60,
+          360,
+          360
+        ]
+      },
+      {
+        "processing_fps": 26.0,
+        "ocr_ms": 31.0,
+        "ring": true,
+        "digit": "1",
+        "confidence": 0.749,
+        "roi": [
+          140,
+          60,
+          360,
+          360
+        ]
+      },
+      {
+        "processing_fps": 26.5,
+        "ocr_ms": 34.3,
+        "ring": true,
+        "digit": "1",
+        "confidence": 0.708,
+        "roi": [
+          140,
+          60,
+          360,
+          360
+        ]
+      },
+      {
+        "processing_fps": 25.7,
+        "ocr_ms": 52.5,
+        "ring": true,
+        "digit": "1",
+        "confidence": 0.739,
+        "roi": [
+          140,
+          60,
+          360,
+          360
+        ]
+      },
+      {
+        "processing_fps": 26.7,
+        "ocr_ms": 54.4,
+        "ring": true,
+        "digit": "1",
+        "confidence": 0.743,
+        "roi": [
+          140,
+          60,
+          360,
+          360
+        ]
+      },
+      {
+        "processing_fps": 26.3,
+        "ocr_ms": 33.0,
+        "ring": true,
+        "digit": "1",
+        "confidence": 0.708,
+        "roi": [
+          140,
+          60,
+          360,
+          360
+        ]
+      }
+    ],
+    "median_fps": 26.0
+  }
+}

@@ -6,6 +6,8 @@
 #include "motion_math.h"
 #include "board.h"
 #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 typedef struct {
     TIM_TypeDef *timer;
     GPIO_TypeDef *step_port, *dir_port;
@@ -24,7 +26,11 @@ typedef struct {
 } axis_t;
 static volatile axis_t axes[AXIS_COUNT];
 static volatile unsigned armed;
+static volatile unsigned chassis_held;
 static volatile uint32_t faults;
+static volatile uint32_t fault_total;
+static volatile unsigned uncertain_axes;
+static const char *fault_reason = "none";
 static volatile unsigned lift_initialized;
 static volatile int32_t lift_down_sign = M5_DOWN_SIGN_DEFAULT;
 static volatile int32_t aux_minimum[2] = {0, 0};
@@ -44,6 +50,14 @@ static volatile struct {
     int32_t correction, mix[4];
 } assist;
 
+/* A signed projection measures translation independently of yaw pulses. */
+static volatile struct {
+    unsigned active, sps, accel;
+    int32_t weights[4], yaw[4], correction;
+    int64_t remaining, total;
+    uint32_t peak;
+} vector_move;
+
 /* Caller masks IRQs (or is the timer ISR). Validate the whole requested target
  * against the original top, including raw MOVE commands and signed direction. */
 static const char *lift_error_locked(int32_t raw_steps)
@@ -61,7 +75,7 @@ static const char *lift_error_locked(int32_t raw_steps)
 int motion_lift_init(void)
 {
     uint32_t key = board_lock();
-    if (lift_initialized) { board_unlock(key); return 1; }
+    if (lift_initialized || (uncertain_axes & (1U << 4))) { board_unlock(key); return 1; }
     if (axes[4].active) { board_unlock(key); return 0; }
     axes[4].position = 0;
     lift_initialized = 1;
@@ -164,7 +178,7 @@ void motion_emergency(void)
     unsigned i;
     uint32_t key = board_lock();
     armed = 0;
-    assist.active = 0;
+    assist.active = 0; vector_move.active = 0;
     line.active = 0;
     for (i = 0; i < AXIS_COUNT; ++i) halt(i);
     board_unlock(key);
@@ -174,7 +188,7 @@ void motion_stop(void)
     unsigned i;
     uint32_t key = board_lock();
     armed = 0;
-    assist.active = 0;
+    assist.active = 0; vector_move.active = 0;
     if (line.active) {
         line.stopping = 1;
         if (!line.high) { line.active = 0; for (i = 0; i < 4; ++i) halt(i); }
@@ -194,9 +208,45 @@ int motion_arm(unsigned enable)
     key = board_lock();
     if (faults) { board_unlock(key); return 0; }
     for (i = 0; i < AXIS_COUNT; ++i) if (axes[i].active) { board_unlock(key); return 0; }
-    armed = 1;
+    chassis_held = 0; armed = 1;
     board_unlock(key);
     return 1;
+}
+
+/* Called only on ISR faults. A truncated STEP may not be counted by its driver;
+ * retain estimated positions but revoke affected auxiliary references. */
+static void latch_fault(const char *reason)
+{
+    unsigned i;
+    ++faults; ++fault_total; fault_reason = reason;
+    for (i = 0; i < AXIS_COUNT; ++i) if (axes[i].active) uncertain_axes |= 1U << i;
+    if (uncertain_axes & (1U << 4)) lift_initialized = 0;
+    if (uncertain_axes & (1U << 5)) rotation_referenced = 0;
+    motion_emergency();
+}
+
+/* No output, zeroing, pending operation or tuning is restarted by this API. */
+int motion_clear_fault(void)
+{
+    unsigned i; uint32_t key = board_lock();
+    if (armed || line.active || assist.active) { board_unlock(key); return 0; }
+    for (i = 0; i < AXIS_COUNT; ++i) if (axes[i].active || axes[i].high) { board_unlock(key); return 0; }
+    faults = 0;
+    board_unlock(key); return 1;
+}
+
+/* Separate capability/status avoids overflowing the legacy HELLO/STAT frames. */
+void motion_fault_report(char *out, unsigned size)
+{
+    unsigned i, active = 0, latched, uncertain, enabled;
+    uint32_t total, key = board_lock(); const char *reason;
+    for (i = 0; i < AXIS_COUNT; ++i) if (axes[i].active) active |= 1U << i;
+    latched = faults != 0; total = fault_total; reason = fault_reason;
+    uncertain = uncertain_axes; enabled = armed;
+    board_unlock(key);
+    /* Formatting cannot mask STEP IRQs: a report must not cause a deadline miss. */
+    snprintf(out, size, "OK cmd=MOTION_STAT v=1 latched=%u total=%lu reason=%s uncertain=%u active=%u armed=%u",
+             latched, (unsigned long)total, reason, uncertain, active, enabled);
 }
 
 /* Called with IRQs masked. Initial low interval gives DIR >=200 us setup. */
@@ -227,7 +277,8 @@ int motion_move(unsigned i, int32_t steps, unsigned sps, unsigned accel, uint32_
     if (i >= AXIS_COUNT || !steps || steps > MAX_MOVE_STEPS || steps < -MAX_MOVE_STEPS ||
         sps < 1 || sps > (i < 4 ? CHASSIS_SPS_MAX : AUX_SPS_MAX) || accel < 1 || accel > 20000) return 0;
     key = board_lock();
-    if (!armed || (i < 4 && line.active) || axes[i].active || (i == 4U && lift_error_locked(steps)) ||
+    if (!armed || (i < 4 && (line.active || chassis_held)) || axes[i].active || (i == 4U && lift_error_locked(steps)) ||
+        (i == 5U && (uncertain_axes & (1U << 5))) ||
         (i == 5U && rotation_configured &&
          ((int64_t)axes[i].position + steps < aux_minimum[1] ||
           (int64_t)axes[i].position + steps > aux_maximum[1]))) {
@@ -270,15 +321,36 @@ int motion_aux_config(unsigned axis, int32_t minimum, int32_t maximum)
     board_unlock(key); return 1;
 }
 
-/* Explicit M6 reference at an operator-chosen physical zero; not homing. */
+/* Explicit physical reference: M5 at top, M6 at chosen zero; never homing.
+ * Unlike reconnect-time LIFT INIT, this may acknowledge a lost reference. */
 int motion_aux_zero(unsigned axis)
 {
-    uint32_t key = board_lock();
-    if (axis != 6U || armed || axes[5].active ||
-        (rotation_configured && (aux_minimum[1] > 0 || aux_maximum[1] < 0))) {
+    unsigned n = axis - 5U; uint32_t key;
+    if (axis == 5U) return motion_aux_reference(axis, 0);
+    key = board_lock();
+    if (n > 1U || armed || faults || axes[axis - 1U].active ||
+        aux_minimum[n] > 0 || aux_maximum[n] < 0) {
         board_unlock(key); return 0;
     }
-    axes[5].position = 0; rotation_referenced = 1;
+    axes[axis - 1U].position = 0; uncertain_axes &= ~(1U << (axis - 1U));
+    if (axis == 5U) lift_initialized = 1;
+    else rotation_referenced = 1;
+    board_unlock(key); return 1;
+}
+
+int motion_aux_reference(unsigned axis, int32_t position)
+{
+    unsigned n = axis - 5U; int32_t sign; uint32_t key = board_lock();
+    sign = axis == 5U ? lift_down_sign : 1;
+    if (n > 1U || armed || faults || axes[axis - 1U].active ||
+        !(uncertain_axes & (1U << (axis - 1U))) || (sign != 1 && sign != -1) ||
+        position < aux_minimum[n] || position > aux_maximum[n]) {
+        board_unlock(key); return 0;
+    }
+    axes[axis - 1U].position = position * sign;
+    uncertain_axes &= ~(1U << (axis - 1U));
+    if (axis == 5U) lift_initialized = 1;
+    else rotation_referenced = 1;
     board_unlock(key); return 1;
 }
 
@@ -327,7 +399,7 @@ int motion_wheels(const int32_t sps[4], unsigned accel, uint32_t id)
     if (accel < 1 || accel > 20000) return 0;
     for (i = 0; i < 4; ++i) if (sps[i] < -(int32_t)CHASSIS_SPS_MAX || sps[i] > (int32_t)CHASSIS_SPS_MAX) return 0;
     key = board_lock();
-    if (!armed || line.active || assist.active) { board_unlock(key); return 0; }
+    if (!armed || chassis_held || line.active || assist.active || vector_move.active) { board_unlock(key); return 0; }
     for (i = 0; i < 4; ++i) {
         if (axes[i].active && (axes[i].finite || axes[i].stopping ||
             (sps[i] != 0 && ((sps[i] > 0 ? 1 : -1) != axes[i].direction)))) {
@@ -353,7 +425,7 @@ int motion_chassis_start(const int32_t signs[4], uint32_t steps, unsigned sps, u
     if (steps > MAX_MOVE_STEPS || !sps || sps > CHASSIS_SPS_MAX || !accel || accel > 20000) return 0;
     for (i = 0; i < 4; ++i) if (signs[i] != 1 && signs[i] != -1) return 0;
     key = board_lock();
-    if (!armed || faults || line.active) { board_unlock(key); return 0; }
+    if (!armed || chassis_held || faults || line.active || vector_move.active) { board_unlock(key); return 0; }
     for (i = 0; i < 4; ++i) if (axes[i].active) { board_unlock(key); return 0; }
     launch = (TIM8->CNT + 50U) & 0xFFFFU;
     for (i = 0; i < 4; ++i) start_axis(i, signs[i], sps, accel, steps != 0, steps, id, launch);
@@ -389,7 +461,44 @@ void motion_assist_correct(int32_t correction_sps)
 {
     uint32_t key = board_lock();
     if (assist.active) assist.correction = correction_sps;
+    if (vector_move.active) vector_move.correction = correction_sps;
     board_unlock(key);
+}
+
+int motion_vector_start(const int32_t steps[4], const int32_t yaw[4],
+                        unsigned sps, unsigned accel, uint32_t id)
+{
+    unsigned i; int64_t dot = 0, orthogonal = 0; uint32_t peak = 0, key, launch;
+    if (!sps || sps > CHASSIS_SPS_MAX || !accel || accel > 20000) return 0;
+    for (i = 0; i < 4; ++i) {
+        uint32_t amount;
+        if (steps[i] < -MAX_MOVE_STEPS || steps[i] > MAX_MOVE_STEPS ||
+            (yaw[i] != -1 && yaw[i] != 1)) return 0;
+        amount = (uint32_t)abs(steps[i]); if (amount > peak) peak = amount;
+        dot += (int64_t)steps[i] * steps[i]; orthogonal += (int64_t)steps[i] * yaw[i];
+    }
+    if (!peak || orthogonal) return 0;
+    key = board_lock();
+    if (!armed || chassis_held || faults || line.active || assist.active || vector_move.active || motion_chassis_active()) {
+        board_unlock(key); return 0;
+    }
+    vector_move.peak = peak; vector_move.total = vector_move.remaining = dot;
+    vector_move.sps = sps; vector_move.accel = accel; vector_move.correction = 0;
+    launch = (TIM8->CNT + 50U) & 0xFFFFU;
+    for (i = 0; i < 4; ++i) {
+        vector_move.weights[i] = steps[i]; vector_move.yaw[i] = yaw[i];
+        axes[i].remaining = peak; axes[i].command_id = id;
+        if (steps[i]) {
+            unsigned rate = (unsigned)((int64_t)abs(steps[i]) * sps / peak);
+            unsigned ramp = (unsigned)((int64_t)abs(steps[i]) * accel / peak);
+            start_axis(i, steps[i] > 0 ? 1 : -1, rate ? rate : 1, ramp ? ramp : 1, 0, peak, id, launch);
+            /* Preserve the vector ratio during acceleration as well as cruise.
+             * Equal launch rates/ramps bend unequal-wheel moves off their line,
+             * and can make short endpoint corrections repeat the same error. */
+            axes[i].current_msps = (uint32_t)((int64_t)(sps < 10U ? sps : 10U) * 1000U * abs(steps[i]) / peak);
+        }
+    }
+    vector_move.active = 1; board_unlock(key); return 1;
 }
 
 /* Prepare the next common rising edge. Rounding error stays below one wheel
@@ -421,7 +530,7 @@ int motion_line_start(const int32_t steps[4], unsigned sps, unsigned accel, uint
     }
     if (!total) return 0;
     key = board_lock();
-    if (!armed || faults || line.active) { board_unlock(key); return 0; }
+    if (!armed || chassis_held || faults || line.active || vector_move.active) { board_unlock(key); return 0; }
     for (i = 0; i < 4; ++i) {
         int64_t end = (int64_t)axes[i].position + steps[i];
         if (axes[i].active || end < INT32_MIN || end > INT32_MAX) { board_unlock(key); return 0; }
@@ -451,7 +560,7 @@ void motion_chassis_stop(void)
 {
     unsigned i;
     uint32_t key = board_lock();
-    assist.active = 0;
+    assist.active = 0; vector_move.active = 0;
     if (line.active) {
         line.stopping = 1;
         if (line.high) { board_unlock(key); return; }
@@ -469,9 +578,57 @@ unsigned motion_chassis_active(void)
     unsigned i, mask = 0;
     uint32_t key = board_lock();
     for (i = 0; i < 4; ++i) if (axes[i].active) mask |= 1U << i;
-    if (line.active && !mask) mask = 1U;
+    if ((line.active || vector_move.active) && !mask) mask = 1U;
     board_unlock(key);
     return mask;
+}
+
+/* Disable timer toggle channels only while low. Highs finish in the existing
+ * IRQ, then park low. Retain all pulse counters, DDA errors and command IDs. */
+static void park_chassis_low(void)
+{
+    unsigned i;
+    for (i = 0; i < 4; ++i) {
+        compare_mode(&hw[i], 4);
+        TIM8->DIER &= ~(2U << i);
+    }
+}
+void TIM8_CC_IRQHandler(void);
+void motion_chassis_hold(unsigned hold)
+{
+    unsigned i;
+    uint32_t key = board_lock(), next = (TIM8->CNT + 50U) & 0xFFFFU;
+    if (!!hold == chassis_held) { board_unlock(key); return; }
+    /* A compare can already have changed the physical pin before its IRQ.
+     * Account that pending edge before deciding which channels are low. */
+    if (TIM8->SR & TIM8->DIER & 0x1EU) TIM8_CC_IRQHandler();
+    chassis_held = !!hold;
+    if (hold) {
+        if (line.active) { if (!line.high) park_chassis_low(); }
+        else for (i = 0; i < 4; ++i) if (!axes[i].high) {
+            compare_mode(&hw[i], 4); TIM8->DIER &= ~(2U << i);
+        }
+    } else if (armed && !faults) {
+        TIM8->SR = ~0x1EU;
+        if (line.active && !line.high && !line.stopping) {
+            line.msps = (line.sps < 10U ? line.sps : 10U)*1000U;
+            for (i = 0; i < 4; ++i) {
+                *ccr(&hw[i]) = next;
+                compare_mode(&hw[i], (line.selected & (1U << i)) ? 3U : 4U);
+            }
+            TIM8->DIER |= 2U;
+        } else for (i = 0; i < 4; ++i) if (axes[i].active && !axes[i].high && !axes[i].stopping) {
+            axes[i].current_msps = (axes[i].target_sps < 10U ? axes[i].target_sps : 10U)*1000U;
+            /* Resume unequal-wheel vectors with their original launch ratio.
+             * Equal restart speeds bend a diagonal move immediately after a
+             * yaw outage, even though its remaining pulse budget is intact. */
+            if (vector_move.active && vector_move.weights[i])
+                axes[i].current_msps = (uint32_t)((int64_t)(vector_move.sps < 10U ? vector_move.sps : 10U)
+                    * 1000U * abs(vector_move.weights[i]) / vector_move.peak);
+            *ccr(&hw[i]) = next; compare_mode(&hw[i], 3); TIM8->DIER |= 2U << i;
+        }
+    }
+    board_unlock(key);
 }
 
 /* 1 kHz trajectory update. Braking envelope v^2 <= 2*a*remaining, with exact
@@ -482,7 +639,36 @@ void motion_tick(void)
     /* One bounded snapshot/update prevents a common TIM8 edge from splitting
      * the four equal-profile updates between old and new velocities. */
     uint32_t outer_key = board_lock();
-    if (assist.active) {
+    if (vector_move.active && !chassis_held) {
+        uint32_t remaining = (uint32_t)((float)vector_move.remaining * vector_move.peak / (float)vector_move.total);
+        uint32_t target = vector_move.sps;
+        int32_t correction = vector_move.correction, limit, base;
+        if (remaining <= target * target / (2U * vector_move.accel)) {
+            uint32_t brake = motion_isqrt(2U * vector_move.accel * remaining);
+            if (brake < target) target = brake;
+        }
+        if (!target) target = 1;
+        limit = (int32_t)(target / 3U);
+        if (correction > limit) correction = limit;
+        if (correction < -limit) correction = -limit;
+        base = (int32_t)target - abs(correction);
+        for (i = 0; i < 4; ++i) {
+            int32_t requested = (int32_t)((int64_t)base * vector_move.weights[i] / vector_move.peak)
+                                + vector_move.yaw[i] * correction;
+            unsigned magnitude = (unsigned)abs(requested);
+            if (axes[i].active && requested && axes[i].direction != (requested > 0 ? 1 : -1)) {
+                axes[i].stopping = 1;
+                if (!axes[i].high) halt(i);
+            } else if (!axes[i].active && magnitude) {
+                unsigned ramp = (unsigned)((int64_t)abs(vector_move.weights[i]) * vector_move.accel / vector_move.peak);
+                /* A zero-translation wheel still owns its yaw correction. */
+                if (!vector_move.weights[i]) ramp = vector_move.accel;
+                start_axis(i, requested > 0 ? 1 : -1, magnitude, ramp ? ramp : 1, 0,
+                           remaining, axes[i].command_id, (TIM8->CNT + 50U) & 0xFFFFU);
+            } else if (!axes[i].stopping) axes[i].target_sps = magnitude;
+        }
+    }
+    if (assist.active && !chassis_held) {
         uint32_t target = assist.sps, remaining = (assist.remaining_q + 3U) / 4U;
         int32_t correction = assist.correction, limit, base;
         if (remaining <= target * target / (2U * assist.accel)) {
@@ -499,7 +685,7 @@ void motion_tick(void)
         for (i = 0; i < 4; ++i)
             axes[i].target_sps = (unsigned)(base + assist.mix[i] * correction);
     }
-    if (line.active && !line.stopping) {
+    if (line.active && !line.stopping && !chassis_held) {
         uint32_t target = line.sps;
         if (line.remaining <= target * target / (2U * line.accel)) {
             uint32_t brake = motion_isqrt(2U * line.accel * line.remaining);
@@ -510,7 +696,7 @@ void motion_tick(void)
     }
     for (i = 0; i < AXIS_COUNT; ++i) {
         uint32_t target, remaining, brake, key = board_lock();
-        if ((i < 4 && line.active) || !axes[i].active || axes[i].stopping) { board_unlock(key); continue; }
+        if ((i < 4 && (line.active || chassis_held)) || !axes[i].active || axes[i].stopping) { board_unlock(key); continue; }
         target = axes[i].target_sps;
         remaining = axes[i].remaining;
         if (axes[i].finite) {
@@ -547,9 +733,20 @@ static void compare_irq(unsigned first, unsigned count)
             /* Avoid signed overflow after very long continuous operation. */
             if ((axes[i].direction > 0 && axes[i].position == INT32_MAX) ||
                 (axes[i].direction < 0 && axes[i].position == INT32_MIN)) {
-                ++faults; motion_emergency(); return;
+                latch_fault("position_overflow"); return;
             }
             axes[i].position += axes[i].direction;
+            if (i < 4U && vector_move.active) {
+                unsigned j;
+                vector_move.remaining -= (int64_t)axes[i].direction * vector_move.weights[i];
+                if (vector_move.remaining <= 0) {
+                    vector_move.active = 0;
+                    for (j = 0; j < 4; ++j) {
+                        axes[j].remaining = 0; axes[j].stopping = 1;
+                        if (!axes[j].high) halt(j);
+                    }
+                }
+            }
             if (i < 4U && assist.active) {
                 unsigned j;
                 --assist.remaining_q;
@@ -557,7 +754,7 @@ static void compare_irq(unsigned first, unsigned count)
                 if (!assist.remaining_q) {
                     /* Stop all further rising edges exactly at sum=4*steps.
                      * Other pending high pulses still receive falling edges. */
-                    assist.active = 0;
+                    assist.active = 0; vector_move.active = 0;
                     for (j = 0; j < 4; ++j) {
                         axes[j].stopping = 1;
                         if (!axes[j].high) halt(j);
@@ -571,6 +768,9 @@ static void compare_irq(unsigned first, unsigned count)
              * rising edge even if a future caller miscounts remaining steps. */
             halt(i); continue;
         }
+        if (i < 4U && chassis_held && !axes[i].high) {
+            compare_mode(h, 4); h->timer->DIER &= ~flag; continue;
+        }
         sps = axes[i].current_msps / 1000U;
         if (!sps) sps = 1;
         fraction = axes[i].fraction;
@@ -579,7 +779,7 @@ static void compare_irq(unsigned first, unsigned count)
         next = (*ccr(h) + interval) & 0xFFFFU;
         /* Signed modular distance works because half-period <=25000 ticks. */
         if ((int16_t)(uint16_t)(next - h->timer->CNT) <= 1) {
-            ++faults; motion_emergency(); return;
+            latch_fault("step_deadline"); return;
         }
         *ccr(h) = next;
     }
@@ -608,6 +808,7 @@ static void line_irq(void)
             return;
         }
         line_select();
+        if (chassis_held) { park_chassis_low(); return; }
     }
     sps = line.msps / 1000U;
     if (!sps) sps = 1;
@@ -616,7 +817,7 @@ static void line_irq(void)
     line.fraction = fraction;
     next = (TIM8->CCR1 + interval) & 0xFFFFU;
     if ((int16_t)(uint16_t)(next - TIM8->CNT) <= 1) {
-        ++faults; motion_emergency(); return;
+        latch_fault("step_deadline"); return;
     }
     for (i = 0; i < 4; ++i) *ccr(&hw[i]) = next;
 }
@@ -632,6 +833,7 @@ void motion_status(unsigned i, axis_status_t *out)
     out->remaining = axes[i].remaining;
     out->command_id = axes[i].command_id;
     out->active = axes[i].active;
+    if (i < 4U && chassis_held) out->sps = 0;
     board_unlock(key);
 }
 unsigned motion_armed(void) { return armed; }

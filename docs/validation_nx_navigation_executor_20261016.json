@@ -1,0 +1,65 @@
+{
+  "completed_at": "2026-10-16T22:35:49.445279+08:00",
+  "firmware_version": "0.2.22",
+  "toolchain": "Keil ARM Compiler 5 / STM32H743 Cortex-M7",
+  "build": {
+    "command": "python tools/build_firmware.py",
+    "result": "passed"
+  },
+  "full_suite": {
+    "command": "python -m unittest discover -s tests -p 'test_*.py'",
+    "tests_run": 458,
+    "skipped": 1,
+    "failures": 0,
+    "errors": 0
+  },
+  "final_navigation_regression": {
+    "command": "python -m unittest tests.test_turn_inset tests.test_mission tests.test_ring_task tests.test_navigation_timing",
+    "tests_run": 44,
+    "result": "passed",
+    "includes_additional_long_station_wait_regression": true
+  },
+  "frontend": {
+    "command": "node tests/test_*.cjs (each file)",
+    "result": "passed"
+  },
+  "browser_sim": {
+    "command": "python -m tests.navigation_browser",
+    "result": "passed",
+    "checks": [
+      "disabled arrival keeps incoming heading",
+      "explicit zero-degree override on repeated station",
+      "NX inset/turn/return execution",
+      "save/reload",
+      "STOP",
+      "station and route editing",
+      "desktop/mobile layout",
+      "no browser page errors"
+    ]
+  },
+  "diff_check": "passed",
+  "legacy_local_config": {
+    "loaded_station_arrival_enabled": {
+      "O": false,
+      "A": false,
+      "B": false,
+      "C": false,
+      "D": false
+    },
+    "on_disk_parameters_rewritten": false
+  },
+  "hardware": {
+    "nx_deployed": false,
+    "flashed": false,
+    "physical_motion_executed": false
+  },
+  "limits": [
+    "ARM emulation verifies compiled logic with synthetic feedback; it does not verify wheel slip, IMU accuracy or physical clearance.",
+    "NX host and v0.2.22 firmware must both be updated before using the new executor."
+  ],
+  "sha256": {
+    "firmware/build/robot_h743.axf": "b259c05d07db34eff1038f58d52692861404af57638ff71d1f6a6069b9c414b5",
+    "firmware/build/robot_h743.hex": "7541f781bce12d65652cd7cca56914ee25c10225ac5c79c22554814ca3902689",
+    "firmware/build/robot_h743.bin": "0471fe0cd9d0f2dba60f967743cf02758d3dc8e8789405ee8d0411538ff468ab"
+  }
+}

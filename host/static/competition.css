@@ -1,0 +1,16 @@
+:root { color-scheme: light; font-family: system-ui, sans-serif; color: #172b38; background: #f2f5f4; }
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px; }
+main { width: min(680px, 100%); text-align: center; }
+.eyebrow { font-size: 14px; letter-spacing: .2em; color: #527268; }
+h1 { font-size: clamp(32px, 6vw, 56px); margin: 18px 0; }
+#route { line-height: 1.8; overflow-wrap: anywhere; }
+button { margin: 24px 0; width: 100%; min-height: 128px; border: 0; border-radius: 20px; background: #14634f; color: white; font: 700 40px system-ui, sans-serif; cursor: pointer; }
+button:disabled { background: #667b75; cursor: default; }
+button:focus-visible { outline: 4px solid #cb9a32; outline-offset: 5px; }
+#status { min-height: 48px; line-height: 1.7; }
+dl { display: flex; justify-content: space-around; gap: 16px; padding: 24px 0; border-block: 1px solid #cbd8d2; }
+dt, .note { color: #527268; font-size: 14px; line-height: 1.8; }
+dd { margin: 8px 0 0; }
+.note { margin-top: 24px; }
+@media (max-width: 450px) { dl { flex-direction: column; } button { min-height: 104px; } }

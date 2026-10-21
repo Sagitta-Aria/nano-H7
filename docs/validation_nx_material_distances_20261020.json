@@ -1,0 +1,50 @@
+{
+  "backup": "/home/a/h743/backups/material_distances_20261020_154930",
+  "service": "active",
+  "pid_before": "MainPID=10468",
+  "pid_after": "MainPID=15792",
+  "files": {
+    "host/webapp.py": "d7095b7182813d4bd5297de4661375bf22426b6666fc55df6214a349d17096b9",
+    "host/webserver.py": "4fdb6452e3980debdb9d809b585eabf18fa1c8e0befd776f1fdd0cfa9a429a8e",
+    "host/static/app.js": "347e7a14d3ef0267aae752de751bdeabacd287f34738f3a9b15baea2e909fa28",
+    "host/static/index.html": "ec2870e7c7903e2b5cdcadf21ad98bca8742844d0d00514f820507cc39d3893e",
+    "host/static/styles.css": "478b5c0d3e49ef847cabcf019f15413fc5f3719a9546e5979e0b7934148c111d",
+    "host/static/material_flow.js": "1805b774fb39dbb7c685830e736101b17dcce8f4f3c4ba0a35782b3aabf214e5",
+    "host/material_flow.py": "7d28c6d559f633633acd94061b2fecc4879dc7b152a98f55d6de049a72a1c53e",
+    "host/mission.py": "094f279261240f083bccc96d00bc41b1b580b00126bb5b1b9b7c740a185aa0f8",
+    "tests/test_material_settings.py": "5ba752febbdb824193c139317fc03bcfe99e8f28a3f1f323ed830ac329c97e41",
+    "tests/test_material_flow.py": "ffba196bd522f51a214a97edd38fa18d7a9e34ca3db24800ce0401fca429b9b2"
+  },
+  "files_verified": true,
+  "configurations_unchanged": true,
+  "config_hashes": {
+    "device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699",
+    "control_settings.json": "4f7e2a67f6cc0a673aa00246f46b5df0e134c4efd8a94f589c59666af8fbe343",
+    "auxiliary.json": "229d4c2dfeffcaf22a16556b2e3932e92f41e8f8627e42bfa35681580699859c",
+    "mission.json": "63ed3d492d38174a4deefd284d80f82c2900bc047eff367e73a0b7ae1df60cca",
+    "navigation.json": "4fecbb76d922f85938a30f7d875a146d2d5f7952ea97ace95a8bf940d719e68e",
+    "b_pickup.json": "55da3d81420046056777b22e8d81d89e5e66608dfe906bb51cf24d57666bda0a",
+    "camera_alignment.json": "259fa3ac373db8b39bb0d39f0951ae2a8007d887c5fb919d198a56de8069b7e8",
+    "pick_place.json": "7d63107e3b800eda2fb3c668933016521236dfe7dd054bcdb1905841205358cf",
+    "cameras.json": "2ad6be879693aa2ca1556ef968328ac434b65b24e1cf7ab4448ee61005e5d56d"
+  },
+  "config": {
+    "point2_steps": 2150,
+    "point3_steps": 4230
+  },
+  "link": "connected",
+  "imu": "streaming",
+  "armed": false,
+  "all_axes_stopped": true,
+  "hardware_task_started": false,
+  "firmware_flashed": false,
+  "remote_validation": "======================================================================\nERROR: test_ocr_never_substitutes_the_requested_digit_for_the_actual_result (tests.test_ring_sequence.GeometryTests)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/a/h743/backups/material_distances_20261020_154930/stage/tests/test_ring_sequence.py\", line 62, in test_ocr_never_substitutes_the_requested_digit_for_the_actual_result\n    self.assertIsNone(reader.select(None, rings, '1'))\n  File \"/home/a/h743/backups/material_distances_20261020_154930/stage/host/ring_perception.py\", line 57, in select\n    self.engine, crop, self.thresholds['confidence'], self.thresholds['confidence_one'])\nAttributeError: 'RingOCR' object has no attribute 'thresholds'\n\n----------------------------------------------------------------------\nRan 150 tests in 239.232s\n\nFAILED (errors=1)\n\nBaseline installation reproduces the same missing test-fixture initialization. Isolated fixture corrected; affected test rerun:\n----------------------------------------------------------------------\nRan 1 test in 0.004s\n\nOK\n",
+  "remote_validation_details": {
+    "returncode": 0,
+    "initial_returncode": 1,
+    "passed": 150,
+    "baseline_failure": "======================================================================\nERROR: test_ocr_never_substitutes_the_requested_digit_for_the_actual_result (tests.test_ring_sequence.GeometryTests)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/a/h743/tests/test_ring_sequence.py\", line 62, in test_ocr_never_substitutes_the_requested_digit_for_the_actual_result\n    self.assertIsNone(reader.select(None, rings, '1'))\n  File \"/home/a/h743/host/ring_perception.py\", line 57, in select\n    self.engine, crop, self.thresholds['confidence'], self.thresholds['confidence_one'])\nAttributeError: 'RingOCR' object has no attribute 'thresholds'\n\n----------------------------------------------------------------------\nRan 1 test in 0.005s\n\nFAILED (errors=1)\n",
+    "fixture_only_change": "Initialize OCR thresholds in isolated test created with __new__; production OCR unchanged",
+    "failed_test_rerun": "----------------------------------------------------------------------\nRan 1 test in 0.004s\n\nOK\n"
+  }
+}

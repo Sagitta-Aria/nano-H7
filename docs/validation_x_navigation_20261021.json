@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-21",
+  "feature": "X=(0,28800), heading=-180, inward then turn to zero then directly A",
+  "toolchain": "Keil ARM Compiler 5 + MicroLIB",
+  "build": "python tools/build_firmware.py",
+  "firmware_version": "0.2.29",
+  "firmware_sha256": "1aa29593a0b47741957917223306d570588f34990b46a83ef86291490f6b7781",
+  "targeted_tests": {
+    "command": "python -m unittest tests.test_x_navigation tests.test_imu_pause tests.test_imu_pause_host -q",
+    "run": 22,
+    "passed": 22
+  },
+  "regression": {
+    "run": 162,
+    "passed": 159,
+    "failed": 3,
+    "known_preexisting_failures": [
+      "tests.test_turn_inset.GenericArmTests.test_replayed_operation_stop_and_stale_feedback_cannot_resume",
+      "tests.test_mission_arm.ArmMissionTests.test_external_stop_and_stale_imu_revoke_handoff_and_uncertain_xy",
+      "tests.test_mission_arm.ArmMissionTests.test_held_guards_budget_stale_imu_stop_and_timeout"
+    ],
+    "baseline_reproduced_without_x_firmware": true,
+    "reason": "Legacy tests expect imu_stale fault; existing 0.2.28 behavior pauses instead."
+  },
+  "frontend": "node tests/test_navigation_frontend.cjs: passed",
+  "browser": "python -m tests.x_navigation_browser: passed; save/reload/reference/arrival/layout, no page errors",
+  "hardware_executed": false,
+  "nx_deployed": false,
+  "flashed": false,
+  "local_saved_config": {
+    "start_station": 0,
+    "stations": "O A B C D X",
+    "max_y": 28800
+  }
+}

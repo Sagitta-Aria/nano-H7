@@ -26,14 +26,26 @@ int motion_chassis_start(const int32_t signs[4], uint32_t steps, unsigned sps, u
 int motion_assist_start(const int32_t signs[4], const int32_t yaw[4], uint32_t steps,
                         unsigned sps, unsigned accel, uint32_t id);
 void motion_assist_correct(int32_t correction_sps);
+/* Finite arbitrary pure-translation wheel vector with yaw feedback. Signed
+ * projection excludes rotation from distance. Caller checks final XY; IRQ
+ * completes high pulses before releasing ownership. No station/task policy. */
+int motion_vector_start(const int32_t steps[4], const int32_t yaw[4],
+                        unsigned sps, unsigned accel, uint32_t id);
 /* Synchronized DDA wheel pulses for a straight translation. Zero wheels hold
  * low; sps/accel apply to the largest wheel count. Not for rotation or jogging. */
 int motion_line_start(const int32_t steps[4], unsigned sps, unsigned accel, uint32_t id);
 void motion_chassis_stop(void);
+/* IMU wait only: preserve DDA/assist progress and ownership, finish STEP highs.
+ * STOP still cancels the operation. Resume never arms an output. */
+void motion_chassis_hold(unsigned hold);
 unsigned motion_chassis_active(void);
 void motion_status(unsigned axis, axis_status_t *out);
 unsigned motion_armed(void);
 uint32_t motion_faults(void);
+/* Explicit idle/disarmed acknowledgement only; never arms or restores position
+ * references. Report retains total/reason and the uncertain-axis bit mask. */
+int motion_clear_fault(void);
+void motion_fault_report(char *out, unsigned size);
 typedef struct {
     int32_t position, down_sign;
     unsigned initialized, active;
@@ -55,6 +67,9 @@ typedef struct {
  * obeys M5 bounds and, after CONFIG, M6 bounds as well. */
 int motion_aux_config(unsigned axis, int32_t minimum, int32_t maximum);
 int motion_aux_zero(unsigned axis);
+/* After reference loss only: operator asserts an actual known physical position
+ * inside the configured bounds. Does not home, move, or change those bounds. */
+int motion_aux_reference(unsigned axis, int32_t position);
 void motion_aux_status(unsigned axis, aux_status_t *out);
 int motion_aux_move(unsigned axis, int32_t value, unsigned absolute,
                     unsigned sps, unsigned accel, uint32_t id);

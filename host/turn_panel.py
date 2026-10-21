@@ -16,6 +16,7 @@ class TurnPanel:
         self.status = tk.StringVar(value="未连接 · 需要支持闭环转角的固件")
         self.kp = tk.StringVar(value='20')
         self.tolerance = tk.StringVar(value='0.20')
+        self.min_sps = tk.StringVar(value='200')
         self.precision_tunable = False
         self.tunable = False
         frame = ttk.LabelFrame(parent, text="陀螺仪闭环转角")
@@ -29,7 +30,7 @@ class TurnPanel:
             ttk.Entry(form, textvariable=variable, width=9).pack(side="left", padx=5)
         tuning = ttk.Frame(frame)
         tuning.pack(anchor="w", fill="x", pady=5)
-        for label, variable in (("陀螺仪 P (step/s)/°", self.kp), ("角度容差 ±°", self.tolerance)):
+        for label, variable in (("陀螺仪 P (step/s)/°", self.kp), ("角度容差 ±°", self.tolerance), ("最低转向 step/s", self.min_sps)):
             ttk.Label(tuning, text=label).pack(side="left", padx=5)
             ttk.Entry(tuning, textvariable=variable, width=9).pack(side="left", padx=5)
         buttons = ttk.Frame(frame)
@@ -58,7 +59,9 @@ class TurnPanel:
                 self.status.set('可调陀螺仪 P 和角度容差需要 0.2.16 固件。')
                 return
             try:
-                self.app.send(tuning_command(self.kp.get(), self.tolerance.get()))
+                if 'min_sps' not in self.fields:
+                    raise ValueError('最低转向轮速需要新版固件及 TURN STAT 参数回读。')
+                self.app.send(tuning_command(self.kp.get(), self.tolerance.get(), int(self.min_sps.get())))
             except ValueError as error:
                 self.status.set(str(error))
             return
@@ -103,6 +106,8 @@ class TurnPanel:
                 fields.get("fault", "none")))
             if fields.get('kp_centi'):
                 self.status.set(self.status.get() + ' · 板端 P={} · 角度容差 ±{:.2f}°'.format(int(fields['kp_centi'])/100, int(fields.get('tolerance_cd',20))/100))
+            if fields.get('min_sps'):
+                self.status.set(self.status.get() + ' · 最低转向 {} step/s'.format(fields['min_sps']))
 
     def tick(self, now):
         if self.app.connected and self.supported and self.app.connection.commands.qsize() < 3 and now - self.last_poll >= .3:

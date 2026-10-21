@@ -1,0 +1,1583 @@
+{
+  "algorithm_validation": {
+    "cold_color_no_ocr": {
+      "mode": "color",
+      "center": [
+        333,
+        273
+      ],
+      "processing_fps": 0.0,
+      "ring": false,
+      "digit": null,
+      "confidence": 0.0,
+      "ocr_ms": 0.0,
+      "color_block": {
+        "color": "green",
+        "center": [
+          333,
+          273
+        ],
+        "area": 2536.0,
+        "coverage": 1.0,
+        "grasp_point": [
+          320,
+          270
+        ],
+        "grasp_offset": [
+          0,
+          30
+        ],
+        "dx": 13,
+        "dy": 33,
+        "error_dx": 13,
+        "error_dy": 3
+      },
+      "color_ms": 21.08,
+      "ring_frames": 0,
+      "color_frames": 1,
+      "ocr_submitted": 0,
+      "roi": [
+        140,
+        60,
+        360,
+        330
+      ],
+      "grasp_point": [
+        320,
+        270
+      ],
+      "grasp_offset": [
+        0,
+        30
+      ],
+      "dx": 13,
+      "dy": 33,
+      "error_dx": 13,
+      "error_dy": 3
+    },
+    "digit_only": {
+      "mode": "digit",
+      "center": [
+        330,
+        230
+      ],
+      "processing_fps": 9.5,
+      "ring": true,
+      "digit": "1",
+      "confidence": 0.715,
+      "ocr_ms": 42.0,
+      "color_block": null,
+      "color_ms": 0.0,
+      "ring_frames": 4,
+      "color_frames": 0,
+      "ocr_submitted": 4,
+      "roi": [
+        140,
+        60,
+        360,
+        330
+      ],
+      "grasp_point": [
+        320,
+        270
+      ],
+      "grasp_offset": [
+        0,
+        30
+      ],
+      "dx": 10,
+      "dy": -10,
+      "error_dx": 10,
+      "error_dy": -40
+    },
+    "color_after_digit": {
+      "mode": "color",
+      "center": [
+        333,
+        273
+      ],
+      "processing_fps": 139.2,
+      "ring": false,
+      "digit": null,
+      "confidence": 0.0,
+      "ocr_ms": 0.0,
+      "color_block": {
+        "color": "green",
+        "center": [
+          333,
+          273
+        ],
+        "area": 2536.0,
+        "coverage": 1.0,
+        "grasp_point": [
+          320,
+          270
+        ],
+        "grasp_offset": [
+          0,
+          30
+        ],
+        "dx": 13,
+        "dy": 33,
+        "error_dx": 13,
+        "error_dy": 3
+      },
+      "color_ms": 7.09,
+      "ring_frames": 0,
+      "color_frames": 10,
+      "ocr_submitted": 0,
+      "roi": [
+        140,
+        60,
+        360,
+        330
+      ],
+      "grasp_point": [
+        320,
+        270
+      ],
+      "grasp_offset": [
+        0,
+        30
+      ],
+      "dx": 13,
+      "dy": 33,
+      "error_dx": 13,
+      "error_dy": 3
+    },
+    "digit_reentry": {
+      "mode": "digit",
+      "center": [
+        330,
+        230
+      ],
+      "processing_fps": 10.2,
+      "ring": true,
+      "digit": "1",
+      "confidence": 0.715,
+      "ocr_ms": 41.2,
+      "color_block": null,
+      "color_ms": 0.0,
+      "ring_frames": 4,
+      "color_frames": 0,
+      "ocr_submitted": 4,
+      "roi": [
+        140,
+        60,
+        360,
+        330
+      ],
+      "grasp_point": [
+        320,
+        270
+      ],
+      "grasp_offset": [
+        0,
+        30
+      ],
+      "dx": 10,
+      "dy": -10,
+      "error_dx": 10,
+      "error_dy": -40
+    },
+    "passed": true
+  },
+  "ui_validation": {
+    "stages": [
+      {
+        "stage": "cold-color",
+        "rows": [
+          {
+            "mode": "color",
+            "center": null,
+            "processing_fps": 0.0,
+            "ring": false,
+            "digit": null,
+            "confidence": 0.0,
+            "ocr_ms": 0.0,
+            "color_block": null,
+            "color_ms": 22.22,
+            "ring_frames": 0,
+            "color_frames": 1,
+            "ocr_submitted": 0,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": null,
+            "dy": null,
+            "error_dx": null,
+            "error_dy": null
+          },
+          {
+            "mode": "color",
+            "center": null,
+            "processing_fps": 41.8,
+            "ring": false,
+            "digit": null,
+            "confidence": 0.0,
+            "ocr_ms": 0.0,
+            "color_block": null,
+            "color_ms": 7.11,
+            "ring_frames": 0,
+            "color_frames": 23,
+            "ocr_submitted": 0,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": null,
+            "dy": null,
+            "error_dx": null,
+            "error_dy": null
+          },
+          {
+            "mode": "color",
+            "center": null,
+            "processing_fps": 44.2,
+            "ring": false,
+            "digit": null,
+            "confidence": 0.0,
+            "ocr_ms": 0.0,
+            "color_block": null,
+            "color_ms": 7.05,
+            "ring_frames": 0,
+            "color_frames": 47,
+            "ocr_submitted": 0,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": null,
+            "dy": null,
+            "error_dx": null,
+            "error_dy": null
+          },
+          {
+            "mode": "color",
+            "center": null,
+            "processing_fps": 45.0,
+            "ring": false,
+            "digit": null,
+            "confidence": 0.0,
+            "ocr_ms": 0.0,
+            "color_block": null,
+            "color_ms": 7.23,
+            "ring_frames": 0,
+            "color_frames": 71,
+            "ocr_submitted": 0,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": null,
+            "dy": null,
+            "error_dx": null,
+            "error_dy": null
+          },
+          {
+            "mode": "color",
+            "center": null,
+            "processing_fps": 45.5,
+            "ring": false,
+            "digit": null,
+            "confidence": 0.0,
+            "ocr_ms": 0.0,
+            "color_block": null,
+            "color_ms": 7.11,
+            "ring_frames": 0,
+            "color_frames": 93,
+            "ocr_submitted": 0,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": null,
+            "dy": null,
+            "error_dx": null,
+            "error_dy": null
+          },
+          {
+            "mode": "color",
+            "center": null,
+            "processing_fps": 45.6,
+            "ring": false,
+            "digit": null,
+            "confidence": 0.0,
+            "ocr_ms": 0.0,
+            "color_block": null,
+            "color_ms": 7.04,
+            "ring_frames": 0,
+            "color_frames": 116,
+            "ocr_submitted": 0,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": null,
+            "dy": null,
+            "error_dx": null,
+            "error_dy": null
+          },
+          {
+            "mode": "color",
+            "center": null,
+            "processing_fps": 45.6,
+            "ring": false,
+            "digit": null,
+            "confidence": 0.0,
+            "ocr_ms": 0.0,
+            "color_block": null,
+            "color_ms": 7.05,
+            "ring_frames": 0,
+            "color_frames": 139,
+            "ocr_submitted": 0,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": null,
+            "dy": null,
+            "error_dx": null,
+            "error_dy": null
+          },
+          {
+            "mode": "color",
+            "center": null,
+            "processing_fps": 45.2,
+            "ring": false,
+            "digit": null,
+            "confidence": 0.0,
+            "ocr_ms": 0.0,
+            "color_block": null,
+            "color_ms": 7.16,
+            "ring_frames": 0,
+            "color_frames": 163,
+            "ocr_submitted": 0,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": null,
+            "dy": null,
+            "error_dx": null,
+            "error_dy": null
+          },
+          {
+            "mode": "color",
+            "center": null,
+            "processing_fps": 46.4,
+            "ring": false,
+            "digit": null,
+            "confidence": 0.0,
+            "ocr_ms": 0.0,
+            "color_block": null,
+            "color_ms": 7.02,
+            "ring_frames": 0,
+            "color_frames": 187,
+            "ocr_submitted": 0,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": null,
+            "dy": null,
+            "error_dx": null,
+            "error_dy": null
+          }
+        ]
+      },
+      {
+        "stage": "digit-first",
+        "rows": [
+          {
+            "mode": "digit",
+            "center": [
+              318,
+              279
+            ],
+            "processing_fps": 0.0,
+            "ring": true,
+            "digit": null,
+            "confidence": 0.0,
+            "ocr_ms": 0.0,
+            "color_block": null,
+            "color_ms": 0.0,
+            "ring_frames": 1,
+            "color_frames": 0,
+            "ocr_submitted": 1,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": -2,
+            "dy": 39,
+            "error_dx": -2,
+            "error_dy": 9
+          },
+          {
+            "mode": "digit",
+            "center": [
+              318,
+              279
+            ],
+            "processing_fps": 26.2,
+            "ring": true,
+            "digit": "1",
+            "confidence": 0.822,
+            "ocr_ms": 45.9,
+            "color_block": null,
+            "color_ms": 0.0,
+            "ring_frames": 15,
+            "color_frames": 0,
+            "ocr_submitted": 12,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": -2,
+            "dy": 39,
+            "error_dx": -2,
+            "error_dy": 9
+          },
+          {
+            "mode": "digit",
+            "center": [
+              318,
+              279
+            ],
+            "processing_fps": 27.2,
+            "ring": true,
+            "digit": "1",
+            "confidence": 0.885,
+            "ocr_ms": 13.9,
+            "color_block": null,
+            "color_ms": 0.0,
+            "ring_frames": 30,
+            "color_frames": 0,
+            "ocr_submitted": 24,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": -2,
+            "dy": 39,
+            "error_dx": -2,
+            "error_dy": 9
+          },
+          {
+            "mode": "digit",
+            "center": [
+              318,
+              279
+            ],
+            "processing_fps": 27.7,
+            "ring": true,
+            "digit": "1",
+            "confidence": 0.882,
+            "ocr_ms": 17.1,
+            "color_block": null,
+            "color_ms": 0.0,
+            "ring_frames": 45,
+            "color_frames": 0,
+            "ocr_submitted": 39,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": -2,
+            "dy": 39,
+            "error_dx": -2,
+            "error_dy": 9
+          },
+          {
+            "mode": "digit",
+            "center": [
+              318,
+              279
+            ],
+            "processing_fps": 28.0,
+            "ring": true,
+            "digit": "1",
+            "confidence": 0.874,
+            "ocr_ms": 14.2,
+            "color_block": null,
+            "color_ms": 0.0,
+            "ring_frames": 60,
+            "color_frames": 0,
+            "ocr_submitted": 53,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": -2,
+            "dy": 39,
+            "error_dx": -2,
+            "error_dy": 9
+          },
+          {
+            "mode": "digit",
+            "center": [
+              318,
+              279
+            ],
+            "processing_fps": 28.1,
+            "ring": true,
+            "digit": "1",
+            "confidence": 0.873,
+            "ocr_ms": 14.2,
+            "color_block": null,
+            "color_ms": 0.0,
+            "ring_frames": 74,
+            "color_frames": 0,
+            "ocr_submitted": 67,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": -2,
+            "dy": 39,
+            "error_dx": -2,
+            "error_dy": 9
+          },
+          {
+            "mode": "digit",
+            "center": [
+              318,
+              279
+            ],
+            "processing_fps": 28.1,
+            "ring": true,
+            "digit": "1",
+            "confidence": 0.896,
+            "ocr_ms": 14.8,
+            "color_block": null,
+            "color_ms": 0.0,
+            "ring_frames": 89,
+            "color_frames": 0,
+            "ocr_submitted": 82,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": -2,
+            "dy": 39,
+            "error_dx": -2,
+            "error_dy": 9
+          },
+          {
+            "mode": "digit",
+            "center": [
+              318,
+              279
+            ],
+            "processing_fps": 28.0,
+            "ring": true,
+            "digit": "1",
+            "confidence": 0.876,
+            "ocr_ms": 14.8,
+            "color_block": null,
+            "color_ms": 0.0,
+            "ring_frames": 103,
+            "color_frames": 0,
+            "ocr_submitted": 94,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": -2,
+            "dy": 39,
+            "error_dx": -2,
+            "error_dy": 9
+          },
+          {
+            "mode": "digit",
+            "center": [
+              318,
+              279
+            ],
+            "processing_fps": 27.6,
+            "ring": true,
+            "digit": "1",
+            "confidence": 0.864,
+            "ocr_ms": 16.0,
+            "color_block": null,
+            "color_ms": 0.0,
+            "ring_frames": 117,
+            "color_frames": 0,
+            "ocr_submitted": 106,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": -2,
+            "dy": 39,
+            "error_dx": -2,
+            "error_dy": 9
+          }
+        ]
+      },
+      {
+        "stage": "color-return",
+        "rows": [
+          {
+            "mode": "color",
+            "center": null,
+            "processing_fps": 46.1,
+            "ring": false,
+            "digit": null,
+            "confidence": 0.0,
+            "ocr_ms": 0.0,
+            "color_block": null,
+            "color_ms": 6.92,
+            "ring_frames": 0,
+            "color_frames": 16,
+            "ocr_submitted": 0,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": null,
+            "dy": null,
+            "error_dx": null,
+            "error_dy": null
+          },
+          {
+            "mode": "color",
+            "center": null,
+            "processing_fps": 45.8,
+            "ring": false,
+            "digit": null,
+            "confidence": 0.0,
+            "ocr_ms": 0.0,
+            "color_block": null,
+            "color_ms": 6.93,
+            "ring_frames": 0,
+            "color_frames": 39,
+            "ocr_submitted": 0,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": null,
+            "dy": null,
+            "error_dx": null,
+            "error_dy": null
+          },
+          {
+            "mode": "color",
+            "center": null,
+            "processing_fps": 46.1,
+            "ring": false,
+            "digit": null,
+            "confidence": 0.0,
+            "ocr_ms": 0.0,
+            "color_block": null,
+            "color_ms": 6.99,
+            "ring_frames": 0,
+            "color_frames": 63,
+            "ocr_submitted": 0,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": null,
+            "dy": null,
+            "error_dx": null,
+            "error_dy": null
+          },
+          {
+            "mode": "color",
+            "center": null,
+            "processing_fps": 46.0,
+            "ring": false,
+            "digit": null,
+            "confidence": 0.0,
+            "ocr_ms": 0.0,
+            "color_block": null,
+            "color_ms": 7.09,
+            "ring_frames": 0,
+            "color_frames": 86,
+            "ocr_submitted": 0,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": null,
+            "dy": null,
+            "error_dx": null,
+            "error_dy": null
+          },
+          {
+            "mode": "color",
+            "center": null,
+            "processing_fps": 46.0,
+            "ring": false,
+            "digit": null,
+            "confidence": 0.0,
+            "ocr_ms": 0.0,
+            "color_block": null,
+            "color_ms": 7.14,
+            "ring_frames": 0,
+            "color_frames": 109,
+            "ocr_submitted": 0,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": null,
+            "dy": null,
+            "error_dx": null,
+            "error_dy": null
+          },
+          {
+            "mode": "color",
+            "center": null,
+            "processing_fps": 46.3,
+            "ring": false,
+            "digit": null,
+            "confidence": 0.0,
+            "ocr_ms": 0.0,
+            "color_block": null,
+            "color_ms": 7.1,
+            "ring_frames": 0,
+            "color_frames": 133,
+            "ocr_submitted": 0,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": null,
+            "dy": null,
+            "error_dx": null,
+            "error_dy": null
+          },
+          {
+            "mode": "color",
+            "center": null,
+            "processing_fps": 45.9,
+            "ring": false,
+            "digit": null,
+            "confidence": 0.0,
+            "ocr_ms": 0.0,
+            "color_block": null,
+            "color_ms": 8.63,
+            "ring_frames": 0,
+            "color_frames": 156,
+            "ocr_submitted": 0,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": null,
+            "dy": null,
+            "error_dx": null,
+            "error_dy": null
+          },
+          {
+            "mode": "color",
+            "center": null,
+            "processing_fps": 45.4,
+            "ring": false,
+            "digit": null,
+            "confidence": 0.0,
+            "ocr_ms": 0.0,
+            "color_block": null,
+            "color_ms": 6.91,
+            "ring_frames": 0,
+            "color_frames": 179,
+            "ocr_submitted": 0,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": null,
+            "dy": null,
+            "error_dx": null,
+            "error_dy": null
+          },
+          {
+            "mode": "color",
+            "center": null,
+            "processing_fps": 45.6,
+            "ring": false,
+            "digit": null,
+            "confidence": 0.0,
+            "ocr_ms": 0.0,
+            "color_block": null,
+            "color_ms": 6.87,
+            "ring_frames": 0,
+            "color_frames": 203,
+            "ocr_submitted": 0,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": null,
+            "dy": null,
+            "error_dx": null,
+            "error_dy": null
+          },
+          {
+            "mode": "color",
+            "center": null,
+            "processing_fps": 45.3,
+            "ring": false,
+            "digit": null,
+            "confidence": 0.0,
+            "ocr_ms": 0.0,
+            "color_block": null,
+            "color_ms": 7.51,
+            "ring_frames": 0,
+            "color_frames": 226,
+            "ocr_submitted": 0,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": null,
+            "dy": null,
+            "error_dx": null,
+            "error_dy": null
+          },
+          {
+            "mode": "color",
+            "center": null,
+            "processing_fps": 45.6,
+            "ring": false,
+            "digit": null,
+            "confidence": 0.0,
+            "ocr_ms": 0.0,
+            "color_block": null,
+            "color_ms": 6.93,
+            "ring_frames": 0,
+            "color_frames": 250,
+            "ocr_submitted": 0,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": null,
+            "dy": null,
+            "error_dx": null,
+            "error_dy": null
+          },
+          {
+            "mode": "color",
+            "center": null,
+            "processing_fps": 46.6,
+            "ring": false,
+            "digit": null,
+            "confidence": 0.0,
+            "ocr_ms": 0.0,
+            "color_block": null,
+            "color_ms": 6.84,
+            "ring_frames": 0,
+            "color_frames": 274,
+            "ocr_submitted": 0,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": null,
+            "dy": null,
+            "error_dx": null,
+            "error_dy": null
+          }
+        ]
+      },
+      {
+        "stage": "digit-return",
+        "rows": [
+          {
+            "mode": "digit",
+            "center": [
+              318,
+              279
+            ],
+            "processing_fps": 27.6,
+            "ring": true,
+            "digit": "1",
+            "confidence": 0.88,
+            "ocr_ms": 21.2,
+            "color_block": null,
+            "color_ms": 0.0,
+            "ring_frames": 12,
+            "color_frames": 0,
+            "ocr_submitted": 11,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": -2,
+            "dy": 39,
+            "error_dx": -2,
+            "error_dy": 9
+          },
+          {
+            "mode": "digit",
+            "center": [
+              318,
+              279
+            ],
+            "processing_fps": 27.6,
+            "ring": true,
+            "digit": "1",
+            "confidence": 0.868,
+            "ocr_ms": 18.6,
+            "color_block": null,
+            "color_ms": 0.0,
+            "ring_frames": 26,
+            "color_frames": 0,
+            "ocr_submitted": 22,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": -2,
+            "dy": 39,
+            "error_dx": -2,
+            "error_dy": 9
+          },
+          {
+            "mode": "digit",
+            "center": [
+              318,
+              279
+            ],
+            "processing_fps": 27.6,
+            "ring": true,
+            "digit": "1",
+            "confidence": 0.878,
+            "ocr_ms": 21.4,
+            "color_block": null,
+            "color_ms": 0.0,
+            "ring_frames": 40,
+            "color_frames": 0,
+            "ocr_submitted": 33,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": -2,
+            "dy": 39,
+            "error_dx": -2,
+            "error_dy": 9
+          },
+          {
+            "mode": "digit",
+            "center": [
+              317,
+              279
+            ],
+            "processing_fps": 27.8,
+            "ring": true,
+            "digit": "1",
+            "confidence": 0.878,
+            "ocr_ms": 19.1,
+            "color_block": null,
+            "color_ms": 0.0,
+            "ring_frames": 55,
+            "color_frames": 0,
+            "ocr_submitted": 45,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": -3,
+            "dy": 39,
+            "error_dx": -3,
+            "error_dy": 9
+          },
+          {
+            "mode": "digit",
+            "center": [
+              318,
+              279
+            ],
+            "processing_fps": 27.6,
+            "ring": true,
+            "digit": "1",
+            "confidence": 0.81,
+            "ocr_ms": 32.3,
+            "color_block": null,
+            "color_ms": 0.0,
+            "ring_frames": 69,
+            "color_frames": 0,
+            "ocr_submitted": 59,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": -2,
+            "dy": 39,
+            "error_dx": -2,
+            "error_dy": 9
+          },
+          {
+            "mode": "digit",
+            "center": [
+              318,
+              279
+            ],
+            "processing_fps": 27.6,
+            "ring": true,
+            "digit": "1",
+            "confidence": 0.871,
+            "ocr_ms": 14.8,
+            "color_block": null,
+            "color_ms": 0.0,
+            "ring_frames": 83,
+            "color_frames": 0,
+            "ocr_submitted": 71,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": -2,
+            "dy": 39,
+            "error_dx": -2,
+            "error_dy": 9
+          },
+          {
+            "mode": "digit",
+            "center": [
+              318,
+              279
+            ],
+            "processing_fps": 27.5,
+            "ring": true,
+            "digit": "1",
+            "confidence": 0.887,
+            "ocr_ms": 15.7,
+            "color_block": null,
+            "color_ms": 0.0,
+            "ring_frames": 97,
+            "color_frames": 0,
+            "ocr_submitted": 84,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": -2,
+            "dy": 39,
+            "error_dx": -2,
+            "error_dy": 9
+          },
+          {
+            "mode": "digit",
+            "center": [
+              318,
+              279
+            ],
+            "processing_fps": 27.6,
+            "ring": true,
+            "digit": "1",
+            "confidence": 0.861,
+            "ocr_ms": 16.9,
+            "color_block": null,
+            "color_ms": 0.0,
+            "ring_frames": 112,
+            "color_frames": 0,
+            "ocr_submitted": 98,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": -2,
+            "dy": 39,
+            "error_dx": -2,
+            "error_dy": 9
+          },
+          {
+            "mode": "digit",
+            "center": [
+              318,
+              279
+            ],
+            "processing_fps": 27.9,
+            "ring": true,
+            "digit": "1",
+            "confidence": 0.808,
+            "ocr_ms": 33.7,
+            "color_block": null,
+            "color_ms": 0.0,
+            "ring_frames": 126,
+            "color_frames": 0,
+            "ocr_submitted": 110,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": -2,
+            "dy": 39,
+            "error_dx": -2,
+            "error_dy": 9
+          },
+          {
+            "mode": "digit",
+            "center": [
+              318,
+              279
+            ],
+            "processing_fps": 25.5,
+            "ring": true,
+            "digit": "1",
+            "confidence": 0.818,
+            "ocr_ms": 160.5,
+            "color_block": null,
+            "color_ms": 0.0,
+            "ring_frames": 138,
+            "color_frames": 0,
+            "ocr_submitted": 121,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": -2,
+            "dy": 39,
+            "error_dx": -2,
+            "error_dy": 9
+          },
+          {
+            "mode": "digit",
+            "center": [
+              318,
+              279
+            ],
+            "processing_fps": 23.9,
+            "ring": true,
+            "digit": "1",
+            "confidence": 0.851,
+            "ocr_ms": 15.3,
+            "color_block": null,
+            "color_ms": 0.0,
+            "ring_frames": 150,
+            "color_frames": 0,
+            "ocr_submitted": 133,
+            "roi": [
+              140,
+              60,
+              360,
+              330
+            ],
+            "grasp_point": [
+              320,
+              270
+            ],
+            "grasp_offset": [
+              0,
+              30
+            ],
+            "dx": -2,
+            "dy": 39,
+            "error_dx": -2,
+            "error_dy": 9
+          }
+        ]
+      }
+    ],
+    "q_released_camera": true
+  },
+  "host_service": "MainPID=1746\nActiveState=active"
+}

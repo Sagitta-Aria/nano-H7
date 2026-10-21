@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-20",
+  "target": "nx-bird /home/a/h743",
+  "backup": "/home/a/h743/backups/nav_handoff_20261020_155726",
+  "changes": [
+    "Recheck held B arrival after transient NAV_HANDOFF_NOT_READY with same path/leg/op-id and stationary verification",
+    "After A QR closes camera2, open camera1 without elapsed limit; retain through both batches and release only at final O",
+    "Refresh row angle per frame and re-align out-of-tolerance seek/approach after matching zero ACK, four idle wheels, and three fresh stopped frames"
+  ],
+  "saved_angle_tolerance_deg": 0.2,
+  "validation": {
+    "remote_tests": "Ran 87 tests in 74.127s",
+    "passed": true,
+    "service": "MainPID=16380\nActiveState=active\n",
+    "link": "connected",
+    "imu": "streaming",
+    "armed": false,
+    "configurations_unchanged": true,
+    "configuration_sha256": {
+      "device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699",
+      "control_settings.json": "4f7e2a67f6cc0a673aa00246f46b5df0e134c4efd8a94f589c59666af8fbe343",
+      "auxiliary.json": "229d4c2dfeffcaf22a16556b2e3932e92f41e8f8627e42bfa35681580699859c",
+      "mission.json": "63ed3d492d38174a4deefd284d80f82c2900bc047eff367e73a0b7ae1df60cca",
+      "navigation.json": "4fecbb76d922f85938a30f7d875a146d2d5f7952ea97ace95a8bf940d719e68e",
+      "b_pickup.json": "22b0c9177fae001bda41ef1dfc9151083c13842e7c3a4851d7f12a69df3c0c91",
+      "camera_alignment.json": "259fa3ac373db8b39bb0d39f0951ae2a8007d887c5fb919d198a56de8069b7e8",
+      "pick_place.json": "10e97f5f3b32c07d5d4fc17ff73b66ddd1362e84c55f22404393f294ba13749c",
+      "cameras.json": "2ad6be879693aa2ca1556ef968328ac434b65b24e1cf7ab4448ee61005e5d56d"
+    },
+    "source_sha256": {
+      "host/mission.py": "b1cf6c02d59e41869a6945b0e00c783151977e3459003e46e00350eb58bf0fb7",
+      "host/material_flow.py": "913ef02640fc3c7b6cd25591c62d1eb32c42eac1431b532e51a0ce6361265652",
+      "host/task_camera.py": "558889881878e162e3f3434aee87aefdbcca76c3de0904e228ee0566d31a7f2f",
+      "host/camera_alignment.py": "34cbd4319795921088b3b31c1ee2512a209318297e583ec2b21617a8edf7b6d7",
+      "host/ring_sequence.py": "62d20ac0a0cb197c51cf9f324fde2503b62256945b62a1408d884b49f5aaf873",
+      "host/static/camera_alignment.js": "37c2690d5106410de51539d361267ba28e39f27aadbad4d49dce06652cfa8c76",
+      "tests/test_material_flow.py": "85860cf7cb7e04c1403ce8df45e994a9cdf5214b5861178e7449e6c10f174ec8",
+      "tests/test_task_code.py": "aaa10a5817a2bd8ce6435b9044792a82d1d433d3df2401222a11865e5b03aa4e",
+      "tests/test_ring_sequence.py": "5e6deed85d211afdd10c425b8a0425056fe90833e7c9ab36cf37a13abd15fe09",
+      "docs/MATERIAL_FLOW.md": "9aa928b5a1f8425900f005efb851a1dae1eaef4cecaf8d7a7e1426cc52c38d72",
+      "docs/CAMERAS.md": "e8ef2f1fd3b908930607483afcbdf15826380aff0ddc18fd301e3a5c07e9761f",
+      "docs/B_PICKUP.md": "330f30d482c2de03302fe342127f5f4daa50ae7cc6cb3f1eb5543389a3030610",
+      "docs/CAMERA_ALIGNMENT.md": "396094c22ef6d90e77f6ba1c81a6da43d05da1726e238169b8692802712177e0",
+      "docs/NAVIGATION.md": "c5e5007cf87ee5db8d1592418e054e82bbc99fe71820fbc29ef361d4b3920a8b"
+    },
+    "firmware_flashed": false,
+    "hardware_pickup_started": false
+  },
+  "verified_at": "2026-10-20 15:59:06 +0800",
+  "evidence_directory": "D:\\stm32H7\\stm32H743IIT6\\localtmp\\nav_handoff_20261020\\evidence"
+}

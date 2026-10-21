@@ -15,14 +15,28 @@ class RouteUploadCases:
     def configure_upload(self):
         self.config = copy.deepcopy(DEFAULT)
         self.config['grid'] = {'x': [0,14,28], 'y': [0,14,28]}
-        self.config['points'] = dict(zip('OABCD', ([0,0],[0,14],[14,0],[14,28],[28,14])))
+        coords = ([0,0],[0,14],[14,0],[14,28],[28,14])
+        self.config['stations'] = [{'name': name, 'x': c[0], 'y': c[1], 'heading': 0}
+                                   for name, c in zip('OABCD', coords)]
         self.entries = mission_waypoints(self.config, (0,0))
         self.send('ARM 0')
         self.assertTrue(self.send('NAV RESET 0 0').ok)
         for axis in ('X','Y'): self.send('NAV GRID {} 0 14 28'.format(axis))
-        for i, p in enumerate(self.config['points'].values()): self.send('NAV POINT {} {} {}'.format(i,*p))
+        self.declare_tables()
         self.send('NAV IMU 0 1 1')
         self.send('PING'); self.send('ARM 1')
+
+    def declare_tables(self, coords=None, route=(1,2,3,4,1)):
+        """Counts precede rows; both tables must be complete before BEGIN."""
+        stations = self.config['stations'] if coords is None else [
+            {'x': c[0], 'y': c[1]} for c in coords]
+        self.assertTrue(self.send('NAV STATIONS {}'.format(len(stations))).ok)
+        for i, s in enumerate(stations):
+            self.assertTrue(self.send('NAV POINT {} {} {}'.format(i, s['x'], s['y'])).ok)
+            self.assertTrue(self.send('NAV ATTITUDE {} 0'.format(i)).ok)
+        self.assertTrue(self.send('NAV LEGS {}'.format(len(route))).ok)
+        for i, station in enumerate(route):
+            self.assertTrue(self.send('NAV LEG {} {} 0'.format(i, station)).ok)
 
     def stage(self, entries=None, ident=7):
         entries = self.entries if entries is None else entries
@@ -163,7 +177,7 @@ class HostPlanningUploadTests(unittest.TestCase):
             self.assertTrue(console.navigation_action('start')[0])
             command,tag=console.connection.sent[-1]
             self.assertEqual(command,'NAV STAT')
-            console._reply(command,decode(encode(1,'OK cmd=NAV_STAT ready=1 state=idle x=0 y=7000')),tag)
+            console._reply(command,decode(encode(1,'OK cmd=NAV_STAT ready=1 state=idle x=0 y=7000 stations=5 held=0')),tag)
             self.assertIn('NAV BEGIN 2 7 0 7000',console.nav_upload)
             command,tag=console.connection.sent[-1]
             console._reply(command,decode(encode(2,'ERR code=NAV_BUSY')),tag)
@@ -181,7 +195,7 @@ class HostPlanningUploadTests(unittest.TestCase):
             console.navigation={'ready':'1','state':'idle'}
             console.navigation_action('start')
             command,tag=console.connection.sent[-1]
-            console._reply(command,decode(encode(1,'OK cmd=NAV_STAT ready=1 state=idle x=1 y=1')),tag)
+            console._reply(command,decode(encode(1,'OK cmd=NAV_STAT ready=1 state=idle x=1 y=1 stations=5 held=0')),tag)
             self.assertFalse(console.nav_pending)
             self.assertEqual(len(console.connection.sent),1)
 

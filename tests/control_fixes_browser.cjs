@@ -20,7 +20,7 @@ const assert=require('node:assert/strict');
     const result=await r.json(); if(!result.ok)throw Error(JSON.stringify(result));
   },{body,token});
   try {
-    await page.goto(process.env.CONTROL_URL||'http://127.0.0.1:18774/');
+    await page.goto(new URL('/debug', process.env.CONTROL_URL||'http://127.0.0.1:18774/').href);
     await page.waitForFunction(()=>document.getElementById('m-armed').textContent==='已关闭');
     assert.equal((await snapshot()).demo,true,'only use the SIM fixture');
     await page.getByRole('tab',{name:'舵机',exact:true}).click();
@@ -49,6 +49,6 @@ const assert=require('node:assert/strict');
       assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,`overflow at ${width}`);
     }
     assert.deepEqual(errors,[]);
-    console.log('Control fixes browser OK: S1 PH6/180, S2 PH9/270, applied P40.25 and closed-loop completion <=0.2 degrees.');
+    console.log('Control fixes browser OK: S1 PH6/180, S2 PE4/270, applied P40.25 and closed-loop completion <=0.2 degrees.');
   }finally{if(token)await command('STOP').catch(()=>{});await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});

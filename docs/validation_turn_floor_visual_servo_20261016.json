@@ -1,0 +1,63 @@
+{
+  "completed_at": "2026-10-16T23:26:52.233507+08:00",
+  "toolchain": "Keil ARM Compiler 5 / Unicorn Cortex-M7",
+  "changes": [
+    "Adjustable in-place turn target floor, default 200 step/s, range 1..5000",
+    "Web/Tk/HTTP/protocol support and board min_sps capability readback",
+    "Visual near-target floor taper, closing-speed/latency prebraking, crossing speed-cap reduction, saturation anti-windup",
+    "Pixel-error completion independent of predictive zero velocity",
+    "Idle/heading query alternation independent of frame parity"
+  ],
+  "build": "passed",
+  "focused_suite": {
+    "tests": 66,
+    "result": "passed"
+  },
+  "full_suite": {
+    "tests_run": 471,
+    "skipped": 1,
+    "failures": 1,
+    "detail": "Only HTTP mock still expected the old seven-argument signature; updated to assert forwarding min_sps=350 and reran that test successfully. Full suite not rerun after assertion-only fix."
+  },
+  "http_regression": "passed after expected signature update",
+  "browser": "Isolated SIM heading_tuning_browser.cjs passed: three-page shared input, applied min_sps=350, reload persistence, desktop/mobile no overflow, no page errors",
+  "frontend": [
+    "test_turn_frontend.cjs passed",
+    "test_camera_frontend.cjs passed",
+    "test_navigation_frontend.cjs passed"
+  ],
+  "visual_plant": {
+    "cases": 9,
+    "delays_seconds": [
+      0.05,
+      0.15,
+      0.25
+    ],
+    "pixels_per_pulse": [
+      0.05,
+      0.2,
+      0.5
+    ],
+    "result": "All converge within 15 seconds and 5 pixels; synthetic plant, not hardware evidence"
+  },
+  "diff_check": "passed",
+  "hardware": {
+    "flashed": false,
+    "nx_deployed": false,
+    "physical_motion_executed": false
+  },
+  "limits": [
+    "Real friction/noise/STEP timing and load require hardware validation.",
+    "Minimum target speed is capped by task maximum; acceleration ramps may run below it.",
+    "Turn settings are RAM only; MCU restart uses default 200.",
+    "Predictive braking estimates latency and deceleration; no real-world speed or precision guarantee."
+  ],
+  "sha256": {
+    "firmware/build/robot_h743.hex": "36e0f36a1d6796687a1c2e5dc0c1e204c70d93841f2b223af8c9d423eae69886",
+    "firmware/build/robot_h743.axf": "f42728bcb1f4c0c8cd60efd52357a1c787f09727de604ec85c9ed2db00484018",
+    "host/vision_alignment.py": "83f3eb42436be68a33baec0b4b527c11b22e4f7f49cb9bc293797ca00ab6587d",
+    "host/camera_alignment.py": "293d258d70ff41c2c8f05be0ee8a97c3caa8d506b216db389fa8f4365b477103",
+    "firmware/src/turn.c": "f970107c7554c422a8556ebf8998ba2519c56ca6485dc33d07803a8ec9ad8110",
+    "host/static/app.js": "30142cbd4e3218dd804fc2430280e9f7522d9b9a4cd25457cea7f3fb7200fa7e"
+  }
+}

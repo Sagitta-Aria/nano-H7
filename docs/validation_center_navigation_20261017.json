@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-17",
+  "scope": "NX shortest-route center-turn preference and matching Web preview",
+  "behavior": {
+    "default_A_to_B": [[0, 14000], [14000, 14000], [14000, 0]],
+    "priority": ["distance", "noncentral turns", "total turns", "segments"],
+    "center": "grid.x[1], grid.y[1]; direct transit turn even on asymmetric grids",
+    "arrival_orientation": "existing inward, turn, return and settle preserved",
+    "departure": "existing turn-before-forward retained; no new lateral cruise mode"
+  },
+  "verification": [
+    {
+      "command": "python -m unittest tests.test_center_navigation tests.test_navigation tests.test_turn_inset tests.test_navigation_regressions tests.test_path_upload tests.test_stations tests.test_ring_task",
+      "result": "80 tests passed",
+      "coverage": ["compiled ARM execution", "full NX protocol route", "visual handoff", "independent shortest-distance BFS oracle", "363 NX/Web route comparisons on three grids"]
+    },
+    {
+      "command": "node tests/test_navigation_frontend.cjs",
+      "result": "passed"
+    },
+    {
+      "command": "python -m compileall -q host/navigation_grid.py host/navigation_runner.py tests/test_center_navigation.py",
+      "result": "passed"
+    },
+    {
+      "command": "git diff --check",
+      "result": "passed; existing CRLF normalization warnings"
+    }
+  ],
+  "firmware_source_changed_this_turn": false,
+  "firmware_test_toolchain": "STM32H743 / Keil ARM Compiler 5 / existing compiled image in Unicorn",
+  "full_suite_run_this_turn": false,
+  "deployed_to_NX": false,
+  "flashed": false,
+  "hardware_motion": false,
+  "limits": "Centerline route preference does not establish real wheel slip or body clearance. Existing stop thresholds unchanged; automatic fault recovery not added."
+}

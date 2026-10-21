@@ -1,0 +1,161 @@
+{
+  "service": "MainPID=20006\nActiveState=active\n",
+  "files_verified": 9,
+  "backup": "/home/a/h743/backups/color_debug_20261019_203235",
+  "tests": 65,
+  "live_verification": {
+    "report": {
+      "kind": "block",
+      "target": "red",
+      "found": false,
+      "center": null,
+      "reference": [
+        320,
+        240
+      ],
+      "control_point": null,
+      "width": 640,
+      "height": 480,
+      "captured_at": 1792413316.551377,
+      "error_dx": null,
+      "error_dy": null,
+      "roi": [
+        96,
+        72,
+        448,
+        336
+      ],
+      "pickup_only": false,
+      "color_settings": {
+        "color": "red",
+        "min_area": 3000,
+        "ranges": [
+          [
+            [
+              12,
+              80,
+              46
+            ],
+            [
+              12,
+              255,
+              255
+            ]
+          ]
+        ]
+      }
+    },
+    "camera": {
+      "state": "ready",
+      "message": "Nano 摄像头已打开，点击“拍照”获取一帧。",
+      "device": "/dev/video0",
+      "label": "USB 2.0 Camera: HD USB Camera",
+      "requested": "640x480",
+      "width": 640,
+      "height": 480,
+      "fps": 120.10136452241716,
+      "sequence": 0
+    },
+    "api_equals_saved_file": true,
+    "thresholds_unchanged": true,
+    "target_before": "black",
+    "target_after": "red",
+    "armed": false
+  },
+  "sample_analysis": {
+    "sample_pixels": 5918,
+    "hue_peaks_count_h": [
+      [
+        2094,
+        177
+      ],
+      [
+        1685,
+        176
+      ],
+      [
+        1078,
+        178
+      ],
+      [
+        926,
+        175
+      ],
+      [
+        76,
+        179
+      ],
+      [
+        51,
+        174
+      ],
+      [
+        8,
+        0
+      ],
+      [
+        0,
+        173
+      ],
+      [
+        0,
+        172
+      ],
+      [
+        0,
+        171
+      ],
+      [
+        0,
+        170
+      ],
+      [
+        0,
+        169
+      ]
+    ],
+    "monitor_uses_saved_red_parameters": true,
+    "monitor_saved_result": {
+      "target": "red",
+      "color": null,
+      "found": false,
+      "center": null
+    },
+    "probes": [
+      {
+        "h": [
+          12,
+          12
+        ],
+        "found": false,
+        "center": null,
+        "mask_pixels": 0
+      },
+      {
+        "h": [
+          0,
+          10
+        ],
+        "found": false,
+        "center": null,
+        "mask_pixels": 0
+      },
+      {
+        "h": [
+          170,
+          179
+        ],
+        "found": true,
+        "center": [
+          346,
+          288
+        ],
+        "mask_pixels": 19161
+      }
+    ],
+    "persisted_thresholds_modified": false
+  },
+  "web_check": "passed desktop/mobile; no writes",
+  "hardware_alignment_started": false,
+  "hardware_pick_place_started": false
+}

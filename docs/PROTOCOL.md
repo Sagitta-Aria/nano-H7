@@ -1,8 +1,36 @@
 # 串口协议 v1
 
+v0.2.29 在 `INFO` 增加 `nav_reference=1`。`NAV RESET <ox> <oy> <x> <y> <heading_cd>` 扩展建系：保留站点 0 的 O 坐标 `(ox,oy)`，将当前脉冲位置设为 `(x,y)`；首次 START 的有效实测 IMU 航向对应声明的地图朝向 `heading_cd`。坐标范围 ±1000000，角度 ±18000（百分之一度）。仅解除使能且底盘空闲时接受，参数全部校验后才修改状态；命令不产生运动或修改 IMU 零偏。STOP/START 保留地图朝向，重新 RESET 后首次 START 再采集。旧 `NAV RESET <ox> <oy>` 保持 O 点、0° 语义。X 示例为 `NAV RESET 0 0 0 28800 -18000`；NX 编排内移、转 0°、从内移位置直达 A。
+
+v0.2.28 新增 `HELLO turn_band=1 imu_pause=1`。`TURN MOVE <REL|ABS> <angle_cd> <sps> <accel> [band_cd]` 可为单次转向指定完成容差（1～1000，即 0.01～10°），省略时沿用共享容差；不修改 `TURN CONFIG`。`TURN STAT task_tolerance_cd` 回读本次容差。`TURN STAT`、`CHASSIS STAT`、`NAV STAT`、`NAV EXEC` 增加 `paused=0|1`。为满足 384 字节帧限制，`chassis_max`、`aux_max` 从 HELLO 移至 INFO，上位机合并两次回报。
+
+同一 IMU 会话的数据失效或过期，在依赖航向的任务中停车保留任务；暂停冻结运动与 NX 编排的执行预算，恢复需至少三个有效样本、跨度至少 100 ms。有限运动保留编号与剩余脉冲；NAV 挂起期间的视觉速度丢弃，恢复后重新获取图像与航向。STOP/解除使能、会话改变、通信/运动故障仍终止任务。独立手动 WHEELS 不因本能力变成依赖 IMU 的有限运动。详见 [恢复边界](RECOVERY.md)。
+
+v0.2.22 增加 NX 编排、H743 逐步执行模式：上传前先查询 `NAV EXEC`，要求 `cmd=NAV_EXEC v=1`；不支持时中止，不继续配置或 START。路线仍用 BEGIN/WP/COMMIT 校验上传，随后发送 `NAV START <path_id> HOST`，H743 在 `checkpoint` 等待，不自行执行下一动作。HELLO/NAV STAT 不新增字段，能力与动作完成状态由独立的 EXEC 回报提供。
+
+`NAV EXEC <path_id> <op_id> <kind> <x> <y> <heading_cd> <sps> <accel>` 接受一个通用动作。path_id 和 op_id 为 1～2147483647，op_id 在同一路线中严格递增；角度为 −18000～18000，速度 1～5000、加速度 1～20000。kind=0 原地转到地图角度；kind=1 保持给定航向平移到绝对 XY（可斜向，坐标 ±1000000）；kind=2 确认到站（x 为从 0 开始的路线段号、y=0，必须已到该站坐标）；kind=3 离站；kind=4 结束最后一段。0/3/4 的 x、y 均填 0。离站或结束要求已在等待状态且挂起已放行。普通动作只在轮组静止的 checkpoint 接受。
+
+成功 ACK 仅表示接受，NX 后续轮询 `NAV EXEC`，匹配 `path_id/op_id` 并确认 `active=0` 以及目标状态（普通动作 checkpoint、到站 waiting、结束 done）后才推进。回报包含 `v host path_id op_id state x y heading_cd target_cd ready imu active tolerance_cd fault`；错误为 `NAV_EXEC_NOT_READY_OR_STALE_OPERATION`。STOP、解除使能、IMU 失效/超时/换会话仍停车；v0.2.28 同会话失效/超时保留任务，换会话仍终止。迟到的旧动作不能恢复执行。
+
+内移、回位、到点是否调姿及每次访问的目标角度由 NX 配置并编排。站点缺失 `arrival_enabled` 时默认为 false；路线段可覆盖该开关和 heading，明确启用的 0°与不调姿不同。`NAV INSET` 已退役，仅查询或设置 0 返回兼容状态 `OK cmd=NAV_INSET v=1 steps=0 phase=0 retired=1`；1～100000 返回 `NAV_INSET_RANGE_OR_BUSY`，越界返回 `BAD_ARGUMENT`。新上位机不发送非零 INSET。详见 [巡航执行](NAVIGATION.md)。
+
+v0.2.21 新增独立 `MOTION STAT`（`v=1 latched total reason uncertain active armed`）和 `MOTION CLEAR`；不扩展已接近帧长上限的 HELLO。CLEAR 只接受已解除使能、全轴静止状态，保留故障历史/估计脉冲位置/范围配置，丢弃旧导航坐标及路线，不自动启动。ARM 1 在锁存时返回 `MOTION_FAULT_LATCHED`，仍运动时返回 `BUSY_OR_FAULT`。`uncertain` 是 M1～M7 对应 bit0～bit6；故障中活动的 M5/M6 必须人工恢复参考。新增 `AUX REFERENCE <5|6> <known_position>`，只允许参考丢失、无锁存、解除使能且该轴静止时确认范围内的物理位置；`AUX ZERO 5` 是恢复最高点 0 的简写，仅参考丢失时允许，原 M6 ZERO 行为保留。完整步骤见 [故障恢复](RECOVERY.md)。
+
+v0.2.20 新增 `NAV ALIGN` 独立能力探测（v=2）、`NAV NUDGE` 导航内微调与 `NAV FIX` 外部视觉确认车辆站点坐标。微调之后须确认位置才能 GO；FIX 不运动，之后直接进入下一站巡航。协议字段、限制与相机标定边界见 [自动任务](MISSION.md)。
+
+v0.2.19 把写死的五段路线改成**站点表 + 路线表**。站点携带坐标与到达姿态，编辑一次；路线是站点下标的任意序列，同一站点可以重复出现，每段各带一个挂起位。新增 `NAV STATIONS <count>`（2～32）、`NAV LEGS <count>`（1～32）、`NAV LEG <index> <station> <hold>` 和 `NAV GO <path_id> <leg>`；`NAV POINT`/`NAV ATTITUDE` 的下标上限随 `STATIONS` 变化，`NAV BEGIN` 的端点数下限由路线段数决定，`NAV WP` 的腿号上限为段数减一。计数必须先于行下发，否则板端无法校验表是否完整。
+
+`NAV STAT` 的 `target=<标签>` 改为 `station=<下标>`，并新增 `legs`、`stations`、`held`。**板端不再存站点名**，名字只在上位机配置里，所以状态回报不会和上位机的命名冲突。带挂起位的腿到点后进入等待且不走停留计时，直到收到指明该腿的 `NAV GO`；放行后停留计时重新开始。放行命令指明腿号，避免上一站点迟到的放行启动下一段。挂起期间仍然维持到达姿态。
+
+HELLO **没有**新增能力位：它的正文已经 364 字节，最坏帧 382 字节而上限 384，再加任何字段都会超长。能力检测改用 `NAV STAT` 是否回报 `stations` 字段。
+
+v0.2.19 同时补上横移里程计。原来只按四轮增量的标量和投影到航向，横移的符号组合相加为零，所以横移不计位移。现在按正交基分别点乘前进行 `{1,1,1,1}` 和左移行 `{1,-1,-1,1}`，两个分量一起转到地图坐标系；旋转行不解码，因为它需要轮距轮径，而原地旋转不产生位移。横移标定系数 `NAV_LATERAL_SCALE` 暂定 1.0，**实际比例必须现场实测**，麦轮侧移靠滚子滑动，每脉冲位移小于直行。
+
+2026-10-16 增加 `TURN CONFIG <kp_centi> <tolerance_cd> <min_sps>`，最低转向目标轮速默认200 step/s、范围1～5000；仅原地转向使用，任务最高轮速仍优先，P=0保持无输出。三项参数静止时原子应用，旧单/双参数形式保留当前最低轮速；`TURN STAT min_sps` 作为支持确认和实际值回读。MCU重启恢复默认，不写Flash。
+
 v0.2.18取消P调参范围。`TURN CONFIG <kp_centi> [tolerance_cd]` 接受 kp_centi=0～INT32_MAX，这是协议存储容量；P=0关闭航向输出，角度容差范围保持1～1000。控制乘法使用64位并在缩窄前按任务最高轮速饱和。配置仍要求底盘/控制任务静止，回报实际值，无静默截断。
 
-v0.2.17 新增 `straight=1`、`CHASSIS STRAIGHT <FWD|BACK|LEFT|RIGHT> <steps> <sps> <accel>`；起步记录新航向，行驶时共享 P/容差纠偏。CHASSIS 状态增加 `assist target_cd error_cd fault`，巡航直线自动使用同一运动底层。停止/ARM0清除待发送直线命令，IMU失效不自动续跑。详情见 [辅助直线](STRAIGHT.md)。
+v0.2.17 新增 `straight=1`、`CHASSIS STRAIGHT <FWD|BACK|LEFT|RIGHT> <steps> <sps> <accel>`；起步记录新航向，行驶时共享 P/容差纠偏。CHASSIS 状态增加 `assist target_cd error_cd fault`，巡航直线自动使用同一运动底层。停止/ARM0清除待发送直线命令，v0.2.17 当时的 IMU 失效不自动续跑；v0.2.28 同会话暂停恢复规则见上文。详情见 [辅助直线](STRAIGHT.md)。
 
 v0.2.16 新增 `turn_precision=1`，`TURN CONFIG <kp_centi> <tolerance_cd>` 原子应用共享P和角度容差；仅底盘、巡航、转角均静止时接受，P1～20000、容差1～1000，分别代表P×100、容差度数×100。返回TURN_STAT实际kp_centi/tolerance_cd；旧的单参数CONFIG保留容差。
 
@@ -33,6 +61,10 @@ v0.2.4 为 S1/S2 分别声明 270°/180° 行程；v0.2.2 新增 `SERVO`，详�
 | 正文 | 含义 | 应答示例正文 |
 |---|---|---|
 | `HELLO` | 版本、能力握手 | `OK cmd=HELLO fw=0.2.7 protocol=1 chassis=1 servo=2 ... lift=1 lift_max=8000 nav=1` |
+| `NAV STATIONS <n>` | 站点表长度 2～32，改长度会丢弃旧行但保留原点 | `OK cmd=NAV_STATIONS` |
+| `NAV LEGS <n>` | 路线段数 1～32，须先有站点表 | `OK cmd=NAV_LEGS` |
+| `NAV LEG <i> <station> <hold>` | 第 i 段去哪个站点，到点是否挂起 | `OK cmd=NAV_LEG` |
+| `NAV GO <path_id> <leg>` | 放行指定的挂起腿 | `OK cmd=NAV_GO` |
 | `PING` | 更新心跳租约 | `OK cmd=PING` |
 | `INFO` | 只读芯片与时钟信息 | `OK cmd=INFO cpu_hz=400000000 ...` |
 | `STAT` | 运行资源、LED、错误计数 | `OK cmd=STAT uptime_ms=... heap_free=...` |
@@ -57,7 +89,7 @@ v0.2.4 为 S1/S2 分别声明 270°/180° 行程；v0.2.2 新增 `SERVO`，详�
 
 抓取点：`SERVO 2 90` → `angle=90.0 us=1500`；`SERVO 2 120` → `angle=120.0 us=1833`。两者均按新版 0–180°标尺，分别对应旧 360°标尺的 180°/240°。
 
-`SERVO <通道> <角度>`：通道为 1–`servo`（当前 2，v0.2.13 起 S1=PH9 / S2=PH6）。角度是**度**，可写整数（`135`、`90`、`0`）或带一位小数（`13.5`、`135.5`）；带小数点才表示小数，`135` 永远表示 135.0 度而不是 13.5 度。S1 行程 0–270°，S2 行程 0–180°。应答回显**已写入的目标**角度与脉宽（不是舵机位置反馈），`us` 就是比较寄存器的微秒值，可直接和示波器对照。
+`SERVO <通道> <角度>`：通道为 1–`servo`（当前 2，2026-10-18 起协议通道 1=PE4 / 通道 2=PH9）。角度是**度**，可写整数（`135`、`90`、`0`）或带一位小数（`13.5`、`135.5`）；带小数点才表示小数，`135` 永远表示 135.0 度而不是 13.5 度。协议通道 1 行程 0–270°，通道 2 行程 0–180°。界面顺序保留 S1=PH9/180°、S2=PE4/270°；上位机按引脚转换通道号。应答回显**已写入的目标**角度与脉宽（不是舵机位置反馈），`us` 就是比较寄存器的微秒值，可直接和示波器对照。
 
 - 超出行程返回 `ERR code=ANGLE_RANGE`，参数写错（含通道号越界）返回 `ERR code=SERVO_BAD_ARGUMENT`；都不静默截断成邻近角度。
 - 分辨率 0.5°：脉宽表按半度步进，`90.5` 会落到 90.5°，更细的小数会被向下取整到半度。
@@ -88,3 +120,22 @@ GUI 心跳由通信线程发送，周期 250 ms。STOP 清除尚未发送的 GUI
 - `reset`：启动时捕获的 RCC_RSR 十六进制原值；`uid` 为芯片 UID 高字在前的 24 位十六进制字符串。
 
 尚未实现 CPU 占用率、温度、供电电压、传感器读数；GUI 不显示伪造的实时硬件测量值。
+# 通用导航控制权交接
+
+`NAV ALIGN` 返回 `suspend=1` 表示支持。协议与视觉目标、数字顺序、补搜方向及右移距离无关。以下命令均要求匹配当前路径 ID 和从 0 开始的段号、已使能、IMU 新鲜、四轮与转角控制器静止。
+
+- `NAV SUSPEND <path_id> <leg>`：仅允许尚未放行的 `waiting` 挂起点。切换为 `suspended`，交出四轮控制权并暂停导航航向维持。继续接收原有 CHASSIS / TURN / WHEELS 原语，内部平移暂不累计到 XY。
+- `NAV POSE <path_id> <leg> <x> <y>`：仅在 `suspended` 接收 NX 明确声明的 XY（±1000000 整数脉冲，可暂不在通道上）。消耗旧轮计数并建立新的平移积分基准，之后通用四轮平移积分反映在地图上。**不改变出发时建立的 IMU 航向基准**，不推断当前视觉目标。
+- `NAV RESTORE <path_id> <leg> <x> <y>`：仅在 `suspended` 接收 NX 验证后的通道内 XY，转为 `stopped` 并撤销旧路线。自身不运动、不使能、不自动续航；NX 必须从该坐标重新规划和上传剩余路径。
+
+成功分别返回 `OK cmd=NAV_SUSPEND`、`OK cmd=NAV_POSE`、`OK cmd=NAV_RESTORE`，状态不满足返回 `ERR code=NAV_HANDOFF_NOT_READY`。坐标是 NX 的外部定位声明，固件只验证范围、通道、身份和静止条件，不代替 NX 判断定位是否可靠。
+
+`CHASSIS HALT` 保留交接和参考，供视觉停车后继续；全局 `STOP`、`NAV STOP`、解除使能、IMU 失效/变更/过期或障碍均撤销交接，并使任务内未知位移对应的坐标无效。改变底盘轮向和导航配置在交接期间被拒绝。停止后不得沿用旧交接或旧路径恢复运动。
+
+2026-10-16 早期 `NAV WORK BEGIN/FIX/END right_steps` 版本已撤回，固件不再实现；它曾把具体任务和右移距离放入 MCU，并在 FIX 重定义地图航向。请勿烧录 `firmware/releases/ring_task_20261016` 的旧二进制。
+
+
+`SERVO DIAG <协议通道>`（v0.2.23）：只读定时器与 GPIO 的实际寄存器，不移动、不修改输出。协议通道 1=PE4/TIM15_CH1N，通道 2=PH9/TIM12_CH2。`cr1/cr2/smcr/ccmr/ccer/bdtr/gpio_clk/apb1_clk/apb2_clk` 为十六进制，其余数值为十进制。正常 PSC=199、ARR=19999、mode=2；PE4 为 af=4、ccer=4、bdtr=8000（v0.2.24 已去掉 v0.2.23 的错误反相位），PH9 为 af=2、ccer=10（v0.2.25 使用 TIM12_CH2；十六进制 0x10）。重复读取 CNT 可辅助确认定时器在运行，不能替代实际波形测量。
+
+
+v0.2.24 的 `SERVO DIAG` 同时采样选中 GPIO 的数字输入约 45 ms，不写角度、输出或中断使能。新增 `sample=1` 表示采样窗口完成；`high_us`、`period_us` 为最后一次完整高脉冲和上升沿周期，预期分别接近 CCR 值和 20000；`rise/fall` 为采到的边沿数；`levels=1/2/3` 分别表示只见低、只见高、高低都见到。`gap_us` 为最大采样间隔，越大则边沿计时误差越大；`sample=0` 或未取得边沿时不能把零脉宽当作有效测量。采样保持中断开启，短暂占用通信任务，基于已配置 CPU 时钟计时，不能测量电压幅值或代替示波器。

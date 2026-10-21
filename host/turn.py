@@ -6,6 +6,8 @@ from decimal import Decimal, InvalidOperation
 # P is transmitted in hundredths as a signed 32-bit protocol integer.
 # This is a wire-format ceiling, not an operator tuning recommendation.
 KP_WIRE_MAX = 2147483647
+# Demo in-place speed floor; mirror firmware TURN_MIN_SPS, not straight P.
+TURN_MIN_SPS = 200
 
 
 def gain_command(kp):
@@ -29,7 +31,7 @@ def gain_command(kp):
     return 'TURN CONFIG {}'.format(int(value*100))
 
 
-def tuning_command(kp, tolerance):
+def tuning_command(kp, tolerance, min_sps=None):
     """Encode shared yaw gain and completion tolerance, never round or move."""
     gain = gain_command(kp)
     if isinstance(tolerance, bool):
@@ -40,7 +42,12 @@ def tuning_command(kp, tolerance):
         raise ValueError('角度容差范围 0.01～10°，最多两位小数。') from None
     if not value.is_finite() or not Decimal('0.01') <= value <= 10 or value*100 != (value*100).to_integral_value():
         raise ValueError('角度容差范围 0.01～10°，最多两位小数。')
-    return '{} {}'.format(gain, int(value*100))
+    body = '{} {}'.format(gain, int(value*100))
+    if min_sps is not None:
+        if type(min_sps) is not int or not 1 <= min_sps <= 5000:
+            raise ValueError('最低转向轮速必须是 1～5000 的整数 step/s。')
+        body += ' {}'.format(min_sps)
+    return body
 
 
 def turn_command(mode, angle, sps, accel):

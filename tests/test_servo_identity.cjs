@@ -1,5 +1,4 @@
-/* Regression from the user's physical check: UI S1 must send wire channel 1,
-   even when HELLO's pin labels describe the opposite connector numbering. */
+/* User-confirmed connectors: UI S1=PH9/180, UI S2=PE4/270. */
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const vm=require('node:vm');
@@ -11,10 +10,10 @@ vm.runInContext(source.slice(0,source.indexOf('applyTheme(document.documentEleme
     globalThis.sent=[];
     command=async body=>{sent.push(body);return {ok:true};};
     status=()=>{};
-    state.device={servo:'2',servo1_pin:'PH9',servo2_pin:'PH6',servo1_travel:'2700',servo2_travel:'1800'};
+    state.device={servo:'2',servo1_pin:'PE4',servo2_pin:'PH9',servo1_travel:'2700',servo2_travel:'1800'};
     await sendAngle(1,'120');
     await sendAngle(2,'0');
   })()`,context);
-  assert.deepEqual(Array.from(context.sent),['SERVO 1 180','SERVO STAT','SERVO 2 0','SERVO STAT']);
-  console.log('Physical identity regression OK: S1->wire1, S2->wire2; angle scale only.');
+  assert.deepEqual(Array.from(context.sent),['SERVO 2 120','SERVO STAT','SERVO 1 0','SERVO STAT']);
+  console.log('Physical identity regression OK: S1/PH9->wire2, S2/PE4->wire1.');
 })().catch(e=>{console.error(e);process.exitCode=1;});

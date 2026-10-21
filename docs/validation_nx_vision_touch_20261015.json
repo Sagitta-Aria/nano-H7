@@ -1,0 +1,167 @@
+{
+  "screen_size": [
+    800,
+    480
+  ],
+  "camera_size": [
+    640,
+    480
+  ],
+  "panel_width": 160,
+  "compile_passed": true,
+  "touch_requests": [
+    {
+      "event": "touch_mode_requested",
+      "mode": "color"
+    },
+    {
+      "event": "touch_mode_requested",
+      "mode": "digit"
+    },
+    {
+      "event": "touch_mode_requested",
+      "mode": "color"
+    },
+    {
+      "event": "touch_mode_requested",
+      "mode": "digit"
+    },
+    {
+      "event": "touch_mode_requested",
+      "mode": "color"
+    },
+    {
+      "event": "touch_mode_requested",
+      "mode": "digit"
+    },
+    {
+      "event": "touch_mode_requested",
+      "mode": "color"
+    }
+  ],
+  "mode_changes": [
+    {
+      "event": "mode_changed",
+      "mode": "digit",
+      "ocr_loaded": true,
+      "roi_size": 360,
+      "bottom_trim": 30,
+      "grasp_offset": [
+        0,
+        30
+      ]
+    },
+    {
+      "event": "mode_changed",
+      "mode": "color",
+      "ocr_loaded": true,
+      "roi_size": 360,
+      "bottom_trim": 30,
+      "grasp_offset": [
+        0,
+        30
+      ]
+    },
+    {
+      "event": "mode_changed",
+      "mode": "digit",
+      "ocr_loaded": true,
+      "roi_size": 360,
+      "bottom_trim": 30,
+      "grasp_offset": [
+        0,
+        30
+      ]
+    },
+    {
+      "event": "mode_changed",
+      "mode": "color",
+      "ocr_loaded": true,
+      "roi_size": 360,
+      "bottom_trim": 30,
+      "grasp_offset": [
+        0,
+        30
+      ]
+    },
+    {
+      "event": "mode_changed",
+      "mode": "digit",
+      "ocr_loaded": true,
+      "roi_size": 360,
+      "bottom_trim": 30,
+      "grasp_offset": [
+        0,
+        30
+      ]
+    },
+    {
+      "event": "mode_changed",
+      "mode": "color",
+      "ocr_loaded": true,
+      "roi_size": 360,
+      "bottom_trim": 30,
+      "grasp_offset": [
+        0,
+        30
+      ]
+    },
+    {
+      "event": "mode_changed",
+      "mode": "digit",
+      "ocr_loaded": true,
+      "roi_size": 360,
+      "bottom_trim": 30,
+      "grasp_offset": [
+        0,
+        30
+      ]
+    },
+    {
+      "event": "mode_changed",
+      "mode": "color",
+      "ocr_loaded": true,
+      "roi_size": 360,
+      "bottom_trim": 30,
+      "grasp_offset": [
+        0,
+        30
+      ]
+    }
+  ],
+  "latest_frame": {
+    "mode": "color",
+    "center": null,
+    "processing_fps": 40.6,
+    "ring": false,
+    "digit": null,
+    "confidence": 0.0,
+    "ocr_ms": 0.0,
+    "color_block": null,
+    "color_ms": 7.5,
+    "ring_frames": 0,
+    "color_frames": 511,
+    "ocr_submitted": 0,
+    "roi": [
+      140,
+      60,
+      360,
+      330
+    ],
+    "grasp_point": [
+      320,
+      270
+    ],
+    "grasp_offset": [
+      0,
+      30
+    ],
+    "dx": null,
+    "dy": null,
+    "error_dx": null,
+    "error_dy": null
+  },
+  "host_service": "MainPID=1746\nActiveState=active",
+  "screenshot": "touch-start.png",
+  "note": "Real live pointer/touch event observed; no automated taps were sent. Initial sample started before GPU startup completed; no new performance conclusion."
+}

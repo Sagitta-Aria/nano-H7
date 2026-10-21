@@ -34,6 +34,72 @@ class ArmChassisTests(unittest.TestCase):
         self.arm.call("TIM8_CC_IRQHandler")
         self.arm.write32(TIM8 + 0x10, 0)
 
+    def test_motion_fault_clear_requires_idle_keeps_history_and_invalidates_pose(self):
+        self.assertFalse(self.request('MOTION CLEAR').ok,'must disarm first')
+        self.request('ARM 0');self.request('NAV RESET 0 0');self.request('ARM 1')
+        self.assertTrue(self.request('MOVE 1 100 5000 2000').ok)
+        self.arm.edge(0,late=3000)
+        self.assertEqual(self.request('MOTION STAT').fields['reason'],'step_deadline')
+        self.request('STOP')
+        self.assertEqual(self.request('ARM 1').fields['code'],'MOTION_FAULT_LATCHED')
+        self.assertTrue(self.request('MOTION CLEAR').ok)
+        f=self.request('MOTION STAT').fields
+        self.assertEqual((f['latched'],f['total'],f['reason']),('0','1','step_deadline'))
+        self.assertEqual(self.request('NAV STAT').fields['ready'],'0')
+        self.assertEqual(self.arm.call('motion_armed'),0)
+        self.assertTrue(self.request('ARM 1').ok)
+        self.assertTrue(self.request('MOVE 1 2 100 2000').ok)
+
+    def test_fault_invalidates_moving_aux_reference_without_rezeroing(self):
+        self.request('MOVE 5 100 3000 2000');self.arm.edge(4)
+        self.request('MOVE 1 100 5000 2000');self.arm.edge(0,late=3000)
+        self.assertEqual(self.request('AUX STAT 5').fields['referenced'],'0')
+        pos=self.arm.status(4)[0]
+        self.assertTrue(self.request('MOTION CLEAR').ok)
+        self.request('LIFT INIT')
+        self.assertEqual(self.arm.status(4)[0],pos)
+        self.assertEqual(self.request('AUX STAT 5').fields['referenced'],'0')
+        self.request('ARM 1')
+        self.assertFalse(self.request('MOVE 5 1 100 1000').ok)
+        self.request('ARM 0')
+        # Operator has physically restored the lift to its top before this command.
+        self.assertTrue(self.request('AUX ZERO 5').ok)
+        self.assertEqual(self.request('AUX STAT 5').fields['referenced'],'1')
+        self.assertEqual(self.arm.status(4)[0],0)
+
+    def test_motion_clear_does_not_truncate_a_stopping_high_pulse(self):
+        self.request('MOVE 1 100 100 1000');self.arm.edge(0)
+        self.request('STOP')
+        self.assertFalse(self.request('MOTION CLEAR').ok)
+        self.arm.edge(0)
+        self.assertTrue(self.request('MOTION CLEAR').ok)
+
+    def test_lost_lift_reference_can_be_restored_inside_nonzero_bounds(self):
+        self.request('MOVE 5 100 3000 2000')
+        for _ in range(40):self.arm.edge(4)
+        self.request('AUX HALT 5')
+        self.assertTrue(self.request('AUX CONFIG 5 10 100').ok)
+        self.request('MOVE 5 10 3000 2000');self.arm.edge(4,late=3000)
+        self.assertFalse(self.request('AUX REFERENCE 5 10').ok,'clear the fault first')
+        self.request('MOTION CLEAR')
+        self.assertFalse(self.request('AUX ZERO 5').ok,'zero is outside these bounds')
+        self.assertFalse(self.request('AUX REFERENCE 5 101').ok)
+        # Operator has physically placed the lift at its known 10-pulse mark.
+        self.assertTrue(self.request('AUX REFERENCE 5 10').ok)
+        self.assertEqual(self.request('AUX STAT 5').fields['pos'],'10')
+        self.assertFalse(self.request('AUX REFERENCE 5 20').ok,'healthy reference cannot be overwritten')
+
+    def test_controller_fault_clear_does_not_fabricate_fresh_imu(self):
+        self.request('NAV IMU 0 1 1')
+        self.assertTrue(self.request('TURN MOVE REL 9000 500 2000').ok)
+        self.arm.call('turn_tick',1000)
+        self.assertEqual(self.request('TURN STAT').fields['state'],'fault')
+        self.assertEqual(self.arm.call('motion_faults'),0)
+        self.request('STOP');self.assertTrue(self.request('MOTION CLEAR').ok)
+        self.assertEqual(self.request('TURN STAT').fields['state'],'stopped')
+        self.request('NAV IMU 0 0 1');self.request('ARM 1')
+        self.assertFalse(self.request('TURN MOVE REL 9000 500 2000').ok)
+
     def test_six_moves_exact_equal_steps_and_common_compare(self):
         self.assertTrue(self.request("CHASSIS CONFIG 0").ok)
         positions = [0] * 4
@@ -126,6 +192,15 @@ class ArmChassisTests(unittest.TestCase):
 
 
 class ChassisHostTests(unittest.TestCase):
+    def test_clear_discards_pending_moves_and_jog_without_arming(self):
+        worker=Connection('SIM',queue.Queue())
+        worker.set_jog('CHASSIS JOG FWD 500 2000')
+        worker.submit('ARM 1');worker.submit('MOVE 5 100 300 1000')
+        worker.submit('MOTION CLEAR')
+        self.assertIsNone(worker.current_jog())
+        self.assertEqual(worker.commands.qsize(),1)
+        self.assertEqual(worker.commands.get_nowait()[2],'MOTION CLEAR')
+
     def test_simulated_finite_moves_and_auxiliary_halt(self):
         now = [10.]
         board = SimulatedBoard(clock=lambda: now[0])

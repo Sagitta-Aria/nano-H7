@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>比赛启动</title>
+<link rel="stylesheet" href="/competition.css">
+<script src="/competition.js" defer></script>
+</head>
+<body>
+<main>
+  <p class="eyebrow">H743 · 比赛</p>
+  <h1>准备出发</h1>
+  <p id="route">O → A → B → C → D → B → C → D → O</p>
+  <button id="start" type="button" disabled>启动</button>
+  <p id="status" role="status" aria-live="polite">正在连接上位机…</p>
+  <dl><div><dt>控制板</dt><dd id="board">等待连接</dd></div><div><dt>航向</dt><dd id="heading">等待数据</dd></div><div><dt>当前位置</dt><dd id="position">—</dd></div></dl>
+  <p class="note">车辆放在调试页已保存的巡航起点：O 朝向 0°，X 位于 (0, 28800)、朝向 -180°。X 出发先内移、转至 0°，再直接走到 A。转盘为空，M5停在已建立零点的最高位置。启动时自动设置M5负方向下降，并以M6当前静止位置为零点。按启动执行两轮搬运；站点坐标、姿态和抓放参数沿用已保存值。</p>
+</main>
+</body></html>

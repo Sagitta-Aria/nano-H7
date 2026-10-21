@@ -1,0 +1,219 @@
+{
+  "date": "2026-10-15",
+  "pip_check": "No broken requirements found.",
+  "camera_capture_started": false,
+  "robot_commands_sent": false,
+  "service_restarted": false,
+  "environment": {
+    "python": "3.8.10",
+    "architecture": "aarch64",
+    "tensorrt": "8.5.2.2",
+    "backend": "native TensorRT GPU FP16",
+    "onnxruntime_cuda_provider_installed": false,
+    "cuda_runtime": 11040,
+    "cuda_driver": 11040,
+    "compute_capability_major": 7,
+    "compute_capability_minor": 2,
+    "model_sha256": "897a3ededb38fee0dae2c1ccee38241f37df202c9509e3abca02e9217c5ee615"
+  },
+  "build": {
+    "status": "PASS",
+    "tensorrt": "8.5.2.2",
+    "model_sha256": "897a3ededb38fee0dae2c1ccee38241f37df202c9509e3abca02e9217c5ee615",
+    "engine_sha256": "513db7696f30bbde03cb55d4baaac6708a2117b857dbbfc20aa39c700ad1b325",
+    "input_profile": [
+      [
+        1,
+        3,
+        48,
+        8
+      ],
+      [
+        1,
+        3,
+        48,
+        64
+      ],
+      [
+        1,
+        3,
+        48,
+        320
+      ]
+    ],
+    "precision": "FP32+FP16",
+    "build_seconds": 731.2707795599999,
+    "renamed_spatial_dimensions": true
+  },
+  "benchmark": {
+    "opencv": "4.9.0",
+    "numpy": "1.24.4",
+    "frame_size": [
+      640,
+      480
+    ],
+    "cpu_opencv_threads": 1,
+    "camera_used": false,
+    "gpu_backend": "TensorRT FP16",
+    "correctness": [
+      {
+        "expected": "1",
+        "cpu_digit": "1",
+        "gpu_digit": "1",
+        "cpu_score": 0.8735448320706686,
+        "gpu_score": 0.873116652170817
+      },
+      {
+        "expected": "2",
+        "cpu_digit": "2",
+        "gpu_digit": "2",
+        "cpu_score": 0.9746351838111877,
+        "gpu_score": 0.9761316776275635
+      },
+      {
+        "expected": "3",
+        "cpu_digit": "3",
+        "gpu_digit": "3",
+        "cpu_score": 0.9985637068748474,
+        "gpu_score": 0.9986012578010559
+      },
+      {
+        "expected": "1",
+        "cpu_digit": "1",
+        "gpu_digit": "1",
+        "cpu_score": 0.944963534673055,
+        "gpu_score": 0.9442182779312134
+      },
+      {
+        "expected": "2",
+        "cpu_digit": "2",
+        "gpu_digit": "2",
+        "cpu_score": 0.9974844455718994,
+        "gpu_score": 0.9975304007530212
+      },
+      {
+        "expected": "3",
+        "cpu_digit": "3",
+        "gpu_digit": "3",
+        "cpu_score": 0.9988106489181519,
+        "gpu_score": 0.9988536834716797
+      },
+      {
+        "expected": "1",
+        "cpu_digit": "1",
+        "gpu_digit": "1",
+        "cpu_score": 0.928981363773346,
+        "gpu_score": 0.9304273128509521
+      },
+      {
+        "expected": "2",
+        "cpu_digit": "2",
+        "gpu_digit": "2",
+        "cpu_score": 0.9968852400779724,
+        "gpu_score": 0.996959924697876
+      },
+      {
+        "expected": "3",
+        "cpu_digit": "3",
+        "gpu_digit": "3",
+        "cpu_score": 0.999790608882904,
+        "gpu_score": 0.9997960925102234
+      }
+    ],
+    "worker_thread": "PASS",
+    "dynamic_widths": "PASS",
+    "timings": {
+      "cpu_ocr": {
+        "samples": 30,
+        "mean_ms": 56.091555433310226,
+        "median_ms": 28.505267499895126,
+        "p95_ms": 159.85309365023542,
+        "max_ms": 252.3139409995565,
+        "compute_only_fps": 17.827995538275722
+      },
+      "gpu_ocr": {
+        "samples": 30,
+        "mean_ms": 13.527286500023669,
+        "median_ms": 8.690408500115154,
+        "p95_ms": 30.883590900339176,
+        "max_ms": 35.53589600051055,
+        "compute_only_fps": 73.92465591663563
+      },
+      "ring_and_crop": {
+        "samples": 30,
+        "mean_ms": 76.95678053338877,
+        "median_ms": 74.92193149982995,
+        "p95_ms": 89.53582315034508,
+        "max_ms": 97.35808099958376,
+        "compute_only_fps": 12.994306584409884
+      },
+      "cpu_sequential_pipeline": {
+        "samples": 30,
+        "mean_ms": 126.3998074333055,
+        "median_ms": 103.93395749952106,
+        "p95_ms": 200.74039680048367,
+        "max_ms": 290.2091650003058,
+        "compute_only_fps": 7.9114044578560545
+      },
+      "gpu_sequential_pipeline": {
+        "samples": 30,
+        "mean_ms": 89.97583073335893,
+        "median_ms": 84.39696300047217,
+        "p95_ms": 109.79271239998523,
+        "max_ms": 134.46886499968969,
+        "compute_only_fps": 11.114095772713389
+      }
+    },
+    "ocr_speedup": 4.1465489352363525,
+    "status": "PASS",
+    "source_sha256": {
+      "black_ring": "64dd7f72fdfe22bc18d7fdb2b50230e77ec0ab009ce02fd4833b714f8f146d42",
+      "digit_core": "a63344123ccb32b69832398567e459df9a1f6e588043b8f81a51d4636a80384e",
+      "ring_digit": "1179e5749a3a9b0c419565ff799d884c0e215e06c1d58d900c8bae5d7df38eb3"
+    }
+  },
+  "launcher": {
+    "tests": [
+      {
+        "script": "ring_digit.py",
+        "status": "PASS",
+        "stdout": "{'center': (320, 240), 'dx': 0, 'dy': 0, 'digit': '3', 'confidence': 0.999}"
+      },
+      {
+        "script": "digit_core.py",
+        "status": "PASS",
+        "stdout": "{'digit': '3', 'confidence': 0.998, 'ocr_ms': 25.6}"
+      }
+    ],
+    "camera_used": false,
+    "status": "PASS"
+  },
+  "tensor_api": {
+    "api": "TensorRT 8.5 tensor I/O",
+    "widths": [
+      8,
+      17,
+      48,
+      96,
+      320
+    ],
+    "worker_thread": "PASS",
+    "status": "PASS"
+  },
+  "video_plugins": {
+    "plugins": {
+      "nvjpegdec": true,
+      "nvvidconv": true,
+      "nvv4l2decoder": true,
+      "v4l2src": true,
+      "appsink": true
+    },
+    "generated_jpeg_hardware_decode": "video/x-raw, width=(int)640, height=(int)480, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, framerate=(fraction)30/1, format=(string)BGR"
+  },
+  "service": "MainPID=1746\nActiveState=active",
+  "files_sha256": {
+    "/home/a/vision-setup/build_nx_vision_engine.py": "a556b4c9cd6b8c04abee5726b8e154286700c5078fc8d7de49cad4e357a6103f",
+    "/home/a/vision-setup/benchmark_vision_nx.py": "d757c90a92fdfba502503830fcc5a1d12985984702bc33465ad95e98bd9226c5",
+    "/home/a/vision-env/lib/python3.8/site-packages/nx_vision_trt.py": "26b4fd9374de2d2d112a9b6f99fb7756b39b5dced251d15e6f9c6bf4c99b1116"
+  }
+}

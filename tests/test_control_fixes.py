@@ -13,15 +13,15 @@ class ArmControlFixTests(unittest.TestCase):
     request = harness.ArmChassisTests.request
     group_edge = harness.ArmChassisTests.group_edge
 
-    def test_servo_270_command_reports_ph9_and_writes_ccr2(self):
+    def test_servo_270_command_reports_pe4_and_writes_tim15_ccr1(self):
         self.arm.call('servo_init')
         fields=self.request('SERVO 1 270').fields
+        self.assertEqual(fields.get('pin'),'PE4')
+        self.assertEqual(self.arm.read32(0x40014034),2500)
+        self.assertEqual(self.arm.read32(0x40001838),1500)
+        fields=self.request('SERVO 2 180').fields
         self.assertEqual(fields.get('pin'),'PH9')
         self.assertEqual(self.arm.read32(0x40001838),2500)
-        self.assertEqual(self.arm.read32(0x40001834),1500)
-        fields=self.request('SERVO 2 180').fields
-        self.assertEqual(fields.get('pin'),'PH6')
-        self.assertEqual(self.arm.read32(0x40001834),2500)
 
     def test_idle_armed_aux_limits_take_effect_in_move_layer(self):
         self.assertTrue(self.request('AUX CONFIG 5 0 20').ok)

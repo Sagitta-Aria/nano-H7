@@ -249,8 +249,6 @@ class ImuHub:
                                 else:
                                     self._status("invalid", "传感器数据无效，检查板端状态。")
                 elapsed = now - self.last_new_sample
-                if elapsed > 3.:
-                    raise RuntimeError("H723 数据超过 3 秒未更新，连接已关闭。")
                 if elapsed > .5:
                     with self.lock:
                         self._status("stale", "H723 数据已过期，图形停止更新。")
@@ -272,12 +270,14 @@ class ImuHub:
         """Return immutable JSON data; measurements from stale links are invalid."""
         with self.lock:
             latest = dict(self.latest) if self.latest else None
-            if latest and self.state != "streaming":
+            age = max(0., time.monotonic()-self.last_new_sample)
+            if latest and (self.state != "streaming" or age >= .15):
                 latest["valid"] = False
             result = {"state": self.state, "message": self.message, "port": self.port,
                       "identity": dict(self.identity), "latest": latest,
                       "generation": self.generation, "rejected": self.rejected,
-                      "revision": self.revision}
+                      "revision": self.revision, "sample_age_ms": round(age*1000, 1) if latest else None,
+                      "navigation_valid": bool(latest and latest.get('valid') and self.identity)}
             if history:
                 result["history"] = list(self.history)
             return result
@@ -296,7 +296,9 @@ class ImuHub:
             angle = round(-point["yaw_deg"] * 100) if point else 0
             angle = (angle + 18000) % 36000 - 18000
             return {"key": key, "valid": valid, "heading_cd": angle,
-                    "epoch": max(1, self.generation)}
+                    "epoch": max(1, self.generation),
+                    "age_ms": round(max(0., time.monotonic()-self.last_new_sample)*1000, 1) if point else None,
+                    "reason": '' if valid else ('sample_timeout' if point and point.get('valid') else 'sensor_invalid')}
 
     def drain(self):
         """Batch telemetry for UI refresh; no unbounded per-sample event queue."""

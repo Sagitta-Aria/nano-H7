@@ -1,4 +1,4 @@
-"""Servo page for the Tk console: S1/PH6 180 degrees, S2/PH9 270 degrees.
+"""Servo page for the Tk console: S1/PH9 180 degrees, S2/PE4 270 degrees.
 
 The board holds the servo itself, so this page only sends an angle and mirrors
 the reported pulse. The dial is a plain canvas arc because the served angle is a
@@ -9,7 +9,7 @@ import re
 from tkinter import ttk, messagebox
 
 from .ui import BG, CARD, GREEN, INK, MUTED, FONT, NUM, MONO, ScrollArea
-from .servo_config import SERVO_LAYOUT, wire_angle, display_angle
+from .servo_config import SERVO_LAYOUT, wire_channel, display_channel, wire_angle, display_angle
 
 PRESETS = [0, 45, 90, 120, 135, 180, 225, 270]
 
@@ -27,7 +27,7 @@ class ServoPanel:
         self.selected_channel = 1
         self.device = {}
         self.frames = {}
-        self.heading = tk.StringVar(value="舵机 S1 · PH6 / TIM12_CH1 · 180°")
+        self.heading = tk.StringVar(value="舵机 S1 · PH9 / TIM12_CH2 · 180°")
         self.area = ScrollArea(parent)
         self.area.pack(fill="both", expand=True)
         self.content = self.area.content
@@ -38,7 +38,7 @@ class ServoPanel:
         ttk.Label(self.content, textvariable=self.heading,
                   font=(FONT, 12, "bold")).pack(anchor="w")
         ttk.Label(self.content,
-                  text="连接后自动定位：S1（PH6）120°，S2（PH9）0°。舵机不受“使能输出”门控，也不会被“停止全部”切断："
+                  text="连接后自动定位：S1（PH9）120°，S2（PE4）0°。舵机不受“使能输出”门控，也不会被“停止全部”切断："
                        "它是位置输出，必须持续收到脉冲才能保持位置。",
                   foreground=MUTED, wraplength=900, justify="left").pack(anchor="w", pady=(4, 10))
 
@@ -102,7 +102,7 @@ class ServoPanel:
         self.travel = self.travels[channel]
         layout = SERVO_LAYOUT[channel]
         pin, timer_channel = layout["pin"], layout["timer"]
-        self.heading.set(f"舵机 S{channel} · {pin} / TIM12_CH{timer_channel} · {self.travel:g}°")
+        self.heading.set(f"舵机 S{channel} · {pin} / {timer_channel} · {self.travel:g}°")
         for degrees, button in self.preset_buttons.items():
             button.pack_forget()
             if degrees <= self.travel and (degrees != 120 or channel == 1):
@@ -126,7 +126,7 @@ class ServoPanel:
         channel = int(self.channel.get())
         self.angle.set(text)
         self.targets[channel] = text
-        self.app.send(f"SERVO {channel} {wire_angle(self.device, channel, text)}")
+        self.app.send(f"SERVO {wire_channel(self.device, channel)} {wire_angle(self.device, channel, text)}")
 
     def send_pulse(self):
         try:
@@ -150,7 +150,7 @@ class ServoPanel:
             count = max(1, int(channels or 1))
             self.travels = {
                 ch: layout["travel"]
-                for ch, layout in SERVO_LAYOUT.items() if ch <= count
+                for ch, layout in SERVO_LAYOUT.items() if wire_channel(self.device, ch) <= count
             }
             self.selector.configure(values=tuple(str(ch) for ch in self.travels))
             if int(self.channel.get()) not in self.travels:
@@ -163,12 +163,12 @@ class ServoPanel:
                            if channels else "该固件没有舵机能力标记。")
         elif fields.get("cmd") == "SERVO_STAT" and reply.ok:
             for match in re.finditer(r"ch=(\d+) angle=([\d.]+) us=(\d+) on=(\d)", reply.body):
-                channel = int(match[1])
+                channel = display_channel(self.device, int(match[1]))
                 if channel in SERVO_LAYOUT:
                     self.frames[channel] = {"angle": display_angle(channel, match[3]), "us": match[3]}
             self.select_channel()
         elif fields.get("cmd") == "SERVO" and reply.ok:
-            channel = int(fields["ch"])
+            channel = display_channel(self.device, int(fields["ch"]))
             if channel in SERVO_LAYOUT:
                 self.frames[channel] = {"angle": display_angle(channel, fields["us"]), "us": fields["us"]}
             self.select_channel()

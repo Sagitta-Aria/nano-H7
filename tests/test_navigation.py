@@ -36,9 +36,15 @@ class ArmNavigationTests(unittest.TestCase):
         self.assertTrue(self.request('NAV RESET {} {}'.format(*points[0])).ok)
         for name, values in self.grid.items():
             self.assertTrue(self.request('NAV GRID {} {} {} {}'.format(name.upper(), *values)).ok)
+        # Counts precede rows; both tables must be complete before BEGIN.
+        self.assertTrue(self.request(f"NAV STATIONS {len(points)}").ok)
         for i, (x, y) in enumerate(points):
             self.assertTrue(self.request(f"NAV POINT {i} {x} {y}").ok)
             self.assertTrue(self.request(f"NAV ATTITUDE {i} {(attitudes or [0]*5)[i]}").ok)
+        self.route = getattr(self, "route", None) or [1, 2, 3, 4, 1]
+        self.assertTrue(self.request(f"NAV LEGS {len(self.route)}").ok)
+        for i, station in enumerate(self.route):
+            self.assertTrue(self.request(f"NAV LEG {i} {station} 0").ok)
         self.request("NAV CONFIG 500 2000 3000")
         self.request("ARM 1")
         self.assertTrue(self.request(f"NAV IMU {initial} 1 1").ok)
@@ -46,7 +52,11 @@ class ArmNavigationTests(unittest.TestCase):
     def upload(self, entries=None, start=None, ident=42):
         start = start or (int(self.nav()['x']), int(self.nav()['y']))
         config = copy.deepcopy(DEFAULT)
-        config.update(points=dict(zip('OABCD', self.points)), grid=self.grid)
+        config.update(
+            stations=[{"name": name, "x": p[0], "y": p[1], "heading": 0}
+                      for name, p in zip('OABCD', self.points)],
+            route=[{"station": s, "hold": 0} for s in getattr(self, "route", None) or [1,2,3,4,1]],
+            grid=self.grid)
         entries = entries if entries is not None else mission_waypoints(config, start)
         self.assertTrue(self.request('NAV BEGIN {} {} {} {}'.format(ident,len(entries),*start)).ok)
         for i, entry in enumerate(entries):
@@ -132,7 +142,7 @@ class ArmNavigationTests(unittest.TestCase):
             self.assertEqual(self.nav()["state"], "done" if index==4 else "turning")
 
     def test_only_cardinal_bearings_even_for_diagonal_goals(self):
-        for point, angle in [((0,10),0),((10,0),9000),((0,-10),18000),((-10,0),-9000),((10,10),0),((-10,-10),-9000)]:
+        for point, angle in [((0,10),0),((10,0),9000),((0,-10),18000),((-10,0),-9000),((10,10),0),((-10,-10),18000)]:
             self.setUp()
             self.configure([(0,0),point,(0,0),(0,0),(0,0)])
             self.start()
@@ -147,13 +157,13 @@ class ArmNavigationTests(unittest.TestCase):
             self.tick(now, feedback=False)
             self.assertEqual(self.nav()["state"], "turning")
             self.assertEqual(self.arm.call("motion_chassis_active"), 0)
-        # Samples in tolerance must be uninterrupted for 300ms.
+        # A sample outside tolerance resets the consecutive-sample confirmation.
         self.tick(260, 0)
         self.tick(360, 300)
         self.assertEqual(self.nav()["state"], "turning")
         self.assertEqual(self.align(0)["state"], "moving")
 
-    def test_stale_invalid_and_changed_source_stop_without_resume(self):
+    def test_same_source_loss_pauses_all_phases_changed_source_still_faults(self):
         for phase in ("turning", "moving", "orienting", "waiting"):
             self.setUp(); self.configure(); self.start()
             if phase != "turning":
@@ -164,14 +174,18 @@ class ArmNavigationTests(unittest.TestCase):
                 self.align(0)
             self.assertEqual(self.nav()["state"], phase)
             self.tick(self.now+300, feedback=False)
-            self.assertEqual(self.nav()["fault"], "imu_stale")
+            before = self.nav()
+            self.assertEqual((before['fault'], before['paused']), ('none', '1'))
             self.group_edge()
             self.tick(self.now+1)
-            self.assertEqual(self.nav()["state"], "fault")
-            self.assertFalse(self.arm.call("motion_chassis_active"))
+            self.assertEqual(self.nav()['paused'], '1')
+            self.tick(self.now+60); self.tick(self.now+60)
+            self.assertEqual(self.nav()['paused'], '0')
+            self.assertEqual(self.nav()['move_id'], before['move_id'])
+            self.assertEqual(self.nav()['fault'], 'none')
         self.setUp(); self.configure(); self.start()
         self.assertTrue(self.request("NAV IMU 17000 0 1").ok)
-        self.assertEqual(self.nav()["fault"], "imu_invalid")
+        self.assertEqual((self.nav()['fault'], self.nav()['paused']), ('none', '1'))
         self.setUp(); self.configure(); self.start()
         self.tick(1, epoch=2)
         self.assertEqual(self.nav()["fault"], "imu_changed")
@@ -214,15 +228,18 @@ class ArmNavigationTests(unittest.TestCase):
         self.assertEqual([self.arm.status(i)[0]-before[i] for i in range(4)], [-14,14,-14,14])
         self.assertEqual((self.nav()["x"],self.nav()["y"]), ("14","14"))
 
-    def test_deviation_stops_translation_and_auxiliary_remains_active(self):
+    def test_deviation_recovers_translation_and_auxiliary_remains_active(self):
         self.configure(); self.start(); self.align(0)
         self.request("MOVE 5 5 100 2000")
         self.group_edge()
         self.tick(self.now+1, 600)
-        self.assertEqual(self.nav()["fault"], "heading_deviation")
+        self.assertEqual(self.nav()["fault"], "none")
+        self.assertEqual(self.nav()['state'], 'turning')
         self.group_edge()
         self.assertEqual(self.arm.call("motion_chassis_active"), 0)
         self.assertTrue(self.arm.status(4)[4])
+        self.align(0)
+        self.assertEqual(self.nav()['state'], 'moving')
 
     def test_obstacle_and_explicit_stop_never_resume(self):
         self.configure(); self.start()
@@ -270,7 +287,7 @@ class ArmNavigationTests(unittest.TestCase):
     def test_late_feedback_cannot_hide_a_gap_or_reconnect_origin(self):
         self.configure(); self.start()
         self.tick(300)  # A new sample arrives before the next navigation tick.
-        self.assertEqual(self.nav()["fault"],"imu_stale")
+        self.assertEqual((self.nav()['fault'], self.nav()['paused']), ('none', '1'))
         self.request("NAV STOP")
         self.tick(301, epoch=2)
         self.assertEqual(self.nav()["ready"],"0")
@@ -351,12 +368,12 @@ class GridPlannerTests(unittest.TestCase):
         for point in ((1,1), (-1,0), (0,28001)):
             with self.assertRaises(ValueError): plan_route(point,(0,0),grid)
         legacy = copy.deepcopy(DEFAULT)
-        del legacy['grid']; del legacy['headings']
+        del legacy['grid']
         self.assertEqual(validated(legacy),DEFAULT)
         for bad in ([0,0,28000],[28000,14000,0],[0,14000],[False,14000,28000]):
             value = copy.deepcopy(DEFAULT); value['grid']['x'] = bad
             with self.assertRaises(ValueError): validated(value)
-        value = copy.deepcopy(DEFAULT); value['points']['B'] = [1,1]
+        value = copy.deepcopy(DEFAULT); value['stations'][2]['x'] = 1; value['stations'][2]['y'] = 1
         with self.assertRaises(ValueError): validated(value)
 
 
@@ -368,13 +385,13 @@ class HostNavigationTests(unittest.TestCase):
             self.assertEqual(config.snapshot(), DEFAULT)
             value = config.snapshot()
             value["grid"] = {'x': [-15, 14000, 32000], 'y': [0, 14000, 28000]}
-            value["points"]["O"] = [-15, 20]
-            value["points"]["A"] = [-15, 14000]
-            value["points"]["D"] = [32000, 17000]
+            value["stations"][0].update(x=-15, y=20)
+            value["stations"][1].update(x=-15, y=14000)
+            value["stations"][4].update(x=32000, y=17000)
             config.save(value)
             self.assertEqual(MissionConfig(path).snapshot(), value)
             original = path.read_bytes()
-            value["points"]["A"][0] = 1.5
+            value["stations"][1]["x"] = 1.5
             with self.assertRaises(ValueError):
                 config.save(value)
             self.assertEqual(path.read_bytes(), original)
@@ -388,7 +405,7 @@ class HostNavigationTests(unittest.TestCase):
             sequence += 1
             return decode(board.receive(encode(sequence, body)))
         send("NAV RESET 0 0"); send("PING"); send("ARM 1")
-        for body in MissionConfig().commands():
+        for body in MissionConfig().commands(host_control=False):
             self.assertTrue(send(body).ok, body)
         reached = []
         wait_start = None
@@ -398,7 +415,9 @@ class HostNavigationTests(unittest.TestCase):
             nav = send("NAV STAT").fields
             if nav["state"] == "waiting" and wait_start is None:
                 wait_start = now[0]
-                reached.append((nav["target"], int(nav["x"]), int(nav["y"])))
+                # The board reports a station index; names stay in host config.
+                reached.append((MissionConfig().station_name(int(nav["station"])),
+                                int(nav["x"]), int(nav["y"])))
                 self.assertFalse(any(axis["active"] for axis in board.axes[:4]))
             if nav["state"] != "waiting" and wait_start is not None:
                 self.assertGreaterEqual(now[0] - wait_start, 3.)
@@ -424,7 +443,7 @@ class HostNavigationTests(unittest.TestCase):
             worker = console.connection
             self.assertEqual(len(worker.sent), 1)
             command, tag = worker.sent[-1]
-            console._reply(command, decode(encode(1, "OK cmd=NAV_STAT ready=1 state=idle x=0 y=0")), tag)
+            console._reply(command, decode(encode(1, "OK cmd=NAV_STAT ready=1 state=idle x=0 y=0 stations=5 held=0")), tag)
             self.assertEqual(len(worker.sent), 2)
             command, tag = worker.sent[-1]
             console.submit("STOP")
@@ -437,10 +456,16 @@ class HostNavigationTests(unittest.TestCase):
         board = SimulatedBoard(clock=lambda: now[0])
         def send(sequence, body): return decode(board.receive(encode(sequence, body)))
         send(1, "NAV RESET 0 0")
-        for index in range(5): send(index + 2, f"NAV POINT {index} 0 0")
+        send(2, "NAV STATIONS 5")
+        for index in range(5): send(index + 3, f"NAV POINT {index} 0 0")
+        for index in range(5): send(index + 8, f"NAV ATTITUDE {index} 0")
+        send(13, "NAV LEGS 5")
+        for index, station in enumerate((1, 2, 3, 4, 1)):
+            send(14 + index, f"NAV LEG {index} {station} 0")
         send(10, "PING"); send(11, "ARM 1")
         config = copy.deepcopy(DEFAULT)
-        config['points'] = dict.fromkeys('OABCD', [0,0])
+        config['stations'] = [{"name": name, "x": 0, "y": 0, "heading": 0}
+                              for name in "OABCD"]
         entries = mission_waypoints(config, (0,0))
         send(100, "NAV BEGIN 1 5 0 0")
         for i, entry in enumerate(entries): send(101+i, "NAV WP 1 {} {} {} {}".format(i,*entry))
@@ -502,16 +527,25 @@ class HeadingBridgeTests(unittest.TestCase):
         self.assertEqual(sent[-1],"NAV IMU -9000 1 4")
 
     def test_configuration_legacy_migration_decimal_angles_and_rejections(self):
-        legacy = copy.deepcopy(DEFAULT); del legacy["headings"]
-        self.assertEqual(validated(legacy)["headings"],dict.fromkeys("OABCD",0))
-        value=copy.deepcopy(DEFAULT); value["headings"]["B"]=-90.25
+        # The deployed pre-station file must still load and mean the same route.
+        legacy = {"points": {"O":[0,0],"A":[0,14000],"B":[14000,0],
+                             "C":[14000,28000],"D":[28000,14000]},
+                  "headings": {"O":0,"A":0,"B":0,"C":0,"D":0},
+                  "grid": {"x":[0,14000,28000],"y":[0,14000,28000]},
+                  "sps":500,"accel":2000,"dwell_ms":3000}
+        expected=copy.deepcopy(DEFAULT)
+        for station in expected['stations']:station['arrival_enabled']=False
+        self.assertEqual(validated(legacy),expected)
+        del legacy["headings"]
+        self.assertEqual([s["heading"] for s in validated(legacy)["stations"]], [0]*5)
+        value=copy.deepcopy(DEFAULT); value["stations"][2]["heading"]=-90.25
         with tempfile.TemporaryDirectory() as directory:
             mission=MissionConfig(Path(directory)/"nav.json"); mission.save(value)
             self.assertIn("NAV ATTITUDE 2 -9025",mission.commands())
         for bad in (True,181,-181,float("nan"),90.123):
-            value["headings"]["B"]=bad
+            value["stations"][2]["heading"]=bad
             with self.assertRaises(ValueError): validated(value)
-        value=copy.deepcopy(DEFAULT); value["headings"]["O"]=1
+        value=copy.deepcopy(DEFAULT); value["stations"][0]["heading"]=1
         with self.assertRaises(ValueError): validated(value)
 
     def test_real_start_rejects_missing_imu_and_legacy_firmware(self):

@@ -1,0 +1,148 @@
+{
+  "backup": "/home/a/h743/backups/qr_search_20261017_180832",
+  "config_hashes": {
+    "device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699",
+    "auxiliary.json": "8ba910fb3e7bba676f3c4c0097a2c90f3b685a46dfd968d9a762c9c1b9480fba",
+    "navigation.json": "862d4134227ad64dae088d0adc8cc6a8ebe23ddd4ae7f21be175500e242946f1",
+    "camera_alignment.json": "48348200dd774edd4b0f136c15b974c068d4e970746fc004f42684ae407586a7",
+    "cameras.json": "2ad6be879693aa2ca1556ef968328ac434b65b24e1cf7ab4448ee61005e5d56d"
+  },
+  "service": "MainPID=18439\nActiveState=active\n",
+  "robot": {
+    "armed": false,
+    "link": "connected",
+    "axes": {
+      "1": {
+        "cmd": "AXIS",
+        "axis": "1",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "2": {
+        "cmd": "AXIS",
+        "axis": "2",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "3": {
+        "cmd": "AXIS",
+        "axis": "3",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "4": {
+        "cmd": "AXIS",
+        "axis": "4",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      }
+    },
+    "task": {
+      "state": "idle",
+      "active": false,
+      "error": "",
+      "run_id": "",
+      "leg": 0,
+      "action": 1,
+      "request": null,
+      "scans": {},
+      "ring_task": null,
+      "task_plan": null,
+      "qr_status": "",
+      "uses_task_code": false,
+      "qr_search": null
+    }
+  },
+  "camera1": {
+    "state": "idle",
+    "message": "Nano 摄像头已关闭，设备已释放。"
+  },
+  "camera2": {
+    "state": "ready",
+    "message": "Nano 摄像头已打开，点击“拍照”获取一帧。",
+    "device": "/dev/video0",
+    "label": "Integrated Camera: Integrated C",
+    "requested": "1280x720",
+    "width": 1280,
+    "height": 720,
+    "fps": 60.0,
+    "sequence": 0,
+    "qr": {
+      "status": "located",
+      "text": "",
+      "code": null,
+      "groups": [],
+      "digits": [],
+      "captured_at": 1792231886.2430506,
+      "task_plan": null,
+      "task_error": "",
+      "last_code": null,
+      "last_seen_at": null,
+      "last_plan": null,
+      "frame_id": 1,
+      "processing_ms": 478.0
+    }
+  },
+  "config_hashes_after": {
+    "device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699",
+    "auxiliary.json": "8ba910fb3e7bba676f3c4c0097a2c90f3b685a46dfd968d9a762c9c1b9480fba",
+    "navigation.json": "862d4134227ad64dae088d0adc8cc6a8ebe23ddd4ae7f21be175500e242946f1",
+    "camera_alignment.json": "48348200dd774edd4b0f136c15b974c068d4e970746fc004f42684ae407586a7",
+    "cameras.json": "2ad6be879693aa2ca1556ef968328ac434b65b24e1cf7ab4448ee61005e5d56d"
+  },
+  "search_parameters": {
+    "speed_steps_per_s": 2500,
+    "range_steps": 3200,
+    "step": 800,
+    "sweep": [
+      0,
+      -3200,
+      3200,
+      0
+    ],
+    "dwell_s": 1.5,
+    "return_to_A_before_cruise": true
+  },
+  "physical_search_started": false,
+  "validation": {
+    "local_regression_tests": 68,
+    "search_tests": 7,
+    "nx_tests": 298,
+    "nx_skipped": 1,
+    "pty_stages": 3,
+    "manifest_files_matched": 82
+  },
+  "browser": {
+    "checks": [
+      {
+        "width": 1440,
+        "rows": 6
+      },
+      {
+        "width": 760,
+        "rows": 6
+      },
+      {
+        "width": 390,
+        "rows": 6
+      }
+    ],
+    "errors": [],
+    "blocked": [
+      "http://192.168.55.1:8770/api/session/heartbeat"
+    ],
+    "fixture_code": "156+231+516+123"
+  }
+}

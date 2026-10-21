@@ -1,0 +1,63 @@
+{
+  "date": "2026-10-18",
+  "backup": "/home/a/h743/backups/material_flow_20261018_210201",
+  "service": "MainPID=6482\nActiveState=active\n",
+  "files_verified": 22,
+  "configurations_unchanged": true,
+  "config_hashes": {
+    "device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699",
+    "control_settings.json": "b50856d715c2bbb9be32415b69f8ee2c240b1ab431871fa8f086d4dd4b556970",
+    "auxiliary.json": "ad800cc3d7d6bd3240ef49d7f584905ea651e424a5c74c127167595c78f56445",
+    "navigation.json": "3cef35975029af77f41d1af4bacf6eee7ca0a3df96c39dc76b116da28de132f5",
+    "camera_alignment.json": "3749ced9734d6902f57154807c00d796e6b6c601c7f9b10591a0633aba7ec9b9",
+    "pick_place.json": "5a8b5b23ed62a8de4a91243228cb5bdfd136c4107bff9dc3cd3cca2e015cae64",
+    "cameras.json": "2ad6be879693aa2ca1556ef968328ac434b65b24e1cf7ab4448ee61005e5d56d"
+  },
+  "remote_validation": {
+    "returncode": 0,
+    "geometry": "----------------------------------------------------------------------\nRan 5 tests in 0.754s\n\nOK\n",
+    "pty": "PTY slave offered to the agent: /dev/pts/1\n\n=== handshake + link rehearsal ===\n[exit 0]\nhandshake protocol=1               PASS \nINFO readable                      PASS cpu=400000000\nLED write acknowledged             PASS OK cmd=LED led=1\nLED off acknowledged               PASS \nARM granted after heartbeat        PASS OK cmd=ARM armed=1\ncontinuous polling                 PASS 16 polls, 0 failures\nboard recorded no lease timeout    PASS timeout=0\nerror counters clean               PASS bad=0 rx_err=0\nSTOP disarms                       PASS \n\n9/9 checks passed in 4.2s on /dev/pts/1\n{\"port\": \"/dev/pts/1\", \"passed\": 9, \"total\": 9}\n\n=== idempotent requests on a live link ===\n[exit 0]\nconnected: /dev/pts/1\nHELLO: OK cmd=HELLO fw=0.2.27 protocol=1 board=SIMULATOR led_mask=3 red=fixed chassis_max=5000 aux_max=3000 chassis=1 servo=2 servo_travel=2700 servo1_travel=2700 servo2_travel=1800 serial=dual lift=1 lift_max=8000 nav=1 nav_heading=1 nav_grid=1 nav_path=1 turn=1 aux_control=1 flow=1 servo1_pin=PE4 servo2_pin=PH9 turn_tuning=1 aux_live=1 turn_precision=1 straight=1\nHELLO                                    seq=1641661508 OK cmd=HELLO fw=0.2.27 protocol=1 board=SIMULATOR led_mask=3 red=fixed chassis_max=5000 aux_max=3000 chassis=1 servo=2 servo_travel=2700 servo1_travel=2700 servo2_travel=1800 serial=dual lift=1 lift_max=8000 nav=1 nav_heading=1 nav_grid=1 nav_path=1 turn=1 aux_control=1 flow=1 servo1_pin=PE4 servo2_pin=PH9 turn_tuning=1 aux_live=1 turn_precision=1 straight=1\nPING                                     seq=1641661509 OK cmd=PING\nINFO                                     seq=1641661510 OK cmd=INFO cpu_hz=400000000 apb_hz=100000000 timer_hz=200000000 flash_kb=2048 uid=SIMULATED reset=0x00000000 rtos=11.2.0 baud=115200\nSTAT                                     seq=1641661511 OK cmd=STAT uptime_ms=5089 heap_free=37000 heap_min=37000 tasks=4 stack_comm=4096 stack_motion=1700 stack_super=1700 led=0 armed=0 rx=1566 rx_err=0 tx_err=0 bad=0 replay=12 timeout=0 motion_fault=0\nAXIS 5                                   seq=1641661512 OK cmd=AXIS axis=5 pos=0 sps=0 remaining=0 active=0 move_id=0\nCHASSIS STAT                             seq=1641661513 OK cmd=CHASSIS_STAT state=stopped direction=FWD move_id=0 total=0 remaining=0 active=0 invert=5 assist=0 target_cd=0 error_cd=0 fault=none\n\n=== lease watchdog ===\n[exit 0]\n{\"port\": \"/dev/pts/1\", \"connected\": true, \"hello\": \"OK cmd=HELLO fw=0.2.27 protocol=1 board=SIMULATOR led_mask=3 red=fixed chassis_max=5000 aux_max=3000 chassis=1 servo=2 servo_travel=2700 servo1_travel=2700 servo2_travel=1800 serial=dual lift=1 lift_max=8000 nav=1 nav_heading=1 nav_grid=1 nav_path=1 turn=1 aux_control=1 flow=1 servo1_pin=PE4 servo2_pin=PH9 turn_tuning=1 aux_live=1 turn_precision=1 straight=1\"}\n{\"seconds\": 4.03, \"reconnects\": 0, \"stat_failures\": 0, \"alive\": true, \"board_timeouts\": \"0\", \"bad\": \"0\", \"rx_err\": \"0\", \"armed\": \"0\"}\n\n---\nall 3 stages passed over a real pty-backed serial device (/dev/pts/1)\n",
+    "previous": {
+      "returncode": 1,
+      "output": "======================================================================\nERROR: test_same_frame_distinct_rings_and_concentric_rejection (tests.test_ring_sequence.GeometryTests)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/a/h743/backups/material_flow_20261018_210201/sandbox/tests/test_ring_sequence.py\", line 75, in test_same_frame_distinct_rings_and_concentric_rejection\n    one = detect(image.copy(), config, 1.)\n  File \"/home/a/h743/backups/material_flow_20261018_210201/sandbox/host/camera_vision.py\", line 138, in detect\n    rings = find_rings(frame, config['black_max'], config['min_area'])\n  File \"/home/a/h743/backups/material_flow_20261018_210201/sandbox/host/ring_perception.py\", line 17, in find_rings\n    module = importlib.import_module('工创赛视觉识别.黑色圆环识别与数字识别.black_ring')\n  File \"/usr/lib/python3.8/importlib/__init__.py\", line 127, in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n  File \"<frozen importlib._bootstrap>\", line 1014, in _gcd_import\n  File \"<frozen importlib._bootstrap>\", line 991, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 961, in _find_and_load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 219, in _call_with_frames_removed\n  File \"<frozen importlib._bootstrap>\", line 1014, in _gcd_import\n  File \"<frozen importlib._bootstrap>\", line 991, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 961, in _find_and_load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 219, in _call_with_frames_removed\n  File \"<frozen importlib._bootstrap>\", line 1014, in _gcd_import\n  File \"<frozen importlib._bootstrap>\", line 991, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 973, in _find_and_load_unlocked\nModuleNotFoundError: No module named '工创赛视觉识别'\n\n----------------------------------------------------------------------\nRan 40 tests in 42.566s\n\nFAILED (errors=1)\n",
+      "initial": {
+        "returncode": 1,
+        "output": "======================================================================\nERROR: test_same_frame_distinct_rings_and_concentric_rejection (tests.test_ring_sequence.GeometryTests)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/a/h743/backups/material_flow_20261018_210201/sandbox/tests/test_ring_sequence.py\", line 71, in test_same_frame_distinct_rings_and_concentric_rejection\n    config = copy.deepcopy(DEFAULT); config['kind'] = 'ring'; config['detector']['ring']['min_area'] = 500\nKeyError: 'detector'\n\n----------------------------------------------------------------------\nRan 145 tests in 90.334s\n\nFAILED (errors=1)\nrace arrival -> done (simulation): 0.000s\nring position -> next motion (simulation): 0.050s\nshort serial reply timeout padding: 0.000s\n"
+      },
+      "fixture_adjustment": "Retained deployed ring vision test contract; local detector schema is an unrelated undeployed change."
+    },
+    "runtime_vision_reused": true
+  },
+  "browser": {
+    "layouts": [
+      {
+        "width": 1440,
+        "overflow": false
+      },
+      {
+        "width": 390,
+        "overflow": false
+      }
+    ],
+    "errors": [],
+    "motion_requests_sent": 0,
+    "full_flow_entries": true
+  },
+  "field_checks": {
+    "m5_down_sign": 0,
+    "m6_referenced": false,
+    "route_issue": {
+      "station": "D",
+      "right_steps": 800,
+      "exit": [
+        28000,
+        13400
+      ],
+      "on_grid": false
+    },
+    "parameters_preserved": true
+  },
+  "firmware_flashed": false,
+  "physical_mission_started": false,
+  "remote_vision_and_unrelated_UI_preserved": true
+}

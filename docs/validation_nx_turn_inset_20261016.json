@@ -1,0 +1,134 @@
+{
+  "backup": "/home/a/h743/backups/turn_inset_20261016_185542",
+  "changed": [
+    "host/navigation.py",
+    "host/navigation_sim.py",
+    "host/turn.py",
+    "host/turn_sim.py",
+    "host/static/index.html",
+    "host/static/app.js"
+  ],
+  "settings_sha256": {
+    "host/auxiliary.json": "8ba910fb3e7bba676f3c4c0097a2c90f3b685a46dfd968d9a762c9c1b9480fba",
+    "host/camera_alignment.json": "48348200dd774edd4b0f136c15b974c068d4e970746fc004f42684ae407586a7",
+    "host/device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699",
+    "host/navigation.json": "5966db5739fe11883c09a424a56b2f79836166aed0e3895a0b8559cc12b791c4"
+  },
+  "link": "connected",
+  "armed": false,
+  "ttyUSB": [
+    "/dev/ttyUSB0"
+  ],
+  "ttyACM": [
+    "/dev/ttyACM0"
+  ],
+  "service": "MainPID=1796\nActiveState=active\n",
+  "after": {
+    "service": "MainPID=6509\nActiveState=active\n",
+    "link": "connected",
+    "port": "/dev/ttyUSB0",
+    "armed": false,
+    "device": {
+      "fw": "0.2.21",
+      "protocol": "1",
+      "board": "H743_CB_V1.5",
+      "led_mask": "3",
+      "red": "fixed",
+      "chassis_max": "5000",
+      "aux_max": "3000",
+      "chassis": "1",
+      "servo": "2",
+      "servo_travel": "2700",
+      "servo1_travel": "2700",
+      "servo2_travel": "1800",
+      "serial": "dual",
+      "lift": "1",
+      "lift_max": "8000",
+      "nav": "1",
+      "nav_heading": "1",
+      "nav_grid": "1",
+      "nav_path": "1",
+      "turn": "1",
+      "aux_control": "1",
+      "flow": "1",
+      "servo1_pin": "PH9",
+      "servo2_pin": "PH6",
+      "turn_tuning": "1",
+      "aux_live": "1",
+      "turn_precision": "1",
+      "straight": "1",
+      "cpu_hz": "400000000",
+      "apb_hz": "100000000",
+      "timer_hz": "200000000",
+      "flash_kb": "2048",
+      "uid": "3637333530335109002A003A",
+      "reset": "0x00FE0000",
+      "rtos": "11.2.0",
+      "baud": "115200",
+      "stat": {
+        "cmd": "STAT",
+        "uptime_ms": "234825",
+        "heap_free": "37488",
+        "heap_min": "37488",
+        "tasks": "4",
+        "stack_comm": "5224",
+        "stack_motion": "1928",
+        "stack_super": "1960",
+        "led": "0",
+        "armed": "0",
+        "rx": "311743",
+        "rx_err": "0",
+        "tx_err": "0",
+        "bad": "0",
+        "replay": "3",
+        "timeout": "0",
+        "motion_fault": "0"
+      }
+    },
+    "imu": {
+      "state": "streaming",
+      "port": "/dev/ttyACM0",
+      "connected": null,
+      "error": null
+    },
+    "navigation": {},
+    "task": {
+      "state": "idle",
+      "active": false
+    },
+    "camera_alignment": {
+      "state": "idle",
+      "active": false
+    },
+    "inset": {
+      "turn_inset_enabled": false,
+      "turn_inset_steps": 1000
+    },
+    "controls_present": true,
+    "script_present": true,
+    "settings_unchanged": true,
+    "settings_sha256": {
+      "host/auxiliary.json": "8ba910fb3e7bba676f3c4c0097a2c90f3b685a46dfd968d9a762c9c1b9480fba",
+      "host/camera_alignment.json": "48348200dd774edd4b0f136c15b974c068d4e970746fc004f42684ae407586a7",
+      "host/device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699",
+      "host/navigation.json": "5966db5739fe11883c09a424a56b2f79836166aed0e3895a0b8559cc12b791c4"
+    }
+  },
+  "tests": {
+    "nx_unittest": 262,
+    "inset_tests": 4,
+    "pty_stages": 3,
+    "pty_handshake_checks": 9
+  },
+  "firmware": "User reports firmware flashed; no flashing performed by deployment.",
+  "completed_at": "2026-10-16T18:59:33.124675+08:00",
+  "url": "http://192.168.1.197:8770/",
+  "browser": {
+    "engine": "Edge headless",
+    "read_only": true,
+    "inset_visible": true,
+    "inset_enabled": false,
+    "inset_steps": 1000,
+    "page_errors": []
+  }
+}

@@ -1,0 +1,112 @@
+{
+  "passed": true,
+  "grasp_point": [
+    320,
+    270
+  ],
+  "grasp_offset": [
+    0,
+    30
+  ],
+  "roi": [
+    140,
+    60,
+    360,
+    330
+  ],
+  "cases": [
+    {
+      "name": "aligned",
+      "center": [
+        320,
+        270
+      ],
+      "metrics": {
+        "grasp_point": [
+          320,
+          270
+        ],
+        "grasp_offset": [
+          0,
+          30
+        ],
+        "dx": 0,
+        "dy": 30,
+        "error_dx": 0,
+        "error_dy": 0
+      },
+      "passed": true
+    },
+    {
+      "name": "camera-center",
+      "center": [
+        320,
+        240
+      ],
+      "metrics": {
+        "grasp_point": [
+          320,
+          270
+        ],
+        "grasp_offset": [
+          0,
+          30
+        ],
+        "dx": 0,
+        "dy": 0,
+        "error_dx": 0,
+        "error_dy": -30
+      },
+      "passed": true
+    },
+    {
+      "name": "right-down",
+      "center": [
+        333,
+        273
+      ],
+      "metrics": {
+        "grasp_point": [
+          320,
+          270
+        ],
+        "grasp_offset": [
+          0,
+          30
+        ],
+        "dx": 13,
+        "dy": 33,
+        "error_dx": 13,
+        "error_dy": 3
+      },
+      "passed": true
+    },
+    {
+      "name": "left-up",
+      "center": [
+        310,
+        260
+      ],
+      "metrics": {
+        "grasp_point": [
+          320,
+          270
+        ],
+        "grasp_offset": [
+          0,
+          30
+        ],
+        "dx": -10,
+        "dy": 20,
+        "error_dx": -10,
+        "error_dy": -10
+      },
+      "passed": true
+    }
+  ],
+  "missing_target_errors": null,
+  "smaller_frame_point": [
+    160,
+    150
+  ]
+}

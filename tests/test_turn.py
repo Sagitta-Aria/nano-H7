@@ -86,7 +86,7 @@ class ArmTurnTests(unittest.TestCase):
         self.group_edge()
         self.assertEqual([self.arm.status(i)[0] for i in range(4)], [0]*4)
 
-    def test_feedback_timeout_invalid_and_epoch_change_never_resume(self):
+    def test_same_epoch_loss_pauses_but_changed_epoch_never_resumes(self):
         for mode, reason in (("stale", "imu_stale"), ("invalid", "imu_invalid"), ("epoch", "imu_changed")):
             self.setUp(); self.feed(0, 0)
             self.request("TURN ZERO")
@@ -97,6 +97,14 @@ class ArmTurnTests(unittest.TestCase):
             else:
                 self.feed(2, 0, valid=0 if mode == "invalid" else 1, epoch=2 if mode == "epoch" else 1)
             status = self.request("TURN STAT").fields
+            if mode != 'epoch':
+                self.assertEqual((status['state'], status['fault'], status['paused']), ('turning', 'none', '1'))
+                self.feed(302, 0)
+                self.assertEqual(self.request('TURN STAT').fields['paused'], '1')
+                self.feed(362, 0); self.feed(422, 0)
+                self.assertEqual(self.request('TURN STAT').fields['paused'], '0')
+                self.assertTrue(self.arm.call('turn_busy'))
+                continue
             self.assertEqual((status["state"], status["fault"]), ("fault", reason))
             self.feed(302, 0, epoch=2 if mode == "epoch" else 1)
             self.assertEqual(self.arm.call("turn_busy"), 0)
@@ -168,9 +176,18 @@ class ArmTurnTests(unittest.TestCase):
         from host.navigation import DEFAULT, mission_waypoints, path_checksum
         import copy
         config = copy.deepcopy(DEFAULT)
-        config.update(points=dict(zip('OABCD', ((123,456),(123,466),(133,456),(133,476),(143,466)))),
+        coords = ((123,456),(123,466),(133,456),(133,476),(143,466))
+        config.update(stations=[{"name": n, "x": c[0], "y": c[1], "heading": 0}
+                                for n, c in zip('OABCD', coords)],
                       grid={'x':[123,133,143], 'y':[456,466,476]})
         entries = mission_waypoints(config, (123,456))
+        self.assertTrue(self.request('NAV STATIONS 5').ok)
+        for i, (x, y) in enumerate(coords):
+            self.assertTrue(self.request('NAV POINT {} {} {}'.format(i, x, y)).ok)
+            self.assertTrue(self.request('NAV ATTITUDE {} 0'.format(i)).ok)
+        self.assertTrue(self.request('NAV LEGS 5').ok)
+        for i, station in enumerate((1,2,3,4,1)):
+            self.assertTrue(self.request('NAV LEG {} {} 0'.format(i, station)).ok)
         self.request('NAV BEGIN 1 {} 123 456'.format(len(entries)))
         for i, entry in enumerate(entries): self.request('NAV WP 1 {} {} {} {}'.format(i,*entry))
         self.assertTrue(self.request('NAV COMMIT 1 {}'.format(path_checksum(entries))).ok)
@@ -267,9 +284,10 @@ class TurnTkTests(unittest.TestCase):
             panel.angle.set("90.001"); app.send.reset_mock(); panel.action("start"); app.send.assert_not_called()
             panel.action("stop"); app.send.assert_called_with("TURN STOP")
             panel.reply('HELLO', Reply(3,'OK cmd=HELLO turn=1 turn_tuning=1 turn_precision=1'))
+            panel.reply('TURN STAT', Reply(4,'OK cmd=TURN_STAT state=idle min_sps=200'))
             panel.kp.set('80'); panel.tolerance.set('0.50'); panel.action('configure')
-            app.send.assert_called_with('TURN CONFIG 8000 50')
-            panel.reply('TURN CONFIG 8000 50', Reply(4,'OK cmd=TURN_STAT state=idle kp_centi=8000 tolerance_cd=50'))
+            app.send.assert_called_with('TURN CONFIG 8000 50 200')
+            panel.reply('TURN CONFIG 8000 50 200', Reply(5,'OK cmd=TURN_STAT state=idle kp_centi=8000 tolerance_cd=50 min_sps=200'))
             self.assertIn('±0.50°',panel.status.get())
         finally:
             root.destroy()

@@ -1,0 +1,640 @@
+{
+  "pid": 11541,
+  "framesize": [
+    640,
+    480
+  ],
+  "log": "/home/a/vision-live/ring_digit/live-current.log",
+  "fps_samples": [
+    {
+      "processing_fps": 26.5,
+      "ocr_ms": 36.8,
+      "ring": true,
+      "digit": "1",
+      "confidence": 0.741
+    },
+    {
+      "processing_fps": 24.1,
+      "ocr_ms": 31.0,
+      "ring": true,
+      "digit": "1",
+      "confidence": 0.779
+    },
+    {
+      "processing_fps": 24.6,
+      "ocr_ms": 29.8,
+      "ring": true,
+      "digit": "1",
+      "confidence": 0.744
+    },
+    {
+      "processing_fps": 24.8,
+      "ocr_ms": 27.5,
+      "ring": true,
+      "digit": "1",
+      "confidence": 0.662
+    },
+    {
+      "processing_fps": 24.8,
+      "ocr_ms": 30.0,
+      "ring": true,
+      "digit": "1",
+      "confidence": 0.697
+    },
+    {
+      "processing_fps": 24.8,
+      "ocr_ms": 35.5,
+      "ring": true,
+      "digit": "1",
+      "confidence": 0.716
+    },
+    {
+      "processing_fps": 24.7,
+      "ocr_ms": 29.8,
+      "ring": true,
+      "digit": "1",
+      "confidence": 0.747
+    },
+    {
+      "processing_fps": 24.7,
+      "ocr_ms": 27.5,
+      "ring": true,
+      "digit": "1",
+      "confidence": 0.73
+    },
+    {
+      "processing_fps": 24.3,
+      "ocr_ms": 32.2,
+      "ring": true,
+      "digit": "1",
+      "confidence": 0.733
+    },
+    {
+      "processing_fps": 24.7,
+      "ocr_ms": 31.0,
+      "ring": true,
+      "digit": "1",
+      "confidence": 0.764
+    },
+    {
+      "processing_fps": 23.8,
+      "ocr_ms": 29.0,
+      "ring": true,
+      "digit": "1",
+      "confidence": 0.732
+    },
+    {
+      "processing_fps": 24.4,
+      "ocr_ms": 30.0,
+      "ring": true,
+      "digit": "1",
+      "confidence": 0.711
+    },
+    {
+      "processing_fps": 24.8,
+      "ocr_ms": 30.5,
+      "ring": true,
+      "digit": "1",
+      "confidence": 0.762
+    },
+    {
+      "processing_fps": 24.7,
+      "ocr_ms": 34.5,
+      "ring": true,
+      "digit": "1",
+      "confidence": 0.724
+    },
+    {
+      "processing_fps": 24.1,
+      "ocr_ms": 27.5,
+      "ring": true,
+      "digit": "1",
+      "confidence": 0.736
+    },
+    {
+      "processing_fps": 24.9,
+      "ocr_ms": 31.0,
+      "ring": true,
+      "digit": "1",
+      "confidence": 0.748
+    }
+  ],
+  "median_live_fps": 24.7,
+  "recent_reports": 60,
+  "recent_digit_1": 60,
+  "confidence": {
+    "min": 0.658,
+    "median": 0.7075,
+    "max": 0.776
+  },
+  "baseline": {
+    "backend": "original",
+    "passed": false,
+    "cases": [
+      {
+        "name": "font-0-digit-1",
+        "expected": "1",
+        "actual": null,
+        "score": 0.0,
+        "passed": false,
+        "ring": true,
+        "median_ms": {
+          "ring": 54.36,
+          "crop": 21.19,
+          "ocr": 11.0,
+          "total": 85.76
+        }
+      },
+      {
+        "name": "font-0-digit-2",
+        "expected": "2",
+        "actual": "2",
+        "score": 0.992,
+        "passed": true,
+        "ring": true,
+        "median_ms": {
+          "ring": 56.09,
+          "crop": 19.13,
+          "ocr": 10.56,
+          "total": 85.55
+        }
+      },
+      {
+        "name": "font-0-digit-3",
+        "expected": "3",
+        "actual": "3",
+        "score": 0.996,
+        "passed": true,
+        "ring": true,
+        "median_ms": {
+          "ring": 55.66,
+          "crop": 19.03,
+          "ocr": 11.86,
+          "total": 87.47
+        }
+      },
+      {
+        "name": "font-2-digit-1",
+        "expected": "1",
+        "actual": null,
+        "score": 0.0,
+        "passed": false,
+        "ring": true,
+        "median_ms": {
+          "ring": 53.78,
+          "crop": 18.81,
+          "ocr": 10.84,
+          "total": 83.58
+        }
+      },
+      {
+        "name": "font-2-digit-2",
+        "expected": "2",
+        "actual": "2",
+        "score": 0.993,
+        "passed": true,
+        "ring": true,
+        "median_ms": {
+          "ring": 53.57,
+          "crop": 19.12,
+          "ocr": 10.6,
+          "total": 83.14
+        }
+      },
+      {
+        "name": "font-2-digit-3",
+        "expected": "3",
+        "actual": "3",
+        "score": 1.0,
+        "passed": true,
+        "ring": true,
+        "median_ms": {
+          "ring": 53.21,
+          "crop": 19.09,
+          "ocr": 8.47,
+          "total": 81.11
+        }
+      },
+      {
+        "name": "font-4-digit-1",
+        "expected": "1",
+        "actual": "1",
+        "score": 0.735,
+        "passed": true,
+        "ring": true,
+        "median_ms": {
+          "ring": 52.97,
+          "crop": 19.1,
+          "ocr": 8.23,
+          "total": 80.4
+        }
+      },
+      {
+        "name": "font-4-digit-2",
+        "expected": "2",
+        "actual": "2",
+        "score": 0.996,
+        "passed": true,
+        "ring": true,
+        "median_ms": {
+          "ring": 54.28,
+          "crop": 19.2,
+          "ocr": 8.29,
+          "total": 81.76
+        }
+      },
+      {
+        "name": "font-4-digit-3",
+        "expected": "3",
+        "actual": "3",
+        "score": 0.999,
+        "passed": true,
+        "ring": true,
+        "median_ms": {
+          "ring": 53.69,
+          "crop": 19.31,
+          "ocr": 8.4,
+          "total": 81.52
+        }
+      },
+      {
+        "name": "blank",
+        "expected": null,
+        "actual": null,
+        "score": 0.0,
+        "passed": true,
+        "ring": false,
+        "median_ms": {
+          "ring": 41.91,
+          "crop": 0.01,
+          "ocr": 0.0,
+          "total": 41.92
+        }
+      },
+      {
+        "name": "solid",
+        "expected": null,
+        "actual": null,
+        "score": 0.0,
+        "passed": true,
+        "ring": false,
+        "median_ms": {
+          "ring": 50.67,
+          "crop": 0.0,
+          "ocr": 0.0,
+          "total": 50.67
+        }
+      },
+      {
+        "name": "empty-ring",
+        "expected": null,
+        "actual": null,
+        "score": 0.0,
+        "passed": true,
+        "ring": true,
+        "median_ms": {
+          "ring": 55.34,
+          "crop": 19.68,
+          "ocr": 8.12,
+          "total": 83.16
+        }
+      },
+      {
+        "name": "digit-4",
+        "expected": null,
+        "actual": null,
+        "score": 0.0,
+        "passed": true,
+        "ring": true,
+        "median_ms": {
+          "ring": 53.03,
+          "crop": 19.37,
+          "ocr": 7.98,
+          "total": 80.58
+        }
+      },
+      {
+        "name": "digit-12",
+        "expected": null,
+        "actual": null,
+        "score": 0.0,
+        "passed": true,
+        "ring": true,
+        "median_ms": {
+          "ring": 53.06,
+          "crop": 20.02,
+          "ocr": 8.63,
+          "total": 81.94
+        }
+      },
+      {
+        "name": "1792051945478247274_frame.png",
+        "expected": "1",
+        "actual": null,
+        "score": 0.0,
+        "passed": false,
+        "ring": true,
+        "median_ms": {
+          "ring": 86.15,
+          "crop": 19.21,
+          "ocr": 17.47,
+          "total": 123.03
+        }
+      },
+      {
+        "name": "1792051946402762714_frame.png",
+        "expected": "1",
+        "actual": null,
+        "score": 0.0,
+        "passed": false,
+        "ring": true,
+        "median_ms": {
+          "ring": 88.2,
+          "crop": 19.19,
+          "ocr": 11.18,
+          "total": 118.74
+        }
+      }
+    ]
+  },
+  "optimized": {
+    "backend": "fast",
+    "passed": true,
+    "cases": [
+      {
+        "name": "font-0-digit-1",
+        "expected": "1",
+        "actual": "1",
+        "score": 0.88,
+        "passed": true,
+        "ring": true,
+        "median_ms": {
+          "ring": 8.94,
+          "crop": 6.53,
+          "ocr": 37.38,
+          "total": 52.02
+        }
+      },
+      {
+        "name": "font-0-digit-2",
+        "expected": "2",
+        "actual": "2",
+        "score": 0.982,
+        "passed": true,
+        "ring": true,
+        "median_ms": {
+          "ring": 7.92,
+          "crop": 5.45,
+          "ocr": 7.54,
+          "total": 20.71
+        }
+      },
+      {
+        "name": "font-0-digit-3",
+        "expected": "3",
+        "actual": "3",
+        "score": 0.996,
+        "passed": true,
+        "ring": true,
+        "median_ms": {
+          "ring": 8.11,
+          "crop": 5.46,
+          "ocr": 6.13,
+          "total": 19.7
+        }
+      },
+      {
+        "name": "font-2-digit-1",
+        "expected": "1",
+        "actual": "1",
+        "score": 0.966,
+        "passed": true,
+        "ring": true,
+        "median_ms": {
+          "ring": 7.89,
+          "crop": 5.15,
+          "ocr": 25.58,
+          "total": 40.94
+        }
+      },
+      {
+        "name": "font-2-digit-2",
+        "expected": "2",
+        "actual": "2",
+        "score": 0.993,
+        "passed": true,
+        "ring": true,
+        "median_ms": {
+          "ring": 8.43,
+          "crop": 5.43,
+          "ocr": 8.26,
+          "total": 21.8
+        }
+      },
+      {
+        "name": "font-2-digit-3",
+        "expected": "3",
+        "actual": "3",
+        "score": 1.0,
+        "passed": true,
+        "ring": true,
+        "median_ms": {
+          "ring": 8.21,
+          "crop": 5.42,
+          "ocr": 5.66,
+          "total": 19.47
+        }
+      },
+      {
+        "name": "font-4-digit-1",
+        "expected": "1",
+        "actual": "1",
+        "score": 0.827,
+        "passed": true,
+        "ring": true,
+        "median_ms": {
+          "ring": 9.53,
+          "crop": 5.41,
+          "ocr": 21.1,
+          "total": 36.04
+        }
+      },
+      {
+        "name": "font-4-digit-2",
+        "expected": "2",
+        "actual": "2",
+        "score": 0.995,
+        "passed": true,
+        "ring": true,
+        "median_ms": {
+          "ring": 8.16,
+          "crop": 5.35,
+          "ocr": 7.79,
+          "total": 21.3
+        }
+      },
+      {
+        "name": "font-4-digit-3",
+        "expected": "3",
+        "actual": "3",
+        "score": 0.999,
+        "passed": true,
+        "ring": true,
+        "median_ms": {
+          "ring": 7.43,
+          "crop": 5.35,
+          "ocr": 10.04,
+          "total": 22.32
+        }
+      },
+      {
+        "name": "blank",
+        "expected": null,
+        "actual": null,
+        "score": 0.0,
+        "passed": true,
+        "ring": false,
+        "median_ms": {
+          "ring": 18.95,
+          "crop": 0.01,
+          "ocr": 0.0,
+          "total": 18.96
+        }
+      },
+      {
+        "name": "solid",
+        "expected": null,
+        "actual": null,
+        "score": 0.0,
+        "passed": true,
+        "ring": false,
+        "median_ms": {
+          "ring": 23.58,
+          "crop": 0.0,
+          "ocr": 0.0,
+          "total": 23.58
+        }
+      },
+      {
+        "name": "empty-ring",
+        "expected": null,
+        "actual": null,
+        "score": 0.0,
+        "passed": true,
+        "ring": true,
+        "median_ms": {
+          "ring": 7.48,
+          "crop": 5.26,
+          "ocr": 0.18,
+          "total": 12.96
+        }
+      },
+      {
+        "name": "digit-4",
+        "expected": null,
+        "actual": null,
+        "score": 0.0,
+        "passed": true,
+        "ring": true,
+        "median_ms": {
+          "ring": 8.15,
+          "crop": 5.15,
+          "ocr": 50.93,
+          "total": 63.81
+        }
+      },
+      {
+        "name": "digit-12",
+        "expected": null,
+        "actual": null,
+        "score": 0.0,
+        "passed": true,
+        "ring": true,
+        "median_ms": {
+          "ring": 8.06,
+          "crop": 5.2,
+          "ocr": 53.16,
+          "total": 66.43
+        }
+      },
+      {
+        "name": "1792051945478247274_frame.png",
+        "expected": "1",
+        "actual": "1",
+        "score": 0.852,
+        "passed": true,
+        "ring": true,
+        "median_ms": {
+          "ring": 14.98,
+          "crop": 4.31,
+          "ocr": 19.89,
+          "total": 39.14
+        }
+      },
+      {
+        "name": "1792051946402762714_frame.png",
+        "expected": "1",
+        "actual": "1",
+        "score": 0.856,
+        "passed": true,
+        "ring": true,
+        "median_ms": {
+          "ring": 15.65,
+          "crop": 4.24,
+          "ocr": 20.65,
+          "total": 41.69
+        }
+      },
+      {
+        "name": "1792052637998556742_frame.png",
+        "expected": "1",
+        "actual": "1",
+        "score": 0.713,
+        "passed": true,
+        "ring": true,
+        "median_ms": {
+          "ring": 14.74,
+          "crop": 4.47,
+          "ocr": 24.32,
+          "total": 43.53
+        }
+      },
+      {
+        "name": "1792052638722056295_frame.png",
+        "expected": "1",
+        "actual": "1",
+        "score": 0.721,
+        "passed": true,
+        "ring": true,
+        "median_ms": {
+          "ring": 14.51,
+          "crop": 4.27,
+          "ocr": 26.18,
+          "total": 45.35
+        }
+      },
+      {
+        "name": "1792052639394072657_frame.png",
+        "expected": "1",
+        "actual": "1",
+        "score": 0.722,
+        "passed": true,
+        "ring": true,
+        "median_ms": {
+          "ring": 14.95,
+          "crop": 4.46,
+          "ocr": 25.34,
+          "total": 44.76
+        }
+      }
+    ]
+  },
+  "files": {
+    "nx_vision_live.py": "e3d4b26a196c13d423d2213a56ea081f9bf37ae9be374875cca8fca392c05182",
+    "nx_vision_fast.py": "d0a9950c448d8f81f33f908ff39b1d757c14d18cbbcfff5b7f1e6209530e2712",
+    "validate_nx_vision_live.py": "bf644188f630eac54455b0824d26b18689996d708013f7c5367ebf902aaa8b80",
+    "black_ring.py": "64dd7f72fdfe22bc18d7fdb2b50230e77ec0ab009ce02fd4833b714f8f146d42",
+    "ring_digit.py": "1179e5749a3a9b0c419565ff799d884c0e215e06c1d58d900c8bae5d7df38eb3",
+    "digit_core.py": "a63344123ccb32b69832398567e459df9a1f6e588043b8f81a51d4636a80384e"
+  }
+}

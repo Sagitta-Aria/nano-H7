@@ -1,0 +1,72 @@
+{
+  "date": "2026-10-18",
+  "version": "0.2.27",
+  "build": {
+    "toolchain": "Keil ARM Compiler 5 + MicroLIB",
+    "target": "STM32H743IIT6",
+    "result": "passed",
+    "warnings": 0
+  },
+  "unittest": {
+    "run": 563,
+    "passed": 562,
+    "skipped": 1,
+    "seconds": 121.073,
+    "skip": "Linux-only process replacement test on Windows"
+  },
+  "frontend_suites": {
+    "run": 7,
+    "result": "passed"
+  },
+  "browser": {
+    "result": "passed",
+    "mode": "temporary SIM with production Session.run",
+    "checks": [
+      "one button, no startup checkboxes",
+      "automatic origin/ARM/route",
+      "reload during travel",
+      "saved parameters independent of browser localStorage"
+    ]
+  },
+  "startup_benchmark": {
+    "model": "real host threads and queues; simulated UART 115200 baud, 10 bits/byte, 20 ms read timeout; Windows timer scheduling",
+    "navigation": {
+      "before_ms": 11984,
+      "after_ms": 1063,
+      "before_commands": 464,
+      "after_commands": 56
+    },
+    "competition": {
+      "before_ms": 14704,
+      "after_ms": 1078,
+      "before_commands": 547,
+      "after_commands": 55
+    },
+    "limits": [
+      "SIM heading",
+      "warm device connection",
+      "camera cold start excluded",
+      "not physical vehicle measurements"
+    ]
+  },
+  "regressions": [
+    "route upload suppresses unrelated debug telemetry",
+    "matching startup ACKs advance without timer ticks",
+    "confirmed tuning is not reapplied on every start",
+    "telemetry yields to control commands; STOP clears queue",
+    "fragmented serial response and tag matching",
+    "no short-response timeout padding",
+    "late arrival response cannot transfer task ownership",
+    "three fresh stationary yaw samples finish compiled ARM turn"
+  ],
+  "hardware": {
+    "deployed": false,
+    "flashed": false,
+    "physical_motion_tested": false
+  },
+  "package": {
+    "runtime_host_json_included": false,
+    "code_matches_workspace": true,
+    "firmware_matches_build": true
+  }
+}

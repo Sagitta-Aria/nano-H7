@@ -2,13 +2,16 @@
 #define APP_CONFIG_H
 /* Board: Waiken STM32H743IIT6 CB V1.5, external VCORE supply, 25 MHz HSE.
  * Change these only with the board schematic and timer clock tree in hand. */
-#define APP_VERSION "0.2.18"
+#define APP_VERSION "0.2.29"
 #define CPU_HZ 400000000UL
 #define APB_HZ 100000000UL
 #define TIMER_HZ 200000000UL
 #define UART_BAUD 115200UL
 #define AXIS_COUNT 7U
 #define CHASSIS_SPS_MAX 5000U
+/* In-place yaw only: avoid crawling outside the angle tolerance. The task's
+ * maximum speed still wins; translating yaw correction keeps its fine P. */
+#define TURN_MIN_SPS 200U
 #define AUX_SPS_MAX 3000U
 #define STEP_TICK_HZ 50000UL
 #define LINK_TIMEOUT_MS 1000U
@@ -31,8 +34,8 @@
 #define AUX_POSITION_MAX 1000000L
 #define RTOS_HEAP_BYTES (48U * 1024U)
 #define FRAME_MAX 384U
-/* Positional servos: S1/PH9 retains 270 degrees; S2/PH6 is 180 degrees.
- * One TIM12 tick is 1 us. Both use provisional 500..2500 us endpoints;
+/* Positional servos: S1/PE4 retains 270 degrees; S2/PH9 is 180 degrees.
+ * One TIM15/TIM12 tick is 1 us. Both use provisional 500..2500 us endpoints;
  * confirm them on the actual servos. Travel does not determine electrical
  * pulse limits. Recompute the corresponding servo.c lookup table if changed.
  * Steps are half degrees. S1 boots at 90 degrees, S2 at 90 degrees/1500 us.

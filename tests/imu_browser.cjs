@@ -21,7 +21,7 @@ const path = require('node:path');
   const output = path.resolve(__dirname, '../../tmp/h723_imu_local_20261011');
   fs.mkdirSync(output, { recursive: true });
   try {
-    await page.goto(url);
+    await page.goto(new URL('/debug', url).href);
     await page.getByRole('tab', { name: '陀螺仪 · H723', exact: true }).click();
     await page.waitForFunction(() => document.querySelector('#imu-port option[value="COM_TEST"]'));
     assert.equal(await page.locator('#imu-port').inputValue(), '', 'must not select a port silently');
@@ -52,7 +52,7 @@ const path = require('node:path');
     assert.equal(overflow, false, 'mobile content must not overflow sideways');
     await page.setViewportSize({ width: 1440, height: 1000 });
     const second = await context.newPage();
-    await second.goto(url);
+    await second.goto(new URL('/debug', url).href);
     await second.getByRole('tab', { name: '陀螺仪 · H723', exact: true }).click();
     await second.waitForFunction(() => {
       const badge = document.getElementById('role-badge');

@@ -1,0 +1,43 @@
+{
+  "backup": "/home/a/h743/backups/b_roi_20261019_195518",
+  "service": "MainPID=4834\nActiveState=active\n",
+  "files_verified": 14,
+  "configurations_unchanged": true,
+  "config_hashes_after": {
+    "device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699",
+    "control_settings.json": "8491531a8b268c4551b03056089047c42f4cb55b5d8013465a261cf4b138b202",
+    "auxiliary.json": "ad800cc3d7d6bd3240ef49d7f584905ea651e424a5c74c127167595c78f56445",
+    "mission.json": "63ed3d492d38174a4deefd284d80f82c2900bc047eff367e73a0b7ae1df60cca",
+    "navigation.json": "533762405b0f2bedc8f7dba5383a72297263a7db583c9448658c962cbe9c508e",
+    "b_pickup.json": "ff7b6fd1ac18b1fb5c911f784d0f2adfbd1bc44ec7b409359fc15d064d76e1e6",
+    "camera_alignment.json": "322f73dc55512e9fe0c95a55ed26fd5865744dd3e6568506d94a778c53fefca2",
+    "pick_place.json": "4703b12adf5bdc809420454e42a6907d7b38693f10a0af0ffbd2c9f996e56afd",
+    "cameras.json": "2ad6be879693aa2ca1556ef968328ac434b65b24e1cf7ab4448ee61005e5d56d"
+  },
+  "tests_verified": 129,
+  "vision_runtime_roi_test": "passed",
+  "web_debug_check": "passed desktop/mobile; write requests blocked",
+  "link": "connected",
+  "imu": "streaming",
+  "armed": false,
+  "b_pickup_config": {
+    "pick_down": 3500,
+    "pick_rotation": -1750,
+    "lift_sps": 1500,
+    "lift_accel": 5000,
+    "rotation_sps": 2000,
+    "rotation_accel": 2000,
+    "s1_open": 150,
+    "s1_closed": 70,
+    "s1_settle_ms": 600,
+    "s2_settle_ms": 1000,
+    "step_timeout_ms": 60000,
+    "ack_timeout_ms": 3000,
+    "roi_x_pct": 35,
+    "roi_y_pct": 35,
+    "roi_width_pct": 30,
+    "roi_height_pct": 30
+  },
+  "firmware_flashed": false,
+  "hardware_pick_place_started": false
+}

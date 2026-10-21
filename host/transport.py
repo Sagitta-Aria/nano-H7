@@ -10,6 +10,17 @@ from .simulator import SimulatedSerial
 from .servo_config import initial_commands as servo_initial_commands
 
 
+class EventQueue(queue.Queue):
+    """Wake the web control pump when a worker publishes a complete response."""
+    def __init__(self, wakeup):
+        super().__init__()
+        self.wakeup = wakeup
+
+    def put(self, item, block=True, timeout=None):
+        super().put(item, block, timeout)
+        self.wakeup.set()
+
+
 def list_ports():
     try:
         import serial  # Honor an unavailable parent dependency even if submodules were cached.
@@ -30,12 +41,16 @@ class Connection(threading.Thread):
         self.commands = queue.PriorityQueue(maxsize=32)
         self.order = itertools.count()
         self.quit = threading.Event()
+        self.wakeup = threading.Event()
         self.sequence = secrets.randbelow(0xFFFFFFFE) + 1
         self.framer = Framer()
         self.serial = None
         self.last_ping = 0.
         self.jog_lock = threading.Lock()
         self.jog = None
+        self.camera_velocity = None
+        self.camera_zero_ack = None
+        self.last_camera_tx = 0.
         self.last_jog_tx = 0.
         self.stop_generation = 0
         self.imu_provider = imu_provider
@@ -46,6 +61,35 @@ class Connection(threading.Thread):
         self.imu_epoch = None
         self.last_imu_source = None
         self.bridge_epoch = secrets.randbelow(2147483646) + 1
+        self.imu_paused = False
+        self.imu_pause_started = None
+        self.imu_pause_total = 0.
+        self.imu_pause_lock = threading.Lock()
+
+    def imu_pause_snapshot(self):
+        """Read the worker's clock atomically; measurement ages stay untouched."""
+        with self.imu_pause_lock:
+            now = time.monotonic()
+            total = self.imu_pause_total
+            if self.imu_paused and self.imu_pause_started is not None:
+                total += max(0., now-self.imu_pause_started)
+            return self.imu_paused, total
+
+    def absorb_imu_pause(self, fields):
+        """Track the MCU hold before publishing its ACK to the control pump."""
+        terminal = fields.get('armed') == '0' or fields.get('latched') == '1'
+        if 'paused' not in fields and not terminal: return
+        paused = fields.get('paused') == '1' and not terminal
+        with self.imu_pause_lock:
+            if paused == self.imu_paused: return
+            now = time.monotonic()
+            if paused:
+                self.imu_pause_started = now
+            elif self.imu_pause_started is not None:
+                self.imu_pause_total += now-self.imu_pause_started
+                self.imu_pause_started = None
+            self.imu_paused = paused
+        if paused: self.clear_camera_velocity()
 
     def forward_imu(self):
         """Send the newest verified sample before queued work; no telemetry retry.
@@ -83,10 +127,35 @@ class Connection(threading.Thread):
         Expiry stops motion even when this thread can still send PING."""
         with self.jog_lock:
             self.jog = (body, time.monotonic() + .25)
+        self.wakeup.set()
 
     def current_jog(self):
         with self.jog_lock:
             return self.jog
+
+    def set_camera_velocity(self, body, tag):
+        """Latest-only NX visual velocity, renewed by the control loop, not PING.
+
+        A stalled controller expires independently of this serial worker. Only
+        the camera executor uses this lease; ordinary WHEELS calls keep their
+        existing protocol semantics. No motion command is queued here.
+        """
+        if self.imu_paused: return
+        with self.jog_lock:
+            if not self.camera_velocity or (body, tag) != (self.camera_velocity[0], self.camera_velocity[2]):
+                self.camera_zero_ack = None
+            self.camera_velocity = (body, time.monotonic()+.25, tag)
+        self.wakeup.set()
+
+    def clear_camera_velocity(self):
+        """Cancel pending visual targets before stop/completion/reconnect."""
+        with self.jog_lock:
+            self.camera_velocity = None
+            self.camera_zero_ack = None
+
+    def current_camera_velocity(self):
+        with self.jog_lock:
+            return self.camera_velocity
 
     def submit(self, body, tag=None):
         """STOP clears obsolete pending requests and takes queue priority."""
@@ -112,9 +181,11 @@ class Connection(threading.Thread):
                 self.commands.queue[:] = [item for item in self.commands.queue if not obsolete(item)]
                 heapq.heapify(self.commands.queue)
                 self.commands.not_full.notify_all()
-        if body in ("STOP", "CHASSIS HALT", "NAV STOP", "ARM 0"):
+        if body in ("STOP", "CHASSIS HALT", "NAV STOP", "ARM 0", "MOTION CLEAR"):
             with self.jog_lock:
                 self.jog = None
+                self.camera_velocity = None
+                self.camera_zero_ack = None
                 self.stop_generation += 1
             while True:
                 try:
@@ -122,8 +193,10 @@ class Connection(threading.Thread):
                 except queue.Empty:
                     break
         try:
-            priority = 0 if aux_halt or turn_halt or body in ("STOP", "CHASSIS HALT", "NAV STOP", "ARM 0") else 1
+            priority = 0 if aux_halt or turn_halt or body in ("STOP", "CHASSIS HALT", "NAV STOP", "ARM 0", "MOTION CLEAR") else 1
+            if tag == ('telemetry',): priority = 2
             self.commands.put_nowait((priority, next(self.order), body, tag))
+            self.wakeup.set()
             return True
         except queue.Full:
             return False
@@ -131,7 +204,10 @@ class Connection(threading.Thread):
     def close(self):
         with self.jog_lock:
             self.jog = None
+            self.camera_velocity = None
+            self.camera_zero_ack = None
         self.quit.set()
+        self.wakeup.set()
 
     def next_sequence(self):
         self.sequence = self.sequence % 0xFFFFFFFF + 1
@@ -148,6 +224,10 @@ class Connection(threading.Thread):
         sequence = self.next_sequence()
         frame = encode(sequence, body)
         for attempt in range(1 if body.startswith("NAV IMU ") else 2):
+            if tag and tag[0] == 'camera_velocity':
+                intent = self.current_camera_velocity()
+                if not intent or intent[0] != body or intent[2] != tag or intent[1] <= time.monotonic():
+                    return None
             if body.startswith("CHASSIS JOG "):
                 intent = self.current_jog()
                 if not intent or intent[0] != body or intent[1] <= time.monotonic():
@@ -155,13 +235,17 @@ class Connection(threading.Thread):
             self.serial.write(frame)
             deadline = time.monotonic() + .3
             while time.monotonic() < deadline and not self.quit.is_set():
-                for packet in self.framer.feed(self.serial.read(256)):
+                # Block for the first byte only, then drain bytes already here.
+                # read(256) waits out the timeout on every shorter reply.
+                available = getattr(self.serial, 'in_waiting', 0)
+                for packet in self.framer.feed(self.serial.read(min(256, available) if available else 1)):
                     try:
                         reply = decode(packet)
                     except ValueError as exc:
                         self.events.put(("warning", str(exc)))
                         continue
                     if reply.sequence == sequence:
+                        if reply.ok: self.absorb_imu_pause(reply.fields)
                         # (body, reply[, tag]) — GUIs read the first two fields.
                         payload = (body, reply) if tag is None else (body, reply, tag)
                         if publish:
@@ -229,6 +313,8 @@ class Connection(threading.Thread):
                 self.exchange("SERVO STAT")
             self.events.put(("connected", self.port))
             while not self.quit.is_set():
+                # Clear before checking the queue so submissions cannot lose a wake.
+                self.wakeup.clear()
                 # Process release/STOP ahead of heartbeats and renewed jogs.
                 generation = self.stop_generation
                 pending = None
@@ -240,6 +326,29 @@ class Connection(threading.Thread):
                     self.exchange(pending[2], pending[3])
                     continue
                 self.forward_imu()
+                if self.imu_paused:
+                    # Keep exact queued commands/IDs. No old visual velocity is
+                    # replayed; safety commands above still run immediately.
+                    if pending is not None and generation == self.stop_generation:
+                        # The vacated worker slot may have been filled by a
+                        # producer. Restore it atomically without losing work.
+                        with self.commands.mutex:
+                            if generation == self.stop_generation:
+                                heapq.heappush(self.commands.queue, pending)
+                                self.commands.not_empty.notify()
+                    if time.monotonic()-self.last_ping >= .25:
+                        self.exchange('PING')
+                        self.exchange('STAT')
+                        self.exchange('MOTION STAT')
+                        self.exchange('NAV STAT')
+                        self.last_ping = time.monotonic()
+                    self.wakeup.wait(.01)
+                    continue
+                velocity = self.current_camera_velocity()
+                if velocity and velocity[1] <= time.monotonic():
+                    self.submit('STOP')
+                    pending = None
+                    continue
                 intent = self.current_jog()
                 if intent and intent[1] <= time.monotonic():
                     self.submit("CHASSIS HALT")
@@ -254,12 +363,33 @@ class Connection(threading.Thread):
                     self.last_ping = time.monotonic()
                 intent = self.current_jog()
                 if intent and time.monotonic() - self.last_jog_tx >= .15:
-                    self.exchange(intent[0])
+                    reply = self.exchange(intent[0])
+                    if reply is not None and not reply.ok:
+                        self.submit('STOP')
                     self.last_jog_tx = time.monotonic()
+                velocity = self.current_camera_velocity()
+                # Firmware 0.2.21 rejects updates during the final STEP high
+                # even when the requested speed is zero. Once this exact zero
+                # intent is ACKed, keep supervising its lease and polling idle,
+                # without reissuing it into that stop tail. New intents, failed
+                # ACKs and nonzero speeds retain their normal send behavior.
+                zero_key = ((velocity[0], velocity[2]) if velocity and
+                            velocity[0].startswith('WHEELS 0 0 0 0 ') else None)
+                if (velocity and time.monotonic()-self.last_camera_tx >= .05
+                        and (zero_key is None or zero_key != self.camera_zero_ack)):
+                    reply = self.exchange(velocity[0], velocity[2])
+                    self.last_camera_tx = time.monotonic()
+                    if reply is not None and not reply.ok:
+                        self.submit('STOP')
+                    elif reply is not None and reply.ok and zero_key is not None:
+                        with self.jog_lock:
+                            current = self.camera_velocity
+                            if current and (current[0], current[2]) == zero_key:
+                                self.camera_zero_ack = zero_key
                 if pending is not None and generation == self.stop_generation:
                     self.exchange(pending[2], pending[3])
                 else:
-                    self.quit.wait(.01)
+                    self.wakeup.wait(.01)
         except InterruptedError:
             pass
         except Exception as exc:

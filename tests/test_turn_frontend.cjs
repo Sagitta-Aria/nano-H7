@@ -9,7 +9,7 @@ vm.runInContext(source.slice(0, source.indexOf('applyTheme(document.documentElem
 (async () => {
   await vm.runInContext(`(async () => {
     globalThis.sent = []; globalThis.warnings = []; globalThis.nodes = {};
-    for (const id of ['turn-kp','turn-tolerance','turn-configure','turn-mode','turn-angle','turn-sps','turn-accel','turn-state','turn-zero-state','turn-live','turn-zero','turn-start','turn-stop']) nodes[id] = {value:'',disabled:false,textContent:''};
+    for (const id of ['turn-kp','turn-tolerance','turn-min-sps','turn-configure','turn-mode','turn-angle','turn-sps','turn-accel','turn-state','turn-zero-state','turn-live','turn-zero','turn-start','turn-stop']) nodes[id] = {value:'',disabled:false,textContent:''};
     globalThis.document = {getElementById:id=>nodes[id]};
     post = async (url,payload) => {sent.push({url,payload}); return {ok:true};};
     status = message => warnings.push(message);
@@ -17,9 +17,11 @@ vm.runInContext(source.slice(0, source.indexOf('applyTheme(document.documentElem
     await turnAction('start'); nodes['turn-mode'].value='ABS'; await turnAction('start');
     for (const bad of ['','90.001','NaN','181','1e2']) {nodes['turn-angle'].value=bad; await turnAction('start');}
     await turnAction('zero'); await turnAction('stop');
-    nodes['turn-tolerance'].value='0.50'; nodes['turn-kp'].value='40.25'; await turnAction('configure');
+    nodes['turn-min-sps'].value='350'; nodes['turn-tolerance'].value='0.50'; nodes['turn-kp'].value='40.25'; await turnAction('configure');
     for (const value of ['0','200.01','1000.50','21474836.47']) {nodes['turn-kp'].value=value; await turnAction('configure');}
     for (const bad of ['-1','21474836.48','20.001','1e2']) {nodes['turn-kp'].value=bad; await turnAction('configure');}
+    nodes['turn-kp'].value='20';
+    for (const bad of ['0','5001','1.5','']) {nodes['turn-min-sps'].value=bad; await turnAction('configure');}
     state.link='connected'; state.device={turn:'1'}; state.armed=true; state.role='controller';
     state.turn={state:'idle',zero:'0',imu:'1',current_cd:'0',target_cd:'0',error_cd:'0'};
     renderTurn(); globalThis.noZero=nodes['turn-start'].disabled;
@@ -36,8 +38,9 @@ vm.runInContext(source.slice(0, source.indexOf('applyTheme(document.documentElem
   assert.equal(context.sent[3].payload.action,'stop');
   assert.equal(context.sent[4].payload.kp,'40.25');
   assert.equal(context.sent[4].payload.tolerance,'0.50');
+  assert.equal(context.sent[4].payload.min_sps,350);
   assert.deepEqual(Array.from(context.sent.slice(5),item=>item.payload.kp),['0','200.01','1000.50','21474836.47']);
-  assert.equal(context.warnings.length,9);
+  assert.equal(context.warnings.length,13);
   assert.equal(context.noZero,true); assert.equal(context.ready,false);
   assert.equal(context.busy,true); assert.equal(context.readonly,true);
   console.log('Turn frontend OK: both modes, precision, zero, busy and readonly guards.');

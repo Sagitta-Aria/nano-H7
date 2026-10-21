@@ -1,0 +1,58 @@
+{
+  "date": "2026-10-16T17:09:36.945197",
+  "backup": "/home/a/h743/backups/ring_task_20261016_170514",
+  "verification": {
+    "pid": "5604",
+    "link": "connected",
+    "armed": false,
+    "axes_idle": true,
+    "task": {
+      "state": "idle",
+      "active": false,
+      "error": "",
+      "run_id": "",
+      "leg": 0,
+      "action": 1,
+      "request": null,
+      "scans": {},
+      "ring_task": null
+    },
+    "camera": {
+      "state": "ready",
+      "message": "Nano 摄像头已打开，点击“拍照”获取一帧。",
+      "device": "/dev/video0",
+      "label": "USB 2.0 Camera: HD USB Camera",
+      "requested": "1280x720",
+      "width": 1280,
+      "height": 720,
+      "fps": 60.0,
+      "sequence": 0
+    },
+    "imu": "streaming",
+    "nav_align": null,
+    "settings_unchanged": {
+      "host/device_links.json": true,
+      "host/auxiliary.json": true,
+      "host/navigation.json": true,
+      "host/camera_alignment.json": true
+    }
+  },
+  "manifest_count": 73,
+  "files": {
+    "firmware\\releases\\ring_task_20261016\\robot_h743_ring_task_20261016.hex": "9be9a6f7daa59e42e80910b00db8ef9794e293a0ee3ac5e3aa04319f84d87e45",
+    "firmware\\releases\\ring_task_20261016\\robot_h743_ring_task_20261016.bin": "3c6fb10927cc8a9c45251ef1f0467082aa0c0fac5cb8f387bc145f5fa9ecb36c"
+  },
+  "tests": {
+    "full_local": 431,
+    "full_local_skipped": 1,
+    "final_targeted": 60,
+    "nx": 259,
+    "browser": "SIM slots/save/reload/map/mobile passed",
+    "compiled_arm": "6 mission tests passed, including WORK freeze/exit/stop/stale guards"
+  },
+  "firmware_flashed": false,
+  "physical_motion_started": false,
+  "limitation": "User chose self-flash; both local PC and NX currently have no debug probe attached.",
+  "status": "withdrawn",
+  "superseded_by": "validation_nav_handoff_20261016.json"
+}

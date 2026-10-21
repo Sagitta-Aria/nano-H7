@@ -1,0 +1,598 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "name": "solid-red-0",
+      "passed": true,
+      "result": {
+        "color": "red",
+        "center": [
+          333,
+          273
+        ],
+        "area": 2516.0,
+        "coverage": 1.0,
+        "grasp_point": [
+          320,
+          270
+        ],
+        "grasp_offset": [
+          0,
+          30
+        ],
+        "dx": 13,
+        "dy": 33,
+        "error_dx": 13,
+        "error_dy": 3
+      },
+      "median_ms": 11.67
+    },
+    {
+      "name": "solid-red-1",
+      "passed": true,
+      "result": {
+        "color": "red",
+        "center": [
+          333,
+          273
+        ],
+        "area": 2516.0,
+        "coverage": 1.0,
+        "grasp_point": [
+          320,
+          270
+        ],
+        "grasp_offset": [
+          0,
+          30
+        ],
+        "dx": 13,
+        "dy": 33,
+        "error_dx": 13,
+        "error_dy": 3
+      },
+      "median_ms": 10.04
+    },
+    {
+      "name": "solid-green-2",
+      "passed": true,
+      "result": {
+        "color": "green",
+        "center": [
+          333,
+          273
+        ],
+        "area": 2536.0,
+        "coverage": 1.0,
+        "grasp_point": [
+          320,
+          270
+        ],
+        "grasp_offset": [
+          0,
+          30
+        ],
+        "dx": 13,
+        "dy": 33,
+        "error_dx": 13,
+        "error_dy": 3
+      },
+      "median_ms": 9.39
+    },
+    {
+      "name": "solid-blue-3",
+      "passed": true,
+      "result": {
+        "color": "blue",
+        "center": [
+          333,
+          273
+        ],
+        "area": 2456.0,
+        "coverage": 1.0,
+        "grasp_point": [
+          320,
+          270
+        ],
+        "grasp_offset": [
+          0,
+          30
+        ],
+        "dx": 13,
+        "dy": 33,
+        "error_dx": 13,
+        "error_dy": 3
+      },
+      "median_ms": 10.02
+    },
+    {
+      "name": "solid-blue-4",
+      "passed": true,
+      "result": {
+        "color": "blue",
+        "center": [
+          333,
+          273
+        ],
+        "area": 2480.0,
+        "coverage": 1.0,
+        "grasp_point": [
+          320,
+          270
+        ],
+        "grasp_offset": [
+          0,
+          30
+        ],
+        "dx": 13,
+        "dy": 33,
+        "error_dx": 13,
+        "error_dy": 3
+      },
+      "median_ms": 8.8
+    },
+    {
+      "name": "solid-yellow-5",
+      "passed": true,
+      "result": {
+        "color": "yellow",
+        "center": [
+          333,
+          273
+        ],
+        "area": 2516.0,
+        "coverage": 1.0,
+        "grasp_point": [
+          320,
+          270
+        ],
+        "grasp_offset": [
+          0,
+          30
+        ],
+        "dx": 13,
+        "dy": 33,
+        "error_dx": 13,
+        "error_dy": 3
+      },
+      "median_ms": 8.53
+    },
+    {
+      "name": "solid-black-6",
+      "passed": true,
+      "result": {
+        "color": "black",
+        "center": [
+          333,
+          273
+        ],
+        "area": 2390.0,
+        "coverage": 1.0,
+        "grasp_point": [
+          320,
+          270
+        ],
+        "grasp_offset": [
+          0,
+          30
+        ],
+        "dx": 13,
+        "dy": 33,
+        "error_dx": 13,
+        "error_dy": 3
+      },
+      "median_ms": 8.43
+    },
+    {
+      "name": "solid-light_blue-7",
+      "passed": true,
+      "result": {
+        "color": "light_blue",
+        "center": [
+          333,
+          273
+        ],
+        "area": 2536.0,
+        "coverage": 1.0,
+        "grasp_point": [
+          320,
+          270
+        ],
+        "grasp_offset": [
+          0,
+          30
+        ],
+        "dx": 13,
+        "dy": 33,
+        "error_dx": 13,
+        "error_dy": 3
+      },
+      "median_ms": 8.38
+    },
+    {
+      "name": "solid-light_blue-8",
+      "passed": true,
+      "result": {
+        "color": "light_blue",
+        "center": [
+          333,
+          273
+        ],
+        "area": 2496.0,
+        "coverage": 1.0,
+        "grasp_point": [
+          320,
+          270
+        ],
+        "grasp_offset": [
+          0,
+          30
+        ],
+        "dx": 13,
+        "dy": 33,
+        "error_dx": 13,
+        "error_dy": 3
+      },
+      "median_ms": 8.39
+    },
+    {
+      "name": "blank",
+      "passed": true,
+      "result": null,
+      "median_ms": 7.93
+    },
+    {
+      "name": "rectangle",
+      "passed": true,
+      "result": null,
+      "median_ms": 7.65
+    },
+    {
+      "name": "square",
+      "passed": true,
+      "result": null,
+      "median_ms": 8.1
+    },
+    {
+      "name": "tiny",
+      "passed": true,
+      "result": null,
+      "median_ms": 7.8
+    },
+    {
+      "name": "black-ring",
+      "passed": true,
+      "result": null,
+      "median_ms": 8.38
+    },
+    {
+      "name": "red-ring",
+      "passed": true,
+      "result": null,
+      "median_ms": 8.51
+    },
+    {
+      "name": "outside",
+      "passed": true,
+      "result": null,
+      "median_ms": 7.5
+    },
+    {
+      "name": "cut-left",
+      "passed": true,
+      "result": null,
+      "median_ms": 7.42
+    },
+    {
+      "name": "cut-bottom",
+      "passed": true,
+      "result": null,
+      "median_ms": 7.92
+    },
+    {
+      "name": "smallest-valid",
+      "passed": true,
+      "result": {
+        "color": "blue",
+        "center": [
+          400,
+          300
+        ],
+        "area": 1450.0,
+        "coverage": 1.0,
+        "grasp_point": [
+          320,
+          270
+        ],
+        "grasp_offset": [
+          0,
+          30
+        ],
+        "dx": 80,
+        "dy": 60,
+        "error_dx": 80,
+        "error_dy": 30
+      },
+      "median_ms": 8.54
+    },
+    {
+      "name": "solid-next-to-ring",
+      "passed": true,
+      "result": {
+        "color": "red",
+        "center": [
+          240,
+          270
+        ],
+        "area": 3114.0,
+        "coverage": 1.0,
+        "grasp_point": [
+          320,
+          270
+        ],
+        "grasp_offset": [
+          0,
+          30
+        ],
+        "dx": -80,
+        "dy": 30,
+        "error_dx": -80,
+        "error_dy": 0
+      },
+      "median_ms": 8.16
+    },
+    {
+      "name": "aligned-with-grasp",
+      "passed": true,
+      "result": {
+        "color": "green",
+        "center": [
+          320,
+          270
+        ],
+        "area": 2370.0,
+        "coverage": 1.0,
+        "grasp_point": [
+          320,
+          270
+        ],
+        "grasp_offset": [
+          0,
+          30
+        ],
+        "dx": 0,
+        "dy": 30,
+        "error_dx": 0,
+        "error_dy": 0
+      },
+      "median_ms": 8.35
+    },
+    {
+      "name": "real-ring-1792051945478247274_frame.png",
+      "passed": true,
+      "result": null,
+      "median_ms": 7.62
+    },
+    {
+      "name": "real-ring-1792052638722056295_frame.png",
+      "passed": true,
+      "result": null,
+      "median_ms": 7.17
+    }
+  ],
+  "simultaneous": {
+    "digit": "3",
+    "score": 0.9993122816085815,
+    "color": {
+      "color": "green",
+      "center": [
+        240,
+        270
+      ],
+      "area": 2044.0,
+      "coverage": 1.0,
+      "grasp_point": [
+        320,
+        270
+      ],
+      "grasp_offset": [
+        0,
+        30
+      ],
+      "dx": -80,
+      "dy": 30,
+      "error_dx": -80,
+      "error_dy": 0
+    },
+    "grasp_point": [
+      320,
+      270
+    ]
+  },
+  "live": {
+    "pid": 14181,
+    "log": "/home/a/vision-live/ring_digit/live-color.log",
+    "roi": [
+      140,
+      60,
+      360,
+      330
+    ],
+    "grasp_point": [
+      320,
+      270
+    ],
+    "median_fps": 23.7,
+    "median_color_ms": 7.07,
+    "recent_samples": [
+      {
+        "processing_fps": 24.2,
+        "ocr_ms": 15.5,
+        "ring": true,
+        "digit": "1",
+        "confidence": 0.888,
+        "roi": [
+          140,
+          60,
+          360,
+          330
+        ],
+        "color_block": null,
+        "color_ms": 6.75,
+        "grasp_point": [
+          320,
+          270
+        ],
+        "grasp_offset": [
+          0,
+          30
+        ],
+        "dx": 12,
+        "dy": 33,
+        "error_dx": 12,
+        "error_dy": 3
+      },
+      {
+        "processing_fps": 23.4,
+        "ocr_ms": 35.4,
+        "ring": true,
+        "digit": "1",
+        "confidence": 0.888,
+        "roi": [
+          140,
+          60,
+          360,
+          330
+        ],
+        "color_block": null,
+        "color_ms": 7.51,
+        "grasp_point": [
+          320,
+          270
+        ],
+        "grasp_offset": [
+          0,
+          30
+        ],
+        "dx": 12,
+        "dy": 32,
+        "error_dx": 12,
+        "error_dy": 2
+      },
+      {
+        "processing_fps": 24.1,
+        "ocr_ms": 15.0,
+        "ring": true,
+        "digit": "1",
+        "confidence": 0.88,
+        "roi": [
+          140,
+          60,
+          360,
+          330
+        ],
+        "color_block": null,
+        "color_ms": 8.18,
+        "grasp_point": [
+          320,
+          270
+        ],
+        "grasp_offset": [
+          0,
+          30
+        ],
+        "dx": 12,
+        "dy": 33,
+        "error_dx": 12,
+        "error_dy": 3
+      },
+      {
+        "processing_fps": 24.0,
+        "ocr_ms": 15.3,
+        "ring": true,
+        "digit": "1",
+        "confidence": 0.883,
+        "roi": [
+          140,
+          60,
+          360,
+          330
+        ],
+        "color_block": null,
+        "color_ms": 6.61,
+        "grasp_point": [
+          320,
+          270
+        ],
+        "grasp_offset": [
+          0,
+          30
+        ],
+        "dx": 13,
+        "dy": 32,
+        "error_dx": 13,
+        "error_dy": 2
+      },
+      {
+        "processing_fps": 24.4,
+        "ocr_ms": 14.9,
+        "ring": true,
+        "digit": "1",
+        "confidence": 0.87,
+        "roi": [
+          140,
+          60,
+          360,
+          330
+        ],
+        "color_block": null,
+        "color_ms": 6.63,
+        "grasp_point": [
+          320,
+          270
+        ],
+        "grasp_offset": [
+          0,
+          30
+        ],
+        "dx": 13,
+        "dy": 33,
+        "error_dx": 13,
+        "error_dy": 3
+      },
+      {
+        "processing_fps": 24.0,
+        "ocr_ms": 14.5,
+        "ring": true,
+        "digit": "1",
+        "confidence": 0.919,
+        "roi": [
+          140,
+          60,
+          360,
+          330
+        ],
+        "color_block": null,
+        "color_ms": 6.69,
+        "grasp_point": [
+          320,
+          270
+        ],
+        "grasp_offset": [
+          0,
+          30
+        ],
+        "dx": 13,
+        "dy": 33,
+        "error_dx": 13,
+        "error_dy": 3
+      }
+    ]
+  },
+  "source_sha256": {
+    "nx_vision_color.py": "d34a08e512b33c710330c40c5c85e0ace86885983ad098fb2c51b7821c4799be",
+    "nx_vision_live.py": "a572b5f4a742150fe8b76133d56530bd26ea10728f4d09b880946db66b7dcdec",
+    "validate_nx_vision_color.py": "1309cc45beb3c7bf81b616681b4561f781d05b484d84a9a829e4b6b3688053f9",
+    "color_block_center.py": "9119f332ad660419b7b7923eb26dc2cef4e47fc6b3fd592fb9e4ea1012fc3183"
+  }
+}

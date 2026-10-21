@@ -1,0 +1,82 @@
+{
+  "date": "2026-10-15",
+  "version": "0.2.20",
+  "behavior": "到站挂起→摄像头指定目标校准→新帧稳定确认→FIX车辆参考位置→站点动作→直接下一站；无轨迹回溯",
+  "firmware": {
+    "compiler": "Keil ARM Compiler 5 / MicroLIB",
+    "command": "python tools/build_firmware.py",
+    "built": true,
+    "warnings": 0,
+    "flashed": false,
+    "artifacts": {
+      "firmware\\build\\robot_h743.axf": "327b7f8eec07bce2f8f92337a4e1da4e6f0bc15c878de71f7cdbd91c585917cf",
+      "firmware\\build\\robot_h743.hex": "06e2621ecd5f99db7f8db520edcfc341ab432e3bbb29c489e0885353ef72d46e"
+    }
+  },
+  "tests": {
+    "full": {
+      "command": "python -m unittest discover -s tests -p test_*.py -q",
+      "run": 341,
+      "passed": 340,
+      "skipped": 1,
+      "failures": 0
+    },
+    "after_final_changes": {
+      "command": "python -m unittest tests.test_mission tests.test_mission_arm tests.test_navigation tests.test_stations tests.test_webpage -q",
+      "run": 64,
+      "passed": 64
+    },
+    "frontend": [
+      "navigation",
+      "servo",
+      "servo_identity",
+      "turn",
+      "lift",
+      "flow",
+      "camera"
+    ],
+    "arm_cases": [
+      "NUDGE轮组脉冲与横移坐标",
+      "90度车身前进映射到世界X",
+      "FIX不产生车轮运动",
+      "GO拒绝未确认位置及重复放行",
+      "错误路径/段号、1000脉冲预算、IMU过期、微调超时",
+      "九段及32段完整路径上传"
+    ]
+  },
+  "browser": {
+    "ok": true,
+    "checks": [
+      "nine-leg repeated station route and hold flags",
+      "valid and invalid unsaved drafts preserved during structural editing",
+      "readonly page cannot edit route structure or start tasks",
+      "task request shown, manual control locked, global/task STOP available",
+      "HTTP vision result resumes and finishes all nine held legs",
+      "reload preserves plan; STOP cancels vision wait and disarms",
+      "ordinary navigation still finishes without task orchestration",
+      "desktop and 760/390px layouts fit viewport"
+    ],
+    "pageErrors": [],
+    "engine": "existing Playwright + installed Microsoft Edge",
+    "command": "python -m tests.stations_browser",
+    "temporary_settings": true,
+    "new_browser_install": false,
+    "screenshots": [
+      "tmp/mission_1440.png",
+      "tmp/mission_760.png",
+      "tmp/mission_390.png"
+    ]
+  },
+  "hardware": {
+    "deployed": false,
+    "flashed": false,
+    "real_motion": false,
+    "pending": [
+      "像素偏差到车身脉冲矩阵实测",
+      "视觉目标与车辆站点参考姿态标定",
+      "各次到站抓放/舵机/辅助轴参数",
+      "NX现有视觉环境下摄像头与OCR实时联调",
+      "实际轮滑/车身通道余量/机构行程检查"
+    ]
+  }
+}

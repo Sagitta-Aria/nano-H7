@@ -83,6 +83,23 @@ function capture() {
   assert.equal(f.nodes['camera-snapshot'].disabled,true);
 
   const second = await fixture(true, 'camera2');
+  second.view.updateRemote({state:'ready', qr:{status:'valid', code:'012+321+456+054', last_code:'012+321+456+054', last_seen_at:100}});
+  assert.equal(second.nodes['camera2-qr-code'].textContent, '012+321+456+054');
+  assert.match(second.nodes['camera2-qr-status'].textContent, /当前已识别/);
+  second.view.updateRemote({state:'error', qr:{status:'stale', last_code:'012+321+456+054', last_seen_at:100}});
+  assert.match(second.nodes['camera2-qr-status'].textContent, /离线/);
+  assert.match(second.nodes['camera2-qr-seen'].textContent, /保留结果/);
+  assert.equal(second.images.length, 0);
+  assert.equal(second.posted.length, 0);
+  const lockedPlan = {code:'156+231+516+123', batches:[{batch:1, items:[
+    {angle_deg:0,color_name:'红',target:2},{angle_deg:135,color_name:'黑',target:3},{angle_deg:270,color_name:'浅蓝',target:1}
+  ]}]};
+  second.view.setTask({active:true,uses_task_code:true,task_plan:lockedPlan,qr_status:'摄像头2已关闭，摄像头1已打开'});
+  second.view.updateRemote({state:'idle'});
+  assert.equal(second.nodes['camera2-qr-code'].textContent, lockedPlan.code);
+  assert.match(second.nodes['camera2-task-plan'].textContent, /0° 红 → 位置2；135° 黑 → 位置3；270° 浅蓝 → 位置1/);
+  assert.equal(second.nodes['camera2-start'].disabled, true);
+  second.view.setTask({active:false});
   await second.view.start();
   await second.view.capture();
   assert.match(second.images[0], /^\/api\/camera2\/frame\?sequence=1/);

@@ -1,0 +1,2861 @@
+{
+  "backup": "/home/a/h743/backups/ring_sequence_20261016_160517",
+  "before": {
+    "type": "hello",
+    "link": "connected",
+    "port": "/dev/ttyUSB0",
+    "armed": false,
+    "wiring_ack": false,
+    "device": {
+      "fw": "0.2.21",
+      "protocol": "1",
+      "board": "H743_CB_V1.5",
+      "led_mask": "3",
+      "red": "fixed",
+      "chassis_max": "5000",
+      "aux_max": "3000",
+      "chassis": "1",
+      "servo": "2",
+      "servo_travel": "2700",
+      "servo1_travel": "2700",
+      "servo2_travel": "1800",
+      "serial": "dual",
+      "lift": "1",
+      "lift_max": "8000",
+      "nav": "1",
+      "nav_heading": "1",
+      "nav_grid": "1",
+      "nav_path": "1",
+      "turn": "1",
+      "aux_control": "1",
+      "flow": "1",
+      "servo1_pin": "PH9",
+      "servo2_pin": "PH6",
+      "turn_tuning": "1",
+      "aux_live": "1",
+      "turn_precision": "1",
+      "straight": "1",
+      "cpu_hz": "400000000",
+      "apb_hz": "100000000",
+      "timer_hz": "200000000",
+      "flash_kb": "2048",
+      "uid": "3637333530335109002A003A",
+      "reset": "0x00FE0000",
+      "rtos": "11.2.0",
+      "baud": "115200",
+      "stat": {
+        "cmd": "STAT",
+        "uptime_ms": "3429731",
+        "heap_free": "37488",
+        "heap_min": "37488",
+        "tasks": "4",
+        "stack_comm": "5224",
+        "stack_motion": "1860",
+        "stack_super": "1960",
+        "led": "0",
+        "armed": "0",
+        "rx": "4456420",
+        "rx_err": "0",
+        "tx_err": "0",
+        "bad": "0",
+        "replay": "10",
+        "timeout": "0",
+        "motion_fault": "0"
+      }
+    },
+    "axes": {
+      "5": {
+        "cmd": "AXIS",
+        "axis": "5",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "6": {
+        "cmd": "AXIS",
+        "axis": "6",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "7": {
+        "cmd": "AXIS",
+        "axis": "7",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "1": {
+        "cmd": "AXIS",
+        "axis": "1",
+        "pos": "23476",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "3826757104"
+      },
+      "2": {
+        "cmd": "AXIS",
+        "axis": "2",
+        "pos": "-24844",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "3826757104"
+      },
+      "3": {
+        "cmd": "AXIS",
+        "axis": "3",
+        "pos": "26186",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "3826757104"
+      },
+      "4": {
+        "cmd": "AXIS",
+        "axis": "4",
+        "pos": "-22122",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "3826757104"
+      }
+    },
+    "servo": {
+      "cmd": "SERVO_STAT",
+      "raw": "OK cmd=SERVO_STAT ch=1 angle=180.0 us=1833 on=1 pin=PH9 timer=TIM12_CH2 OK cmd=SERVO_STAT ch=2 angle=0.0 us=500 on=1 pin=PH6 timer=TIM12_CH1"
+    },
+    "servo_channels": 2,
+    "chassis": {
+      "cmd": "CHASSIS",
+      "state": "stopped",
+      "direction": "BACK",
+      "move_id": "3826756775",
+      "total": "500",
+      "remaining": "0",
+      "active": "0",
+      "invert": "5",
+      "assist": "1",
+      "target_cd": "14492",
+      "error_cd": "-2",
+      "fault": "none"
+    },
+    "lift": {
+      "cmd": "LIFT_STAT",
+      "axis": "5",
+      "initialized": "1",
+      "down_sign": "0",
+      "pos": "0",
+      "max": "8000",
+      "up_room": "0",
+      "down_room": "8000",
+      "active": "0",
+      "min": "0"
+    },
+    "auxiliary": {
+      "5": {
+        "cmd": "AUX_STAT",
+        "axis": "5",
+        "pos": "0",
+        "min": "0",
+        "max": "8000",
+        "referenced": "1",
+        "configured": "1",
+        "active": "0"
+      },
+      "6": {
+        "cmd": "AUX_STAT",
+        "axis": "6",
+        "pos": "0",
+        "min": "0",
+        "max": "0",
+        "referenced": "0",
+        "configured": "0",
+        "active": "0"
+      }
+    },
+    "aux_settings": {
+      "5": {
+        "presets": [
+          0,
+          0
+        ],
+        "min": 0,
+        "max": 9400,
+        "sps": 1000,
+        "accel": 1000,
+        "step": 9300
+      },
+      "6": {
+        "presets": [
+          0,
+          -2950
+        ],
+        "min": -2950,
+        "max": 0,
+        "sps": 3000,
+        "accel": 6000,
+        "step": 50
+      }
+    },
+    "navigation": {
+      "cmd": "NAV_STAT",
+      "state": "stopped",
+      "ready": "0",
+      "x": "0",
+      "y": "0",
+      "station": "0",
+      "tx": "0",
+      "ty": "0",
+      "leg": "1",
+      "wait_ms": "0",
+      "move_id": "0",
+      "obstacle": "0",
+      "planner": "host_grid",
+      "heading_cd": "0",
+      "target_cd": "0",
+      "arrival_cd": "0",
+      "imu": "1",
+      "fault": "none",
+      "wx": "0",
+      "wy": "0",
+      "segment": "0",
+      "segments": "0",
+      "path_id": "0",
+      "route_ready": "0",
+      "legs": "0",
+      "stations": "0",
+      "held": "0"
+    },
+    "turn": {
+      "cmd": "TURN_STAT",
+      "state": "idle",
+      "mode": "REL",
+      "zero": "0",
+      "current_cd": "-39",
+      "target_cd": "0",
+      "error_cd": "39",
+      "imu": "1",
+      "move_id": "3826753203",
+      "active": "0",
+      "fault": "none",
+      "kp_centi": "2000",
+      "tolerance_cd": "20"
+    },
+    "motion": {
+      "cmd": "MOTION_STAT",
+      "v": "1",
+      "latched": "0",
+      "total": "0",
+      "reason": "none",
+      "uncertain": "0",
+      "active": "0",
+      "armed": "0"
+    },
+    "flow": {
+      "cmd": "FLOW_CONFIG",
+      "x_um": "0",
+      "y_um": "0",
+      "rx_um": "0",
+      "ry_um": "0",
+      "marked": "0",
+      "recording": "0",
+      "start_ms": "0",
+      "end_ms": "0",
+      "now_ms": "3429552",
+      "online": "0",
+      "valid": "0",
+      "dt_us": "0",
+      "fx": "0",
+      "fy": "0",
+      "frames": "0",
+      "accepted": "0",
+      "bad": "0",
+      "low": "0",
+      "uart": "0",
+      "sat": "0",
+      "rev": "0",
+      "wx_um": "0",
+      "wy_um": "0",
+      "wrx_um": "0",
+      "wry_um": "0",
+      "heading": "0",
+      "locked": "1",
+      "gaps": "0",
+      "rgaps": "0",
+      "world_ms": "84538",
+      "epoch": "1313660462",
+      "height_um": "30000",
+      "gx_ppm": "1000000",
+      "gy_ppm": "1000000",
+      "map": "0",
+      "angle_cd": "0",
+      "minq": "1"
+    },
+    "flow_settings": {
+      "height_mm": 30.0,
+      "gain_x": 1.0,
+      "gain_y": 1.0,
+      "map": 0,
+      "angle_deg": 0.0,
+      "min_quality": 1
+    },
+    "mission": {
+      "stations": [
+        {
+          "name": "O",
+          "x": 0,
+          "y": 0,
+          "heading": 0
+        },
+        {
+          "name": "A",
+          "x": 0,
+          "y": 14400,
+          "heading": 0
+        },
+        {
+          "name": "B",
+          "x": 14400,
+          "y": 0,
+          "heading": -90
+        },
+        {
+          "name": "C",
+          "x": 14400,
+          "y": 28800,
+          "heading": 90
+        },
+        {
+          "name": "D",
+          "x": 28800,
+          "y": 14400,
+          "heading": -180
+        }
+      ],
+      "route": [
+        {
+          "station": 1,
+          "hold": 0
+        },
+        {
+          "station": 2,
+          "hold": 0
+        },
+        {
+          "station": 3,
+          "hold": 1
+        },
+        {
+          "station": 4,
+          "hold": 1
+        },
+        {
+          "station": 1,
+          "hold": 0
+        },
+        {
+          "station": 0,
+          "hold": 0
+        }
+      ],
+      "grid": {
+        "x": [
+          0,
+          14400,
+          28800
+        ],
+        "y": [
+          0,
+          14400,
+          28800
+        ]
+      },
+      "sps": 2500,
+      "accel": 2000,
+      "dwell_ms": 3000
+    },
+    "task": {
+      "state": "idle",
+      "active": false,
+      "error": "",
+      "run_id": "",
+      "leg": 0,
+      "action": 1,
+      "request": null,
+      "scans": {}
+    },
+    "camera_alignment": {
+      "state": "fault",
+      "active": false,
+      "busy": false,
+      "error": "四轮速度被拒绝：ERR code=DISARMED_BUSY_OR_REVERSE",
+      "vision": {
+        "kind": "ring",
+        "target": "ring",
+        "found": true,
+        "center": [
+          710,
+          404
+        ],
+        "reference": [
+          640,
+          360
+        ],
+        "control_point": [
+          610,
+          344
+        ],
+        "width": 1280,
+        "height": 720,
+        "captured_at": 1792137550.7840126,
+        "error_dx": -30,
+        "error_dy": -16,
+        "rings": [
+          [
+            710,
+            404
+          ]
+        ],
+        "row_line": null,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              710,
+              404
+            ],
+            "confidence": 0.669623076915741
+          }
+        ],
+        "expected_digit": "1",
+        "digit": "1",
+        "confidence": 0.669623076915741,
+        "frame_id": 5013,
+        "captured_monotonic": 3028.367373339,
+        "stream_id": 27,
+        "processing_ms": 286.8
+      },
+      "stable_frames": 1,
+      "iterations": 87,
+      "total_steps": 2500,
+      "has_image": false,
+      "image_revision": 2704,
+      "frame_age_ms": 309.4,
+      "dropped_frames": 6,
+      "streaming": false,
+      "velocity": {
+        "right": 0,
+        "forward": 0,
+        "yaw": 0
+      },
+      "wheel_targets": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "ring_sequence": {
+        "phase": "approach",
+        "expected": 1,
+        "position_steps": -2500,
+        "range_steps": 4000,
+        "total_steps": 2500,
+        "recognized": [],
+        "line": {
+          "points": [
+            [
+              811,
+              411
+            ],
+            [
+              172,
+              410
+            ]
+          ],
+          "error_deg": 0.0896646834736714
+        },
+        "visible_digits": [
+          {
+            "digit": "1",
+            "center": [
+              710,
+              404
+            ],
+            "confidence": 0.669623076915741
+          }
+        ],
+        "wait_remaining_s": 0.0
+      },
+      "control": "ring_sequence"
+    },
+    "camera_alignment_config": {
+      "kind": "ring",
+      "target": "red",
+      "min_area": 500,
+      "black_max": 140,
+      "target_offset_px": [
+        -100,
+        -60
+      ],
+      "tracking": {
+        "sps": 1500,
+        "deadzone_px": 30,
+        "reverse_x": false,
+        "reverse_y": false,
+        "kp": 1.3,
+        "ki": 0,
+        "kd": 0,
+        "min_sps": 50,
+        "accel": 2000,
+        "camera_yaw_deg": 90
+      },
+      "ring_sequence": {
+        "range_steps": 4000,
+        "scan_step": 500,
+        "sps": 600,
+        "angle_tolerance_deg": 1,
+        "max_turn_deg": 30
+      }
+    },
+    "task_config": {
+      "timeout_s": 480,
+      "leg_timeout_s": 120,
+      "action_timeout_s": 30,
+      "vision_max_age_ms": 500,
+      "calibration": {
+        "verified": false,
+        "matrix": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "tolerance_px": 3,
+        "stable_frames": 3,
+        "max_iterations": 12,
+        "max_step": 100,
+        "sps": 100,
+        "accel": 1000
+      },
+      "legs": {}
+    },
+    "travel": 270.0,
+    "demo": false,
+    "imu": {
+      "state": "streaming",
+      "message": "H723 已握手 · 姿态数据有效",
+      "port": "/dev/ttyACM0",
+      "identity": {
+        "board": "DM-MC02",
+        "mcu": "STM32H723VGT6",
+        "sensor": "BMI088",
+        "protocol": "IMU1",
+        "fw": "1.1.1",
+        "uid": "002600483134510438373332"
+      },
+      "latest": {
+        "timestamp_ms": 3429922,
+        "sample_count": 6873031,
+        "ready": true,
+        "calibrated": true,
+        "accel_trusted": true,
+        "error": 0,
+        "calibration_count": 2000,
+        "roll_deg": -179.593,
+        "pitch_deg": 2.504,
+        "yaw_deg": -144.768,
+        "gyro_dps": [
+          -0.058,
+          -0.158,
+          0.012
+        ],
+        "accel_ms2": [
+          -0.3706,
+          -0.0844,
+          -9.6241
+        ],
+        "linear_accel_ms2": [
+          0.0578,
+          -0.0148,
+          0.1398
+        ],
+        "temperature_c": 28.5,
+        "quaternion_wxyz": [
+          0.021934,
+          -0.302908,
+          0.95099,
+          0.003255
+        ],
+        "valid": true,
+        "time_s": 1987.0625933490003
+      },
+      "generation": 1,
+      "rejected": 0,
+      "revision": 198288
+    },
+    "auto_devices": {
+      "enabled": true,
+      "message": "自动连接：H743 已连接 · H723 已连接",
+      "h743_uid": "3637333530335109002A003A",
+      "h723_uid": "002600483134510438373332"
+    }
+  },
+  "hashes": {
+    "host/__init__.py": "de6a97b2b28849916f27a28e5a523eb29a6cf5d58cceaf2482f91088475968d4",
+    "host/protocol.py": "fcd974ecc18be00337aadb55e7fdde1dbb9b27472517ca8a1dfc221131d6c06b",
+    "host/transport.py": "938a0e6105b61b6c3f64657aa5b108133a4878d4ff0b2383dc71665257042bba",
+    "host/simulator.py": "e75d767eb0252f9c5c3de973d0731a3241bb0aa43af231c9f889f45a43a2c5b8",
+    "host/servo_config.py": "032c9a8f9720ba24551c0e65a76fb29097cb7d4fae42234dcb7469a80f3069ef",
+    "host/mission.py": "73a91d01e7a208da8c43675c3840c2c396d64ecad72a2108af9d1b7be112c2ce",
+    "host/mission_vision.py": "46105bfd4492ba45da1fa8c61b9e13004a338f443db66b11543b2a2f186b02f7",
+    "host/navigation.py": "b027a31f8a76d80929ae79b000041307441be703c11dead6a36a28f10a181ff3",
+    "host/navigation_grid.py": "a7e1663f6750a0fe9ebbe3fccc8e844729a86828915a69bfe4e26356cdebbb51",
+    "host/navigation_sim.py": "6e81b2cbe01984dadf0602e744a970ddc032832229736b11496b1971cc509266",
+    "host/auxiliary.py": "72a87aecc1056c4c7d2bbc43765f1c6a437502d757a58e46f1b6174927e6a3e0",
+    "host/turn.py": "df507f56080d24a7e171fd1f08b34a83bc1862557c364281fcb3c0d5b5144629",
+    "host/turn_sim.py": "860a7ccf7d77d7a74c705dda0abf8cfd1b67f5db3d853d188e6631a2f1506019",
+    "host/straight.py": "7b6ae21b8c3a54dda3df7cedeac52fa0ad6687a23b11325cd03015223e8c620f",
+    "host/straight_sim.py": "16a1867f167e92c95a0285c371b16176cbc88f92418dd02416976edbce15ef79",
+    "host/optical_flow.py": "8bfa879c774ff5ef44cfa8a0f8e3a6b5587b90bfe60ff17078736e8a30e66c5b",
+    "host/agent.py": "baa8b8e50f176a8236c067eaa1801065e1fd0de524414019ca9cc667ebf0baa6",
+    "host/control.py": "e925297f2a8ad8440fc18b699e8a9a963f676ebd00fa98a76a20f574d0ab6de7",
+    "host/verify_link.py": "6d723ab9992cbe2059a291467f59cb502542712244cfa0bbcb8c9f5df5f072c5",
+    "host/webapp.py": "2a2c88cc43b95bd99df4f3c9e5d42945309cff697fe28cd1b3d12a603db8bb38",
+    "host/imu.py": "275760a0db549d44742c0ef83f9141e2c372fbb8aba9009004967ae4747e6f40",
+    "host/imu_protocol.py": "2de1813d2caed4bfe78d8e8a370ebf129b9a49d5649fd32489a67eea08a1022d",
+    "host/autolink.py": "9286986fbccf21e15915ae02578c25944cac4eb403d11f83004eb61f3b071365",
+    "host/camera.py": "253da90f407d3fdd820fa1b46c039629adc9f461690a6366825cde5434d7bcbf",
+    "host/webserver.py": "09c072d07d4c8171afa39452de3ac6f8cb4a8aff7015cfa7800a2cf5b11cf3ca",
+    "host/camera_vision.py": "35afc166e4a1d76d98e3fac366969da46a8a9e9aebd6732fa3e44826a65ea562",
+    "host/camera_alignment.py": "e7787810a02ef3f049a6ea5e4439b614c99498cea144d1b73740bca5c809544a",
+    "host/camera_monitor.py": "fde3518a48243c4b9798714e272ea70331b1871a740ba0535c4f7e719785967a",
+    "host/vision_alignment.py": "278b1ca97891c8331f561408c5ea916bcbc521e69cb45c6e4fe59931fb770b35",
+    "host/ring_sequence.py": "c67de3e698aedd7ca331646f825d645bf934d88844aa473292e3815b778a9fa0",
+    "host/ring_perception.py": "597dd2aaff4534fd9e37063ed0d81174b003aaa18664d707eb554374e7f4f0c5",
+    "host/static/index.html": "fa16d4512ba0c1631c88f61038f55eafebb69bfc2a2aff63ff49d68aa68d155e",
+    "host/static/styles.css": "36b3617cc16891eba6183118ca61526babbe3034e6284ad4c2418445c9032da0",
+    "host/static/app.js": "bd6d828f1db48e9c8a9df8233cfab14b46003d31c0cab55a0899d3fa160759e2",
+    "host/static/imu.js": "2c4fc239bd45bc9efd723b515ed741e37f12fc6c96542008c3403c31667ca70b",
+    "host/static/camera.js": "58b0bb417427c428ec746d27065be503bc2afbac1b68e5c56dd8820c0353e80c",
+    "host/static/camera_alignment.js": "847b924c39bf3b0d33e5c0b300d230be83507bf82150dca3e58f7d690e7eae1e",
+    "tests/__init__.py": "35043b12b938e4a6123610ad1dce65bf4749f5dc3fb05a21ef4be8ea0efd63ec",
+    "tests/test_agent.py": "4e8689298b501dbb9e173eba924a45eb3beae3330f8c4d827990ed75fa22e62a",
+    "tests/test_control.py": "2dc67a1ac92c125e4203221b8a50472bc25ff44e3ce8bcd4878632d79c88ef5c",
+    "tests/test_webapp.py": "5625d716fe3ceef0fc1843a6ce2131ce0981912a404d44a3511cf2acb49620b4",
+    "tests/test_servo_connection.py": "724f65eb3cf772f723aa0a066aaf920eaf3e32a1309b13bc82b0996712749ee7",
+    "tests/test_host_restart.py": "7ec77453fe38376af9b68ce089882866b2ae6889d437a2f053aeb05f640392ad",
+    "tests/test_imu.py": "1e6663bcc598bf54d79b48d3357c98186243e8249cd34923f15677ee4911008f",
+    "tests/test_autolink.py": "98742beb313bf0a6c1da030a1b4c726e7c2a28b0d2f77b222a69be50040307ac",
+    "tests/test_camera.py": "ecbf5e25401f6014e9b53f08b713a1895ffbb4ed04267b6244a221d6ecdc2f59",
+    "tests/test_camera_alignment.py": "d30df326ff4e9f189f0a469aba765f338d72ccca1e39d333d9debbaac632ee1e",
+    "tests/test_camera_servo.py": "547a39f40d96046742c199a54ce817d03519bd2a1424e4dfd8d203cf2e9454a6",
+    "tests/test_visual_pid.py": "b110f7f0850b408da51874359350e082ca84379b3c35cdf352dc4f46df5321c5",
+    "tests/test_ring_sequence.py": "7b6f9dafdd5d1c316f989db9743c962dd7efbdd97390c1d273b3bffaa3ee2dd1",
+    "tests/test_webpage.py": "388d3f73aeb6eb5bb0b9e14ff154226d611774fd21f7add225fe2507fc6ff675",
+    "tests/test_stations.py": "5fa32d04b1ef48dba1de58b62cc2ef74d4dc6be4ee3d9e869e2c0e41046bbf8e",
+    "tests/test_mission.py": "80b962da992ce940f3a288b7e28858d2a9b9b32b9f86e1c1d9ff73bbf0803fb4",
+    "tests/chassis_fixture.py": "c49d316129c9eba38e14d73b7adf0b2e778d07166fdc4c706b6dd642984e2feb",
+    "tests/imu_fixture_server.py": "ccbb386257dc4864cafcde3eade4c47a02f20f0918d3b52b140e89c405abc078",
+    "tests/pty_link_check.py": "e62911ac57118522d032ba8468d2dbe599304e4daf1bc21ad9ab7727dce5fdfb",
+    "tests/lease_stress.py": "16b4580c8dcb3449a345b939caa58be6e6b46bb827e4701acf5d40aea7f973d4",
+    "tests/test_flow_host.py": "f84994571149f000215e3dafee236124b9bb956d2725cd4b3ff19bffd47a1a23",
+    "tests/test_path_upload.py": "8bbc2a3f32ce28c7f8be16530588109f95f0f6866cf18e06819988be96d6d828",
+    "tests/test_control_fixes_host.py": "9e6b8452c9a82f70d3f9a81673ea5982d276a1e435293a3305dab1f3c265ece7",
+    "tests/test_heading_tuning_host.py": "6dc567a6f44a1146f3d66cb29637da1c396a3d9f8686f0695d0322cc4f30e1a1",
+    "tests/test_straight_host.py": "f63ddaae737afd47b44e240fc05f45ac201c297a0448c9738629ab03503af113",
+    "工创赛视觉识别/色块识别/color_block_center.py": "9119f332ad660419b7b7923eb26dc2cef4e47fc6b3fd592fb9e4ea1012fc3183",
+    "工创赛视觉识别/黑色圆环识别与数字识别/black_ring.py": "d0c071bbae581093b935336931310954618e1cee30bd04742cf711d533f5247b",
+    "工创赛视觉识别/黑色圆环识别与数字识别/ring_digit.py": "1179e5749a3a9b0c419565ff799d884c0e215e06c1d58d900c8bae5d7df38eb3",
+    "工创赛视觉识别/黑色圆环识别与数字识别/digit_core.py": "a63344123ccb32b69832398567e459df9a1f6e588043b8f81a51d4636a80384e",
+    "tools/nx_vision_live.py": "1a51cef71c9341d2538937ef1e7ce178525efc9e626d13ea06e9d47cd7bdf5d0",
+    "tools/nx_vision_ui.py": "b889b8e28151b127ac9829c39e654d2755fb0e7f3ca63506d93a3a343b49ba0d",
+    "tools/nx_vision_roi.py": "6c8a2789ef8d2d6a8b4115ea0b48909dadbc365ec2f6b9edc3ff6e23a1b9a91f",
+    "tools/nx_vision_color.py": "2d636961a2a193796b1a417d3895ef627f910b93638b5ae5155f746bab2eb6ed",
+    "tools/nx_vision_fast.py": "c2206d3a3648627bf788a21fb4c7e115f87f7d7899a9e0b83371aa99c0f3717d",
+    "tools/nx_vision_trt.py": "26b4fd9374de2d2d112a9b6f99fb7756b39b5dced251d15e6f9c6bf4c99b1116",
+    "tools/deploy_host.py": "2f17f4b6f089c74178d7f0170d9db985d1350866789847bdb4d17540d3a5b350",
+    "docs/CAMERA_ALIGNMENT.md": "4e63f6ea3c035ad7e35b4a09b15d06396b6e12ca26ef0d9b17dc4fabd0357cb4",
+    "docs/JETSON.md": "638d6bd4bb98aa9424952e01fa96c7dc013c8ae1315bb965e70da500ce640859",
+    "host/device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699",
+    "host/auxiliary.json": "868a99af7a7ab53bf0e4db5b1926e2041d4954538aa59a0df0ea1ba9e12c4fd5",
+    "host/navigation.json": "f6bee53206c49ea025b75d9e94a89e87ecefaeb21db5f7e7623339db446befd2",
+    "host/camera_alignment.json": "addbd86e4d4117932797bf3e99be5e75940579dfd0d903afcfd97b41920c5163"
+  },
+  "missing_before": [],
+  "old_pid": "5659",
+  "manifest_sha256": {
+    "host/__init__.py": "de6a97b2b28849916f27a28e5a523eb29a6cf5d58cceaf2482f91088475968d4",
+    "host/protocol.py": "fcd974ecc18be00337aadb55e7fdde1dbb9b27472517ca8a1dfc221131d6c06b",
+    "host/transport.py": "938a0e6105b61b6c3f64657aa5b108133a4878d4ff0b2383dc71665257042bba",
+    "host/simulator.py": "e75d767eb0252f9c5c3de973d0731a3241bb0aa43af231c9f889f45a43a2c5b8",
+    "host/servo_config.py": "032c9a8f9720ba24551c0e65a76fb29097cb7d4fae42234dcb7469a80f3069ef",
+    "host/mission.py": "73a91d01e7a208da8c43675c3840c2c396d64ecad72a2108af9d1b7be112c2ce",
+    "host/mission_vision.py": "46105bfd4492ba45da1fa8c61b9e13004a338f443db66b11543b2a2f186b02f7",
+    "host/navigation.py": "b027a31f8a76d80929ae79b000041307441be703c11dead6a36a28f10a181ff3",
+    "host/navigation_grid.py": "a7e1663f6750a0fe9ebbe3fccc8e844729a86828915a69bfe4e26356cdebbb51",
+    "host/navigation_sim.py": "6e81b2cbe01984dadf0602e744a970ddc032832229736b11496b1971cc509266",
+    "host/auxiliary.py": "72a87aecc1056c4c7d2bbc43765f1c6a437502d757a58e46f1b6174927e6a3e0",
+    "host/turn.py": "df507f56080d24a7e171fd1f08b34a83bc1862557c364281fcb3c0d5b5144629",
+    "host/turn_sim.py": "860a7ccf7d77d7a74c705dda0abf8cfd1b67f5db3d853d188e6631a2f1506019",
+    "host/straight.py": "7b6ae21b8c3a54dda3df7cedeac52fa0ad6687a23b11325cd03015223e8c620f",
+    "host/straight_sim.py": "16a1867f167e92c95a0285c371b16176cbc88f92418dd02416976edbce15ef79",
+    "host/optical_flow.py": "8bfa879c774ff5ef44cfa8a0f8e3a6b5587b90bfe60ff17078736e8a30e66c5b",
+    "host/agent.py": "baa8b8e50f176a8236c067eaa1801065e1fd0de524414019ca9cc667ebf0baa6",
+    "host/control.py": "e925297f2a8ad8440fc18b699e8a9a963f676ebd00fa98a76a20f574d0ab6de7",
+    "host/verify_link.py": "6d723ab9992cbe2059a291467f59cb502542712244cfa0bbcb8c9f5df5f072c5",
+    "host/webapp.py": "2a2c88cc43b95bd99df4f3c9e5d42945309cff697fe28cd1b3d12a603db8bb38",
+    "host/imu.py": "275760a0db549d44742c0ef83f9141e2c372fbb8aba9009004967ae4747e6f40",
+    "host/imu_protocol.py": "2de1813d2caed4bfe78d8e8a370ebf129b9a49d5649fd32489a67eea08a1022d",
+    "host/autolink.py": "9286986fbccf21e15915ae02578c25944cac4eb403d11f83004eb61f3b071365",
+    "host/camera.py": "253da90f407d3fdd820fa1b46c039629adc9f461690a6366825cde5434d7bcbf",
+    "host/webserver.py": "09c072d07d4c8171afa39452de3ac6f8cb4a8aff7015cfa7800a2cf5b11cf3ca",
+    "host/camera_vision.py": "35afc166e4a1d76d98e3fac366969da46a8a9e9aebd6732fa3e44826a65ea562",
+    "host/camera_alignment.py": "5ad2b43c91ac16ed47a35e382096e732fab3cde23c528dad554d18977ef80c39",
+    "host/camera_monitor.py": "fde3518a48243c4b9798714e272ea70331b1871a740ba0535c4f7e719785967a",
+    "host/vision_alignment.py": "278b1ca97891c8331f561408c5ea916bcbc521e69cb45c6e4fe59931fb770b35",
+    "host/ring_sequence.py": "d02e9026a9cc4a7a4f3b89e6c9d96527236b2e4d7edb92f64ffb5dfbfbc69bef",
+    "host/ring_perception.py": "597dd2aaff4534fd9e37063ed0d81174b003aaa18664d707eb554374e7f4f0c5",
+    "host/static/index.html": "fa16d4512ba0c1631c88f61038f55eafebb69bfc2a2aff63ff49d68aa68d155e",
+    "host/static/styles.css": "36b3617cc16891eba6183118ca61526babbe3034e6284ad4c2418445c9032da0",
+    "host/static/app.js": "bd6d828f1db48e9c8a9df8233cfab14b46003d31c0cab55a0899d3fa160759e2",
+    "host/static/imu.js": "2c4fc239bd45bc9efd723b515ed741e37f12fc6c96542008c3403c31667ca70b",
+    "host/static/camera.js": "58b0bb417427c428ec746d27065be503bc2afbac1b68e5c56dd8820c0353e80c",
+    "host/static/camera_alignment.js": "847b924c39bf3b0d33e5c0b300d230be83507bf82150dca3e58f7d690e7eae1e",
+    "tests/__init__.py": "35043b12b938e4a6123610ad1dce65bf4749f5dc3fb05a21ef4be8ea0efd63ec",
+    "tests/test_agent.py": "4e8689298b501dbb9e173eba924a45eb3beae3330f8c4d827990ed75fa22e62a",
+    "tests/test_control.py": "2dc67a1ac92c125e4203221b8a50472bc25ff44e3ce8bcd4878632d79c88ef5c",
+    "tests/test_webapp.py": "5625d716fe3ceef0fc1843a6ce2131ce0981912a404d44a3511cf2acb49620b4",
+    "tests/test_servo_connection.py": "724f65eb3cf772f723aa0a066aaf920eaf3e32a1309b13bc82b0996712749ee7",
+    "tests/test_host_restart.py": "7ec77453fe38376af9b68ce089882866b2ae6889d437a2f053aeb05f640392ad",
+    "tests/test_imu.py": "1e6663bcc598bf54d79b48d3357c98186243e8249cd34923f15677ee4911008f",
+    "tests/test_autolink.py": "98742beb313bf0a6c1da030a1b4c726e7c2a28b0d2f77b222a69be50040307ac",
+    "tests/test_camera.py": "ecbf5e25401f6014e9b53f08b713a1895ffbb4ed04267b6244a221d6ecdc2f59",
+    "tests/test_camera_alignment.py": "d30df326ff4e9f189f0a469aba765f338d72ccca1e39d333d9debbaac632ee1e",
+    "tests/test_camera_servo.py": "1c2726d7d968912ed10f11e41a633f1ad8eb61bc04918229d035b1af30e94d61",
+    "tests/test_visual_pid.py": "b110f7f0850b408da51874359350e082ca84379b3c35cdf352dc4f46df5321c5",
+    "tests/test_ring_sequence.py": "209b32b54bbbde4e0e7a53cfeed00490124509889b2c6dae01f40f686db2698d",
+    "tests/test_webpage.py": "388d3f73aeb6eb5bb0b9e14ff154226d611774fd21f7add225fe2507fc6ff675",
+    "tests/test_stations.py": "5fa32d04b1ef48dba1de58b62cc2ef74d4dc6be4ee3d9e869e2c0e41046bbf8e",
+    "tests/test_mission.py": "80b962da992ce940f3a288b7e28858d2a9b9b32b9f86e1c1d9ff73bbf0803fb4",
+    "tests/chassis_fixture.py": "c49d316129c9eba38e14d73b7adf0b2e778d07166fdc4c706b6dd642984e2feb",
+    "tests/imu_fixture_server.py": "ccbb386257dc4864cafcde3eade4c47a02f20f0918d3b52b140e89c405abc078",
+    "tests/pty_link_check.py": "e62911ac57118522d032ba8468d2dbe599304e4daf1bc21ad9ab7727dce5fdfb",
+    "tests/lease_stress.py": "16b4580c8dcb3449a345b939caa58be6e6b46bb827e4701acf5d40aea7f973d4",
+    "tests/test_flow_host.py": "f84994571149f000215e3dafee236124b9bb956d2725cd4b3ff19bffd47a1a23",
+    "tests/test_path_upload.py": "8bbc2a3f32ce28c7f8be16530588109f95f0f6866cf18e06819988be96d6d828",
+    "tests/test_control_fixes_host.py": "9e6b8452c9a82f70d3f9a81673ea5982d276a1e435293a3305dab1f3c265ece7",
+    "tests/test_heading_tuning_host.py": "6dc567a6f44a1146f3d66cb29637da1c396a3d9f8686f0695d0322cc4f30e1a1",
+    "tests/test_straight_host.py": "f63ddaae737afd47b44e240fc05f45ac201c297a0448c9738629ab03503af113",
+    "工创赛视觉识别/色块识别/color_block_center.py": "9119f332ad660419b7b7923eb26dc2cef4e47fc6b3fd592fb9e4ea1012fc3183",
+    "工创赛视觉识别/黑色圆环识别与数字识别/black_ring.py": "d0c071bbae581093b935336931310954618e1cee30bd04742cf711d533f5247b",
+    "工创赛视觉识别/黑色圆环识别与数字识别/ring_digit.py": "1179e5749a3a9b0c419565ff799d884c0e215e06c1d58d900c8bae5d7df38eb3",
+    "工创赛视觉识别/黑色圆环识别与数字识别/digit_core.py": "a63344123ccb32b69832398567e459df9a1f6e588043b8f81a51d4636a80384e",
+    "tools/nx_vision_live.py": "1a51cef71c9341d2538937ef1e7ce178525efc9e626d13ea06e9d47cd7bdf5d0",
+    "tools/nx_vision_ui.py": "b889b8e28151b127ac9829c39e654d2755fb0e7f3ca63506d93a3a343b49ba0d",
+    "tools/nx_vision_roi.py": "6c8a2789ef8d2d6a8b4115ea0b48909dadbc365ec2f6b9edc3ff6e23a1b9a91f",
+    "tools/nx_vision_color.py": "2d636961a2a193796b1a417d3895ef627f910b93638b5ae5155f746bab2eb6ed",
+    "tools/nx_vision_fast.py": "c2206d3a3648627bf788a21fb4c7e115f87f7d7899a9e0b83371aa99c0f3717d",
+    "tools/nx_vision_trt.py": "26b4fd9374de2d2d112a9b6f99fb7756b39b5dced251d15e6f9c6bf4c99b1116"
+  },
+  "restart": {
+    "pid": "9324",
+    "started_at": "2026-10-16T16:08:19.390184",
+    "camera": {
+      "state": "ready",
+      "message": "Nano 摄像头已打开，点击“拍照”获取一帧。",
+      "device": "/dev/video0",
+      "label": "USB 2.0 Camera: HD USB Camera",
+      "requested": "1280x720",
+      "width": 1280,
+      "height": 720,
+      "fps": 60.0,
+      "sequence": 0
+    }
+  },
+  "verification": {
+    "state": {
+      "type": "hello",
+      "link": "connected",
+      "port": "/dev/ttyUSB0",
+      "armed": false,
+      "wiring_ack": false,
+      "device": {
+        "fw": "0.2.21",
+        "protocol": "1",
+        "board": "H743_CB_V1.5",
+        "led_mask": "3",
+        "red": "fixed",
+        "chassis_max": "5000",
+        "aux_max": "3000",
+        "chassis": "1",
+        "servo": "2",
+        "servo_travel": "2700",
+        "servo1_travel": "2700",
+        "servo2_travel": "1800",
+        "serial": "dual",
+        "lift": "1",
+        "lift_max": "8000",
+        "nav": "1",
+        "nav_heading": "1",
+        "nav_grid": "1",
+        "nav_path": "1",
+        "turn": "1",
+        "aux_control": "1",
+        "flow": "1",
+        "servo1_pin": "PH9",
+        "servo2_pin": "PH6",
+        "turn_tuning": "1",
+        "aux_live": "1",
+        "turn_precision": "1",
+        "straight": "1",
+        "cpu_hz": "400000000",
+        "apb_hz": "100000000",
+        "timer_hz": "200000000",
+        "flash_kb": "2048",
+        "uid": "3637333530335109002A003A",
+        "reset": "0x00FE0000",
+        "rtos": "11.2.0",
+        "baud": "115200",
+        "stat": {
+          "cmd": "STAT",
+          "uptime_ms": "3653430",
+          "heap_free": "37488",
+          "heap_min": "37488",
+          "tasks": "4",
+          "stack_comm": "5224",
+          "stack_motion": "1860",
+          "stack_super": "1960",
+          "led": "0",
+          "armed": "0",
+          "rx": "4758305",
+          "rx_err": "0",
+          "tx_err": "0",
+          "bad": "0",
+          "replay": "12",
+          "timeout": "0",
+          "motion_fault": "0"
+        }
+      },
+      "axes": {
+        "1": {
+          "cmd": "AXIS",
+          "axis": "1",
+          "pos": "23476",
+          "sps": "0",
+          "remaining": "0",
+          "active": "0",
+          "move_id": "3826757104"
+        },
+        "2": {
+          "cmd": "AXIS",
+          "axis": "2",
+          "pos": "-24844",
+          "sps": "0",
+          "remaining": "0",
+          "active": "0",
+          "move_id": "3826757104"
+        },
+        "3": {
+          "cmd": "AXIS",
+          "axis": "3",
+          "pos": "26186",
+          "sps": "0",
+          "remaining": "0",
+          "active": "0",
+          "move_id": "3826757104"
+        },
+        "4": {
+          "cmd": "AXIS",
+          "axis": "4",
+          "pos": "-22122",
+          "sps": "0",
+          "remaining": "0",
+          "active": "0",
+          "move_id": "3826757104"
+        },
+        "5": {
+          "cmd": "AXIS",
+          "axis": "5",
+          "pos": "0",
+          "sps": "0",
+          "remaining": "0",
+          "active": "0",
+          "move_id": "0"
+        },
+        "6": {
+          "cmd": "AXIS",
+          "axis": "6",
+          "pos": "0",
+          "sps": "0",
+          "remaining": "0",
+          "active": "0",
+          "move_id": "0"
+        },
+        "7": {
+          "cmd": "AXIS",
+          "axis": "7",
+          "pos": "0",
+          "sps": "0",
+          "remaining": "0",
+          "active": "0",
+          "move_id": "0"
+        }
+      },
+      "servo": {
+        "cmd": "SERVO_STAT",
+        "raw": "OK cmd=SERVO_STAT ch=1 angle=180.0 us=1833 on=1 pin=PH9 timer=TIM12_CH2 OK cmd=SERVO_STAT ch=2 angle=0.0 us=500 on=1 pin=PH6 timer=TIM12_CH1"
+      },
+      "servo_channels": 2,
+      "chassis": {
+        "cmd": "CHASSIS",
+        "state": "stopped",
+        "direction": "BACK",
+        "move_id": "3826756775",
+        "total": "500",
+        "remaining": "0",
+        "active": "0",
+        "invert": "5",
+        "assist": "1",
+        "target_cd": "14492",
+        "error_cd": "-2",
+        "fault": "none"
+      },
+      "lift": {
+        "cmd": "LIFT_STAT",
+        "axis": "5",
+        "initialized": "1",
+        "down_sign": "0",
+        "pos": "0",
+        "max": "8000",
+        "up_room": "0",
+        "down_room": "8000",
+        "active": "0",
+        "min": "0"
+      },
+      "auxiliary": {
+        "5": {
+          "cmd": "AUX_STAT",
+          "axis": "5",
+          "pos": "0",
+          "min": "0",
+          "max": "8000",
+          "referenced": "1",
+          "configured": "1",
+          "active": "0"
+        },
+        "6": {
+          "cmd": "AUX_STAT",
+          "axis": "6",
+          "pos": "0",
+          "min": "0",
+          "max": "0",
+          "referenced": "0",
+          "configured": "0",
+          "active": "0"
+        }
+      },
+      "aux_settings": {
+        "5": {
+          "presets": [
+            0,
+            0
+          ],
+          "min": 0,
+          "max": 9400,
+          "sps": 1000,
+          "accel": 1000,
+          "step": 9300
+        },
+        "6": {
+          "presets": [
+            0,
+            -2950
+          ],
+          "min": -2950,
+          "max": 0,
+          "sps": 3000,
+          "accel": 6000,
+          "step": 50
+        }
+      },
+      "navigation": {
+        "cmd": "NAV_STAT",
+        "state": "stopped",
+        "ready": "0",
+        "x": "0",
+        "y": "0",
+        "station": "0",
+        "tx": "0",
+        "ty": "0",
+        "leg": "1",
+        "wait_ms": "0",
+        "move_id": "0",
+        "obstacle": "0",
+        "planner": "host_grid",
+        "heading_cd": "0",
+        "target_cd": "0",
+        "arrival_cd": "0",
+        "imu": "1",
+        "fault": "none",
+        "wx": "0",
+        "wy": "0",
+        "segment": "0",
+        "segments": "0",
+        "path_id": "0",
+        "route_ready": "0",
+        "legs": "0",
+        "stations": "0",
+        "held": "0"
+      },
+      "turn": {
+        "cmd": "TURN_STAT",
+        "state": "idle",
+        "mode": "REL",
+        "zero": "0",
+        "current_cd": "-68",
+        "target_cd": "0",
+        "error_cd": "68",
+        "imu": "1",
+        "move_id": "3826753203",
+        "active": "0",
+        "fault": "none",
+        "kp_centi": "2000",
+        "tolerance_cd": "20"
+      },
+      "motion": {
+        "cmd": "MOTION_STAT",
+        "v": "1",
+        "latched": "0",
+        "total": "0",
+        "reason": "none",
+        "uncertain": "0",
+        "active": "0",
+        "armed": "0"
+      },
+      "flow": {
+        "cmd": "FLOW_CONFIG",
+        "x_um": "0",
+        "y_um": "0",
+        "rx_um": "0",
+        "ry_um": "0",
+        "marked": "0",
+        "recording": "0",
+        "start_ms": "0",
+        "end_ms": "0",
+        "now_ms": "3653847",
+        "online": "0",
+        "valid": "0",
+        "dt_us": "0",
+        "fx": "0",
+        "fy": "0",
+        "frames": "0",
+        "accepted": "0",
+        "bad": "0",
+        "low": "0",
+        "uart": "0",
+        "sat": "0",
+        "rev": "0",
+        "wx_um": "0",
+        "wy_um": "0",
+        "wrx_um": "0",
+        "wry_um": "0",
+        "heading": "0",
+        "locked": "1",
+        "gaps": "0",
+        "rgaps": "0",
+        "world_ms": "84538",
+        "epoch": "1945823163",
+        "height_um": "30000",
+        "gx_ppm": "1000000",
+        "gy_ppm": "1000000",
+        "map": "0",
+        "angle_cd": "0",
+        "minq": "1"
+      },
+      "flow_settings": {
+        "height_mm": 30.0,
+        "gain_x": 1.0,
+        "gain_y": 1.0,
+        "map": 0,
+        "angle_deg": 0.0,
+        "min_quality": 1
+      },
+      "mission": {
+        "stations": [
+          {
+            "name": "O",
+            "x": 0,
+            "y": 0,
+            "heading": 0
+          },
+          {
+            "name": "A",
+            "x": 0,
+            "y": 14400,
+            "heading": 0
+          },
+          {
+            "name": "B",
+            "x": 14400,
+            "y": 0,
+            "heading": -90
+          },
+          {
+            "name": "C",
+            "x": 14400,
+            "y": 28800,
+            "heading": 90
+          },
+          {
+            "name": "D",
+            "x": 28800,
+            "y": 14400,
+            "heading": -180
+          }
+        ],
+        "route": [
+          {
+            "station": 1,
+            "hold": 0
+          },
+          {
+            "station": 2,
+            "hold": 0
+          },
+          {
+            "station": 3,
+            "hold": 1
+          },
+          {
+            "station": 4,
+            "hold": 1
+          },
+          {
+            "station": 1,
+            "hold": 0
+          },
+          {
+            "station": 0,
+            "hold": 0
+          }
+        ],
+        "grid": {
+          "x": [
+            0,
+            14400,
+            28800
+          ],
+          "y": [
+            0,
+            14400,
+            28800
+          ]
+        },
+        "sps": 2500,
+        "accel": 2000,
+        "dwell_ms": 3000
+      },
+      "task": {
+        "state": "idle",
+        "active": false,
+        "error": "",
+        "run_id": "",
+        "leg": 0,
+        "action": 1,
+        "request": null,
+        "scans": {}
+      },
+      "camera_alignment": {
+        "state": "idle",
+        "active": false,
+        "busy": false,
+        "error": "",
+        "vision": null,
+        "stable_frames": 0,
+        "iterations": 0,
+        "total_steps": 0,
+        "has_image": false,
+        "image_revision": 0,
+        "frame_age_ms": null,
+        "dropped_frames": 0,
+        "streaming": false,
+        "velocity": {
+          "right": 0,
+          "forward": 0,
+          "yaw": 0
+        },
+        "wheel_targets": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "fault_context": null,
+        "ring_sequence": null,
+        "control": "visual_pid_velocity"
+      },
+      "camera_alignment_config": {
+        "kind": "ring",
+        "target": "red",
+        "min_area": 500,
+        "black_max": 140,
+        "target_offset_px": [
+          -100,
+          -60
+        ],
+        "tracking": {
+          "sps": 1500,
+          "deadzone_px": 30,
+          "reverse_x": false,
+          "reverse_y": false,
+          "kp": 1.3,
+          "ki": 0,
+          "kd": 0,
+          "min_sps": 50,
+          "accel": 2000,
+          "camera_yaw_deg": 90
+        },
+        "ring_sequence": {
+          "range_steps": 4000,
+          "scan_step": 500,
+          "sps": 600,
+          "angle_tolerance_deg": 1,
+          "max_turn_deg": 30
+        }
+      },
+      "task_config": {
+        "timeout_s": 480,
+        "leg_timeout_s": 120,
+        "action_timeout_s": 30,
+        "vision_max_age_ms": 500,
+        "calibration": {
+          "verified": false,
+          "matrix": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              0
+            ]
+          ],
+          "tolerance_px": 3,
+          "stable_frames": 3,
+          "max_iterations": 12,
+          "max_step": 100,
+          "sps": 100,
+          "accel": 1000
+        },
+        "legs": {}
+      },
+      "travel": 270.0,
+      "demo": false,
+      "imu": {
+        "state": "streaming",
+        "message": "H723 已握手 · 姿态数据有效",
+        "port": "/dev/ttyACM0",
+        "identity": {
+          "board": "DM-MC02",
+          "mcu": "STM32H723VGT6",
+          "sensor": "BMI088",
+          "protocol": "IMU1",
+          "fw": "1.1.1",
+          "uid": "002600483134510438373332"
+        },
+        "latest": {
+          "timestamp_ms": 3653722,
+          "sample_count": 7321538,
+          "ready": true,
+          "calibrated": true,
+          "accel_trusted": true,
+          "error": 0,
+          "calibration_count": 2000,
+          "roll_deg": -179.603,
+          "pitch_deg": 2.504,
+          "yaw_deg": -144.464,
+          "gyro_dps": [
+            -0.15,
+            -0.274,
+            -0.081
+          ],
+          "accel_ms2": [
+            -0.4353,
+            -0.1203,
+            -9.6035
+          ],
+          "linear_accel_ms2": [
+            -0.0068,
+            -0.0524,
+            0.1605
+          ],
+          "temperature_c": 28.375,
+          "quaternion_wxyz": [
+            0.021898,
+            -0.305437,
+            0.950182,
+            0.003397
+          ],
+          "valid": true,
+          "time_s": 45.67992366700037
+        },
+        "generation": 1,
+        "rejected": 0,
+        "revision": 4526
+      },
+      "auto_devices": {
+        "enabled": true,
+        "message": "自动连接：H743 已连接 · H723 已连接",
+        "h743_uid": "3637333530335109002A003A",
+        "h723_uid": "002600483134510438373332"
+      }
+    },
+    "camera": {
+      "state": "ready",
+      "message": "Nano 摄像头已打开，点击“拍照”获取一帧。",
+      "device": "/dev/video0",
+      "label": "USB 2.0 Camera: HD USB Camera",
+      "requested": "1280x720",
+      "width": 1280,
+      "height": 720,
+      "fps": 60.0,
+      "sequence": 0
+    },
+    "config": {
+      "kind": "ring",
+      "target": "red",
+      "min_area": 500,
+      "black_max": 140,
+      "target_offset_px": [
+        -100,
+        -60
+      ],
+      "tracking": {
+        "sps": 1500,
+        "deadzone_px": 30,
+        "reverse_x": false,
+        "reverse_y": false,
+        "kp": 1.3,
+        "ki": 0,
+        "kd": 0,
+        "min_sps": 50,
+        "accel": 2000,
+        "camera_yaw_deg": 90
+      },
+      "ring_sequence": {
+        "range_steps": 4000,
+        "scan_step": 500,
+        "sps": 600,
+        "angle_tolerance_deg": 1,
+        "max_turn_deg": 30
+      }
+    },
+    "settings_unchanged": {
+      "host/device_links.json": true,
+      "host/auxiliary.json": true,
+      "host/navigation.json": true,
+      "host/camera_alignment.json": true
+    },
+    "pid": "9324"
+  },
+  "verified_manifest_count": 72,
+  "tests": {
+    "local_full": 420,
+    "local_skipped": 1,
+    "targeted": 60,
+    "remote": 249,
+    "pty_stages": 3,
+    "local_browser": "passed"
+  },
+  "reproduction_before_fix": "[nano] connected via 192.168.1.197\ntest_delayed_idle_reply_cannot_erase_running_wheel_directions (diagnostic_regression.ServoTests) ... FAIL\ntest_idle_query_requires_board_acknowledged_zero_velocity (diagnostic_regression.ServoTests) ... FAIL\n\n======================================================================\nFAIL: test_delayed_idle_reply_cannot_erase_running_wheel_directions (diagnostic_regression.ServoTests)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"tests/test_camera_servo.py\", line 146, in test_delayed_idle_reply_cannot_erase_running_wheel_directions\n    forward=sum(physical)/4\nAssertionError: 'fault' != 'braking'\n- fault\n+ braking\n : 四轮速度被拒绝：ERR code=DISARMED_BUSY_OR_REVERSE\n\n======================================================================\nFAIL: test_idle_query_requires_board_acknowledged_zero_velocity (diagnostic_regression.ServoTests)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"tests/test_camera_servo.py\", line 177, in test_idle_query_requires_board_acknowledged_zero_velocity\n    self.assertIsNone(self.link.velocity)\nAssertionError: False is not true\n\n----------------------------------------------------------------------\nRan 2 tests in 0.056s\n\nFAILED (failures=2)\n",
+  "original_failure": {
+    "state": {
+      "type": "hello",
+      "link": "connected",
+      "port": "/dev/ttyUSB0",
+      "armed": false,
+      "wiring_ack": false,
+      "device": {
+        "fw": "0.2.21",
+        "protocol": "1",
+        "board": "H743_CB_V1.5",
+        "led_mask": "3",
+        "red": "fixed",
+        "chassis_max": "5000",
+        "aux_max": "3000",
+        "chassis": "1",
+        "servo": "2",
+        "servo_travel": "2700",
+        "servo1_travel": "2700",
+        "servo2_travel": "1800",
+        "serial": "dual",
+        "lift": "1",
+        "lift_max": "8000",
+        "nav": "1",
+        "nav_heading": "1",
+        "nav_grid": "1",
+        "nav_path": "1",
+        "turn": "1",
+        "aux_control": "1",
+        "flow": "1",
+        "servo1_pin": "PH9",
+        "servo2_pin": "PH6",
+        "turn_tuning": "1",
+        "aux_live": "1",
+        "turn_precision": "1",
+        "straight": "1",
+        "cpu_hz": "400000000",
+        "apb_hz": "100000000",
+        "timer_hz": "200000000",
+        "flash_kb": "2048",
+        "uid": "3637333530335109002A003A",
+        "reset": "0x00FE0000",
+        "rtos": "11.2.0",
+        "baud": "115200",
+        "stat": {
+          "cmd": "STAT",
+          "uptime_ms": "3179526",
+          "heap_free": "37488",
+          "heap_min": "37488",
+          "tasks": "4",
+          "stack_comm": "5224",
+          "stack_motion": "1860",
+          "stack_super": "1960",
+          "led": "0",
+          "armed": "0",
+          "rx": "4113393",
+          "rx_err": "0",
+          "tx_err": "0",
+          "bad": "0",
+          "replay": "9",
+          "timeout": "0",
+          "motion_fault": "0"
+        }
+      },
+      "axes": {
+        "5": {
+          "cmd": "AXIS",
+          "axis": "5",
+          "pos": "0",
+          "sps": "0",
+          "remaining": "0",
+          "active": "0",
+          "move_id": "0"
+        },
+        "6": {
+          "cmd": "AXIS",
+          "axis": "6",
+          "pos": "0",
+          "sps": "0",
+          "remaining": "0",
+          "active": "0",
+          "move_id": "0"
+        },
+        "7": {
+          "cmd": "AXIS",
+          "axis": "7",
+          "pos": "0",
+          "sps": "0",
+          "remaining": "0",
+          "active": "0",
+          "move_id": "0"
+        },
+        "1": {
+          "cmd": "AXIS",
+          "axis": "1",
+          "pos": "23476",
+          "sps": "0",
+          "remaining": "0",
+          "active": "0",
+          "move_id": "3826757104"
+        },
+        "2": {
+          "cmd": "AXIS",
+          "axis": "2",
+          "pos": "-24844",
+          "sps": "0",
+          "remaining": "0",
+          "active": "0",
+          "move_id": "3826757104"
+        },
+        "3": {
+          "cmd": "AXIS",
+          "axis": "3",
+          "pos": "26186",
+          "sps": "0",
+          "remaining": "0",
+          "active": "0",
+          "move_id": "3826757104"
+        },
+        "4": {
+          "cmd": "AXIS",
+          "axis": "4",
+          "pos": "-22122",
+          "sps": "0",
+          "remaining": "0",
+          "active": "0",
+          "move_id": "3826757104"
+        }
+      },
+      "servo": {
+        "cmd": "SERVO_STAT",
+        "raw": "OK cmd=SERVO_STAT ch=1 angle=180.0 us=1833 on=1 pin=PH9 timer=TIM12_CH2 OK cmd=SERVO_STAT ch=2 angle=0.0 us=500 on=1 pin=PH6 timer=TIM12_CH1"
+      },
+      "servo_channels": 2,
+      "chassis": {
+        "cmd": "CHASSIS",
+        "state": "stopped",
+        "direction": "BACK",
+        "move_id": "3826756775",
+        "total": "500",
+        "remaining": "0",
+        "active": "0",
+        "invert": "5",
+        "assist": "1",
+        "target_cd": "14492",
+        "error_cd": "-2",
+        "fault": "none"
+      },
+      "lift": {
+        "cmd": "LIFT_STAT",
+        "axis": "5",
+        "initialized": "1",
+        "down_sign": "0",
+        "pos": "0",
+        "max": "8000",
+        "up_room": "0",
+        "down_room": "8000",
+        "active": "0",
+        "min": "0"
+      },
+      "auxiliary": {
+        "5": {
+          "cmd": "AUX_STAT",
+          "axis": "5",
+          "pos": "0",
+          "min": "0",
+          "max": "8000",
+          "referenced": "1",
+          "configured": "1",
+          "active": "0"
+        },
+        "6": {
+          "cmd": "AUX_STAT",
+          "axis": "6",
+          "pos": "0",
+          "min": "0",
+          "max": "0",
+          "referenced": "0",
+          "configured": "0",
+          "active": "0"
+        }
+      },
+      "aux_settings": {
+        "5": {
+          "presets": [
+            0,
+            0
+          ],
+          "min": 0,
+          "max": 9400,
+          "sps": 1000,
+          "accel": 1000,
+          "step": 9300
+        },
+        "6": {
+          "presets": [
+            0,
+            -2950
+          ],
+          "min": -2950,
+          "max": 0,
+          "sps": 3000,
+          "accel": 6000,
+          "step": 50
+        }
+      },
+      "navigation": {
+        "cmd": "NAV_STAT",
+        "state": "stopped",
+        "ready": "0",
+        "x": "0",
+        "y": "0",
+        "station": "0",
+        "tx": "0",
+        "ty": "0",
+        "leg": "1",
+        "wait_ms": "0",
+        "move_id": "0",
+        "obstacle": "0",
+        "planner": "host_grid",
+        "heading_cd": "0",
+        "target_cd": "0",
+        "arrival_cd": "0",
+        "imu": "1",
+        "fault": "none",
+        "wx": "0",
+        "wy": "0",
+        "segment": "0",
+        "segments": "0",
+        "path_id": "0",
+        "route_ready": "0",
+        "legs": "0",
+        "stations": "0",
+        "held": "0"
+      },
+      "turn": {
+        "cmd": "TURN_STAT",
+        "state": "idle",
+        "mode": "REL",
+        "zero": "1",
+        "current_cd": "-3",
+        "target_cd": "0",
+        "error_cd": "3",
+        "imu": "1",
+        "move_id": "3826753203",
+        "active": "0",
+        "fault": "none",
+        "kp_centi": "2000",
+        "tolerance_cd": "20"
+      },
+      "motion": {
+        "cmd": "MOTION_STAT",
+        "v": "1",
+        "latched": "0",
+        "total": "0",
+        "reason": "none",
+        "uncertain": "0",
+        "active": "0",
+        "armed": "0"
+      },
+      "flow": {
+        "cmd": "FLOW_CONFIG",
+        "x_um": "0",
+        "y_um": "0",
+        "rx_um": "0",
+        "ry_um": "0",
+        "marked": "0",
+        "recording": "0",
+        "start_ms": "0",
+        "end_ms": "0",
+        "now_ms": "3179380",
+        "online": "0",
+        "valid": "0",
+        "dt_us": "0",
+        "fx": "0",
+        "fy": "0",
+        "frames": "0",
+        "accepted": "0",
+        "bad": "0",
+        "low": "0",
+        "uart": "0",
+        "sat": "0",
+        "rev": "0",
+        "wx_um": "0",
+        "wy_um": "0",
+        "wrx_um": "0",
+        "wry_um": "0",
+        "heading": "0",
+        "locked": "1",
+        "gaps": "0",
+        "rgaps": "0",
+        "world_ms": "84538",
+        "epoch": "1836502987",
+        "height_um": "30000",
+        "gx_ppm": "1000000",
+        "gy_ppm": "1000000",
+        "map": "0",
+        "angle_cd": "0",
+        "minq": "1"
+      },
+      "flow_settings": {
+        "height_mm": 30.0,
+        "gain_x": 1.0,
+        "gain_y": 1.0,
+        "map": 0,
+        "angle_deg": 0.0,
+        "min_quality": 1
+      },
+      "mission": {
+        "stations": [
+          {
+            "name": "O",
+            "x": 0,
+            "y": 0,
+            "heading": 0
+          },
+          {
+            "name": "A",
+            "x": 0,
+            "y": 14400,
+            "heading": 0
+          },
+          {
+            "name": "B",
+            "x": 14400,
+            "y": 0,
+            "heading": -90
+          },
+          {
+            "name": "C",
+            "x": 14400,
+            "y": 28800,
+            "heading": 90
+          },
+          {
+            "name": "D",
+            "x": 28800,
+            "y": 14400,
+            "heading": -180
+          }
+        ],
+        "route": [
+          {
+            "station": 1,
+            "hold": 0
+          },
+          {
+            "station": 2,
+            "hold": 0
+          },
+          {
+            "station": 3,
+            "hold": 1
+          },
+          {
+            "station": 4,
+            "hold": 1
+          },
+          {
+            "station": 1,
+            "hold": 0
+          },
+          {
+            "station": 0,
+            "hold": 0
+          }
+        ],
+        "grid": {
+          "x": [
+            0,
+            14400,
+            28800
+          ],
+          "y": [
+            0,
+            14400,
+            28800
+          ]
+        },
+        "sps": 2500,
+        "accel": 2000,
+        "dwell_ms": 3000
+      },
+      "task": {
+        "state": "idle",
+        "active": false,
+        "error": "",
+        "run_id": "",
+        "leg": 0,
+        "action": 1,
+        "request": null,
+        "scans": {}
+      },
+      "camera_alignment": {
+        "state": "fault",
+        "active": false,
+        "busy": false,
+        "error": "四轮速度被拒绝：ERR code=DISARMED_BUSY_OR_REVERSE",
+        "vision": {
+          "kind": "ring",
+          "target": "ring",
+          "found": true,
+          "center": [
+            710,
+            404
+          ],
+          "reference": [
+            640,
+            360
+          ],
+          "control_point": [
+            610,
+            344
+          ],
+          "width": 1280,
+          "height": 720,
+          "captured_at": 1792137550.7840126,
+          "error_dx": -30,
+          "error_dy": -16,
+          "rings": [
+            [
+              710,
+              404
+            ]
+          ],
+          "row_line": null,
+          "digits": [
+            {
+              "digit": "1",
+              "center": [
+                710,
+                404
+              ],
+              "confidence": 0.669623076915741
+            }
+          ],
+          "expected_digit": "1",
+          "digit": "1",
+          "confidence": 0.669623076915741,
+          "frame_id": 5013,
+          "captured_monotonic": 3028.367373339,
+          "stream_id": 27,
+          "processing_ms": 286.8
+        },
+        "stable_frames": 1,
+        "iterations": 87,
+        "total_steps": 2500,
+        "has_image": false,
+        "image_revision": 2704,
+        "frame_age_ms": 309.4,
+        "dropped_frames": 6,
+        "streaming": false,
+        "velocity": {
+          "right": 0,
+          "forward": 0,
+          "yaw": 0
+        },
+        "wheel_targets": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "ring_sequence": {
+          "phase": "approach",
+          "expected": 1,
+          "position_steps": -2500,
+          "range_steps": 4000,
+          "total_steps": 2500,
+          "recognized": [],
+          "line": {
+            "points": [
+              [
+                811,
+                411
+              ],
+              [
+                172,
+                410
+              ]
+            ],
+            "error_deg": 0.0896646834736714
+          },
+          "visible_digits": [
+            {
+              "digit": "1",
+              "center": [
+                710,
+                404
+              ],
+              "confidence": 0.669623076915741
+            }
+          ],
+          "wait_remaining_s": 0.0
+        },
+        "control": "ring_sequence"
+      },
+      "camera_alignment_config": {
+        "kind": "ring",
+        "target": "red",
+        "min_area": 500,
+        "black_max": 140,
+        "target_offset_px": [
+          -100,
+          -60
+        ],
+        "tracking": {
+          "sps": 1500,
+          "deadzone_px": 30,
+          "reverse_x": false,
+          "reverse_y": false,
+          "kp": 1.3,
+          "ki": 0,
+          "kd": 0,
+          "min_sps": 50,
+          "accel": 2000,
+          "camera_yaw_deg": 90
+        },
+        "ring_sequence": {
+          "range_steps": 4000,
+          "scan_step": 500,
+          "sps": 600,
+          "angle_tolerance_deg": 1,
+          "max_turn_deg": 30
+        }
+      },
+      "task_config": {
+        "timeout_s": 480,
+        "leg_timeout_s": 120,
+        "action_timeout_s": 30,
+        "vision_max_age_ms": 500,
+        "calibration": {
+          "verified": false,
+          "matrix": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              0
+            ]
+          ],
+          "tolerance_px": 3,
+          "stable_frames": 3,
+          "max_iterations": 12,
+          "max_step": 100,
+          "sps": 100,
+          "accel": 1000
+        },
+        "legs": {}
+      },
+      "travel": 270.0,
+      "log": [
+        {
+          "seq": 66357,
+          "time": "15:59:52",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 66379,
+          "time": "15:59:53",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 66400,
+          "time": "15:59:53",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 66424,
+          "time": "15:59:54",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 66445,
+          "time": "15:59:55",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 66484,
+          "time": "15:59:55",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 66506,
+          "time": "15:59:56",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 66528,
+          "time": "15:59:56",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 66550,
+          "time": "15:59:57",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 66590,
+          "time": "15:59:58",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 66611,
+          "time": "15:59:58",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 66634,
+          "time": "15:59:59",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 66673,
+          "time": "16:00:00",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 66695,
+          "time": "16:00:00",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 66717,
+          "time": "16:00:01",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 66756,
+          "time": "16:00:02",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 66778,
+          "time": "16:00:02",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 66800,
+          "time": "16:00:03",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 66838,
+          "time": "16:00:04",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 66860,
+          "time": "16:00:04",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 66882,
+          "time": "16:00:05",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 66905,
+          "time": "16:00:05",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 66927,
+          "time": "16:00:06",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 66948,
+          "time": "16:00:06",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 66969,
+          "time": "16:00:07",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67010,
+          "time": "16:00:08",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67030,
+          "time": "16:00:08",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67053,
+          "time": "16:00:09",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67074,
+          "time": "16:00:09",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67097,
+          "time": "16:00:10",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67135,
+          "time": "16:00:11",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67174,
+          "time": "16:00:12",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67198,
+          "time": "16:00:12",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67220,
+          "time": "16:00:13",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67242,
+          "time": "16:00:13",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67263,
+          "time": "16:00:14",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67287,
+          "time": "16:00:15",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67307,
+          "time": "16:00:15",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67346,
+          "time": "16:00:16",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67368,
+          "time": "16:00:16",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67390,
+          "time": "16:00:17",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67429,
+          "time": "16:00:18",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67453,
+          "time": "16:00:18",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67473,
+          "time": "16:00:19",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67513,
+          "time": "16:00:20",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67536,
+          "time": "16:00:20",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67574,
+          "time": "16:00:21",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67596,
+          "time": "16:00:22",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67617,
+          "time": "16:00:22",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67638,
+          "time": "16:00:23",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67677,
+          "time": "16:00:24",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67699,
+          "time": "16:00:24",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67720,
+          "time": "16:00:25",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67760,
+          "time": "16:00:26",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67781,
+          "time": "16:00:26",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67803,
+          "time": "16:00:27",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67844,
+          "time": "16:00:28",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67866,
+          "time": "16:00:28",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67886,
+          "time": "16:00:29",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67908,
+          "time": "16:00:29",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67933,
+          "time": "16:00:30",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67954,
+          "time": "16:00:30",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 67976,
+          "time": "16:00:31",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68015,
+          "time": "16:00:32",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68038,
+          "time": "16:00:32",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68059,
+          "time": "16:00:33",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68082,
+          "time": "16:00:33",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68103,
+          "time": "16:00:34",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68143,
+          "time": "16:00:35",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68163,
+          "time": "16:00:35",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68203,
+          "time": "16:00:36",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68242,
+          "time": "16:00:37",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68264,
+          "time": "16:00:38",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68285,
+          "time": "16:00:38",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68309,
+          "time": "16:00:39",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68329,
+          "time": "16:00:39",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68369,
+          "time": "16:00:40",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68390,
+          "time": "16:00:41",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68414,
+          "time": "16:00:41",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68435,
+          "time": "16:00:42",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68456,
+          "time": "16:00:42",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68493,
+          "time": "16:00:43",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68516,
+          "time": "16:00:44",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68554,
+          "time": "16:00:44",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68577,
+          "time": "16:00:45",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68598,
+          "time": "16:00:45",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68639,
+          "time": "16:00:46",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68660,
+          "time": "16:00:47",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68681,
+          "time": "16:00:47",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68702,
+          "time": "16:00:48",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68743,
+          "time": "16:00:49",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68765,
+          "time": "16:00:49",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68788,
+          "time": "16:00:50",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68826,
+          "time": "16:00:51",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68848,
+          "time": "16:00:51",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68869,
+          "time": "16:00:52",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68909,
+          "time": "16:00:53",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68931,
+          "time": "16:00:53",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68954,
+          "time": "16:00:54",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68977,
+          "time": "16:00:54",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 68997,
+          "time": "16:00:55",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 69019,
+          "time": "16:00:55",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 69042,
+          "time": "16:00:56",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 69064,
+          "time": "16:00:56",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 69085,
+          "time": "16:00:57",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 69107,
+          "time": "16:00:58",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 69146,
+          "time": "16:00:58",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 69186,
+          "time": "16:00:59",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 69208,
+          "time": "16:01:00",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 69230,
+          "time": "16:01:00",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 69250,
+          "time": "16:01:01",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 69287,
+          "time": "16:01:02",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 69312,
+          "time": "16:01:02",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 69334,
+          "time": "16:01:03",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 69357,
+          "time": "16:01:03",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 69377,
+          "time": "16:01:04",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 69401,
+          "time": "16:01:04",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 69422,
+          "time": "16:01:05",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 69462,
+          "time": "16:01:06",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        },
+        {
+          "seq": 69484,
+          "time": "16:01:06",
+          "kind": "ok",
+          "text": "MOTION STAT → OK cmd=MOTION_STAT v=1 latched=0 total=0 reason=none uncertain=0 active=0 armed=0"
+        }
+      ],
+      "demo": false,
+      "imu": {
+        "state": "streaming",
+        "message": "H723 已握手 · 姿态数据有效",
+        "port": "/dev/ttyACM0",
+        "identity": {
+          "board": "DM-MC02",
+          "mcu": "STM32H723VGT6",
+          "sensor": "BMI088",
+          "protocol": "IMU1",
+          "fw": "1.1.1",
+          "uid": "002600483134510438373332"
+        },
+        "latest": {
+          "timestamp_ms": 3179563,
+          "sample_count": 6371297,
+          "ready": true,
+          "calibrated": true,
+          "accel_trusted": true,
+          "error": 0,
+          "calibration_count": 2000,
+          "roll_deg": -179.614,
+          "pitch_deg": 2.486,
+          "yaw_deg": -145.116,
+          "gyro_dps": [
+            -0.258,
+            0.282,
+            -0.126
+          ],
+          "accel_ms2": [
+            -0.4209,
+            -0.0781,
+            -9.7183
+          ],
+          "linear_accel_ms2": [
+            0.0045,
+            -0.0121,
+            0.0458
+          ],
+          "temperature_c": 28.5,
+          "quaternion_wxyz": [
+            0.021737,
+            -0.300016,
+            0.951911,
+            0.003319
+          ],
+          "valid": true,
+          "time_s": 1736.722476954
+        },
+        "generation": 1,
+        "rejected": 0,
+        "revision": 173282
+      },
+      "auto_devices": {
+        "enabled": true,
+        "message": "自动连接：H743 已连接 · H723 已连接",
+        "h743_uid": "3637333530335109002A003A",
+        "h723_uid": "002600483134510438373332"
+      }
+    },
+    "vision": {
+      "status": {
+        "state": "fault",
+        "active": false,
+        "busy": false,
+        "error": "四轮速度被拒绝：ERR code=DISARMED_BUSY_OR_REVERSE",
+        "vision": {
+          "kind": "ring",
+          "target": "ring",
+          "found": true,
+          "center": [
+            710,
+            404
+          ],
+          "reference": [
+            640,
+            360
+          ],
+          "control_point": [
+            610,
+            344
+          ],
+          "width": 1280,
+          "height": 720,
+          "captured_at": 1792137550.7840126,
+          "error_dx": -30,
+          "error_dy": -16,
+          "rings": [
+            [
+              710,
+              404
+            ]
+          ],
+          "row_line": null,
+          "digits": [
+            {
+              "digit": "1",
+              "center": [
+                710,
+                404
+              ],
+              "confidence": 0.669623076915741
+            }
+          ],
+          "expected_digit": "1",
+          "digit": "1",
+          "confidence": 0.669623076915741,
+          "frame_id": 5013,
+          "captured_monotonic": 3028.367373339,
+          "stream_id": 27,
+          "processing_ms": 286.8
+        },
+        "stable_frames": 1,
+        "iterations": 87,
+        "total_steps": 2500,
+        "has_image": false,
+        "image_revision": 2704,
+        "frame_age_ms": 309.4,
+        "dropped_frames": 6,
+        "streaming": false,
+        "velocity": {
+          "right": 0,
+          "forward": 0,
+          "yaw": 0
+        },
+        "wheel_targets": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "ring_sequence": {
+          "phase": "approach",
+          "expected": 1,
+          "position_steps": -2500,
+          "range_steps": 4000,
+          "total_steps": 2500,
+          "recognized": [],
+          "line": {
+            "points": [
+              [
+                811,
+                411
+              ],
+              [
+                172,
+                410
+              ]
+            ],
+            "error_deg": 0.0896646834736714
+          },
+          "visible_digits": [
+            {
+              "digit": "1",
+              "center": [
+                710,
+                404
+              ],
+              "confidence": 0.669623076915741
+            }
+          ],
+          "wait_remaining_s": 0.0
+        },
+        "control": "ring_sequence"
+      },
+      "config": {
+        "kind": "ring",
+        "target": "red",
+        "min_area": 500,
+        "black_max": 140,
+        "target_offset_px": [
+          -100,
+          -60
+        ],
+        "tracking": {
+          "sps": 1500,
+          "deadzone_px": 30,
+          "reverse_x": false,
+          "reverse_y": false,
+          "kp": 1.3,
+          "ki": 0,
+          "kd": 0,
+          "min_sps": 50,
+          "accel": 2000,
+          "camera_yaw_deg": 90
+        },
+        "ring_sequence": {
+          "range_steps": 4000,
+          "scan_step": 500,
+          "sps": 600,
+          "angle_tolerance_deg": 1,
+          "max_turn_deg": 30
+        }
+      }
+    },
+    "unit": "# /home/a/.config/systemd/user/h743-web.service\n[Unit]\nDescription=H743 robot web console\nAfter=network.target\n\n[Service]\nType=simple\nWorkingDirectory=%h/h743\nExecStart=/usr/bin/python3 -u -m host.webserver --host 0.0.0.0 --port 8770 --no-browser --auto-devices\nRestart=on-failure\nRestartSec=3\n\n[Install]\nWantedBy=default.target\n\n# /home/a/.config/systemd/user/h743-web.service.d/camera-display.conf\n[Service]\nEnvironment=DISPLAY=:0\nEnvironment=XAUTHORITY=/run/user/1000/gdm/Xauthority\nEnvironment=H743_CAMERA_DISPLAY=1\nEnvironment=H743_CAMERA_PYTHON=/home/a/vision-env/bin/python\n",
+    "service": "MainPID=5659\nStandardOutput=journal\nStandardError=inherit\n"
+  },
+  "limitations": [
+    "Original command history was overwritten; exact historical trigger is unproven.",
+    "Same rejection reproduced with delayed idle response against NX pre-fix code using SIM only.",
+    "Physical movement not initiated; firmware not flashed."
+  ]
+}

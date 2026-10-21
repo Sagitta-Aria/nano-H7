@@ -23,7 +23,7 @@ const path = require('node:path');
     return card.querySelector('.aux-position-value').textContent===String(position)&&card.querySelector('.aux-live').textContent.includes('静止');
   },{axis,position});
   try{
-    await page.goto(process.env.AUX_URL||'http://127.0.0.1:18770/');
+    await page.goto(new URL('/debug', process.env.AUX_URL||'http://127.0.0.1:18770/').href);
     await page.getByRole('tab',{name:'升降与旋转'}).click();
     await page.waitForFunction(()=>document.querySelector('.aux-card[data-axis="5"] .aux-position-value').textContent==='0');
     const initial=await snapshot();assert.equal(initial.demo,true,'requires a simulated board');

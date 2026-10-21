@@ -1,0 +1,14 @@
+{
+  "pick_down": 9200,
+  "pick_rotation": -1750,
+  "lift_sps": 300,
+  "lift_accel": 1000,
+  "rotation_sps": 300,
+  "rotation_accel": 1000,
+  "s1_open": 120,
+  "s1_closed": 75,
+  "s1_settle_ms": 600,
+  "s2_settle_ms": 1000,
+  "step_timeout_ms": 60000,
+  "ack_timeout_ms": 3000
+}

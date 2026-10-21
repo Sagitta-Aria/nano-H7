@@ -1,6 +1,6 @@
 """Gyro parameter API/transport regressions without accessing real devices."""
 import unittest
-from unittest.mock import Mock
+from unittest.mock import Mock, ANY
 from host import turn
 from host.webapp import Console
 from host.simulator import SimulatedBoard
@@ -8,6 +8,23 @@ from host.protocol import encode, decode
 
 
 class HeadingTuningHostTests(unittest.TestCase):
+    def test_adjustable_floor_validation_capability_and_simulator_roundtrip(self):
+        """The UI/API must distinguish confirmed floor support from old firmware."""
+        for value in (True, 0, 5001, 1.5, '200'):
+            with self.assertRaises(ValueError): turn.tuning_command(20, .2, value)
+        c=Console();c.connection=Mock();c.device={'turn':'1','turn_tuning':'1','turn_precision':'1'}
+        self.assertFalse(c.turn_action('configure',kp=20,tolerance=.2,min_sps=350)[0])
+        c.connection.submit.assert_not_called()
+        c.turn={'min_sps':'200'}
+        self.assertTrue(c.turn_action('configure',kp=20,tolerance=.2,min_sps=350)[0])
+        c.connection.submit.assert_called_with('TURN CONFIG 2000 20 350', tag=ANY)
+        board=SimulatedBoard()
+        result=decode(board.receive(encode(1,'TURN CONFIG 2000 20 350')))
+        self.assertTrue(result.ok)
+        self.assertEqual(result.fields['min_sps'],'350')
+        result=decode(board.receive(encode(2,'TURN CONFIG 4000 50')))
+        self.assertEqual(result.fields['min_sps'],'350')
+
     def test_command_keeps_exact_hundredths_and_rejects_bad_tolerance(self):
         self.assertEqual(turn.tuning_command('80.25','0.50'),'TURN CONFIG 8025 50')
         for tolerance in (True,0,'0.001',10.01,'NaN','Infinity'):
@@ -16,7 +33,7 @@ class HeadingTuningHostTests(unittest.TestCase):
     def test_api_submits_both_settings_and_requires_new_capability(self):
         c=Console(); c.connection=Mock(); c.device={'turn':'1','turn_tuning':'1','turn_precision':'1'}
         self.assertTrue(c.turn_action('configure',kp='80',tolerance='0.5')[0])
-        c.connection.submit.assert_called_with('TURN CONFIG 8000 50')
+        c.connection.submit.assert_called_with('TURN CONFIG 8000 50', tag=ANY)
         c.device.pop('turn_precision'); c.connection.submit.reset_mock()
         self.assertFalse(c.turn_action('configure',kp=80,tolerance=.5)[0])
         c.connection.submit.assert_not_called()
@@ -40,7 +57,7 @@ class HeadingTuningHostTests(unittest.TestCase):
     def test_api_queues_large_gain_without_clamping_and_sim_accepts_it(self):
         console=Console(); console.connection=Mock(); console.device={'turn':'1','turn_tuning':'1','turn_precision':'1'}
         self.assertTrue(console.turn_action('configure',kp='1000.50',tolerance='0.20')[0])
-        console.connection.submit.assert_called_with('TURN CONFIG 100050 20')
+        console.connection.submit.assert_called_with('TURN CONFIG 100050 20', tag=ANY)
         board=SimulatedBoard()
         reply=decode(board.receive(encode(1,'TURN CONFIG 2147483647 20')))
         self.assertTrue(reply.ok); self.assertEqual(reply.fields['kp_centi'],'2147483647')

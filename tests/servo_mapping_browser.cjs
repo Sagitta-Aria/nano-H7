@@ -13,7 +13,7 @@ const path = require('node:path');
     if (request.url().endsWith('/api/command')) commands.push(request.postDataJSON().body);
   });
   try {
-    await page.goto(process.env.SERVO_TEST_URL || 'http://127.0.0.1:18779/');
+    await page.goto(new URL('/debug', process.env.SERVO_TEST_URL || 'http://127.0.0.1:18779/').href);
     const snapshot = () => page.evaluate(async () => (await fetch('/api/state')).json());
     assert.equal((await snapshot()).demo, true, 'only exercise the simulated board');
     const s1 = page.locator('.servo-card[data-ch="1"]');
@@ -23,8 +23,8 @@ const path = require('node:path');
       document.querySelector('.servo-card[data-ch="2"] .angle').textContent === '0.0');
     assert.match(await s1.locator('h2').textContent(), /180°/);
     assert.match(await s2.locator('h2').textContent(), /270°/);
-    assert.match(await s1.locator('.tag').textContent(), /PH6.*TIM12_CH1/);
-    assert.match(await s2.locator('.tag').textContent(), /PH9.*TIM12_CH2/);
+    assert.match(await s1.locator('.tag').textContent(), /PH9.*TIM12_CH2/);
+    assert.match(await s2.locator('.tag').textContent(), /PE4.*TIM15_CH1N/);
     assert.equal(await s1.locator('.angle-input').inputValue(), '120');
     assert.equal(await s2.locator('.angle-input').inputValue(), '0');
     assert.deepEqual(commands, [], 'initial rendering must not send servo motion');
@@ -35,14 +35,14 @@ const path = require('node:path');
       document.querySelector('.servo-card[data-ch="2"] .angle').textContent === '0.0');
     assert.equal(await s1.locator('.us').textContent(), '1833');
     assert.equal(await s2.locator('.us').textContent(), '500');
-    assert.ok(commands.includes('SERVO 1 180'));
-    assert.ok(commands.includes('SERVO 2 0'));
-    assert.match((await snapshot()).servo.raw, /ch=1 angle=180.0 us=1833/);
+    assert.ok(commands.includes('SERVO 2 120'));
+    assert.ok(commands.includes('SERVO 1 0'));
+    assert.match((await snapshot()).servo.raw, /ch=2 angle=120.0 us=1833/);
     await s1.locator('.angle-input').fill('180.5');
     const before = commands.length;
     await s1.locator('.servo-send').click();
     await page.waitForFunction(() => document.getElementById('status').textContent.includes('180°'));
-    assert.equal(commands.length, before, 'out-of-range PH6 commands stay local');
+    assert.equal(commands.length, before, 'out-of-range PH9 commands stay local');
     await s2.locator('[data-deg="270"]').click();
     await page.waitForFunction(() => document.querySelector('.servo-card[data-ch="2"] .angle').textContent === '270.0');
     assert.equal(await s2.locator('.us').textContent(), '2500');
@@ -56,7 +56,7 @@ const path = require('node:path');
       await page.screenshot({path:path.join(__dirname,`../tmp/servo_mapping_${width}.png`),fullPage:true});
     }
     assert.deepEqual(errors, []);
-    console.log('Servo browser OK: defaults, mapped commands/telemetry, PH6 limit, PH9 full travel, desktop/mobile layout.');
+    console.log('Servo browser OK: defaults, mapped commands/telemetry, S1 limit, S2 full travel, desktop/mobile layout.');
   } finally {
     await browser.close();
   }

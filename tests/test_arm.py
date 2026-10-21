@@ -21,6 +21,7 @@ SCRATCH = 0x24000000
 TIM8 = 0x40010400
 TIM5 = 0x40000C00
 TIM12 = 0x40001800
+TIM15 = 0x40014000
 
 
 class ArmImage:
@@ -253,7 +254,7 @@ class ArmMotionTests(unittest.TestCase):
 
 
 class ArmServoTests(unittest.TestCase):
-    """The pulse table is data and is checked exhaustively here; that PH6/PH9 really
+    """The pulse table is data and is checked exhaustively here; that PH9/PE4 really
     emits 50 Hz and that the horn reaches the commanded angle are hardware facts
     this emulator cannot see (OCxE drives nothing without a real timer clock)."""
 
@@ -269,10 +270,94 @@ class ArmServoTests(unittest.TestCase):
         return 500 + (2000 * steps + 270) // 540
 
     def test_timer_programmed_for_50hz_with_one_microsecond_ticks(self):
-        self.assertEqual(self.arm.read32(TIM12 + 0x28), 199)      # PSC
-        self.assertEqual(self.arm.read32(TIM12 + 0x2C), 19999)    # ARR: 1 MHz / 20000
-        self.assertEqual(self.arm.read32(TIM12 + 0x20) & 0x11, 0x11)  # CC1E and CC2E
-        self.assertEqual(self.arm.read32(TIM12 + 0x00) & 1, 1)    # CEN
+        for timer in (TIM15, TIM12):
+            self.assertEqual(self.arm.read32(timer + 0x28), 199)      # PSC
+            self.assertEqual(self.arm.read32(timer + 0x2C), 19999)    # ARR
+            self.assertEqual(self.arm.read32(timer + 0x20), 4 if timer == TIM15 else 16)
+            self.assertEqual(self.arm.read32(timer + 0x00) & 1, 1)    # CEN
+        self.assertEqual(self.arm.read32(TIM15 + 0x44) & (1 << 15), 1 << 15)  # MOE
+
+    def test_pe4_unchanged_and_180_degree_route_moves_to_ph9(self):
+        """Check the compiled mux/clock setup; electrical timing needs a board."""
+        gpioe, gpioh, rcc = 0x58021000, 0x58021C00, 0x58024400
+        self.assertEqual((self.arm.read32(gpioe) >> 8) & 3, 2)
+        self.assertEqual((self.arm.read32(gpioe + 0x20) >> 16) & 15, 4)
+        self.assertEqual((self.arm.read32(gpioh) >> 18) & 3, 2)
+        self.assertEqual((self.arm.read32(gpioh + 0x24) >> 4) & 15, 2)
+        self.assertEqual((self.arm.read32(gpioh) >> 12) & 3, 0)  # PH6 not configured
+        self.assertTrue(self.arm.read32(rcc + 0xE0) & (1 << 4))  # GPIOE
+        self.assertTrue(self.arm.read32(rcc + 0xE8) & (1 << 6))  # TIM12
+        self.assertTrue(self.arm.read32(rcc + 0xF0) & (1 << 16))  # TIM15
+
+    def test_pe4_uses_ch1n_with_positive_servo_pulses(self):
+        """STM32H743IITx AF4: PE4=TIM15_CH1N; PE5, not PE4, is CH1.
+
+        RM0433 Rev 6 Table 337: with CC1E=0 and CC1NE=1, OC1N is
+        OC1REF XOR CC1NP. CC1NP must be zero for short high PWM1 pulses. This tests register
+        configuration, not measured voltage or a moving servo.
+        """
+        self.assertEqual(self.arm.read32(TIM15 + 0x20) & 15, 4)
+        self.assertEqual(self.arm.read32(TIM15 + 0x44) & (1 << 15), 1 << 15)
+        self.assertEqual(self.arm.read32(TIM12 + 0x20), 16)
+
+    def test_diagnostic_reads_hardware_registers_without_changing_outputs(self):
+        """Do not mistake cached target acknowledgements for live timer state."""
+        for channel, timer, pin, output in ((1, TIM15, 'PE4', 'TIM15_CH1N'), (2, TIM12, 'PH9', 'TIM12_CH2')):
+            self.arm.write32(timer, 0)
+            self.arm.write32(timer + (0x34 if timer == TIM15 else 0x38), 1777)
+            before = bytes(self.arm.uc.mem_read(timer, 0x50))
+            self.arm.transmitted.clear()
+            self.arm.uc.mem_write(SCRATCH + 4096, encode(200 + channel, f'SERVO DIAG {channel}').rstrip(b'\n') + b'\0')
+            self.arm.call('process_line', SCRATCH + 4096)
+            reply = decode(bytes(self.arm.transmitted))
+            self.assertTrue(reply.ok, reply.body)
+            self.assertEqual(reply.fields['pin'], pin)
+            self.assertEqual(reply.fields['timer'], output)
+            self.assertEqual(reply.fields['cr1'], '0')
+            self.assertEqual(reply.fields['ccr'], '1777')
+            self.assertEqual(reply.fields['mode'], '2')
+            self.assertEqual(reply.fields['af'], '4' if channel == 1 else '2')
+            self.assertEqual(bytes(self.arm.uc.mem_read(timer, 0x50)), before)
+
+    def test_diagnostic_measures_pad_pulses_and_detects_stuck_levels(self):
+        """Drive GPIO input independently of CCR, then execute the real sampler.
+
+        This validates diagnostic logic, not the physical timer or connector.
+        Include the observed inverted 500 us pulse and constant-low/high faults.
+        """
+        for channel, high_us, inverted, expected_high, levels in (
+                (0, 500, False, 500, 3), (1, 2000, False, 2000, 3),
+                (0, 500, True, 19500, 3), (1, 0, False, 0, 1), (1, 20000, False, 0, 2)):
+            with self.subTest(high_us=high_us, inverted=inverted):
+                arm = ArmImage()
+                arm.call('servo_init')
+                arm.write32(0xE0001000, 1)  # DWT cycle counter enabled
+                arm.cycle_step = 40000     # 100 us per sampling iteration
+
+                def pad(uc, access, address, size, value, user):
+                    if address == 0xE0001004:
+                        phase = (arm.read32(address) // 400) % 20000
+                        level = int((phase < high_us) != inverted)
+                        arm.write32(0x58021010 if channel == 0 else 0x58021C10, level << (4 if channel == 0 else 9))
+
+                arm.uc.hook_add(UC_HOOK_MEM_READ, pad)
+                before = bytes(arm.uc.mem_read(TIM15, 0x50))
+                arm.call('servo_diagnostics', channel, SCRATCH, 384)
+                body = bytes(arm.uc.mem_read(SCRATCH, 384)).split(b'\0')[0].decode()
+                fields = dict(token.split('=', 1) for token in body.split() if '=' in token)
+                self.assertEqual(fields['sample'], '1', body)
+                self.assertEqual(int(fields['high_us']), expected_high, body)
+                self.assertEqual(int(fields['period_us']), 20000 if levels == 3 else 0, body)
+                self.assertEqual(int(fields['levels']), levels, body)
+                self.assertEqual(fields['gap_us'], '100', body)
+                self.assertIn('apb2_clk=', body)  # full report fits the protocol buffer
+                self.assertEqual(bytes(arm.uc.mem_read(TIM15, 0x50)), before)
+
+    def test_diagnostic_stalled_cycle_counter_returns_incomplete(self):
+        self.arm.write32(0xE0001000, 1)
+        self.arm.call('servo_diagnostics', 1, SCRATCH, 384)
+        body = bytes(self.arm.uc.mem_read(SCRATCH, 384)).split(b'\0')[0].decode()
+        self.assertIn('sample=0 ', body)
 
     def test_both_outputs_use_pwm1_not_inactive_on_match(self):
         """Check the compiled init's mode fields against STM32 PWM1 encoding.
@@ -281,16 +366,16 @@ class ArmServoTests(unittest.TestCase):
         only clears the output on a match; PWM1 requires OCxM=0b0110.
         This checks register programming, not physical output timing.
         """
-        ccmr1 = self.arm.read32(TIM12 + 0x18)
-        ccer = self.arm.read32(TIM12 + 0x20)
-        for channel in (0, 1):
-            with self.subTest(channel=channel):
-                shift = channel * 8
+        for timer in (TIM15, TIM12):
+            with self.subTest(timer=timer):
+                ccmr1 = self.arm.read32(timer + 0x18)
+                ccer = self.arm.read32(timer + 0x20)
+                shift = 0 if timer == TIM15 else 8
                 self.assertEqual((ccmr1 >> shift) & 3, 0)  # CCxS: output
                 mode = ((ccmr1 >> (shift + 4)) & 7) | (((ccmr1 >> (shift + 16)) & 1) << 3)
                 self.assertEqual(mode, 6, "PWM1 requires OCxM=0b0110, not 0b0010")
                 self.assertEqual((ccmr1 >> (shift + 3)) & 1, 1)  # CCR preload
-                self.assertEqual((ccer >> (channel * 4)) & 0xB, 1)  # enabled, active high
+                self.assertEqual(ccer, 4 if timer == TIM15 else 16)  # CH1N only, normal polarity / CH1 normal
 
     def test_both_channels_hold_the_home_pulse_from_the_first_period(self):
         # on=1 is truthful: the pulse train is live and each horn is holding at
@@ -298,7 +383,7 @@ class ArmServoTests(unittest.TestCase):
         for channel, angle, pulse in ((0, 900, 1167), (1, 900, 1500)):
             with self.subTest(channel=channel):
                 self.assertEqual(self.servo(channel), (1, angle, pulse, 1))
-                self.assertEqual(self.arm.read32(TIM12 + 0x34 + (1 - channel) * 4), pulse)
+                self.assertEqual(self.arm.read32((TIM15 + 0x34 if channel == 0 else TIM12 + 0x38)), pulse)
 
     def test_each_channel_uses_its_own_full_travel_table(self):
         """Exercise every compiled lookup entry and round trip, not a Python copy alone."""
@@ -306,7 +391,7 @@ class ArmServoTests(unittest.TestCase):
             for steps in range(limit + 1):
                 pulse = 500 + (2000 * steps + limit // 2) // limit
                 self.assertEqual(self.arm.call("servo_set_steps", channel, steps), 1)
-                self.assertEqual(self.arm.read32(TIM12 + 0x34 + 4 * (1 - channel)), pulse)
+                self.assertEqual(self.arm.read32((TIM15 + 0x34 if channel == 0 else TIM12 + 0x38)), pulse)
                 self.assertEqual(self.servo(channel), (1, steps * 5, pulse, 1))
             self.assertEqual(self.arm.call("servo_set_steps", channel, limit + 1), 0)
 
@@ -321,6 +406,14 @@ class ArmServoTests(unittest.TestCase):
         hello = request(80, "HELLO")
         self.assertEqual(hello.fields["servo1_travel"], "2700")
         self.assertEqual(hello.fields["servo2_travel"], "1800")
+        self.assertEqual(hello.fields["servo1_pin"], "PE4")
+        self.assertEqual(hello.fields["servo2_pin"], "PH9")
+        reply = request(79, "SERVO 1 90")
+        self.assertEqual(reply.fields["pin"], "PE4")
+        self.assertEqual(reply.fields["timer"], "TIM15_CH1N")
+        status = request(78, "SERVO STAT")
+        self.assertIn("pin=PE4 timer=TIM15_CH1N", status.body)
+        self.assertIn("pin=PH9 timer=TIM12_CH2", status.body)
         for seq, angle, pulse in ((81, 45, 1000), (82, 90, 1500), (83, 135, 2000), (84, 180, 2500)):
             reply = request(seq, f"SERVO 2 {angle}")
             self.assertTrue(reply.ok, reply.body)
@@ -338,7 +431,7 @@ class ArmServoTests(unittest.TestCase):
             reply = request(seq, f"SERVO 2 {angle}")
             self.assertEqual(reply.fields["us"], str(pulse))
             self.assertEqual(reply.fields["angle"], f"{angle}.0")
-            self.assertEqual(self.arm.read32(TIM12 + 0x34), pulse)
+            self.assertEqual(self.arm.read32(TIM12 + 0x38), pulse)
 
     def test_every_step_maps_monotonically_inside_the_electrical_range(self):
         previous = 0
@@ -347,7 +440,7 @@ class ArmServoTests(unittest.TestCase):
             if steps in (0, 90, 180, 270, 540):
                 self.assertEqual(self.arm.call("servo_set_steps", 0, steps), 1)
                 self.assertEqual(self.servo(0), (1, steps * 5, pulse, 1))
-                self.assertEqual(self.arm.read32(TIM12 + 0x38), pulse)
+                self.assertEqual(self.arm.read32(TIM15 + 0x34), pulse)
             self.assertGreaterEqual(pulse, previous)
             self.assertGreaterEqual(pulse, 500)
             self.assertLessEqual(pulse, 2500)
@@ -361,8 +454,8 @@ class ArmServoTests(unittest.TestCase):
         self.assertEqual(self.arm.call("servo_set_steps", 1, 360), 1)
         self.assertEqual(self.servo(0), (1, 0, 500, 1))
         self.assertEqual(self.servo(1), (1, 1800, 2500, 1))
-        self.assertEqual(self.arm.read32(TIM12 + 0x38), 500)   # S1 -> PH9/CH2
-        self.assertEqual(self.arm.read32(TIM12 + 0x34), 2500)  # S2 -> PH6/CH1
+        self.assertEqual(self.arm.read32(TIM15 + 0x34), 500)   # S1 -> PE4/TIM15_CH1
+        self.assertEqual(self.arm.read32(TIM12 + 0x38), 2500)  # S2 -> PH9/CH2
         # Refusing the second channel leaves the first one where it was.
         self.assertEqual(self.arm.call("servo_set_steps", 1, 361), 0)
         self.assertEqual(self.servo(1), (1, 1800, 2500, 1))

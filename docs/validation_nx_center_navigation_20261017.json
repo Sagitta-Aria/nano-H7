@@ -1,0 +1,344 @@
+{
+  "backup": "/home/a/h743/backups/center_navigation_20261017_170328",
+  "config_unchanged": true,
+  "config_sha256": {
+    "host/device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699",
+    "host/auxiliary.json": "8ba910fb3e7bba676f3c4c0097a2c90f3b685a46dfd968d9a762c9c1b9480fba",
+    "host/navigation.json": "069219467f43151b6f396a41ea0569d3636514ce31904f441d4093332a177b43",
+    "host/camera_alignment.json": "48348200dd774edd4b0f136c15b974c068d4e970746fc004f42684ae407586a7"
+  },
+  "A_to_B": [
+    [
+      14400,
+      14400
+    ],
+    [
+      14400,
+      0
+    ]
+  ],
+  "assets": {
+    "/": {
+      "sha256": "256a36d0bca213fa6a7f5be0bb892397a29955fffa799ad5773ae9080465bc3b",
+      "matches_local": true,
+      "content_type": "text/html; charset=utf-8"
+    },
+    "/app.js": {
+      "sha256": "99dc3709de887babca58de4369167657c4022f1c071899fef2f323c75c3a141c",
+      "matches_local": true,
+      "content_type": "application/javascript; charset=utf-8"
+    }
+  },
+  "state": {
+    "link": "connected",
+    "port": "/dev/ttyUSB0",
+    "armed": false,
+    "device": {
+      "fw": "0.2.22",
+      "protocol": "1",
+      "board": "H743_CB_V1.5",
+      "led_mask": "3",
+      "red": "fixed",
+      "chassis_max": "5000",
+      "aux_max": "3000",
+      "chassis": "1",
+      "servo": "2",
+      "servo_travel": "2700",
+      "servo1_travel": "2700",
+      "servo2_travel": "1800",
+      "serial": "dual",
+      "lift": "1",
+      "lift_max": "8000",
+      "nav": "1",
+      "nav_heading": "1",
+      "nav_grid": "1",
+      "nav_path": "1",
+      "turn": "1",
+      "aux_control": "1",
+      "flow": "1",
+      "servo1_pin": "PH9",
+      "servo2_pin": "PH6",
+      "turn_tuning": "1",
+      "aux_live": "1",
+      "turn_precision": "1",
+      "straight": "1",
+      "cpu_hz": "400000000",
+      "apb_hz": "100000000",
+      "timer_hz": "200000000",
+      "flash_kb": "2048",
+      "uid": "3637333530335109002A003A",
+      "reset": "0x00FE0000",
+      "rtos": "11.2.0",
+      "baud": "115200",
+      "stat": {
+        "cmd": "STAT",
+        "uptime_ms": "996142",
+        "heap_free": "37496",
+        "heap_min": "37496",
+        "tasks": "4",
+        "stack_comm": "5200",
+        "stack_motion": "1804",
+        "stack_super": "1960",
+        "led": "0",
+        "armed": "0",
+        "rx": "741020",
+        "rx_err": "0",
+        "tx_err": "0",
+        "bad": "0",
+        "replay": "0",
+        "timeout": "0",
+        "motion_fault": "0"
+      }
+    },
+    "axes": {
+      "1": {
+        "cmd": "AXIS",
+        "axis": "1",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "2": {
+        "cmd": "AXIS",
+        "axis": "2",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "3": {
+        "cmd": "AXIS",
+        "axis": "3",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "4": {
+        "cmd": "AXIS",
+        "axis": "4",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "5": {
+        "cmd": "AXIS",
+        "axis": "5",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "6": {
+        "cmd": "AXIS",
+        "axis": "6",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "7": {
+        "cmd": "AXIS",
+        "axis": "7",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      }
+    },
+    "navigation": {
+      "cmd": "NAV_STAT",
+      "state": "idle",
+      "ready": "0",
+      "x": "0",
+      "y": "0",
+      "station": "0",
+      "tx": "0",
+      "ty": "0",
+      "leg": "1",
+      "wait_ms": "0",
+      "move_id": "0",
+      "obstacle": "0",
+      "planner": "host_grid",
+      "heading_cd": "0",
+      "target_cd": "0",
+      "arrival_cd": "0",
+      "imu": "1",
+      "fault": "none",
+      "wx": "0",
+      "wy": "0",
+      "segment": "0",
+      "segments": "0",
+      "path_id": "0",
+      "route_ready": "0",
+      "legs": "0",
+      "stations": "0",
+      "held": "0"
+    },
+    "navigation_runner": {
+      "state": "stopped",
+      "phase": "",
+      "leg": 1,
+      "op_id": 0,
+      "path_id": null,
+      "error": "",
+      "active": false
+    },
+    "turn": {
+      "cmd": "TURN_STAT",
+      "state": "idle",
+      "mode": "REL",
+      "zero": "0",
+      "current_cd": "15135",
+      "target_cd": "0",
+      "error_cd": "-15135",
+      "imu": "1",
+      "move_id": "0",
+      "active": "0",
+      "fault": "none",
+      "kp_centi": "2000",
+      "tolerance_cd": "20",
+      "min_sps": "200"
+    },
+    "task": {
+      "state": "idle",
+      "active": false,
+      "error": "",
+      "run_id": "",
+      "leg": 0,
+      "action": 1,
+      "request": null,
+      "scans": {},
+      "ring_task": null
+    },
+    "camera_alignment": {
+      "state": "idle",
+      "active": false,
+      "busy": false,
+      "error": "",
+      "vision": null,
+      "stable_frames": 0,
+      "iterations": 0,
+      "total_steps": 0,
+      "has_image": false,
+      "image_revision": 0,
+      "frame_age_ms": null,
+      "dropped_frames": 0,
+      "streaming": false,
+      "velocity": {
+        "right": 0,
+        "forward": 0,
+        "yaw": 0
+      },
+      "wheel_targets": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "fault_context": null,
+      "ring_sequence": null,
+      "control": "visual_pid_velocity"
+    },
+    "imu": {
+      "state": "streaming",
+      "message": "H723 已握手 · 姿态数据有效",
+      "port": "/dev/ttyACM0",
+      "identity": {
+        "board": "DM-MC02",
+        "mcu": "STM32H723VGT6",
+        "sensor": "BMI088",
+        "protocol": "IMU1",
+        "fw": "1.1.1",
+        "uid": "002600483134510438373332"
+      },
+      "latest": {
+        "timestamp_ms": 1213253,
+        "sample_count": 2431237,
+        "ready": true,
+        "calibrated": true,
+        "accel_trusted": true,
+        "error": 0,
+        "calibration_count": 2000,
+        "roll_deg": -179.876,
+        "pitch_deg": 3.246,
+        "yaw_deg": -151.746,
+        "gyro_dps": [
+          -0.216,
+          -0.059,
+          0.039
+        ],
+        "accel_ms2": [
+          -0.6264,
+          0.026,
+          -9.6313
+        ],
+        "linear_accel_ms2": [
+          -0.0711,
+          0.0473,
+          0.1265
+        ],
+        "temperature_c": 29.375,
+        "quaternion_wxyz": [
+          0.027773,
+          -0.24431,
+          0.96754,
+          0.005894
+        ],
+        "valid": true,
+        "time_s": 56.825262246999955
+      },
+      "generation": 1,
+      "rejected": 0,
+      "revision": 5686
+    },
+    "auto_devices": {
+      "enabled": true,
+      "message": "自动连接：H743 已连接 · H723 已连接",
+      "h743_uid": "3637333530335109002A003A",
+      "h723_uid": "002600483134510438373332"
+    }
+  },
+  "service": "MainPID=8818\nActiveState=active\n",
+  "date": "2026-10-17",
+  "copied_files": 21,
+  "manifest_files_verified": 75,
+  "remote_tests": {
+    "run": 274,
+    "skipped": 1,
+    "reason": "Node.js unavailable on NX; JS parity covered on development PC",
+    "passed": true,
+    "duration_seconds": 103.735
+  },
+  "pty_stages_passed": 3,
+  "endpoints": {
+    "http://192.168.55.1:8770": {
+      "http_ok": true,
+      "link": "connected",
+      "runner_available": true
+    },
+    "http://192.168.1.196:8770": {
+      "http_ok": true,
+      "link": "connected",
+      "runner_available": true
+    }
+  },
+  "firmware_flashed": false,
+  "vehicle_motion_tested": false,
+  "existing_route_caveat": "C and D use ring task 1 but lack arrival_enabled. Enable arrival orientation and confirm headings before running those tasks.",
+  "journal_review": "journalctl returned no entries; log-based error absence could not be verified. Service ActiveState=active, ExecMainStatus=0, NRestarts=0 and HTTP/device checks passed.",
+  "service_health": {
+    "active": true,
+    "ExecMainStatus": 0,
+    "NRestarts": 0
+  }
+}

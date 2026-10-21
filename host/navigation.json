@@ -1,36 +1,70 @@
 {
-  "points": {
-    "O": [
-      0,
-      0
-    ],
-    "A": [
-      0,
-      14000
-    ],
-    "B": [
-      14000,
-      0
-    ],
-    "C": [
-      14000,
-      28000
-    ],
-    "D": [
-      28000,
-      14000
-    ]
-  },
-  "sps": 500,
-  "accel": 2000,
-  "dwell_ms": 3000,
-  "headings": {
-    "O": 0,
-    "A": 0,
-    "B": 0,
-    "C": 0,
-    "D": 0
-  },
+  "stations": [
+    {
+      "name": "O",
+      "x": 0,
+      "y": 0,
+      "heading": 0,
+      "arrival_enabled": false
+    },
+    {
+      "name": "A",
+      "x": 0,
+      "y": 14000,
+      "heading": 0,
+      "arrival_enabled": false
+    },
+    {
+      "name": "B",
+      "x": 14000,
+      "y": 0,
+      "heading": 0,
+      "arrival_enabled": false
+    },
+    {
+      "name": "C",
+      "x": 14000,
+      "y": 28000,
+      "heading": 0,
+      "arrival_enabled": false
+    },
+    {
+      "name": "D",
+      "x": 28000,
+      "y": 14000,
+      "heading": 0,
+      "arrival_enabled": false
+    },
+    {
+      "name": "X",
+      "x": 0,
+      "y": 28800,
+      "heading": -180,
+      "arrival_enabled": true
+    }
+  ],
+  "route": [
+    {
+      "station": 1,
+      "hold": 0
+    },
+    {
+      "station": 2,
+      "hold": 0
+    },
+    {
+      "station": 3,
+      "hold": 0
+    },
+    {
+      "station": 4,
+      "hold": 0
+    },
+    {
+      "station": 1,
+      "hold": 0
+    }
+  ],
   "grid": {
     "x": [
       0,
@@ -40,7 +74,13 @@
     "y": [
       0,
       14000,
-      28000
+      28800
     ]
-  }
+  },
+  "sps": 500,
+  "accel": 2000,
+  "dwell_ms": 3000,
+  "turn_inset_enabled": false,
+  "turn_inset_steps": 1000,
+  "start_station": 0
 }

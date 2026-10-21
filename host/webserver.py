@@ -26,6 +26,7 @@ from pathlib import Path
 
 from .webapp import Console
 from .camera import CameraSlots
+from .task_camera import TaskCameras
 
 STATIC = Path(__file__).resolve().parent / "static"
 PAGE = STATIC / "index.html"
@@ -40,7 +41,10 @@ class Session:
     def __init__(self, console, exit_when_idle=False, control_lease=CONTROL_LEASE_SECONDS):
         self.console = console
         self.cameras = CameraSlots()
+        self.task_cameras = TaskCameras(self.cameras)
+        self.console.task_cameras = self.task_cameras
         self.camera = self.cameras.hubs["1"]  # legacy camera API is camera 1
+        self.console.camera_alignment.hub = self.camera
         self.exit_when_idle = exit_when_idle
         self.control_lease = control_lease
         self.lock = threading.Lock()
@@ -130,6 +134,9 @@ class Session:
 
     def claim(self, token):
         """Explicitly transfer control to a registered page, queuing STOP first."""
+        if self.console.pick_place.active:return False,'抓取与放置正在运行；请先停止。'
+        if self.console.task.active:return False,'自动任务正在运行；请先停止自动任务。'
+        if self.console.camera_alignment.active:return False,'摄像头对准正在运行；请先停止对准。'
         with self.lock:
             if token not in self.clients:
                 return False, '页面尚未连接，请刷新后重试。'
@@ -180,10 +187,14 @@ class Session:
             frame = self.console.hello()
             if frame["armed"]:
                 return False, "请先停止运动并取消电机使能，再重启上位机。"
-            busy = (self.console.nav_pending or self.console.aux_pending or
+            if getattr(self.console, 'settings_pending', None):
+                return False, '正在等待参数回读并保存，请稍候再重启。'
+            if frame.get('settings_error'):
+                return False, frame['settings_error']
+            busy = (frame.get('competition',{}).get('active',False) or frame.get('pick_place',{}).get('active',False) or frame.get('navigation_runner',{}).get('active',False) or frame.get('task',{}).get('active',False) or self.console.nav_pending or self.console.aux_pending or
                     frame["turn"].get("active") == "1" or
                     frame["navigation"].get("state") in
-                    ("moving", "turning", "orienting", "waiting", "blocked") or
+                    ("moving", "turning", "orienting", "waiting", "nudging", "blocked") or
                     any(axis.get("active") == "1" or float(axis.get("sps", 0)) != 0
                         for axis in frame["axes"].values()))
             if busy:
@@ -196,25 +207,59 @@ class Session:
         self.stopping.set()
         self.shutdown_server()
 
+    def open_local_monitor(self):
+        """Open camera one for the enabled NX desktop, without starting control.
+
+        Honor the remembered physical binding and native mode. Device startup
+        retries happen off the serial pump. Monitor recognition never arms or moves.
+        """
+        for _ in range(20):
+            if self.stopping.wait(.5): return
+            if self.camera.snapshot()['state'] in ('ready','opening'): return
+            try:
+                listing = self.cameras.listing('1')
+                device = next((d for d in listing['devices'] if d['id'] == listing['bound_device']),None)
+                if device is None and not listing['binding']:
+                    device = next(iter(listing['devices']),None)
+                if device is None: continue
+                modes = device['resolutions']
+                resolution = '1280x720' if '1280x720' in modes else modes[-1]
+                self.cameras.start('1',device['id'],resolution)
+                return
+            except (OSError,ValueError) as error:
+                self.console.note('warn','NX 本地相机显示等待设备：'+str(error))
+
     def run(self):
         """Drain board events, poll the board, and push to every page.
 
         A failure in here would silently freeze every page while the port stays
         open, so the loop reports it instead of dying quietly.
         """
+        if self.cameras.bindings.get('2'):
+            self.task_cameras.request('2')
+        elif self.camera.display:
+            threading.Thread(target=self.open_local_monitor,daemon=True,name='nx-local-monitor').start()
         watchdog = time.monotonic()
+        last_snapshot = 0.
+        snapshot_dirty = False
         while not self.stopping.is_set():
             try:
+                self.console.wakeup.clear()
                 with self.lock:
                     watching = bool(self.clients)
                 if watching:
                     self.console.last_client = time.monotonic()
                 events = self.console.drain()
+                # Process completion and dispatch control before rendering UI.
+                self.console.tick()
                 if events:
                     for event in events:
                         self.broadcast(event)
+                    snapshot_dirty = True
+                if snapshot_dirty and time.monotonic()-last_snapshot >= .1:
                     self.broadcast({"type": "snapshot", "frames": self.console.hello()})
-                self.console.tick()
+                    last_snapshot = time.monotonic()
+                    snapshot_dirty = False
                 if self.console.autolink:
                     self.console.autolink.tick()
                 self.release_stale_control()
@@ -224,6 +269,11 @@ class Session:
                 if now - watchdog >= 1.:
                     watchdog = now
                     self.broadcast({"type": "ping", "t": int(now)})
+                    self.broadcast({"type": "camera2", "frame": self.cameras.hubs['2'].snapshot()})
+                    self.broadcast({"type": "task_progress", "task": self.console.task.snapshot()})
+                    with self.console.lock:
+                        pick_place_status = self.console.pick_place.snapshot()
+                    self.broadcast({"type": "pick_place", "status": pick_place_status})
                 if self.exit_when_idle:
                     with self.lock:
                         watching = bool(self.clients)
@@ -238,7 +288,7 @@ class Session:
                         idle = False
                         if watching:
                             self.seen_page = True
-                    if idle:
+                    if idle and not self.console.task.active and not self.console.camera_alignment.active and not self.console.pick_place.active:
                         self.stopping.set()
                         return
             except Exception as exc:  # noqa: BLE001 - the pump must never die silently
@@ -250,7 +300,8 @@ class Session:
                 except Exception:  # noqa: BLE001
                     pass
                 time.sleep(.2)
-            time.sleep(.05)
+            # Replies wake this immediately; timeout services timers/perception.
+            self.console.wakeup.wait(.01)
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -323,7 +374,24 @@ class Handler(BaseHTTPRequestHandler):
         slot, action = self.camera_route(path)
         if slot:
             hub = self.session.cameras.hubs[slot]
-            if action == "devices":
+            if slot == '1' and action == 'vision/state':
+                with self.session.console.lock:
+                    alignment = self.session.console.camera_alignment
+                    self.json({'status': alignment.snapshot(), 'config': alignment.settings.snapshot()})
+            elif slot == '1' and action == 'vision/defaults':
+                from .vision_tuning import defaults
+                self.json({'detector': defaults()})
+            elif slot == '1' and action == 'vision/frame':
+                with self.session.console.lock:
+                    data = self.session.console.camera_alignment.preview_image
+                if not data:
+                    self.json({'error': '尚无识别图像。'}, 404); return
+                self.send_response(200)
+                self.send_header('Content-Type', 'image/jpeg')
+                self.send_header('Content-Length', str(len(data)))
+                self.send_header('Cache-Control', 'no-store')
+                self.end_headers(); self.wfile.write(data)
+            elif action == "devices":
                 self.json(self.session.cameras.listing(slot))
             elif action == "state":
                 self.json(hub.snapshot())
@@ -346,6 +414,19 @@ class Handler(BaseHTTPRequestHandler):
         elif path == "/api/host/state":
             self.json({"instance": self.session.instance,
                        "restarting": self.session.restart_requested.is_set()})
+        elif path == '/api/mission/request':
+            self.json({'request':self.session.console.hello()['task']['request']})
+        elif path in ('/api/pick-place/state', '/api/pick-place/request'):
+            with self.session.console.lock:
+                module = self.session.console.pick_place
+                self.json({'status':module.snapshot(), 'config':module.settings.snapshot(),
+                           'request':module.snapshot()['request']})
+        elif path == '/api/b-pickup/config':
+            with self.session.console.lock:
+                self.json({'config':self.session.console.b_pickup.snapshot()})
+        elif path == '/api/material-flow/config':
+            with self.session.console.lock:
+                self.json({'config':self.session.console.material_settings.snapshot()})
         elif path == "/api/ports":
             self.json(self.session.console.ports())
         elif path == "/api/imu/ports":
@@ -390,6 +471,45 @@ class Handler(BaseHTTPRequestHandler):
                 return
             try:
                 hub = self.session.cameras.hubs[slot]
+                alignment = self.session.console.camera_alignment
+                if action != 'snapshot' and self.session.console.task.active and self.session.console.task.uses_task_code:
+                    raise ValueError('自动任务正在管理摄像头，请先停止任务。')
+                if action != 'snapshot' and self.session.task_cameras.snapshot()['state'] == 'opening':
+                    raise ValueError('摄像头正在切换，请等待完成。')
+                if slot == '1' and action == 'vision/tune':
+                    from .camera_vision import validated
+                    with self.session.console.lock:
+                        if alignment.active or alignment.capturing or self.session.console.task.active:
+                            raise ValueError('请先停止对准和自动任务，再进行调参预览。')
+                        config = validated(payload.get('config'))
+                        if 'preview_roi_pct' in payload:
+                            from .camera_vision import pickup_roi_bounds
+                            roi = payload['preview_roi_pct']
+                            pickup_roi_bounds(100, 100, roi)
+                            if config['kind'] != 'block':
+                                raise ValueError('调试识别框用于色块模式。')
+                            config['preview_roi_pct'] = roi
+                        alignment.capturing = True
+                        alignment.tuning = True
+                    try:
+                        result = hub.tune(config)
+                    finally:
+                        with self.session.console.lock:
+                            alignment.capturing = False
+                            alignment.tuning = False
+                    self.json(dict(ok=True, status=alignment.snapshot(), **result)); return
+                if slot == '1' and action.startswith('vision/'):
+                    with self.session.console.lock:
+                        if action == 'vision/config':
+                            result = alignment.save(payload.get('config'))
+                            self.json({'ok': True, 'config': result}); return
+                        elif action == 'vision/recognize': alignment.recognize(payload.get('image'))
+                        elif action == 'vision/start': alignment.start()
+                        elif action == 'vision/stop': alignment.stop()
+                        else: raise ValueError('未知视觉操作。')
+                        self.json({'ok': True, 'status': alignment.snapshot()}); return
+                if slot == '1' and action != 'snapshot' and (alignment.active or alignment.capturing):
+                    raise ValueError('摄像头一正在识别或对准，请先停止并等待采集完成。')
                 if action == "start":
                     frame = self.session.cameras.start(slot, payload.get("device"), payload.get("resolution"))
                 elif action == "snapshot":
@@ -472,6 +592,69 @@ class Handler(BaseHTTPRequestHandler):
                 return
             ok, message = self.session.console.apply_auxiliary(payload.get('config'), payload.get('axis'))
             self.json({'ok':ok,'detail':message,'error':None if ok else message})
+        elif path == '/api/material-flow/config':
+            if self.guard(payload) is None:return
+            try:
+                with self.session.console.lock:
+                    config = self.session.console.material_settings.save(payload.get('config'))
+            except (ValueError, OSError) as error:
+                self.json({'ok':False, 'error':str(error)}, 400);return
+            self.session.broadcast({'type':'material_flow_config', 'config':config})
+            self.json({'ok':True, 'config':config})
+        elif path == '/api/b-pickup/config':
+            if self.guard(payload) is None:return
+            try:
+                with self.session.console.lock:
+                    config = self.session.console.b_pickup.save(payload.get('config'))
+            except (ValueError, OSError) as error:
+                self.json({'ok':False, 'error':str(error)}, 400);return
+            self.session.broadcast({'type':'b_pickup_config', 'config':config})
+            self.json({'ok':True, 'config':config})
+        elif path == '/api/pick-place/config':
+            if self.guard(payload) is None:return
+            try:
+                with self.session.console.lock:
+                    config = self.session.console.pick_place.save(payload.get('config'))
+            except (ValueError, OSError) as error:
+                self.json({'ok':False, 'error':str(error)}, 400);return
+            self.session.broadcast({'type':'pick_place_config', 'config':config})
+            self.json({'ok':True, 'config':config})
+        elif path == '/api/pick-place/action':
+            if self.guard(payload) is None:return
+            ok, message = self.session.console.pick_place_action(
+                payload.get('action'), item=payload.get('item', 1), batch=payload.get('batch', 1),
+                task_code=payload.get('task_code'), require_vision=payload.get('require_vision', False),
+                profile=payload.get('profile', 'default'))
+            with self.session.console.lock:
+                status = self.session.console.pick_place.snapshot()
+            self.session.broadcast({'type':'pick_place', 'status':status})
+            self.json({'ok':ok, 'error':None if ok else message, 'detail':message, 'status':status})
+        elif path == '/api/pick-place/vision':
+            # Local perception publishes a result; only a controller starts jobs.
+            if self.client_address[0] not in ('127.0.0.1','::1') and self.guard(payload) is None:return
+            try:self.session.console.pick_place_vision(payload.get('sample'))
+            except (ValueError, TypeError) as error:
+                self.json({'ok':False, 'error':str(error)}, 400);return
+            self.json({'ok':True})
+        elif path == '/api/mission/config':
+            if self.guard(payload) is None:return
+            try:config=self.session.console.save_task(payload.get('config'))
+            except (ValueError,OSError) as error:
+                self.json({'ok':False,'error':str(error)},400);return
+            self.session.broadcast({'type':'task_config','config':config})
+            self.json({'ok':True,'config':config})
+        elif path == '/api/mission/action':
+            if self.guard(payload) is None:return
+            ok,message=self.session.console.task_action(payload.get('action'))
+            self.json({'ok':ok,'error':None if ok else message,'detail':message})
+        elif path == '/api/mission/vision':
+            # A local vision worker is an input producer, not a motor controller.
+            # Remote callers retain the existing browser-controller guard.
+            if self.client_address[0] not in ('127.0.0.1','::1') and self.guard(payload) is None:return
+            try:self.session.console.task_vision(payload.get('sample'))
+            except (ValueError,TypeError) as error:
+                self.json({'ok':False,'error':str(error)},400);return
+            self.json({'ok':True})
         elif path == "/api/navigation/config":
             if self.guard(payload) is None:
                 return
@@ -501,8 +684,13 @@ class Handler(BaseHTTPRequestHandler):
             if self.guard(payload) is None:
                 return
             ok, message = self.session.console.turn_action(payload.get("action"), payload.get("mode", "REL"),
-                payload.get("angle", 0), payload.get("sps", 500), payload.get("accel", 2000), payload.get("kp", 20), payload.get("tolerance"))
+                payload.get("angle", 0), payload.get("sps", 500), payload.get("accel", 2000), payload.get("kp", 20), payload.get("tolerance"), payload.get("min_sps"))
             self.json({"ok": ok, "detail": message, "error": None if ok else message})
+        elif path == '/api/competition/start':
+            if self.guard(payload) is None:
+                return
+            ok, message = self.session.console.competition.start(full_flow=payload.get('full_flow', False))
+            self.json({'ok': ok, 'detail': message, 'error': None if ok else message})
         elif path == "/api/navigation/action":
             if self.guard(payload) is None:
                 return
@@ -512,7 +700,7 @@ class Handler(BaseHTTPRequestHandler):
             self.json({"ok": False, "error": "未知接口"}, 404)
 
     def static(self, path):
-        relative = "index.html" if path in ("/", "") else path.lstrip("/")
+        relative = "index.html" if path in ('/', '', '/debug', '/debug/') else path.lstrip('/')
         target = (STATIC / relative).resolve()
         if STATIC not in target.parents and target != STATIC:
             self.json({"ok": False, "error": "越界路径"}, 403)
@@ -580,7 +768,7 @@ def serve(host="127.0.0.1", port=8770, open_browser=True, exit_when_idle=False,
     if auto_devices and (demo or connect):
         raise ValueError("--auto-devices cannot be combined with --demo or --connect")
     console = Console()
-    if auto_devices:
+    if auto_devices or (not demo and not connect):
         from .autolink import AutoDevices
         console.autolink = AutoDevices(console)
     session = Session(console, exit_when_idle=exit_when_idle)
@@ -607,6 +795,7 @@ def serve(host="127.0.0.1", port=8770, open_browser=True, exit_when_idle=False,
     finally:
         session.stopping.set()
         pump.join(timeout=2.)
+        session.task_cameras.close()
         session.cameras.close()
         console.imu.close()
         if console.attached():

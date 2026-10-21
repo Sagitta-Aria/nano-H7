@@ -1,0 +1,277 @@
+{
+  "backup": "/home/a/h743/backups/camera2_qr_20261017_172437",
+  "config_hashes_before": {
+    "host/device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699",
+    "host/auxiliary.json": "8ba910fb3e7bba676f3c4c0097a2c90f3b685a46dfd968d9a762c9c1b9480fba",
+    "host/navigation.json": "069219467f43151b6f396a41ea0569d3636514ce31904f441d4093332a177b43",
+    "host/camera_alignment.json": "48348200dd774edd4b0f136c15b974c068d4e970746fc004f42684ae407586a7"
+  },
+  "binding": {
+    "id": "/dev/v4l/by-id/usb-XHH-260202-H_Integrated_Camera-video-index0",
+    "label": "Integrated Camera: Integrated C",
+    "kind": "usb"
+  },
+  "device": {
+    "id": "/dev/video0",
+    "stable_id": "/dev/v4l/by-id/usb-XHH-260202-H_Integrated_Camera-video-index0",
+    "aliases": [
+      "/dev/v4l/by-id/usb-XHH-260202-H_Integrated_Camera-video-index0",
+      "/dev/v4l/by-path/platform-3610000.xhci-usb-0:2.4:1.0-video-index0"
+    ],
+    "physical_id": "/sys/devices/platform/3610000.xhci/usb1/1-2/1-2.4",
+    "kind": "usb",
+    "label": "Integrated Camera: Integrated C",
+    "resolutions": [
+      "640x480",
+      "1280x720"
+    ],
+    "mjpeg": true
+  },
+  "live_samples": [
+    {
+      "state": "ready",
+      "message": "拍照完成，画面为这一帧，不会持续传输。",
+      "device": "/dev/video0",
+      "label": "Integrated Camera: Integrated C",
+      "requested": "1280x720",
+      "width": 1280,
+      "height": 720,
+      "fps": 60.0,
+      "sequence": 14,
+      "qr": {
+        "status": "searching",
+        "text": "",
+        "code": null,
+        "groups": [],
+        "digits": [],
+        "captured_at": 1792229368.8140178,
+        "last_code": null,
+        "last_seen_at": null,
+        "frame_id": 2414,
+        "processing_ms": 336.8
+      },
+      "vision": null,
+      "captured_at": 1792229365.2933538,
+      "taken_at": 1792229365.3650215
+    },
+    {
+      "state": "ready",
+      "message": "拍照完成，画面为这一帧，不会持续传输。",
+      "device": "/dev/video0",
+      "label": "Integrated Camera: Integrated C",
+      "requested": "1280x720",
+      "width": 1280,
+      "height": 720,
+      "fps": 60.0,
+      "sequence": 14,
+      "qr": {
+        "status": "valid",
+        "text": "156+123+516+231",
+        "code": "156+123+516+231",
+        "groups": [
+          "156",
+          "123",
+          "516",
+          "231"
+        ],
+        "digits": [
+          1,
+          5,
+          6,
+          1,
+          2,
+          3,
+          5,
+          1,
+          6,
+          2,
+          3,
+          1
+        ],
+        "captured_at": 1792229369.452935,
+        "last_code": "156+123+516+231",
+        "last_seen_at": 1792229369.452935,
+        "frame_id": 2420,
+        "processing_ms": 412.3
+      },
+      "vision": null,
+      "captured_at": 1792229365.2933538,
+      "taken_at": 1792229365.3650215
+    },
+    {
+      "state": "ready",
+      "message": "拍照完成，画面为这一帧，不会持续传输。",
+      "device": "/dev/video0",
+      "label": "Integrated Camera: Integrated C",
+      "requested": "1280x720",
+      "width": 1280,
+      "height": 720,
+      "fps": 60.0,
+      "sequence": 14,
+      "qr": {
+        "status": "valid",
+        "text": "156+123+516+231",
+        "code": "156+123+516+231",
+        "groups": [
+          "156",
+          "123",
+          "516",
+          "231"
+        ],
+        "digits": [
+          1,
+          5,
+          6,
+          1,
+          2,
+          3,
+          5,
+          1,
+          6,
+          2,
+          3,
+          1
+        ],
+        "captured_at": 1792229369.9079657,
+        "last_code": "156+123+516+231",
+        "last_seen_at": 1792229369.9079657,
+        "frame_id": 2429,
+        "processing_ms": 388.8
+      },
+      "vision": null,
+      "captured_at": 1792229365.2933538,
+      "taken_at": 1792229365.3650215
+    }
+  ],
+  "camera1_devices": {
+    "supported": true,
+    "devices": [],
+    "binding": null,
+    "bound_device": null
+  },
+  "camera2_devices": {
+    "supported": true,
+    "devices": [
+      {
+        "id": "/dev/video0",
+        "stable_id": "/dev/v4l/by-id/usb-XHH-260202-H_Integrated_Camera-video-index0",
+        "aliases": [
+          "/dev/v4l/by-id/usb-XHH-260202-H_Integrated_Camera-video-index0",
+          "/dev/v4l/by-path/platform-3610000.xhci-usb-0:2.4:1.0-video-index0"
+        ],
+        "physical_id": "/sys/devices/platform/3610000.xhci/usb1/1-2/1-2.4",
+        "kind": "usb",
+        "label": "Integrated Camera: Integrated C",
+        "resolutions": [
+          "640x480",
+          "1280x720"
+        ],
+        "mjpeg": true
+      }
+    ],
+    "binding": {
+      "id": "/dev/v4l/by-id/usb-XHH-260202-H_Integrated_Camera-video-index0",
+      "label": "Integrated Camera: Integrated C",
+      "kind": "usb"
+    },
+    "bound_device": "/dev/video0"
+  },
+  "robot": {
+    "armed": false,
+    "link": "connected",
+    "axes": {
+      "1": {
+        "cmd": "AXIS",
+        "axis": "1",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "2": {
+        "cmd": "AXIS",
+        "axis": "2",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "3": {
+        "cmd": "AXIS",
+        "axis": "3",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "4": {
+        "cmd": "AXIS",
+        "axis": "4",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "5": {
+        "cmd": "AXIS",
+        "axis": "5",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "6": {
+        "cmd": "AXIS",
+        "axis": "6",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "7": {
+        "cmd": "AXIS",
+        "axis": "7",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      }
+    },
+    "task": {
+      "state": "idle",
+      "active": false,
+      "error": "",
+      "run_id": "",
+      "leg": 0,
+      "action": 1,
+      "request": null,
+      "scans": {},
+      "ring_task": null
+    }
+  },
+  "config_hashes_after": {
+    "host/device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699",
+    "host/auxiliary.json": "8ba910fb3e7bba676f3c4c0097a2c90f3b685a46dfd968d9a762c9c1b9480fba",
+    "host/navigation.json": "069219467f43151b6f396a41ea0569d3636514ce31904f441d4093332a177b43",
+    "host/camera_alignment.json": "48348200dd774edd4b0f136c15b974c068d4e970746fc004f42684ae407586a7"
+  },
+  "service": "MainPID=11837\nActiveState=active\n",
+  "validation": {
+    "local_tests": 46,
+    "local_skipped": 1,
+    "nx_regression_tests": 274,
+    "nx_regression_skipped": 1,
+    "nx_vision_qr_tests": 5,
+    "pty_stages": 3,
+    "manifest_files_sha256_matched": 78,
+    "live_qr_status": "valid",
+    "physical_qr_decoded": true
+  }
+}

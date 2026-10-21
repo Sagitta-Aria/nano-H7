@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-17",
+  "scope": "Review of center-priority navigation, arrival headings, visual exits and NX/SIM execution",
+  "fixed": [
+    {
+      "file": "host/static/app.js",
+      "problem": "Ring-task exit preview ignored the per-visit heading and used the station default, drawing the next leg from the wrong position.",
+      "reproduction": "A=(0,14), default=0 degrees, visit=90 degrees, right_steps=14: preview used (14,14), NX correctly used (0,0).",
+      "change": "Use the per-visit heading when present, preserving explicit zero and station fallback.",
+      "regression": "tests/test_navigation_frontend.cjs: rendered preview route starts"
+    },
+    {
+      "file": "host/navigation_sim.py",
+      "problem": "SIM processed wheel pulses in per-wheel batches, potentially exhausting vector distance before other wheels advanced. Uneven ticks caused short returns to fault with move_position.",
+      "reproduction": "Real browser route failed; deterministic seed 10 with 20-80ms tick jitter reproduced a fractional-heading return failure.",
+      "change": "Apply simulated pulse events in timestamp order and include simultaneous edges before testing completion.",
+      "regression": "tests/test_turn_inset.py: test_fractional_heading_return_with_jittered_simulation_clock"
+    }
+  ],
+  "verification": [
+    {"command": "python -m unittest discover -s tests", "result": "477 tests, OK, 1 skipped", "seconds": 113.285},
+    {"command": "node tests/test_navigation_frontend.cjs", "result": "passed, including per-visit exit preview"},
+    {"command": "python -m tests.navigation_browser", "result": "passed after SIM fix; full cruise, repeated arrivals, inset execution, desktop/mobile layout"},
+    {"check": "Independent exhaustive route-cost oracle over 3 grids", "result": "243 start/goal cases passed"},
+    {"check": "Full-route SIM with 50 seeded jitter schedules", "result": "50 passed after fix"},
+    {"check": "NX Mission.ring_parameters with per-visit 90-degree override", "result": "expected exit (0,0) confirmed"},
+    {"check": "git diff --check for changed files", "result": "passed, CRLF normalization warnings only"}
+  ],
+  "firmware_source_changed": false,
+  "firmware_position_tolerance_changed": false,
+  "firmware_stop_protection_changed": false,
+  "deployed_to_NX": false,
+  "flashed": false,
+  "hardware_motion": false,
+  "limits": "No new defect found in center-priority path selection. Software checks do not establish physical wheel slip or turning clearance."
+}

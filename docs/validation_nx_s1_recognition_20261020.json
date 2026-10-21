@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-20",
+  "target": "nx-bird /home/a/h743",
+  "backup": "/home/a/h743/backups/s1_recognition_20261020_160646",
+  "behavior": "Before active block/ring calibration and lowered B color recognition, command physical S1 to 170 degrees using resolved channel/scaling; require ACK and saved s1_settle_ms before perception/gyro zero. Passive previews keep their existing behavior.",
+  "route": {
+    "physical_s1_pin": "PH9",
+    "firmware_command": "SERVO 2 170",
+    "saved_settle_ms": 600
+  },
+  "validation": {
+    "local_tests": "136 passed in 26.224s",
+    "remote_tests": "Ran 110 tests in 98.806s",
+    "passed": true,
+    "py_compile": true,
+    "javascript_syntax": true,
+    "service": "MainPID=16940\nActiveState=active\n",
+    "link": "connected",
+    "imu": "streaming",
+    "armed": false,
+    "configurations_unchanged": true,
+    "configuration_sha256": {
+      "device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699",
+      "control_settings.json": "4f7e2a67f6cc0a673aa00246f46b5df0e134c4efd8a94f589c59666af8fbe343",
+      "auxiliary.json": "229d4c2dfeffcaf22a16556b2e3932e92f41e8f8627e42bfa35681580699859c",
+      "mission.json": "63ed3d492d38174a4deefd284d80f82c2900bc047eff367e73a0b7ae1df60cca",
+      "navigation.json": "4fecbb76d922f85938a30f7d875a146d2d5f7952ea97ace95a8bf940d719e68e",
+      "b_pickup.json": "22b0c9177fae001bda41ef1dfc9151083c13842e7c3a4851d7f12a69df3c0c91",
+      "camera_alignment.json": "259fa3ac373db8b39bb0d39f0951ae2a8007d887c5fb919d198a56de8069b7e8",
+      "pick_place.json": "10e97f5f3b32c07d5d4fc17ff73b66ddd1362e84c55f22404393f294ba13749c",
+      "cameras.json": "2ad6be879693aa2ca1556ef968328ac434b65b24e1cf7ab4448ee61005e5d56d"
+    },
+    "source_sha256": {
+      "host/camera_alignment.py": "caecf365550a7940b33c8c6bf571acb8b1114a78000d15ee5ecfcdea4d7332f4",
+      "host/static/camera_alignment.js": "30ae28574fce8815308cecbb4151d888b9cf18fd7c79f47a56102aa79346e20b",
+      "tests/test_camera_servo.py": "ddfd5ccf29afd468c4d591907d8bf1aac6f6784e38149a0768564971455c6c1a",
+      "tests/test_ring_sequence.py": "a6ba20c76cf056d4d4495337aceb5562c3cfed5ad10d3738d6dbcdf71d98c273",
+      "tests/test_b_pickup.py": "6931a64786190454af7829e9930a14621f4e00642410ec23ae922237ae2fe451",
+      "docs/CAMERA_ALIGNMENT.md": "0820dc6d24ed95d27a2d2f33195d4b27f9e317cc2c844e5a994ba8e65ddc6c63"
+    },
+    "firmware_flashed": false,
+    "hardware_pickup_started": false
+  },
+  "verified_at": "2026-10-20 16:08:43 +0800",
+  "evidence_directory": "D:\\stm32H7\\stm32H743IIT6\\localtmp\\s1_recognition_20261020\\evidence",
+  "preceding_deployment_record": "docs/validation_nx_nav_handoff_20261020.json"
+}

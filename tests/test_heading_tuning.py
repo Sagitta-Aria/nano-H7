@@ -31,7 +31,7 @@ class HeadingTuningArmTests(unittest.TestCase):
                 self.assertFalse(self.request('TURN CONFIG 2000 100').ok)
 
     def test_increased_p_changes_low_error_wheel_response(self):
-        self.request('TURN CONFIG 8000 20'); self.request('NAV IMU 0 1 1')
+        self.request('TURN CONFIG 8000 20 30'); self.request('NAV IMU 0 1 1')
         self.request('TURN MOVE REL 100 5000 5000'); self.arm.call('turn_tick',0)
         for _ in range(100): self.arm.call('motion_tick')
         self.assertEqual([abs(self.arm.status(i)[1]) for i in range(4)],[80]*4)
@@ -39,7 +39,7 @@ class HeadingTuningArmTests(unittest.TestCase):
     def test_large_gains_are_applied_and_saturate_without_integer_wrap(self):
         for kp in (20001,100000,2147483647):
             with self.subTest(kp=kp):
-                self.assertTrue(self.request(f'TURN CONFIG {kp} 20').ok)
+                self.assertTrue(self.request(f'TURN CONFIG {kp} 20 30').ok)
                 self.assertEqual(self.request('TURN STAT').fields['kp_centi'],str(kp))
                 for error,limit in ((21,5000),(100,777),(18000,5000)):
                     expected=min(limit,max(1,(error*kp+5000)//10000))

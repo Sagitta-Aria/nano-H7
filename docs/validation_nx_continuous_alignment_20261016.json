@@ -1,0 +1,563 @@
+{
+  "date": "2026-10-16",
+  "target": "a@192.168.1.197",
+  "url": "http://192.168.1.197:8770/",
+  "backup": "/home/a/h743/backups/continuous_alignment_20261016_124117",
+  "service": {
+    "name": "h743-web.service",
+    "old_pid": "11020",
+    "new_pid": "15975",
+    "active": "active",
+    "started_at": "Fri 2026-10-16 12:46:32 CST"
+  },
+  "host_sync": {
+    "files_verified": 58,
+    "files_updated": 11,
+    "sha256": {
+      "host/__init__.py": "de6a97b2b28849916f27a28e5a523eb29a6cf5d58cceaf2482f91088475968d4",
+      "host/protocol.py": "fcd974ecc18be00337aadb55e7fdde1dbb9b27472517ca8a1dfc221131d6c06b",
+      "host/transport.py": "54cb09bbb8b6f0f7f8dd0d288b8923be02ec5d479136177c9e256a958b2b6eb5",
+      "host/simulator.py": "e75d767eb0252f9c5c3de973d0731a3241bb0aa43af231c9f889f45a43a2c5b8",
+      "host/servo_config.py": "032c9a8f9720ba24551c0e65a76fb29097cb7d4fae42234dcb7469a80f3069ef",
+      "host/mission.py": "73a91d01e7a208da8c43675c3840c2c396d64ecad72a2108af9d1b7be112c2ce",
+      "host/mission_vision.py": "46105bfd4492ba45da1fa8c61b9e13004a338f443db66b11543b2a2f186b02f7",
+      "host/navigation.py": "b027a31f8a76d80929ae79b000041307441be703c11dead6a36a28f10a181ff3",
+      "host/navigation_grid.py": "a7e1663f6750a0fe9ebbe3fccc8e844729a86828915a69bfe4e26356cdebbb51",
+      "host/navigation_sim.py": "6e81b2cbe01984dadf0602e744a970ddc032832229736b11496b1971cc509266",
+      "host/auxiliary.py": "72a87aecc1056c4c7d2bbc43765f1c6a437502d757a58e46f1b6174927e6a3e0",
+      "host/turn.py": "df507f56080d24a7e171fd1f08b34a83bc1862557c364281fcb3c0d5b5144629",
+      "host/turn_sim.py": "860a7ccf7d77d7a74c705dda0abf8cfd1b67f5db3d853d188e6631a2f1506019",
+      "host/straight.py": "7b6ae21b8c3a54dda3df7cedeac52fa0ad6687a23b11325cd03015223e8c620f",
+      "host/straight_sim.py": "16a1867f167e92c95a0285c371b16176cbc88f92418dd02416976edbce15ef79",
+      "host/optical_flow.py": "8bfa879c774ff5ef44cfa8a0f8e3a6b5587b90bfe60ff17078736e8a30e66c5b",
+      "host/agent.py": "baa8b8e50f176a8236c067eaa1801065e1fd0de524414019ca9cc667ebf0baa6",
+      "host/control.py": "e925297f2a8ad8440fc18b699e8a9a963f676ebd00fa98a76a20f574d0ab6de7",
+      "host/verify_link.py": "6d723ab9992cbe2059a291467f59cb502542712244cfa0bbcb8c9f5df5f072c5",
+      "host/webapp.py": "0998f1d617621ebab6531d8f23e9a0fbc3648708bfa366b24f4ad06f00796da7",
+      "host/imu.py": "275760a0db549d44742c0ef83f9141e2c372fbb8aba9009004967ae4747e6f40",
+      "host/imu_protocol.py": "2de1813d2caed4bfe78d8e8a370ebf129b9a49d5649fd32489a67eea08a1022d",
+      "host/autolink.py": "9286986fbccf21e15915ae02578c25944cac4eb403d11f83004eb61f3b071365",
+      "host/camera.py": "1b018fb08ff55cf9454513f2b68b820a804f82a8c4bae8738ee150c7d5c1a8d0",
+      "host/webserver.py": "877452fbec392cbc09fa3ffb7e2eeeb00a0d99e18abaa6b1fd9e265d59ebff2c",
+      "host/camera_vision.py": "cb6a308d6c57474a5f6821351dc1d6f017b50151a4ee7ecb604d2bdc053a9841",
+      "host/camera_alignment.py": "be73eedc8f4bae62b0c6c56dd22cb80be3d357ee5a2cef2a2bc6b94cdadfde61",
+      "host/vision_alignment.py": "ea2af2d26fc44e64a482d91e99f0cfeb8d36902a557eed6f6c8468bae902eed5",
+      "host/static/index.html": "c55dae812f1f7d3af92ec2aaff5b79ea9b876476eb0864534fc4676aca53b2a7",
+      "host/static/styles.css": "36b3617cc16891eba6183118ca61526babbe3034e6284ad4c2418445c9032da0",
+      "host/static/app.js": "bd6d828f1db48e9c8a9df8233cfab14b46003d31c0cab55a0899d3fa160759e2",
+      "host/static/imu.js": "2c4fc239bd45bc9efd723b515ed741e37f12fc6c96542008c3403c31667ca70b",
+      "host/static/camera.js": "58b0bb417427c428ec746d27065be503bc2afbac1b68e5c56dd8820c0353e80c",
+      "host/static/camera_alignment.js": "e1bc15848e42baadf44878c4458fc046f69babd57d8a0f9fa2064aa38adc4f4a",
+      "tests/__init__.py": "35043b12b938e4a6123610ad1dce65bf4749f5dc3fb05a21ef4be8ea0efd63ec",
+      "tests/test_agent.py": "4e8689298b501dbb9e173eba924a45eb3beae3330f8c4d827990ed75fa22e62a",
+      "tests/test_control.py": "2dc67a1ac92c125e4203221b8a50472bc25ff44e3ce8bcd4878632d79c88ef5c",
+      "tests/test_webapp.py": "5625d716fe3ceef0fc1843a6ce2131ce0981912a404d44a3511cf2acb49620b4",
+      "tests/test_servo_connection.py": "724f65eb3cf772f723aa0a066aaf920eaf3e32a1309b13bc82b0996712749ee7",
+      "tests/test_host_restart.py": "7ec77453fe38376af9b68ce089882866b2ae6889d437a2f053aeb05f640392ad",
+      "tests/test_imu.py": "1e6663bcc598bf54d79b48d3357c98186243e8249cd34923f15677ee4911008f",
+      "tests/test_autolink.py": "98742beb313bf0a6c1da030a1b4c726e7c2a28b0d2f77b222a69be50040307ac",
+      "tests/test_camera.py": "ecbf5e25401f6014e9b53f08b713a1895ffbb4ed04267b6244a221d6ecdc2f59",
+      "tests/test_camera_alignment.py": "2bdf959f2797dad1beb6e8d568135a079322e13c2937c4a2c0927524542e70cd",
+      "tests/test_webpage.py": "388d3f73aeb6eb5bb0b9e14ff154226d611774fd21f7add225fe2507fc6ff675",
+      "tests/test_stations.py": "5fa32d04b1ef48dba1de58b62cc2ef74d4dc6be4ee3d9e869e2c0e41046bbf8e",
+      "tests/test_mission.py": "80b962da992ce940f3a288b7e28858d2a9b9b32b9f86e1c1d9ff73bbf0803fb4",
+      "tests/chassis_fixture.py": "c49d316129c9eba38e14d73b7adf0b2e778d07166fdc4c706b6dd642984e2feb",
+      "tests/imu_fixture_server.py": "ccbb386257dc4864cafcde3eade4c47a02f20f0918d3b52b140e89c405abc078",
+      "tests/pty_link_check.py": "e62911ac57118522d032ba8468d2dbe599304e4daf1bc21ad9ab7727dce5fdfb",
+      "tests/lease_stress.py": "16b4580c8dcb3449a345b939caa58be6e6b46bb827e4701acf5d40aea7f973d4",
+      "tests/test_flow_host.py": "f84994571149f000215e3dafee236124b9bb956d2725cd4b3ff19bffd47a1a23",
+      "tests/test_path_upload.py": "8bbc2a3f32ce28c7f8be16530588109f95f0f6866cf18e06819988be96d6d828",
+      "tests/test_control_fixes_host.py": "9e6b8452c9a82f70d3f9a81673ea5982d276a1e435293a3305dab1f3c265ece7",
+      "tests/test_heading_tuning_host.py": "6dc567a6f44a1146f3d66cb29637da1c396a3d9f8686f0695d0322cc4f30e1a1",
+      "tests/test_straight_host.py": "f63ddaae737afd47b44e240fc05f45ac201c297a0448c9738629ab03503af113",
+      "工创赛视觉识别/色块识别/color_block_center.py": "9119f332ad660419b7b7923eb26dc2cef4e47fc6b3fd592fb9e4ea1012fc3183",
+      "工创赛视觉识别/黑色圆环识别与数字识别/black_ring.py": "d0c071bbae581093b935336931310954618e1cee30bd04742cf711d533f5247b"
+    }
+  },
+  "tests": {
+    "remote_unittest": {
+      "passed": 201
+    },
+    "final_camera_tests": {
+      "passed": 42
+    },
+    "pty_stages_passed": 3,
+    "browser": {
+      "url": "http://192.168.1.197:8770/",
+      "layouts": [
+        {
+          "width": 1440,
+          "tab": "坐标巡航",
+          "viewport": 1440,
+          "body": 1440
+        },
+        {
+          "width": 1440,
+          "tab": "摄像头1",
+          "viewport": 1440,
+          "body": 1440
+        },
+        {
+          "width": 760,
+          "tab": "坐标巡航",
+          "viewport": 760,
+          "body": 760
+        },
+        {
+          "width": 760,
+          "tab": "摄像头1",
+          "viewport": 760,
+          "body": 760
+        },
+        {
+          "width": 390,
+          "tab": "坐标巡航",
+          "viewport": 390,
+          "body": 390
+        },
+        {
+          "width": 390,
+          "tab": "摄像头1",
+          "viewport": 390,
+          "body": 390
+        }
+      ],
+      "errors": [],
+      "blockedWrites": []
+    },
+    "synthetic_block": {
+      "kind": "block",
+      "target": "red",
+      "found": true,
+      "center": [
+        250,
+        210
+      ],
+      "reference": [
+        320,
+        240
+      ],
+      "control_point": [
+        250,
+        240
+      ],
+      "width": 640,
+      "height": 480,
+      "captured_at": 123.0,
+      "error_dx": -70,
+      "error_dy": 0
+    },
+    "synthetic_ring": {
+      "kind": "ring",
+      "target": "ring",
+      "found": true,
+      "center": [
+        390,
+        250
+      ],
+      "reference": [
+        320,
+        240
+      ],
+      "control_point": [
+        390,
+        280
+      ],
+      "width": 640,
+      "height": 480,
+      "captured_at": 123.0,
+      "error_dx": 70,
+      "error_dy": 40
+    },
+    "real_camera": {
+      "device": "/dev/video0",
+      "resolution": "1280x720",
+      "reports": [
+        {
+          "kind": "ring",
+          "target": "ring",
+          "found": true,
+          "center": [
+            1145,
+            339
+          ],
+          "reference": [
+            640,
+            360
+          ],
+          "control_point": [
+            1145,
+            369
+          ],
+          "width": 1280,
+          "height": 720,
+          "captured_at": 1792126190.7911875,
+          "error_dx": 505,
+          "error_dy": 9,
+          "frame_id": 1,
+          "captured_monotonic": 8104.122748805,
+          "stream_id": 1,
+          "processing_ms": 404.6,
+          "received_age_ms": 405.8
+        },
+        {
+          "kind": "ring",
+          "target": "ring",
+          "found": true,
+          "center": [
+            1145,
+            339
+          ],
+          "reference": [
+            640,
+            360
+          ],
+          "control_point": [
+            1145,
+            369
+          ],
+          "width": 1280,
+          "height": 720,
+          "captured_at": 1792126191.0863903,
+          "error_dx": 505,
+          "error_dy": 9,
+          "frame_id": 6,
+          "captured_monotonic": 8104.417952571,
+          "stream_id": 1,
+          "processing_ms": 368.7,
+          "received_age_ms": 369.9
+        },
+        {
+          "kind": "ring",
+          "target": "ring",
+          "found": true,
+          "center": [
+            496,
+            353
+          ],
+          "reference": [
+            640,
+            360
+          ],
+          "control_point": [
+            496,
+            383
+          ],
+          "width": 1280,
+          "height": 720,
+          "captured_at": 1792126191.3562577,
+          "error_dx": -144,
+          "error_dy": 23,
+          "frame_id": 11,
+          "captured_monotonic": 8104.687820323,
+          "stream_id": 1,
+          "processing_ms": 393.9,
+          "received_age_ms": 395.0
+        },
+        {
+          "kind": "ring",
+          "target": "ring",
+          "found": true,
+          "center": [
+            496,
+            353
+          ],
+          "reference": [
+            640,
+            360
+          ],
+          "control_point": [
+            496,
+            383
+          ],
+          "width": 1280,
+          "height": 720,
+          "captured_at": 1792126191.655708,
+          "error_dx": -144,
+          "error_dy": 23,
+          "frame_id": 17,
+          "captured_monotonic": 8104.987270286,
+          "stream_id": 1,
+          "processing_ms": 388.6,
+          "received_age_ms": 389.8
+        },
+        {
+          "kind": "ring",
+          "target": "ring",
+          "found": true,
+          "center": [
+            496,
+            353
+          ],
+          "reference": [
+            640,
+            360
+          ],
+          "control_point": [
+            496,
+            383
+          ],
+          "width": 1280,
+          "height": 720,
+          "captured_at": 1792126191.9911487,
+          "error_dx": -144,
+          "error_dy": 23,
+          "frame_id": 24,
+          "captured_monotonic": 8105.322711283,
+          "stream_id": 1,
+          "processing_ms": 341.7,
+          "received_age_ms": 342.7
+        },
+        {
+          "kind": "ring",
+          "target": "ring",
+          "found": true,
+          "center": [
+            496,
+            353
+          ],
+          "reference": [
+            640,
+            360
+          ],
+          "control_point": [
+            496,
+            383
+          ],
+          "width": 1280,
+          "height": 720,
+          "captured_at": 1792126192.243432,
+          "error_dx": -144,
+          "error_dy": 23,
+          "frame_id": 29,
+          "captured_monotonic": 8105.574994519,
+          "stream_id": 1,
+          "processing_ms": 381.7,
+          "received_age_ms": 382.7
+        },
+        {
+          "kind": "ring",
+          "target": "ring",
+          "found": true,
+          "center": [
+            496,
+            353
+          ],
+          "reference": [
+            640,
+            360
+          ],
+          "control_point": [
+            496,
+            383
+          ],
+          "width": 1280,
+          "height": 720,
+          "captured_at": 1792126192.5315564,
+          "error_dx": -144,
+          "error_dy": 23,
+          "frame_id": 35,
+          "captured_monotonic": 8105.863119131,
+          "stream_id": 1,
+          "processing_ms": 384.0,
+          "received_age_ms": 385.1
+        },
+        {
+          "kind": "ring",
+          "target": "ring",
+          "found": true,
+          "center": [
+            496,
+            353
+          ],
+          "reference": [
+            640,
+            360
+          ],
+          "control_point": [
+            496,
+            383
+          ],
+          "width": 1280,
+          "height": 720,
+          "captured_at": 1792126192.8289204,
+          "error_dx": -144,
+          "error_dy": 23,
+          "frame_id": 41,
+          "captured_monotonic": 8106.160482511,
+          "stream_id": 1,
+          "processing_ms": 379.4,
+          "received_age_ms": 380.6
+        },
+        {
+          "kind": "ring",
+          "target": "ring",
+          "found": true,
+          "center": [
+            496,
+            353
+          ],
+          "reference": [
+            640,
+            360
+          ],
+          "control_point": [
+            496,
+            383
+          ],
+          "width": 1280,
+          "height": 720,
+          "captured_at": 1792126193.447265,
+          "error_dx": -144,
+          "error_dy": 23,
+          "frame_id": 54,
+          "captured_monotonic": 8106.778827362,
+          "stream_id": 1,
+          "processing_ms": 361.7,
+          "received_age_ms": 362.8
+        }
+      ],
+      "no_shutter_reports": 8,
+      "manual_photos": 1,
+      "recognition_continued_after_photo": true,
+      "photo_retained_after_recognition_stopped": true,
+      "robot_commands_sent": 0,
+      "real_frames_simulated_controller": {
+        "board": "SIM",
+        "browser_present": false,
+        "controller": {
+          "state": "moving",
+          "active": true,
+          "busy": true,
+          "error": "",
+          "vision": {
+            "kind": "ring",
+            "target": "ring",
+            "found": true,
+            "center": [
+              496,
+              353
+            ],
+            "reference": [
+              640,
+              360
+            ],
+            "control_point": [
+              496,
+              383
+            ],
+            "width": 1280,
+            "height": 720,
+            "captured_at": 1792126196.7838607,
+            "error_dx": -144,
+            "error_dy": 23,
+            "frame_id": 121,
+            "captured_monotonic": 8110.115423611,
+            "stream_id": 2,
+            "processing_ms": 327.0
+          },
+          "stable_frames": 0,
+          "iterations": 3,
+          "total_steps": 30,
+          "has_image": false,
+          "image_revision": 24,
+          "frame_age_ms": 341.5,
+          "dropped_frames": 0,
+          "streaming": true
+        },
+        "physical_serial_ports_opened": 0,
+        "extra_photo_requests": 0
+      }
+    }
+  },
+  "configs_unchanged": true,
+  "config_sha256": {
+    "host/device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699",
+    "host/auxiliary.json": "868a99af7a7ab53bf0e4db5b1926e2041d4954538aa59a0df0ea1ba9e12c4fd5",
+    "host/navigation.json": "236156461803ab9214ef7999c808ed6fe07bea57025dea1cfa9a8eb33f45782b",
+    "host/camera_alignment.json": "7333e1da335d8fe66b98ecfb369e0463a11df56623ca9de3aa1669dcdab1c044"
+  },
+  "runtime": {
+    "python": "3.8.10",
+    "cv2": "4.9.0",
+    "numpy": "1.23.5"
+  },
+  "hardware": {
+    "h743_link": "connected",
+    "h743_firmware": "0.2.21",
+    "h723": "streaming",
+    "armed": false,
+    "axes": {
+      "1": {
+        "cmd": "AXIS",
+        "axis": "1",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "2": {
+        "cmd": "AXIS",
+        "axis": "2",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "3": {
+        "cmd": "AXIS",
+        "axis": "3",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "4": {
+        "cmd": "AXIS",
+        "axis": "4",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "5": {
+        "cmd": "AXIS",
+        "axis": "5",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "1547255931"
+      },
+      "6": {
+        "cmd": "AXIS",
+        "axis": "6",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "7": {
+        "cmd": "AXIS",
+        "axis": "7",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      }
+    }
+  },
+  "limits": {
+    "flashed_firmware": false,
+    "opened_real_camera": true,
+    "ran_vehicle_alignment": false,
+    "calibration_required": false,
+    "cruise_integration": "future adapter; standalone camera-one entry only"
+  }
+}

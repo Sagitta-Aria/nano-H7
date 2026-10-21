@@ -1,0 +1,260 @@
+{
+  "date": "2026-10-16",
+  "target": "a@192.168.1.197",
+  "url": "http://192.168.1.197:8770/",
+  "backup": "/home/a/h743/backups/camera_tracking_20261016_121733",
+  "service": {
+    "name": "h743-web.service",
+    "old_pid": "8055",
+    "new_pid": "11020",
+    "active": "active",
+    "started_at": "Fri 2026-10-16 12:20:05 CST"
+  },
+  "host_sync": {
+    "files_verified": 58,
+    "files_updated": 6,
+    "sha256": {
+      "host/__init__.py": "de6a97b2b28849916f27a28e5a523eb29a6cf5d58cceaf2482f91088475968d4",
+      "host/protocol.py": "fcd974ecc18be00337aadb55e7fdde1dbb9b27472517ca8a1dfc221131d6c06b",
+      "host/transport.py": "54cb09bbb8b6f0f7f8dd0d288b8923be02ec5d479136177c9e256a958b2b6eb5",
+      "host/simulator.py": "e75d767eb0252f9c5c3de973d0731a3241bb0aa43af231c9f889f45a43a2c5b8",
+      "host/servo_config.py": "032c9a8f9720ba24551c0e65a76fb29097cb7d4fae42234dcb7469a80f3069ef",
+      "host/mission.py": "73a91d01e7a208da8c43675c3840c2c396d64ecad72a2108af9d1b7be112c2ce",
+      "host/mission_vision.py": "46105bfd4492ba45da1fa8c61b9e13004a338f443db66b11543b2a2f186b02f7",
+      "host/navigation.py": "b027a31f8a76d80929ae79b000041307441be703c11dead6a36a28f10a181ff3",
+      "host/navigation_grid.py": "a7e1663f6750a0fe9ebbe3fccc8e844729a86828915a69bfe4e26356cdebbb51",
+      "host/navigation_sim.py": "6e81b2cbe01984dadf0602e744a970ddc032832229736b11496b1971cc509266",
+      "host/auxiliary.py": "72a87aecc1056c4c7d2bbc43765f1c6a437502d757a58e46f1b6174927e6a3e0",
+      "host/turn.py": "df507f56080d24a7e171fd1f08b34a83bc1862557c364281fcb3c0d5b5144629",
+      "host/turn_sim.py": "860a7ccf7d77d7a74c705dda0abf8cfd1b67f5db3d853d188e6631a2f1506019",
+      "host/straight.py": "7b6ae21b8c3a54dda3df7cedeac52fa0ad6687a23b11325cd03015223e8c620f",
+      "host/straight_sim.py": "16a1867f167e92c95a0285c371b16176cbc88f92418dd02416976edbce15ef79",
+      "host/optical_flow.py": "8bfa879c774ff5ef44cfa8a0f8e3a6b5587b90bfe60ff17078736e8a30e66c5b",
+      "host/agent.py": "baa8b8e50f176a8236c067eaa1801065e1fd0de524414019ca9cc667ebf0baa6",
+      "host/control.py": "e925297f2a8ad8440fc18b699e8a9a963f676ebd00fa98a76a20f574d0ab6de7",
+      "host/verify_link.py": "6d723ab9992cbe2059a291467f59cb502542712244cfa0bbcb8c9f5df5f072c5",
+      "host/webapp.py": "811e732c8a4b7c061c2fd0eb91ace2e87d56234ed9b1d74a2c675798369bc9fe",
+      "host/imu.py": "275760a0db549d44742c0ef83f9141e2c372fbb8aba9009004967ae4747e6f40",
+      "host/imu_protocol.py": "2de1813d2caed4bfe78d8e8a370ebf129b9a49d5649fd32489a67eea08a1022d",
+      "host/autolink.py": "9286986fbccf21e15915ae02578c25944cac4eb403d11f83004eb61f3b071365",
+      "host/camera.py": "51ac338127375d30cc92449349f162daba54068e5ae5a1e51626de00f6bdb96e",
+      "host/webserver.py": "39adfc75e36f4147c9bcf6fdf742aa83e62fda3554ac23e9646747cc9fa64e3a",
+      "host/camera_vision.py": "ec37850fd14f8ac01640d3249de53ee3bd9f7321546f76999be3a3b49523d7f7",
+      "host/camera_alignment.py": "acf81a7e4862eb14dccbec5ca0b723778310d421173609b23833dd3269a86cb4",
+      "host/vision_alignment.py": "ea2af2d26fc44e64a482d91e99f0cfeb8d36902a557eed6f6c8468bae902eed5",
+      "host/static/index.html": "3422cda3a49855e3bd001c6d45f8fbae9bb6ee99ed8aaa13280694f2533e3680",
+      "host/static/styles.css": "36b3617cc16891eba6183118ca61526babbe3034e6284ad4c2418445c9032da0",
+      "host/static/app.js": "332b3e1fc33a1ebf111f4a450d5abdc603354fad41b40c3df5383d6178449456",
+      "host/static/imu.js": "2c4fc239bd45bc9efd723b515ed741e37f12fc6c96542008c3403c31667ca70b",
+      "host/static/camera.js": "58b0bb417427c428ec746d27065be503bc2afbac1b68e5c56dd8820c0353e80c",
+      "host/static/camera_alignment.js": "b1390d842c657e6d213e561483afb7c0f4968f5e707b1dd43a3d834c1c3fbae4",
+      "tests/__init__.py": "35043b12b938e4a6123610ad1dce65bf4749f5dc3fb05a21ef4be8ea0efd63ec",
+      "tests/test_agent.py": "4e8689298b501dbb9e173eba924a45eb3beae3330f8c4d827990ed75fa22e62a",
+      "tests/test_control.py": "2dc67a1ac92c125e4203221b8a50472bc25ff44e3ce8bcd4878632d79c88ef5c",
+      "tests/test_webapp.py": "5625d716fe3ceef0fc1843a6ce2131ce0981912a404d44a3511cf2acb49620b4",
+      "tests/test_servo_connection.py": "724f65eb3cf772f723aa0a066aaf920eaf3e32a1309b13bc82b0996712749ee7",
+      "tests/test_host_restart.py": "7ec77453fe38376af9b68ce089882866b2ae6889d437a2f053aeb05f640392ad",
+      "tests/test_imu.py": "1e6663bcc598bf54d79b48d3357c98186243e8249cd34923f15677ee4911008f",
+      "tests/test_autolink.py": "98742beb313bf0a6c1da030a1b4c726e7c2a28b0d2f77b222a69be50040307ac",
+      "tests/test_camera.py": "6c9926ccb6570c74193b7aede2344673eda3c07bf7edbfe2b2e1da6020db87f9",
+      "tests/test_camera_alignment.py": "c5917d0eedec0e001523f7dce557b3555cb85142e6e65d910298b60100352d85",
+      "tests/test_webpage.py": "388d3f73aeb6eb5bb0b9e14ff154226d611774fd21f7add225fe2507fc6ff675",
+      "tests/test_stations.py": "5fa32d04b1ef48dba1de58b62cc2ef74d4dc6be4ee3d9e869e2c0e41046bbf8e",
+      "tests/test_mission.py": "80b962da992ce940f3a288b7e28858d2a9b9b32b9f86e1c1d9ff73bbf0803fb4",
+      "tests/chassis_fixture.py": "c49d316129c9eba38e14d73b7adf0b2e778d07166fdc4c706b6dd642984e2feb",
+      "tests/imu_fixture_server.py": "ccbb386257dc4864cafcde3eade4c47a02f20f0918d3b52b140e89c405abc078",
+      "tests/pty_link_check.py": "e62911ac57118522d032ba8468d2dbe599304e4daf1bc21ad9ab7727dce5fdfb",
+      "tests/lease_stress.py": "16b4580c8dcb3449a345b939caa58be6e6b46bb827e4701acf5d40aea7f973d4",
+      "tests/test_flow_host.py": "f84994571149f000215e3dafee236124b9bb956d2725cd4b3ff19bffd47a1a23",
+      "tests/test_path_upload.py": "8bbc2a3f32ce28c7f8be16530588109f95f0f6866cf18e06819988be96d6d828",
+      "tests/test_control_fixes_host.py": "9e6b8452c9a82f70d3f9a81673ea5982d276a1e435293a3305dab1f3c265ece7",
+      "tests/test_heading_tuning_host.py": "6dc567a6f44a1146f3d66cb29637da1c396a3d9f8686f0695d0322cc4f30e1a1",
+      "tests/test_straight_host.py": "f63ddaae737afd47b44e240fc05f45ac201c297a0448c9738629ab03503af113",
+      "工创赛视觉识别/色块识别/color_block_center.py": "9119f332ad660419b7b7923eb26dc2cef4e47fc6b3fd592fb9e4ea1012fc3183",
+      "工创赛视觉识别/黑色圆环识别与数字识别/black_ring.py": "64dd7f72fdfe22bc18d7fdb2b50230e77ec0ab009ce02fd4833b714f8f146d42"
+    }
+  },
+  "tests": {
+    "remote_unittest": {
+      "passed": 195
+    },
+    "pty_stages_passed": 3,
+    "browser": {
+      "url": "http://192.168.1.197:8770/",
+      "layouts": [
+        {
+          "width": 1440,
+          "tab": "坐标巡航",
+          "viewport": 1440,
+          "body": 1440
+        },
+        {
+          "width": 1440,
+          "tab": "摄像头1",
+          "viewport": 1440,
+          "body": 1440
+        },
+        {
+          "width": 760,
+          "tab": "坐标巡航",
+          "viewport": 760,
+          "body": 760
+        },
+        {
+          "width": 760,
+          "tab": "摄像头1",
+          "viewport": 760,
+          "body": 760
+        },
+        {
+          "width": 390,
+          "tab": "坐标巡航",
+          "viewport": 390,
+          "body": 390
+        },
+        {
+          "width": 390,
+          "tab": "摄像头1",
+          "viewport": 390,
+          "body": 390
+        }
+      ],
+      "errors": [],
+      "blockedWrites": []
+    },
+    "synthetic_block": {
+      "kind": "block",
+      "target": "red",
+      "found": true,
+      "center": [
+        250,
+        210
+      ],
+      "reference": [
+        320,
+        240
+      ],
+      "control_point": [
+        250,
+        240
+      ],
+      "width": 640,
+      "height": 480,
+      "captured_at": 123.0,
+      "error_dx": -70,
+      "error_dy": 0
+    },
+    "synthetic_ring": {
+      "kind": "ring",
+      "target": "ring",
+      "found": true,
+      "center": [
+        390,
+        250
+      ],
+      "reference": [
+        320,
+        240
+      ],
+      "control_point": [
+        390,
+        280
+      ],
+      "width": 640,
+      "height": 480,
+      "captured_at": 123.0,
+      "error_dx": 70,
+      "error_dy": 40
+    }
+  },
+  "configs_unchanged": true,
+  "config_sha256": {
+    "host/device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699",
+    "host/auxiliary.json": "868a99af7a7ab53bf0e4db5b1926e2041d4954538aa59a0df0ea1ba9e12c4fd5",
+    "host/navigation.json": "236156461803ab9214ef7999c808ed6fe07bea57025dea1cfa9a8eb33f45782b",
+    "host/camera_alignment.json": "dd9d6b88485decb77802bf0f4314613a1d6030e77a8d112a06d3da982f78c6e7"
+  },
+  "runtime": {
+    "python": "3.8.10",
+    "cv2": "4.9.0",
+    "numpy": "1.23.5"
+  },
+  "hardware": {
+    "h743_link": "connected",
+    "h743_firmware": "0.2.21",
+    "h723": "streaming",
+    "armed": false,
+    "axes": {
+      "1": {
+        "cmd": "AXIS",
+        "axis": "1",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "2": {
+        "cmd": "AXIS",
+        "axis": "2",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "3": {
+        "cmd": "AXIS",
+        "axis": "3",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "4": {
+        "cmd": "AXIS",
+        "axis": "4",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "5": {
+        "cmd": "AXIS",
+        "axis": "5",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "1547255931"
+      },
+      "6": {
+        "cmd": "AXIS",
+        "axis": "6",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "7": {
+        "cmd": "AXIS",
+        "axis": "7",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      }
+    }
+  },
+  "limits": {
+    "flashed_firmware": false,
+    "opened_real_camera": false,
+    "ran_vehicle_alignment": false,
+    "calibration_required": false,
+    "cruise_integration": "future adapter; standalone camera-one entry only"
+  }
+}

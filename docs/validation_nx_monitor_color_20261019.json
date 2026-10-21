@@ -1,0 +1,28 @@
+{
+  "backup": "/home/a/h743/backups/monitor_color_20261019_202152",
+  "files": {
+    "host/camera_monitor.py": "109dce56eac14a9949ee7cd4b63a57f7f661d96a81507d27dd1cb64376edd137",
+    "host/camera_vision.py": "7b0cf28ec343c4edd6be78ab6a720e8cf5570c59a1f866521c28aad4d57d4840",
+    "tests/test_camera_monitor_modes.py": "896a3c1a02e9fcc5486218c2f3333678d816b40a734f94b154cefbacd9acc58c"
+  },
+  "camera": {
+    "state": "ready",
+    "message": "Nano 摄像头已打开，点击“拍照”获取一帧。",
+    "device": "/dev/video0",
+    "label": "USB 2.0 Camera: HD USB Camera",
+    "requested": "640x480",
+    "width": 640,
+    "height": 480,
+    "fps": 120.10136452241716,
+    "sequence": 1
+  },
+  "armed": false,
+  "link": "connected",
+  "service_not_restarted": true,
+  "configurations_unchanged": true,
+  "tests": 49,
+  "cause": "Idle preview used saved task target both as detector filter and unconditional Color label, including missing detections.",
+  "fix": "Idle color preview searches all six saved color thresholds and shows the selected detected color; no detection displays --. B-station and standalone alignment remain target-specific.",
+  "selection": "Smallest valid candidate across colors; each color retains its calibrated area/HSV limits and per-color contour policy.",
+  "hardware_pick_place_started": false
+}

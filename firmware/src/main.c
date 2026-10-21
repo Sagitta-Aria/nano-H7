@@ -134,22 +134,22 @@ static void dispatch_move(uint32_t id, unsigned axis, int32_t steps, unsigned sp
 
 static void dispatch(uint32_t id, char *body)
 {
-    char *arg[8];
-    int n = split(body, arg, 8);
-    int32_t a, b, c, d, e, wheels[4];
+    char *arg[12];
+    int n = split(body, arg, 12);
+    int32_t a, b, c, d, e, f, g, h, wheels[4];
     unsigned i;
     strcpy(response, "ERR code=BAD_ARGUMENT");
     if (n < 1) return;
     if (strcmp(arg[0], "HELLO") == 0 && n == 1) {
-        snprintf(response, sizeof(response), "OK cmd=HELLO fw=%s protocol=1 board=H743_CB_V1.5 led_mask=3 red=fixed chassis_max=%u aux_max=%u chassis=1 servo=%u servo_travel=%u servo1_travel=%u servo2_travel=%u serial=dual lift=1 lift_max=%ld nav=1 nav_heading=1 nav_grid=1 nav_path=1 turn=1 aux_control=1 flow=1 servo1_pin=PH%u servo2_pin=PH%u turn_tuning=1 aux_live=1 turn_precision=1 straight=1", APP_VERSION, CHASSIS_SPS_MAX, AUX_SPS_MAX, servo_channels(), servo_steps_max(0) * 5U, servo_steps_max(0) * 5U, servo_steps_max(1) * 5U, (long)M5_TRAVEL_PULSES, servo_pin(0), servo_pin(1));
+        snprintf(response, sizeof(response), "OK cmd=HELLO fw=%s protocol=1 board=H743_CB_V1.5 led_mask=3 red=fixed chassis=1 servo=%u servo_travel=%u servo1_travel=%u servo2_travel=%u serial=dual lift=1 lift_max=%ld nav=1 nav_heading=1 nav_grid=1 nav_path=1 turn=1 aux_control=1 flow=1 servo1_pin=P%c%u servo2_pin=P%c%u turn_tuning=1 aux_live=1 turn_precision=1 straight=1 turn_band=1 imu_pause=1", APP_VERSION, servo_channels(), servo_steps_max(0) * 5U, servo_steps_max(0) * 5U, servo_steps_max(1) * 5U, (long)M5_TRAVEL_PULSES, servo_port(0), servo_pin(0), servo_port(1), servo_pin(1));
     } else if (strcmp(arg[0], "PING") == 0 && n == 1) {
         heartbeat = xTaskGetTickCount();
         strcpy(response, "OK cmd=PING");
     } else if (strcmp(arg[0], "INFO") == 0 && n == 1) {
-        snprintf(response, sizeof(response), "OK cmd=INFO cpu_hz=%lu apb_hz=%lu timer_hz=%lu flash_kb=%u uid=%08lX%08lX%08lX reset=0x%08lX rtos=11.2.0 baud=%lu",
+        snprintf(response, sizeof(response), "OK cmd=INFO cpu_hz=%lu apb_hz=%lu timer_hz=%lu flash_kb=%u uid=%08lX%08lX%08lX reset=0x%08lX rtos=11.2.0 baud=%lu chassis_max=%u aux_max=%u nav_reference=1",
             (unsigned long)SystemCoreClock, APB_HZ, TIMER_HZ, *(volatile uint16_t *)FLASHSIZE_BASE,
             *(volatile unsigned long *)(UID_BASE + 8), *(volatile unsigned long *)(UID_BASE + 4), *(volatile unsigned long *)UID_BASE,
-            (unsigned long)board_reset_flags(), UART_BAUD);
+            (unsigned long)board_reset_flags(), UART_BAUD, CHASSIS_SPS_MAX, AUX_SPS_MAX);
     } else if (strcmp(arg[0], "STAT") == 0 && n == 1) {
         snprintf(response, sizeof(response), "OK cmd=STAT uptime_ms=%lu heap_free=%lu heap_min=%lu tasks=%lu stack_comm=%lu stack_motion=%lu stack_super=%lu led=%u armed=%u rx=%lu rx_err=%lu tx_err=%lu bad=%lu replay=%lu timeout=%lu motion_fault=%lu",
             (unsigned long)xTaskGetTickCount(), (unsigned long)xPortGetFreeHeapSize(), (unsigned long)xPortGetMinimumEverFreeHeapSize(),
@@ -165,28 +165,39 @@ static void dispatch(uint32_t id, char *body)
         /* Only a recent explicit PING permits arming. Queries are not a lease. */
         if (a && (TickType_t)(xTaskGetTickCount() - heartbeat) >= pdMS_TO_TICKS(LINK_TIMEOUT_MS))
             strcpy(response, "ERR code=HEARTBEAT_REQUIRED");
+        else if (a && motion_faults()) strcpy(response, "ERR code=MOTION_FAULT_LATCHED");
         else if (motion_arm((unsigned)a)) {
-            if (!a) chassis_halt();
+            if (!a) { navigation_stop(); chassis_halt(); }
             snprintf(response, sizeof(response), "OK cmd=ARM armed=%u", motion_armed());
         }
         else strcpy(response, "ERR code=BUSY_OR_FAULT");
     } else if (strcmp(arg[0], "STOP") == 0 && n == 1) {
-        chassis_halt(); motion_stop(); strcpy(response, "OK cmd=STOP armed=0");
+        navigation_stop(); chassis_halt(); motion_stop(); strcpy(response, "OK cmd=STOP armed=0");
+    } else if (strcmp(arg[0], "MOTION") == 0 && n == 2) {
+        if (strcmp(arg[1], "STAT") == 0) motion_fault_report(response, sizeof(response));
+        else if (strcmp(arg[1], "CLEAR") == 0) {
+            if (motion_clear_fault()) {
+                chassis_clear_fault();
+                motion_fault_report(response, sizeof(response));
+            } else strcpy(response, "ERR code=MOTION_CLEAR_REQUIRES_DISARMED_IDLE");
+        } else strcpy(response, "ERR code=BAD_ARGUMENT");
     } else if (strcmp(arg[0], "SERVO") == 0) {
         /* Servos are not armed and not stopped by STOP: they are positional
          * outputs, and a 50 Hz pulse train has to keep running to hold them. */
         servo_status_t status;
         unsigned ch;
-        if (n == 2 && (strcmp(arg[1], "STAT") == 0 || strcmp(arg[1], "?") == 0)) {
+        if (n == 3 && strcmp(arg[1], "DIAG") == 0 && protocol_int(arg[2], 1, (int32_t)servo_channels(), &a)) {
+            servo_diagnostics((unsigned)a - 1U, response, sizeof(response));
+        } else if (n == 2 && (strcmp(arg[1], "STAT") == 0 || strcmp(arg[1], "?") == 0)) {
             /* One line per channel: a fixed field list cannot describe a count
              * that grows, and the host should not have to guess. */
             response[0] = 0;
             for (ch = 0; ch < servo_channels(); ++ch) {
                 char line[128];
                 if (!servo_status(ch, &status)) break;
-                snprintf(line, sizeof(line), "%sOK cmd=SERVO_STAT ch=%u angle=%u.%u us=%u on=%u pin=PH%u timer=TIM12_CH%u",
+                snprintf(line, sizeof(line), "%sOK cmd=SERVO_STAT ch=%u angle=%u.%u us=%u on=%u pin=P%c%u timer=TIM%u_CH%u%s",
                     ch ? " " : "", ch + 1U, status.angle_tenths / 10U, status.angle_tenths % 10U,
-                    status.pulse_us, status.on, servo_pin(ch), servo_timer_channel(ch));
+                    status.pulse_us, status.on, servo_port(ch), servo_pin(ch), servo_timer(ch), servo_timer_channel(ch), servo_timer_suffix(ch));
                 if (strlen(response) + strlen(line) >= sizeof(response)) break;
                 strcat(response, line);
             }
@@ -199,8 +210,8 @@ static void dispatch(uint32_t id, char *body)
                 /* The table is half-degree; the host may still ask for tenths. */
                 servo_set_steps(ch, (unsigned)b / 5U);
                 servo_status(ch, &status);
-                snprintf(response, sizeof(response), "OK cmd=SERVO ch=%ld angle=%u.%u us=%u pin=PH%u timer=TIM12_CH%u",
-                    (long)a, status.angle_tenths / 10U, status.angle_tenths % 10U, status.pulse_us, servo_pin(ch), servo_timer_channel(ch));
+                snprintf(response, sizeof(response), "OK cmd=SERVO ch=%ld angle=%u.%u us=%u pin=P%c%u timer=TIM%u_CH%u%s",
+                    (long)a, status.angle_tenths / 10U, status.angle_tenths % 10U, status.pulse_us, servo_port(ch), servo_pin(ch), servo_timer(ch), servo_timer_channel(ch), servo_timer_suffix(ch));
             }
         } else {
             /* Recognised verb, unusable arguments: say so instead of leaving the
@@ -231,7 +242,11 @@ static void dispatch(uint32_t id, char *body)
             motion_aux_stop((unsigned)a); aux_report((unsigned)a);
         } else if (n == 3 && strcmp(arg[1], "ZERO") == 0) {
             if (motion_aux_zero((unsigned)a)) aux_report((unsigned)a);
-            else strcpy(response, "ERR code=AUX_ZERO_REQUIRES_M6_DISARMED_IDLE");
+            else strcpy(response, "ERR code=AUX_ZERO_REQUIRES_DISARMED_IDLE");
+        } else if (n == 4 && strcmp(arg[1], "REFERENCE") == 0 &&
+                   protocol_int(arg[3], -AUX_POSITION_MAX, AUX_POSITION_MAX, &b)) {
+            if (motion_aux_reference((unsigned)a, b)) aux_report((unsigned)a);
+            else strcpy(response, "ERR code=AUX_REFERENCE_REQUIRES_LOST_DISARMED_IDLE_IN_RANGE");
         } else if (n == 5 && strcmp(arg[1], "CONFIG") == 0 &&
                    protocol_int(arg[3], -AUX_POSITION_MAX, AUX_POSITION_MAX, &b) &&
                    protocol_int(arg[4], -AUX_POSITION_MAX, AUX_POSITION_MAX, &c)) {
@@ -254,6 +269,11 @@ static void dispatch(uint32_t id, char *body)
             else strcpy(response, "ERR code=TURN_ZERO_REQUIRES_IDLE_IMU");
         } else if (n == 2 && strcmp(arg[1], "STOP") == 0) {
             turn_stop(); turn_report(response, sizeof(response), xTaskGetTickCount());
+        } else if (n == 5 && strcmp(arg[1], "CONFIG") == 0 &&
+                   protocol_int(arg[2], 0, INT32_MAX, &a) && protocol_int(arg[3], 1, 1000, &b) &&
+                   protocol_int(arg[4], 1, CHASSIS_SPS_MAX, &c)) {
+            if (turn_tune((unsigned)a, (unsigned)b, (unsigned)c)) turn_report(response, sizeof(response), xTaskGetTickCount());
+            else strcpy(response, "ERR code=TURN_CONFIG_RANGE_OR_BUSY");
         } else if (n == 4 && strcmp(arg[1], "CONFIG") == 0 &&
                    protocol_int(arg[2], 0, INT32_MAX, &a) && protocol_int(arg[3], 1, 1000, &b)) {
             if (turn_configure((unsigned)a, (unsigned)b)) turn_report(response, sizeof(response), xTaskGetTickCount());
@@ -261,11 +281,12 @@ static void dispatch(uint32_t id, char *body)
         } else if (n == 3 && strcmp(arg[1], "CONFIG") == 0 && protocol_int(arg[2], 0, INT32_MAX, &a)) {
             if (turn_config((unsigned)a)) turn_report(response, sizeof(response), xTaskGetTickCount());
             else strcpy(response, "ERR code=TURN_CONFIG_RANGE_OR_BUSY");
-        } else if (n == 6 && strcmp(arg[1], "MOVE") == 0 &&
+        } else if ((n == 6 || n == 7) && strcmp(arg[1], "MOVE") == 0 &&
                    (strcmp(arg[2], "REL") == 0 || strcmp(arg[2], "ABS") == 0) &&
                    protocol_int(arg[3], -18000, 18000, &a) &&
-                   protocol_int(arg[4], 1, CHASSIS_SPS_MAX, &b) && protocol_int(arg[5], 1, 20000, &c)) {
-            if (turn_start(strcmp(arg[2], "ABS") == 0, a, (unsigned)b, (unsigned)c, id, xTaskGetTickCount()))
+                   protocol_int(arg[4], 1, CHASSIS_SPS_MAX, &b) && protocol_int(arg[5], 1, 20000, &c) &&
+                   (n == 6 || protocol_int(arg[6], 1, 1000, &d))) {
+            if (turn_start_band(strcmp(arg[2], "ABS") == 0, a, (unsigned)b, (unsigned)c, id, xTaskGetTickCount(), n == 7 ? (unsigned)d : turn_tolerance_cd()))
                 snprintf(response, sizeof(response), "OK cmd=TURN_MOVE state=accepted move_id=%lu", (unsigned long)id);
             else strcpy(response, "ERR code=TURN_NOT_READY_BUSY_DISARMED_OR_IMU");
         }
@@ -279,6 +300,14 @@ static void dispatch(uint32_t id, char *body)
                    protocol_int(arg[3], -NAV_COORD_MAX, NAV_COORD_MAX, &b)) {
             if (navigation_origin(a, b)) navigation_report(response, sizeof(response), xTaskGetTickCount());
             else strcpy(response, "ERR code=NAV_RESET_REQUIRES_DISARMED_IDLE");
+        } else if (n == 7 && strcmp(arg[1], "RESET") == 0 &&
+                   protocol_int(arg[2], -NAV_COORD_MAX, NAV_COORD_MAX, &a) &&
+                   protocol_int(arg[3], -NAV_COORD_MAX, NAV_COORD_MAX, &b) &&
+                   protocol_int(arg[4], -NAV_COORD_MAX, NAV_COORD_MAX, &c) &&
+                   protocol_int(arg[5], -NAV_COORD_MAX, NAV_COORD_MAX, &d) &&
+                   protocol_int(arg[6], -18000, 18000, &e)) {
+            if (navigation_reference(a, b, c, d, e)) navigation_report(response, sizeof(response), xTaskGetTickCount());
+            else strcpy(response, "ERR code=NAV_RESET_REQUIRES_DISARMED_IDLE");
         } else if (n == 6 && strcmp(arg[1], "GRID") == 0 &&
                    (strcmp(arg[2], "X") == 0 || strcmp(arg[2], "Y") == 0) &&
                    protocol_int(arg[3], -NAV_COORD_MAX, NAV_COORD_MAX, &a) &&
@@ -286,30 +315,73 @@ static void dispatch(uint32_t id, char *body)
                    protocol_int(arg[5], -NAV_COORD_MAX, NAV_COORD_MAX, &c)) {
             strcpy(response, navigation_grid(strcmp(arg[2], "Y") == 0, a, b, c) ? "OK cmd=NAV_GRID" : "ERR code=NAV_GRID_INVALID_OR_BUSY");
         } else if (n == 5 && strcmp(arg[1], "POINT") == 0 &&
-                   protocol_int(arg[2], 0, 4, &a) && protocol_int(arg[3], -NAV_COORD_MAX, NAV_COORD_MAX, &b) &&
+                   protocol_int(arg[2], 0, NAV_STATION_MAX - 1, &a) && protocol_int(arg[3], -NAV_COORD_MAX, NAV_COORD_MAX, &b) &&
                    protocol_int(arg[4], -NAV_COORD_MAX, NAV_COORD_MAX, &c)) {
             strcpy(response, navigation_point((unsigned)a, b, c) ? "OK cmd=NAV_POINT" : "ERR code=NAV_BUSY");
         } else if (n == 4 && strcmp(arg[1], "ATTITUDE") == 0 &&
-                   protocol_int(arg[2], 0, 4, &a) && protocol_int(arg[3], -18000, 18000, &b)) {
+                   protocol_int(arg[2], 0, NAV_STATION_MAX - 1, &a) && protocol_int(arg[3], -18000, 18000, &b)) {
             strcpy(response, navigation_attitude((unsigned)a, b) ? "OK cmd=NAV_ATTITUDE" : "ERR code=NAV_BUSY");
         } else if (n == 5 && strcmp(arg[1], "IMU") == 0 &&
                    protocol_int(arg[2], -18000, 18000, &a) && protocol_int(arg[3], 0, 1, &b) &&
                    protocol_int(arg[4], 1, INT32_MAX, &c)) {
             navigation_imu(a, (unsigned)b, (uint32_t)c, xTaskGetTickCount());
             optical_flow_feedback(a, (unsigned)b, (uint32_t)c, xTaskGetTickCount());
-            strcpy(response, "OK cmd=NAV_IMU");
+            snprintf(response, sizeof(response), "OK cmd=NAV_IMU paused=%u", turn_imu_waiting(xTaskGetTickCount()));
+        } else if (n == 2 && strcmp(arg[1], "INSET") == 0) {
+            navigation_inset_report(response, sizeof(response));
+        } else if (n == 3 && strcmp(arg[1], "INSET") == 0 && protocol_int(arg[2], 0, 100000, &a)) {
+            if (navigation_inset((unsigned)a)) navigation_inset_report(response, sizeof(response));
+            else strcpy(response, "ERR code=NAV_INSET_RANGE_OR_BUSY");
         } else if (n == 5 && strcmp(arg[1], "CONFIG") == 0 &&
                    protocol_int(arg[2], 1, CHASSIS_SPS_MAX, &a) && protocol_int(arg[3], 1, 20000, &b) &&
                    protocol_int(arg[4], 0, 60000, &c)) {
             strcpy(response, navigation_parameters((unsigned)a, (unsigned)b, (uint32_t)c) ? "OK cmd=NAV_CONFIG" : "ERR code=NAV_BUSY");
+        } else if (n == 3 && strcmp(arg[1], "STATIONS") == 0 &&
+                   protocol_int(arg[2], 2, NAV_STATION_MAX, &a)) {
+            strcpy(response, navigation_stations((unsigned)a) ? "OK cmd=NAV_STATIONS" : "ERR code=NAV_BUSY_OR_RANGE");
+        } else if (n == 3 && strcmp(arg[1], "LEGS") == 0 &&
+                   protocol_int(arg[2], 1, NAV_LEG_MAX, &a)) {
+            strcpy(response, navigation_legs((unsigned)a) ? "OK cmd=NAV_LEGS" : "ERR code=NAV_BUSY_OR_NO_STATIONS");
+        } else if (n == 5 && strcmp(arg[1], "LEG") == 0 &&
+                   protocol_int(arg[2], 0, NAV_LEG_MAX - 1, &a) &&
+                   protocol_int(arg[3], 0, NAV_STATION_MAX - 1, &b) &&
+                   protocol_int(arg[4], 0, 1, &c)) {
+            strcpy(response, navigation_leg((unsigned)a, (unsigned)b, (unsigned)c) ? "OK cmd=NAV_LEG" : "ERR code=NAV_LEG_RANGE_OR_BUSY");
+        } else if (n == 2 && strcmp(arg[1], "ALIGN") == 0) {
+            navigation_align_report(response, sizeof(response));
+        } else if (n == 8 && strcmp(arg[1], "NUDGE") == 0 &&
+                   protocol_int(arg[2], 1, INT32_MAX, &a) && protocol_int(arg[3], 0, NAV_LEG_MAX - 1, &b) &&
+                   (c = chassis_parse_direction(arg[4])) >= 0 && c <= CH_RIGHT &&
+                   protocol_int(arg[5], 1, NAV_MICRO_STEPS_MAX, &d) &&
+                   protocol_int(arg[6], 1, CHASSIS_SPS_MAX, &e) && protocol_int(arg[7], 1, 20000, &f)) {
+            if (navigation_nudge((uint32_t)a, (unsigned)b, (unsigned)c, (unsigned)d, (unsigned)e, (unsigned)f, id, xTaskGetTickCount()))
+                snprintf(response, sizeof(response), "OK cmd=NAV_NUDGE op_id=%lu", (unsigned long)id);
+            else strcpy(response, "ERR code=NAV_MICRO_NOT_READY_OR_LIMIT");
+        } else if (n == 4 && strcmp(arg[1], "SUSPEND") == 0 &&
+                   protocol_int(arg[2], 1, INT32_MAX, &a) && protocol_int(arg[3], 0, NAV_LEG_MAX - 1, &b)) {
+            strcpy(response, navigation_suspend((uint32_t)a, (unsigned)b, xTaskGetTickCount()) ? "OK cmd=NAV_SUSPEND" : "ERR code=NAV_HANDOFF_NOT_READY");
+        } else if (n == 6 && (strcmp(arg[1], "POSE") == 0 || strcmp(arg[1], "RESTORE") == 0) &&
+                   protocol_int(arg[2], 1, INT32_MAX, &a) && protocol_int(arg[3], 0, NAV_LEG_MAX - 1, &b) &&
+                   protocol_int(arg[4], -NAV_COORD_MAX, NAV_COORD_MAX, &c) && protocol_int(arg[5], -NAV_COORD_MAX, NAV_COORD_MAX, &d)) {
+            if (navigation_locate((uint32_t)a, (unsigned)b, c, d, strcmp(arg[1], "RESTORE") == 0, xTaskGetTickCount()))
+                snprintf(response, sizeof(response), "OK cmd=NAV_%s", arg[1]);
+            else strcpy(response, "ERR code=NAV_HANDOFF_NOT_READY");
+        } else if (n == 4 && strcmp(arg[1], "FIX") == 0 &&
+                   protocol_int(arg[2], 1, INT32_MAX, &a) && protocol_int(arg[3], 0, NAV_LEG_MAX - 1, &b)) {
+            if (navigation_fix((uint32_t)a, (unsigned)b, xTaskGetTickCount()))
+                strcpy(response, "OK cmd=NAV_FIX");
+            else strcpy(response, "ERR code=NAV_MICRO_NOT_READY");
+        } else if (n == 4 && strcmp(arg[1], "GO") == 0 &&
+                   protocol_int(arg[2], 1, INT32_MAX, &a) && protocol_int(arg[3], 0, NAV_LEG_MAX - 1, &b)) {
+            strcpy(response, navigation_go((uint32_t)a, (unsigned)b, xTaskGetTickCount()) ? "OK cmd=NAV_GO" : "ERR code=NAV_NOT_HELD_OR_WRONG_LEG");
         } else if (n == 6 && strcmp(arg[1], "BEGIN") == 0 &&
-                   protocol_int(arg[2], 1, INT32_MAX, &a) && protocol_int(arg[3], 5, NAV_PATH_MAX, &b) &&
+                   protocol_int(arg[2], 1, INT32_MAX, &a) && protocol_int(arg[3], 1, NAV_PATH_MAX, &b) &&
                    protocol_int(arg[4], -NAV_COORD_MAX, NAV_COORD_MAX, &c) && protocol_int(arg[5], -NAV_COORD_MAX, NAV_COORD_MAX, &d)) {
             strcpy(response, navigation_begin((uint32_t)a, (unsigned)b, c, d, xTaskGetTickCount()) ? "OK cmd=NAV_BEGIN" : "ERR code=NAV_UPLOAD_NOT_READY");
         } else if (n == 7 && strcmp(arg[1], "WP") == 0 &&
                    protocol_int(arg[2], 1, INT32_MAX, &a) && protocol_int(arg[3], 0, NAV_PATH_MAX - 1, &b) &&
                    protocol_int(arg[4], -NAV_COORD_MAX, NAV_COORD_MAX, &c) && protocol_int(arg[5], -NAV_COORD_MAX, NAV_COORD_MAX, &d) &&
-                   protocol_int(arg[6], 0, 4, &e)) {
+                   protocol_int(arg[6], 0, NAV_LEG_MAX - 1, &e)) {
             strcpy(response, navigation_waypoint((uint32_t)a, (unsigned)b, c, d, (unsigned)e, xTaskGetTickCount()) ? "OK cmd=NAV_WP" : "ERR code=NAV_UPLOAD_ORDER_OR_BUSY");
         } else if (n == 4 && strcmp(arg[1], "COMMIT") == 0 &&
                    protocol_int(arg[2], 1, INT32_MAX, &a) && protocol_int(arg[3], 0, 65535, &b)) {
@@ -318,6 +390,19 @@ static void dispatch(uint32_t id, char *body)
             if (navigation_start(id, n == 3 ? (uint32_t)a : 0U, xTaskGetTickCount()))
                 snprintf(response, sizeof(response), "OK cmd=NAV_START state=accepted move_id=%lu", (unsigned long)id);
             else strcpy(response, "ERR code=NAV_NOT_READY_BUSY_DISARMED_OR_IMU");
+        } else if (n == 4 && strcmp(arg[1], "START") == 0 && strcmp(arg[3], "HOST") == 0 && protocol_int(arg[2],1,INT32_MAX,&a)) {
+            if (navigation_host_start(id,(uint32_t)a,xTaskGetTickCount()))
+                snprintf(response,sizeof(response),"OK cmd=NAV_START state=accepted host=1 move_id=%lu",(unsigned long)id);
+            else strcpy(response,"ERR code=NAV_NOT_READY_BUSY_DISARMED_OR_IMU");
+        } else if (n == 2 && strcmp(arg[1], "EXEC") == 0) {
+            navigation_exec_report(response,sizeof(response),xTaskGetTickCount());
+        } else if (n == 10 && strcmp(arg[1], "EXEC") == 0 &&
+            protocol_int(arg[2],1,INT32_MAX,&a) && protocol_int(arg[3],1,INT32_MAX,&b) &&
+            protocol_int(arg[4],0,4,&c) && protocol_int(arg[5],-NAV_COORD_MAX,NAV_COORD_MAX,&d) &&
+            protocol_int(arg[6],-NAV_COORD_MAX,NAV_COORD_MAX,&e) && protocol_int(arg[7],-18000,18000,&f) &&
+            protocol_int(arg[8],1,CHASSIS_SPS_MAX,&g) && protocol_int(arg[9],1,20000,&h)) {
+            if (navigation_execute(a,b,c,d,e,f,g,h,xTaskGetTickCount())) navigation_exec_report(response,sizeof(response),xTaskGetTickCount());
+            else strcpy(response,"ERR code=NAV_EXEC_NOT_READY_OR_STALE_OPERATION");
         } else if (n == 3 && strcmp(arg[1], "OBSTACLE") == 0 && protocol_int(arg[2], 0, 1, &a)) {
             navigation_obstacle((unsigned)a); navigation_report(response, sizeof(response), xTaskGetTickCount());
         } else if (n == 2 && strcmp(arg[1], "REPLAN") == 0) {

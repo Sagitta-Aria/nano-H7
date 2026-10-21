@@ -13,7 +13,7 @@ const assert=require('node:assert/strict');
   const mask=()=>page.locator('.inv').evaluateAll(boxes=>boxes.reduce((value,b)=>value|(b.checked?1<<Number(b.value):0),0));
   const setMask=async value=>{for(let i=0;i<4;i++)await page.locator(`.inv[value="${i}"]`).setChecked(!!(value&(1<<i)));};
   try{
-    await page.goto(process.env.CHASSIS_URL||'http://127.0.0.1:18771/');
+    await page.goto(new URL('/debug', process.env.CHASSIS_URL||'http://127.0.0.1:18771/').href);
     await page.getByRole('tab',{name:'底盘运动',exact:true}).click();
     await page.waitForFunction(()=>document.getElementById('inv-state').textContent.includes('5'));
     const initial=await snapshot();assert.equal(initial.demo,true,'requires SIM');

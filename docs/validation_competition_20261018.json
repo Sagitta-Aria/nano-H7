@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-18",
+  "version": "0.2.26",
+  "build": {
+    "toolchain": "Keil ARM Compiler 5 + MicroLIB",
+    "result": "passed",
+    "warnings": 0
+  },
+  "unittest": {
+    "run": 553,
+    "passed": 552,
+    "skipped": 1,
+    "seconds": 126.312,
+    "skip": "Linux-only process replacement test on Windows"
+  },
+  "frontend_suites": {
+    "run": 7,
+    "result": "passed"
+  },
+  "browser": {
+    "result": "passed",
+    "mode": "temporary SIM only",
+    "checks": [
+      "one button and no checkboxes",
+      "origin/ARM/upload/start in one click",
+      "reload during cruise does not cancel route",
+      "manual empty holds pass without changing saved configuration",
+      "saved yaw settings restore after clearing browser storage"
+    ]
+  },
+  "hardware": {
+    "deployed": false,
+    "flashed": false,
+    "physical_motion_tested": false,
+    "reason": "NX SSH banner exchange timed out twice"
+  },
+  "runtime_configs_packaged": false,
+  "sha256": {
+    "host-update.zip": "254831b8ced0fb0d14aa3886e39689471767cd5e9b0031af5cbfc51d76b20809",
+    "robot_h743.axf": "89ee61efefbbc6bb86f994c4d436cf4d15fa9e07f39484678bf3047e82f7e660",
+    "robot_h743.bin": "7ec414cea94f22c360e9c356d1b700c16c2562c55f65ff26a3e811465be2e497",
+    "robot_h743.hex": "fa7550d78e270fcda0da74e5576678745af1267592f11d48eda6deb572c76407",
+    "robot_h743.map": "ce55f63b23df97a1b5dd712a1ff56e80fb15b4cc6d13bc9b13f80af850655474"
+  }
+}

@@ -13,10 +13,14 @@ static const char *const names[] = {"idle", "turning", "done", "stopped", "fault
 static unsigned state, valid, zero_ready, absolute_mode, mask, max_sps, acceleration;
 static int32_t heading, zero_heading, origin, target, direction;
 static uint32_t sample_time, epoch, revision, move_id, started;
-static uint32_t stable_revision, stable_started, stable_last;
+static uint32_t stable_revision, stable_last;
 static unsigned stable_count;
 static unsigned kp_centi = 2000U;
 static unsigned tolerance_cd = NAV_HEADING_TOLERANCE_CD;
+static unsigned minimum_sps = TURN_MIN_SPS;
+static unsigned task_tolerance_cd = NAV_HEADING_TOLERANCE_CD;
+static unsigned imu_wait, resume_samples;
+static uint32_t pause_started, pause_total, resume_first, pause_seen;
 static const char *fault = "none";
 
 /* Shortest signed yaw difference; +180 deterministically turns clockwise. */
@@ -26,9 +30,38 @@ static unsigned fresh(uint32_t now)
 { return valid && (uint32_t)(now - sample_time) < NAV_IMU_TIMEOUT_MS; }
 unsigned turn_busy(void) { return state == TURNING; }
 
+/* Visual WHEELS is a disposable velocity, unlike finite STRAIGHT/TURN tasks.
+ * Discard it before holding; resuming must wait for a new camera observation. */
+static void hold_imu(uint32_t now)
+{
+    if (!imu_wait) {
+        imu_wait = 1; pause_started = now;
+        if (navigation_suspended() && !chassis_busy()) motion_chassis_stop();
+    }
+    resume_samples = 0; motion_chassis_hold(1);
+}
+
 /* Caller holds the IRQ lock. Finish STEP highs and retain the stopped result. */
 static void fail(const char *reason)
 { motion_chassis_stop(); state = TURN_FAULT; fault = reason; direction = 0; }
+
+/* Task-only lease check also covers suspended navigation and visual WHEELS.
+ * Hold preserves motion ownership; status active includes that reservation. */
+unsigned turn_imu_waiting(uint32_t now)
+{
+    uint32_t key = board_lock();
+    if (imu_wait && (!motion_armed() || !chassis_imu_required())) {
+        pause_total += now-pause_started; imu_wait = 0; resume_samples = 0;
+        motion_chassis_hold(0);
+    }
+    if (!fresh(now) && motion_armed() && chassis_imu_required()) {
+        hold_imu(now);
+    }
+    board_unlock(key); return imu_wait;
+}
+uint32_t turn_imu_paused_ms(uint32_t now)
+{ return pause_total + (imu_wait ? (uint32_t)(now-pause_started) : 0U); }
+unsigned turn_imu_paused(void) { return imu_wait; }
 
 /* Called by the NAV IMU bridge, including while no cruise or turn is active.
  * A changed H723 session invalidates zero; delayed data never resumes a turn. */
@@ -39,10 +72,22 @@ void turn_feedback(int32_t angle_cd, unsigned sample_valid, uint32_t sample_epoc
     if (sample_epoch != epoch) {
         zero_ready = 0;
         if (turn_busy()) fail("imu_changed");
-    } else if (turn_busy() && !fresh(now)) fail("imu_stale");
+    }
+    if (!sample_valid || !fresh(now)) {
+        if (motion_armed() && chassis_imu_required()) {
+            hold_imu(now);
+        }
+    }
     heading = wrap(angle_cd); valid = sample_valid != 0;
     epoch = sample_epoch; sample_time = now; ++revision;
-    if (!valid && turn_busy()) fail("imu_invalid");
+    if (imu_wait && valid) {
+        if (!resume_samples) resume_first = now;
+        ++resume_samples;
+        if (resume_samples >= 3U && (uint32_t)(now-resume_first) >= 100U) {
+            pause_total += now-pause_started; imu_wait = 0; resume_samples = 0;
+            stable_count = 0; motion_chassis_hold(0);
+        }
+    }
     board_unlock(key);
 }
 
@@ -51,7 +96,7 @@ void turn_feedback(int32_t angle_cd, unsigned sample_valid, uint32_t sample_epoc
 int turn_zero(uint32_t now)
 {
     uint32_t key = board_lock();
-    if (!fresh(now) || chassis_busy() || motion_chassis_active()) { board_unlock(key); return 0; }
+    if (turn_imu_waiting(now) || !fresh(now) || chassis_busy() || motion_chassis_active()) { board_unlock(key); return 0; }
     zero_heading = origin = heading; zero_ready = 1; target = 0;
     state = TURN_IDLE; fault = "none";
     board_unlock(key); return 1;
@@ -61,16 +106,20 @@ int turn_zero(uint32_t now)
  * REL works without a zero. Accepted is not completion; poll TURN STAT. */
 int turn_start(unsigned absolute, int32_t angle_cd, unsigned sps, unsigned accel,
                uint32_t id, uint32_t now)
+{ return turn_start_band(absolute, angle_cd, sps, accel, id, now, tolerance_cd); }
+int turn_start_band(unsigned absolute, int32_t angle_cd, unsigned sps, unsigned accel,
+                    uint32_t id, uint32_t now, unsigned band)
 {
     uint32_t key;
     if (absolute > 1 || angle_cd < -18000 || angle_cd > 18000 ||
-        !sps || sps > CHASSIS_SPS_MAX || !accel || accel > 20000) return 0;
+        !sps || sps > CHASSIS_SPS_MAX || !accel || accel > 20000 || band < 1U || band > 1000U) return 0;
     key = board_lock();
-    if (!motion_armed() || !fresh(now) || (absolute && !zero_ready) ||
+    if (!motion_armed() || turn_imu_waiting(now) || !fresh(now) || (absolute && !zero_ready) ||
         chassis_busy() || motion_chassis_active() || motion_faults()) { board_unlock(key); return 0; }
     absolute_mode = absolute; origin = absolute ? zero_heading : heading;
     target = wrap(angle_cd); max_sps = sps; acceleration = accel;
     mask = chassis_invert_mask(); move_id = id; started = now;
+    task_tolerance_cd = band; pause_seen = turn_imu_paused_ms(now);
     stable_count = 0; stable_revision = revision; direction = 0;
     state = TURNING; fault = "none";
     board_unlock(key); return 1;
@@ -85,25 +134,37 @@ void turn_stop(void)
     board_unlock(key);
 }
 
+/* MOTION CLEAR calls this after all axes are confirmed idle/disarmed. */
+void turn_clear_fault(void)
+{
+    uint32_t key = board_lock();
+    state = TURN_STOPPED; fault = "none"; stable_count = 0; direction = 0;
+    board_unlock(key);
+}
 /* Configure shared P only while the wheels and both controllers are idle. */
 int turn_config(unsigned kp)
 { return turn_configure(kp, turn_tolerance_cd()); }
 
 /* Apply gain and completion band atomically; active wheel tasks reject edits. */
 int turn_configure(unsigned kp, unsigned tolerance)
+{ return turn_tune(kp, tolerance, minimum_sps); }
+
+/* New full tuning command; old one/two-parameter forms preserve the floor. */
+int turn_tune(unsigned kp, unsigned tolerance, unsigned minimum)
 {
     uint32_t key;
-    if (kp > INT32_MAX || tolerance < 1U || tolerance > 1000U) return 0;
+    if (kp > INT32_MAX || tolerance < 1U || tolerance > 1000U ||
+        minimum < 1U || minimum > CHASSIS_SPS_MAX) return 0;
     key = board_lock();
     if (chassis_busy() || motion_chassis_active()) { board_unlock(key); return 0; }
-    kp_centi = kp; tolerance_cd = tolerance; board_unlock(key); return 1;
+    kp_centi = kp; tolerance_cd = tolerance; minimum_sps = minimum; board_unlock(key); return 1;
 }
 /* Shared cruise/standalone completion tolerance in centidegrees, RAM only. */
 unsigned turn_tolerance_cd(void)
 { uint32_t key = board_lock(); unsigned value = tolerance_cd; board_unlock(key); return value; }
-/* P in step/s/degree. Near target, permit 1 step/s rather than imposing the
- * former 30 step/s minimum. Caller max_sps replaces the hidden 600 cap. */
-unsigned turn_control_speed(unsigned magnitude, unsigned limit)
+/* Fine P output for translating yaw correction. Do not apply the in-place
+ * turn floor here: a speed step near the straight-line deadband causes sway. */
+static unsigned proportional_speed(unsigned magnitude, unsigned limit)
 {
     unsigned sps;
     uint64_t scaled;
@@ -117,10 +178,19 @@ unsigned turn_control_speed(unsigned magnitude, unsigned limit)
     if (sps > limit) sps = limit;
     return sps;
 }
+/* Standalone and cruise rotation share a minimum speed outside tolerance.
+ * Keep P=0 disabled and honor even a task speed below TURN_MIN_SPS. Callers
+ * stop inside tolerance before requesting this speed, including on overshoot. */
+unsigned turn_control_speed(unsigned magnitude, unsigned limit)
+{
+    unsigned sps = proportional_speed(magnitude, limit);
+    if (sps && sps < minimum_sps) sps = minimum_sps;
+    return sps > limit ? limit : sps;
+}
 int turn_heading(uint32_t now, int32_t *angle_cd, uint32_t *session)
 {
     uint32_t key = board_lock();
-    unsigned available = fresh(now);
+    unsigned available = fresh(now) && !imu_wait;
     *angle_cd = heading; *session = epoch;
     board_unlock(key); return available != 0;
 }
@@ -129,7 +199,7 @@ int32_t turn_heading_correction(int32_t error_cd, unsigned max_sps)
     unsigned magnitude = (unsigned)(error_cd < 0 ? -error_cd : error_cd);
     int32_t correction;
     if (magnitude <= turn_tolerance_cd()) return 0;
-    correction = (int32_t)turn_control_speed(magnitude, max_sps);
+    correction = (int32_t)proportional_speed(magnitude, max_sps);
     return error_cd < 0 ? -correction : correction;
 }
 /* 1 ms controller; completion requires >=3 samples spanning 300 ms within
@@ -139,22 +209,26 @@ void turn_tick(uint32_t now)
     int32_t error, wanted, signs[4], velocities[4];
     unsigned magnitude, sps, i;
     uint32_t key = board_lock();
+    uint32_t paused, elapsed;
+    turn_imu_waiting(now);
+    paused = turn_imu_paused_ms(now); elapsed = paused-pause_seen; pause_seen = paused;
+    if (turn_busy()) started += elapsed;
     if (!turn_busy()) { board_unlock(key); return; }
     if (!motion_armed()) { turn_stop(); board_unlock(key); return; }
-    if (!fresh(now)) { fail("imu_stale"); board_unlock(key); return; }
+    if (imu_wait) { stable_count = 0; board_unlock(key); return; }
     if ((uint32_t)(now - started) >= NAV_TURN_TIMEOUT_MS) { fail("turn_timeout"); board_unlock(key); return; }
     error = wrap(target - wrap(heading - origin));
     magnitude = (unsigned)(error < 0 ? -error : error);
-    if (magnitude <= tolerance_cd) {
+    if (magnitude <= task_tolerance_cd) {
         motion_chassis_stop(); direction = 0;
         if (motion_chassis_active()) { stable_count = 0; board_unlock(key); return; }
         if (revision != stable_revision) {
             stable_revision = revision;
             if (!stable_count || (uint32_t)(sample_time - stable_last) > NAV_SAMPLE_GAP_MS) {
-                stable_started = sample_time; stable_count = 0;
+                stable_count = 0;
             }
             stable_last = sample_time; ++stable_count;
-            if (stable_count >= 3 && (uint32_t)(stable_last - stable_started) >= NAV_SETTLE_MS)
+            if (stable_count >= NAV_SETTLE_SAMPLES)
                 state = TURN_DONE;
         }
         board_unlock(key); return;
@@ -187,12 +261,14 @@ void turn_report(char *out, unsigned capacity, uint32_t now)
     unsigned saved_state = state, saved_mode = absolute_mode, saved_zero = zero_ready;
     unsigned saved_kp = kp_centi;
     unsigned saved_tolerance = tolerance_cd;
+    unsigned saved_minimum = minimum_sps;
+    unsigned saved_paused = imu_wait, saved_band = task_tolerance_cd;
     unsigned saved_fresh = fresh(now), active = turn_busy() ? motion_chassis_active() : 0U;
     uint32_t id = move_id;
     const char *saved_fault = fault;
     board_unlock(key);
-    snprintf(out, capacity, "OK cmd=TURN_STAT state=%s mode=%s zero=%u current_cd=%ld target_cd=%ld error_cd=%ld imu=%u move_id=%lu active=%u fault=%s kp_centi=%u tolerance_cd=%u",
+    snprintf(out, capacity, "OK cmd=TURN_STAT state=%s mode=%s zero=%u current_cd=%ld target_cd=%ld error_cd=%ld imu=%u move_id=%lu active=%u fault=%s kp_centi=%u tolerance_cd=%u min_sps=%u paused=%u task_tolerance_cd=%u",
         names[saved_state], saved_mode ? "ABS" : "REL", saved_zero, (long)current,
         (long)saved_target, (long)wrap(saved_target - current), saved_fresh, (unsigned long)id,
-        active, saved_fault, saved_kp, saved_tolerance);
+        active, saved_fault, saved_kp, saved_tolerance, saved_minimum, saved_paused, saved_band);
 }

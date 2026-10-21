@@ -7,15 +7,31 @@ import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
+from unittest.mock import Mock
 from host.camera import CameraHub, CameraSlots, csi_identity
 
 WORKER = """
-import sys,json
+import sys,json,threading,time
+lock=threading.Lock();active=[None]
+def emit(header,data=b''):
+    with lock:
+        sys.stdout.buffer.write(json.dumps(dict(header,length=len(data))).encode()+b'\\n'+data)
+        sys.stdout.buffer.flush()
+def track(identity):
+    frame=0
+    while active[0]==identity:
+        frame+=1
+        emit({'vision_only':True,'stream_id':identity,'vision':{'stream_id':identity,'frame_id':frame,'captured_monotonic':time.monotonic()}})
+        time.sleep(.01)
 print(json.dumps({'length':0,'width':640,'height':480}),flush=True)
 for command in sys.stdin.buffer:
-    data=b'one-photo'
-    sys.stdout.buffer.write(json.dumps({'length':len(data),'width':640,'height':480}).encode()+b'\\n'+data)
-    sys.stdout.buffer.flush()
+    if command.startswith(b'TRACK '):
+        active[0]=json.loads(command[6:])['stream_id']
+        threading.Thread(target=track,args=(active[0],),daemon=True).start()
+    elif command.startswith(b'UNTRACK '):
+        active[0]=None
+    elif command.strip()==b'SNAP':
+        emit({'width':640,'height':480},b'one-photo')
 """
 
 
@@ -82,6 +98,34 @@ class CameraTests(unittest.TestCase):
         self.assertIsNone(self.hub.image())
         with self.assertRaises(ValueError):
             self.hub.capture()
+
+    def test_reader_releases_pipes_if_stop_reaped_worker_concurrently(self):
+        process = Mock()
+        process.stdout.readline.return_value = b''
+        process.poll.return_value = None
+        process.terminate.side_effect = ProcessLookupError('already reaped by stop')
+        self.hub.process = process
+        self.hub._read(process)
+        self.assertIsNone(self.hub.process)
+        self.assertEqual(self.hub.snapshot()['state'], 'error')
+        process.stdin.close.assert_called_once()
+        process.stdout.close.assert_called_once()
+
+    def test_continuous_coordinates_do_not_need_or_replace_photos(self):
+        self.open();started=time.monotonic()
+        self.hub.start_tracking({'kind':'ring'})
+        first=self.hub.tracking_sample(started)
+        second=self.hub.tracking_sample(started,first['frame_id'])
+        self.assertGreater(second['frame_id'],first['frame_id'])
+        self.assertEqual(self.hub.sequence,0)
+        self.assertIsNone(self.hub.image())
+        self.assertEqual(self.hub.capture()['sequence'],1)
+        self.assertEqual(self.hub.image(),b'one-photo')
+        third=self.hub.tracking_sample(started,second['frame_id'])
+        self.assertGreater(third['frame_id'],second['frame_id'])
+        self.hub.stop_tracking()
+        self.assertEqual(self.hub.image(),b'one-photo')
+        with self.assertRaises(ValueError):self.hub.tracking_sample(started,third['frame_id'])
 
 
 class CameraSlotTests(CameraTests):

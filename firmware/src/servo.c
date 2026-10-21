@@ -1,12 +1,8 @@
-/* S1: PH9 = TIM12_CH2 (270 degrees), S2: PH6 = TIM12_CH1 (180 degrees).
- * PCB connector routing is swapped; logical S1/S2 travel and tables stay tied
- * to the servo number, while both the GPIO and compare channel change here.
- * TIM12 is general purpose and has no BDTR/MOE, so each compare channel drives
- * its pin directly with no break or dead-time logic in the way. The prescaler is
- * chosen so one counter tick is exactly one microsecond: the compare value is
- * then the pulse width in microseconds, and nothing between the command and the
- * electrical output can round it. Both channels share the 20 ms period, so S1
- * and S2 stay phase-locked without any extra work.
+/* S1: PE4 = TIM15_CH1N/AF4 (270 degrees), S2: PH9 = TIM12_CH2/AF2 (180 degrees).
+ * S1 moved from the loose PH9 connector; logical IDs and pulse tables stay fixed.
+ * APB1 and APB2 timers both run at 200 MHz with the current board clock tree.
+ * Each counter ticks at 1 MHz and produces a 20 ms period independently.
+ * TIM15 requires BDTR.MOE; TIM12 has no main-output gate. No IRQ is needed.
  *
  * Angle is a half-degree step and the translation is the table below rather
  * than a division, because a divide by the travel constant is the one place a
@@ -17,13 +13,15 @@
 #include "servo.h"
 #include "board.h"
 #include "app_config.h"
+#include <stdio.h>
 typedef struct {
     GPIO_TypeDef *port;
+    TIM_TypeDef *timer;
     unsigned pin, channel, af;
 } servo_hw_t;
 static const servo_hw_t hw[SERVO_CHANNELS] = {
-    {GPIOH, 9, 1, 2},   /* S1: PH9 = TIM12_CH2 */
-    {GPIOH, 6, 0, 2}    /* S2: PH6 = TIM12_CH1 */
+    {GPIOE, TIM15, 4, 0, 4},   /* S1: PE4 = TIM15_CH1N (PE5 is CH1) */
+    {GPIOH, TIM12, 9, 1, 2}    /* S2: user-requested PH6/PH9 swap; PE4 stays fixed. */
 };
 static const uint16_t pulse_us[SERVO_STEPS_MAX + 1] = {
     500, 504, 507, 511, 515, 519, 522, 526, 530, 533, 537, 541,
@@ -131,7 +129,7 @@ static unsigned nearest_step(unsigned channel, unsigned us)
 /* Caller holds the lock; the compare channel is a direct index from CCR1. */
 static void apply(unsigned channel, unsigned us)
 {
-    (&TIM12->CCR1)[hw[channel].channel] = us;
+    (&hw[channel].timer->CCR1)[hw[channel].channel] = us;
     current_us[channel] = (uint16_t)us;
     hold[channel] = 1;
 }
@@ -139,37 +137,52 @@ static void apply(unsigned channel, unsigned us)
 void servo_init(void)
 {
     unsigned i;
-    /* APB1 timers run at 2x PCLK1 (200 MHz); PSC=199 gives one tick per microsecond. */
+    /* GPIOE is not enabled by board_init; both timer buses use 200 MHz. */
+    RCC->AHB4ENR |= RCC_AHB4ENR_GPIOEEN | RCC_AHB4ENR_GPIOHEN;
+    (void)RCC->AHB4ENR;
     RCC->APB1LENR |= RCC_APB1LENR_TIM12EN;
     (void)RCC->APB1LENR;
-    TIM12->CR1 = 0;
-    TIM12->PSC = TIMER_HZ / 1000000UL - 1U;
-    TIM12->ARR = 1000000UL / SERVO_PWM_HZ - 1U;
-    TIM12->CCMR1 = 0;
-    TIM12->CCMR2 = 0;
-    TIM12->CCER = 0;
-    TIM12->DIER = 0;
-    TIM12->EGR = TIM_EGR_UG; /* Load PSC/ARR/CCR once, before any output goes live. */
-    TIM12->SR = 0;
+    RCC->APB2ENR |= RCC_APB2ENR_TIM15EN;
+    (void)RCC->APB2ENR;
     for (i = 0; i < SERVO_CHANNELS; ++i) {
         const servo_hw_t *h = &hw[i];
+        TIM_TypeDef *timer = h->timer;
         const uint16_t *table = i == 1U ? pulse_us_s2 : pulse_us;
         unsigned home = i == 1U ? SERVO2_HOME_STEPS : SERVO_HOME_STEPS;
         unsigned shift = (h->channel % 2U) * 8U;
-        volatile uint32_t *reg = h->channel < 2U ? &TIM12->CCMR1 : &TIM12->CCMR2;
+        volatile uint32_t *reg = &timer->CCMR1;
+        /* One dedicated timer per servo; do not add shared timers to hw[]. */
+        timer->CR1 = 0;
+        timer->CCER = 0;
+        timer->DIER = 0;
+        timer->PSC = TIMER_HZ / 1000000UL - 1U;
+        timer->ARR = 1000000UL / SERVO_PWM_HZ - 1U;
+        timer->CCMR1 = 0;
+        timer->CNT = 0;
+        if (timer == TIM15) {
+            timer->BDTR = 0;
+            timer->RCR = 0;
+        }
         if (home > servo_steps_max(i)) home = servo_steps_max(i);
-        /* Every channel is held low from reset until its compare output is
-         * enabled below, so a booting board cannot twitch a horn. */
-        (&TIM12->CCR1)[h->channel] = 0;
+        /* Keep the compare output disabled until its home pulse is loaded. */
+        (&timer->CCR1)[h->channel] = 0;
         /* PWM1 is OCxM=0b0110: both mode bits are required. OCxM=0b0010
          * only forces inactive on compare and cannot generate servo pulses.
          * Preload applies a late CCR write at the next period boundary. */
         *reg |= (TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1PE) << shift;
         board_gpio(h->port, h->pin, 2, h->af);
-        TIM12->CCER |= TIM_CCER_CC1E << (h->channel * 4U);
         apply(i, table[home]);
+        /* Latch home/PSC before enabling output, including TIM15's MOE gate. */
+        timer->EGR = TIM_EGR_UG;
+        timer->SR = 0;
+        /* RM0433 Rev 6 Table 337: when only CH1N is enabled (CC1E=0), its
+         * output is OC1REF XOR CC1NP, NOT the complementary signal used when
+         * both outputs are enabled. Keep CC1NP=0 for short high PWM1 pulses.
+         * PH9 uses normal TIM12_CH2; select its enable bit as well as CCR2. */
+        timer->CCER = timer == TIM15 ? TIM_CCER_CC1NE : (TIM_CCER_CC1E << (h->channel * 4U));
+        if (timer == TIM15) timer->BDTR = TIM_BDTR_MOE;
+        timer->CR1 = TIM_CR1_CEN;
     }
-    TIM12->CR1 = TIM_CR1_CEN;
 }
 
 int servo_set_pulse_us(unsigned channel, unsigned us)
@@ -217,4 +230,86 @@ unsigned servo_steps_max(unsigned channel)
 
 /* Physical identity comes from the same table that writes GPIO/CCR. */
 unsigned servo_pin(unsigned channel) { return channel < SERVO_CHANNELS ? hw[channel].pin : 0; }
+/* Protocol identity only; derive the port/timer from the actual PWM route. */
+char servo_port(unsigned channel) { return channel < SERVO_CHANNELS ? (hw[channel].port == GPIOE ? 'E' : 'H') : '?'; }
+unsigned servo_timer(unsigned channel) { return channel < SERVO_CHANNELS ? (hw[channel].timer == TIM15 ? 15U : 12U) : 0; }
+const char *servo_timer_suffix(unsigned channel) { return channel < SERVO_CHANNELS && hw[channel].timer == TIM15 ? "N" : ""; }
 unsigned servo_timer_channel(unsigned channel) { return channel < SERVO_CHANNELS ? hw[channel].channel + 1U : 0; }
+
+typedef struct {
+    unsigned complete, rises, falls, levels;
+    uint32_t high_us, period_us, gap_us;
+} servo_wave_t;
+
+/* Sample the pad's digital input for 45 ms without changing GPIO, PWM or IRQs.
+ * Use only on an explicit diagnostic request: it occupies the communication
+ * task briefly. Higher-priority tasks still run; gap_us exposes sampling gaps.
+ * Timing uses the configured CPU clock, not a voltage/oscilloscope measurement.
+ * A disabled/stalled cycle counter yields complete=0 rather than hanging. */
+static servo_wave_t sample_pin(const servo_hw_t *h)
+{
+    servo_wave_t wave = {0};
+    uint32_t start, now, previous_time, rise_time = 0, max_gap = 0;
+    unsigned previous, have_rise = 0, samples, stalled = 0;
+    if (!(DWT->CTRL & DWT_CTRL_CYCCNTENA_Msk)) return wave;
+    start = DWT->CYCCNT; previous_time = start;
+    previous = (h->port->IDR >> h->pin) & 1U;
+    wave.levels = 1U << previous;
+    for (samples = 0; samples < 2000000U; ++samples) {
+        unsigned level;
+        uint32_t gap;
+        now = DWT->CYCCNT;
+        gap = now - previous_time;
+        if (gap > max_gap) max_gap = gap;
+        if (gap == 0) {
+            if (++stalled >= 4096U) break;
+        } else stalled = 0;
+        previous_time = now;
+        level = (h->port->IDR >> h->pin) & 1U;
+        wave.levels |= 1U << level;
+        if (level != previous) {
+            if (level) {
+                if (have_rise) wave.period_us = (now - rise_time) / (CPU_HZ / 1000000UL);
+                rise_time = now; have_rise = 1; ++wave.rises;
+            } else {
+                if (have_rise) wave.high_us = (now - rise_time) / (CPU_HZ / 1000000UL);
+                ++wave.falls;
+            }
+            previous = level;
+        }
+        if (now - start >= 45000UL * (CPU_HZ / 1000000UL)) {
+            wave.complete = 1;
+            break;
+        }
+    }
+    wave.gap_us = max_gap / (CPU_HZ / 1000000UL);
+    return wave;
+}
+
+/* Read live registers and a bounded digital pad sample. No angle/output writes.
+ * Report sampling validity/gaps explicitly; this is not mechanical feedback. */
+void servo_diagnostics(unsigned channel, char *out, unsigned capacity)
+{
+    const servo_hw_t *h;
+    TIM_TypeDef *t;
+    servo_wave_t wave;
+    if (channel >= SERVO_CHANNELS) {
+        snprintf(out, capacity, "ERR code=SERVO_BAD_ARGUMENT");
+        return;
+    }
+    h = &hw[channel]; t = h->timer;
+    wave = sample_pin(h);
+    snprintf(out, capacity,
+        "OK cmd=SERVO_DIAG ch=%u pin=P%c%u timer=TIM%u_CH%u%s sample=%u high_us=%lu period_us=%lu rise=%u fall=%u levels=%u gap_us=%lu cr1=%lx cr2=%lx smcr=%lx ccmr=%lx ccer=%lx psc=%lu arr=%lu ccr=%lu cnt=%lu bdtr=%lx mode=%lu af=%lu idr=%lu gpio_clk=%lx apb1_clk=%lx apb2_clk=%lx",
+        channel + 1U, servo_port(channel), h->pin, servo_timer(channel), servo_timer_channel(channel), servo_timer_suffix(channel),
+        wave.complete, (unsigned long)wave.high_us, (unsigned long)wave.period_us,
+        wave.rises, wave.falls, wave.levels, (unsigned long)wave.gap_us,
+        (unsigned long)t->CR1, (unsigned long)t->CR2, (unsigned long)t->SMCR,
+        (unsigned long)t->CCMR1, (unsigned long)t->CCER, (unsigned long)t->PSC,
+        (unsigned long)t->ARR, (unsigned long)(&t->CCR1)[h->channel], (unsigned long)t->CNT,
+        t == TIM15 ? (unsigned long)t->BDTR : 0UL,
+        (unsigned long)((h->port->MODER >> (h->pin * 2U)) & 3U),
+        (unsigned long)((h->port->AFR[h->pin / 8U] >> ((h->pin % 8U) * 4U)) & 15U),
+        (unsigned long)((h->port->IDR >> h->pin) & 1U),
+        (unsigned long)RCC->AHB4ENR, (unsigned long)RCC->APB1LENR, (unsigned long)RCC->APB2ENR);
+}

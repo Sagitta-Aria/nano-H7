@@ -1,0 +1,4826 @@
+{
+  "backup": "/home/a/h743/backups/ring_sequence_20261016_162407",
+  "before": {
+    "type": "hello",
+    "link": "connected",
+    "port": "/dev/ttyUSB0",
+    "armed": false,
+    "wiring_ack": false,
+    "device": {
+      "fw": "0.2.21",
+      "protocol": "1",
+      "board": "H743_CB_V1.5",
+      "led_mask": "3",
+      "red": "fixed",
+      "chassis_max": "5000",
+      "aux_max": "3000",
+      "chassis": "1",
+      "servo": "2",
+      "servo_travel": "2700",
+      "servo1_travel": "2700",
+      "servo2_travel": "1800",
+      "serial": "dual",
+      "lift": "1",
+      "lift_max": "8000",
+      "nav": "1",
+      "nav_heading": "1",
+      "nav_grid": "1",
+      "nav_path": "1",
+      "turn": "1",
+      "aux_control": "1",
+      "flow": "1",
+      "servo1_pin": "PH9",
+      "servo2_pin": "PH6",
+      "turn_tuning": "1",
+      "aux_live": "1",
+      "turn_precision": "1",
+      "straight": "1",
+      "cpu_hz": "400000000",
+      "apb_hz": "100000000",
+      "timer_hz": "200000000",
+      "flash_kb": "2048",
+      "uid": "3637333530335109002A003A",
+      "reset": "0x00FE0000",
+      "rtos": "11.2.0",
+      "baud": "115200",
+      "stat": {
+        "cmd": "STAT",
+        "uptime_ms": "4559896",
+        "heap_free": "37488",
+        "heap_min": "37488",
+        "tasks": "4",
+        "stack_comm": "5120",
+        "stack_motion": "1860",
+        "stack_super": "1960",
+        "led": "0",
+        "armed": "0",
+        "rx": "5903231",
+        "rx_err": "0",
+        "tx_err": "0",
+        "bad": "0",
+        "replay": "12",
+        "timeout": "0",
+        "motion_fault": "0"
+      }
+    },
+    "axes": {
+      "1": {
+        "cmd": "AXIS",
+        "axis": "1",
+        "pos": "26251",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "133920800"
+      },
+      "2": {
+        "cmd": "AXIS",
+        "axis": "2",
+        "pos": "-27779",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "133920800"
+      },
+      "3": {
+        "cmd": "AXIS",
+        "axis": "3",
+        "pos": "28961",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "133920800"
+      },
+      "4": {
+        "cmd": "AXIS",
+        "axis": "4",
+        "pos": "-25057",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "133920800"
+      },
+      "5": {
+        "cmd": "AXIS",
+        "axis": "5",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "6": {
+        "cmd": "AXIS",
+        "axis": "6",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      },
+      "7": {
+        "cmd": "AXIS",
+        "axis": "7",
+        "pos": "0",
+        "sps": "0",
+        "remaining": "0",
+        "active": "0",
+        "move_id": "0"
+      }
+    },
+    "servo": {
+      "cmd": "SERVO_STAT",
+      "raw": "OK cmd=SERVO_STAT ch=1 angle=180.0 us=1833 on=1 pin=PH9 timer=TIM12_CH2 OK cmd=SERVO_STAT ch=2 angle=0.0 us=500 on=1 pin=PH6 timer=TIM12_CH1"
+    },
+    "servo_channels": 2,
+    "chassis": {
+      "cmd": "CHASSIS",
+      "state": "stopped",
+      "direction": "BACK",
+      "move_id": "133920385",
+      "total": "1000",
+      "remaining": "0",
+      "active": "0",
+      "invert": "5",
+      "assist": "1",
+      "target_cd": "14327",
+      "error_cd": "-15",
+      "fault": "none"
+    },
+    "lift": {
+      "cmd": "LIFT_STAT",
+      "axis": "5",
+      "initialized": "1",
+      "down_sign": "0",
+      "pos": "0",
+      "max": "8000",
+      "up_room": "0",
+      "down_room": "8000",
+      "active": "0",
+      "min": "0"
+    },
+    "auxiliary": {
+      "5": {
+        "cmd": "AUX_STAT",
+        "axis": "5",
+        "pos": "0",
+        "min": "0",
+        "max": "8000",
+        "referenced": "1",
+        "configured": "1",
+        "active": "0"
+      },
+      "6": {
+        "cmd": "AUX_STAT",
+        "axis": "6",
+        "pos": "0",
+        "min": "0",
+        "max": "0",
+        "referenced": "0",
+        "configured": "0",
+        "active": "0"
+      }
+    },
+    "aux_settings": {
+      "5": {
+        "presets": [
+          0,
+          0
+        ],
+        "min": 0,
+        "max": 9400,
+        "sps": 1000,
+        "accel": 1000,
+        "step": 9300
+      },
+      "6": {
+        "presets": [
+          0,
+          -2950
+        ],
+        "min": -2950,
+        "max": 0,
+        "sps": 3000,
+        "accel": 6000,
+        "step": 50
+      }
+    },
+    "navigation": {
+      "cmd": "NAV_STAT",
+      "state": "stopped",
+      "ready": "0",
+      "x": "0",
+      "y": "0",
+      "station": "0",
+      "tx": "0",
+      "ty": "0",
+      "leg": "1",
+      "wait_ms": "0",
+      "move_id": "0",
+      "obstacle": "0",
+      "planner": "host_grid",
+      "heading_cd": "0",
+      "target_cd": "0",
+      "arrival_cd": "0",
+      "imu": "1",
+      "fault": "none",
+      "wx": "0",
+      "wy": "0",
+      "segment": "0",
+      "segments": "0",
+      "path_id": "0",
+      "route_ready": "0",
+      "legs": "0",
+      "stations": "0",
+      "held": "0"
+    },
+    "turn": {
+      "cmd": "TURN_STAT",
+      "state": "idle",
+      "mode": "REL",
+      "zero": "1",
+      "current_cd": "-22",
+      "target_cd": "0",
+      "error_cd": "22",
+      "imu": "1",
+      "move_id": "133919839",
+      "active": "0",
+      "fault": "none",
+      "kp_centi": "2000",
+      "tolerance_cd": "20"
+    },
+    "motion": {
+      "cmd": "MOTION_STAT",
+      "v": "1",
+      "latched": "0",
+      "total": "0",
+      "reason": "none",
+      "uncertain": "0",
+      "active": "0",
+      "armed": "0"
+    },
+    "flow": {
+      "cmd": "FLOW_CONFIG",
+      "x_um": "0",
+      "y_um": "0",
+      "rx_um": "0",
+      "ry_um": "0",
+      "marked": "0",
+      "recording": "0",
+      "start_ms": "0",
+      "end_ms": "0",
+      "now_ms": "4560276",
+      "online": "0",
+      "valid": "0",
+      "dt_us": "0",
+      "fx": "0",
+      "fy": "0",
+      "frames": "0",
+      "accepted": "0",
+      "bad": "0",
+      "low": "0",
+      "uart": "0",
+      "sat": "0",
+      "rev": "0",
+      "wx_um": "0",
+      "wy_um": "0",
+      "wrx_um": "0",
+      "wry_um": "0",
+      "heading": "0",
+      "locked": "1",
+      "gaps": "0",
+      "rgaps": "0",
+      "world_ms": "84538",
+      "epoch": "1945823163",
+      "height_um": "30000",
+      "gx_ppm": "1000000",
+      "gy_ppm": "1000000",
+      "map": "0",
+      "angle_cd": "0",
+      "minq": "1"
+    },
+    "flow_settings": {
+      "height_mm": 30.0,
+      "gain_x": 1.0,
+      "gain_y": 1.0,
+      "map": 0,
+      "angle_deg": 0.0,
+      "min_quality": 1
+    },
+    "mission": {
+      "stations": [
+        {
+          "name": "O",
+          "x": 0,
+          "y": 0,
+          "heading": 0
+        },
+        {
+          "name": "A",
+          "x": 0,
+          "y": 14400,
+          "heading": 0
+        },
+        {
+          "name": "B",
+          "x": 14400,
+          "y": 0,
+          "heading": -90
+        },
+        {
+          "name": "C",
+          "x": 14400,
+          "y": 28800,
+          "heading": 90
+        },
+        {
+          "name": "D",
+          "x": 28800,
+          "y": 14400,
+          "heading": -180
+        }
+      ],
+      "route": [
+        {
+          "station": 1,
+          "hold": 0
+        },
+        {
+          "station": 2,
+          "hold": 0
+        },
+        {
+          "station": 3,
+          "hold": 1
+        },
+        {
+          "station": 4,
+          "hold": 1
+        },
+        {
+          "station": 1,
+          "hold": 0
+        },
+        {
+          "station": 0,
+          "hold": 0
+        }
+      ],
+      "grid": {
+        "x": [
+          0,
+          14400,
+          28800
+        ],
+        "y": [
+          0,
+          14400,
+          28800
+        ]
+      },
+      "sps": 2500,
+      "accel": 2000,
+      "dwell_ms": 3000
+    },
+    "task": {
+      "state": "idle",
+      "active": false,
+      "error": "",
+      "run_id": "",
+      "leg": 0,
+      "action": 1,
+      "request": null,
+      "scans": {}
+    },
+    "camera_alignment": {
+      "state": "fault",
+      "active": false,
+      "busy": false,
+      "error": "四轮速度被拒绝：ERR code=DISARMED_BUSY_OR_REVERSE",
+      "vision": {
+        "kind": "ring",
+        "target": "ring",
+        "found": true,
+        "center": [
+          751,
+          417
+        ],
+        "reference": [
+          640,
+          360
+        ],
+        "control_point": [
+          651,
+          357
+        ],
+        "width": 1280,
+        "height": 720,
+        "captured_at": 1792138998.798528,
+        "error_dx": 11,
+        "error_dy": -3,
+        "rings": [
+          [
+            751,
+            417
+          ]
+        ],
+        "row_line": null,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              751,
+              417
+            ],
+            "confidence": 0.7012180387973785
+          }
+        ],
+        "expected_digit": "1",
+        "digit": "1",
+        "confidence": 0.7012180387973785,
+        "frame_id": 10325,
+        "captured_monotonic": 4476.38188868,
+        "stream_id": 23,
+        "processing_ms": 277.7
+      },
+      "stable_frames": 2,
+      "iterations": 126,
+      "total_steps": 6500,
+      "has_image": false,
+      "image_revision": 2016,
+      "frame_age_ms": 303.3,
+      "dropped_frames": 2,
+      "streaming": false,
+      "velocity": {
+        "right": 0,
+        "forward": 0,
+        "yaw": 0
+      },
+      "wheel_targets": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "fault_context": {
+        "time": "2026-10-16 16:23:19",
+        "command": "WHEELS 0 0 0 0 4000",
+        "reply": "ERR code=DISARMED_BUSY_OR_REVERSE",
+        "state": "settling",
+        "sequence": {
+          "phase": "approach",
+          "expected": 1,
+          "position_steps": -1000,
+          "range_steps": 4000,
+          "total_steps": 6500,
+          "recognized": [],
+          "line": {
+            "points": [
+              [
+                200,
+                425
+              ],
+              [
+                847,
+                428
+              ]
+            ],
+            "error_deg": 0.2656663163967181
+          },
+          "visible_digits": [
+            {
+              "digit": "1",
+              "center": [
+                751,
+                417
+              ],
+              "confidence": 0.7012180387973785
+            }
+          ],
+          "wait_remaining_s": 0.0
+        },
+        "vision": {
+          "kind": "ring",
+          "target": "ring",
+          "found": true,
+          "center": [
+            751,
+            417
+          ],
+          "reference": [
+            640,
+            360
+          ],
+          "control_point": [
+            651,
+            357
+          ],
+          "width": 1280,
+          "height": 720,
+          "captured_at": 1792138998.798528,
+          "error_dx": 11,
+          "error_dy": -3,
+          "rings": [
+            [
+              751,
+              417
+            ]
+          ],
+          "row_line": null,
+          "digits": [
+            {
+              "digit": "1",
+              "center": [
+                751,
+                417
+              ],
+              "confidence": 0.7012180387973785
+            }
+          ],
+          "expected_digit": "1",
+          "digit": "1",
+          "confidence": 0.7012180387973785,
+          "frame_id": 10325,
+          "captured_monotonic": 4476.38188868,
+          "stream_id": 23,
+          "processing_ms": 277.7
+        },
+        "polarities": [
+          1,
+          -1,
+          1,
+          -1
+        ],
+        "wheel_targets": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "velocity_revision": 197,
+        "zero_ack_revision": 197,
+        "armed": true,
+        "chassis": {
+          "cmd": "CHASSIS",
+          "state": "done",
+          "direction": "BACK",
+          "move_id": "133920385",
+          "total": "1000",
+          "remaining": "0",
+          "active": "0",
+          "invert": "5",
+          "assist": "1",
+          "target_cd": "14327",
+          "error_cd": "-15",
+          "fault": "none"
+        },
+        "turn": {
+          "cmd": "TURN_STAT",
+          "state": "idle",
+          "mode": "REL",
+          "zero": "1",
+          "current_cd": "-13",
+          "target_cd": "0",
+          "error_cd": "13",
+          "imu": "1",
+          "move_id": "133919839",
+          "active": "0",
+          "fault": "none",
+          "kp_centi": "2000",
+          "tolerance_cd": "20"
+        },
+        "motion": {
+          "cmd": "MOTION_STAT",
+          "v": "1",
+          "latched": "0",
+          "total": "0",
+          "reason": "none",
+          "uncertain": "0",
+          "active": "15",
+          "armed": "1"
+        },
+        "trace": [
+          {
+            "t": 4474.074,
+            "event": "query_ack",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-2 target_cd=0 error_cd=2 imu=1 move_id=133919839 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+            "revision": null
+          },
+          {
+            "t": 4474.127,
+            "event": "velocity_ack",
+            "body": "WHEELS -1000 1000 -1000 1000 4000",
+            "reply": "OK cmd=WHEELS state=accepted",
+            "tag": [
+              "camera_velocity",
+              40,
+              190
+            ]
+          },
+          {
+            "t": 4474.129,
+            "event": "query",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "revision": 190
+          },
+          {
+            "t": 4474.248,
+            "event": "query_ack",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-3 target_cd=0 error_cd=3 imu=1 move_id=133919839 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+            "revision": null
+          },
+          {
+            "t": 4474.249,
+            "event": "velocity_ack",
+            "body": "WHEELS -1000 1000 -1000 1000 4000",
+            "reply": "OK cmd=WHEELS state=accepted",
+            "tag": [
+              "camera_velocity",
+              40,
+              190
+            ]
+          },
+          {
+            "t": 4474.25,
+            "event": "query",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "revision": 190
+          },
+          {
+            "t": 4474.302,
+            "event": "velocity_ack",
+            "body": "WHEELS -1000 1000 -1000 1000 4000",
+            "reply": "OK cmd=WHEELS state=accepted",
+            "tag": [
+              "camera_velocity",
+              40,
+              190
+            ]
+          },
+          {
+            "t": 4474.304,
+            "event": "velocity_intent",
+            "body": "WHEELS 0 0 0 0 4000",
+            "revision": 191,
+            "state": "tracking",
+            "polarities": [
+              -1,
+              1,
+              -1,
+              1
+            ]
+          },
+          {
+            "t": 4474.357,
+            "event": "query_ack",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-7 target_cd=0 error_cd=7 imu=1 move_id=133919839 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+            "revision": null
+          },
+          {
+            "t": 4474.358,
+            "event": "query",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "revision": 191
+          },
+          {
+            "t": 4474.462,
+            "event": "velocity_ack",
+            "body": "WHEELS 0 0 0 0 4000",
+            "reply": "OK cmd=WHEELS state=accepted",
+            "tag": [
+              "camera_velocity",
+              40,
+              191
+            ]
+          },
+          {
+            "t": 4474.462,
+            "event": "query_ack",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-8 target_cd=0 error_cd=8 imu=1 move_id=133919839 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+            "revision": null
+          },
+          {
+            "t": 4474.464,
+            "event": "query",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "revision": 191
+          },
+          {
+            "t": 4474.514,
+            "event": "velocity_ack",
+            "body": "WHEELS 0 0 0 0 4000",
+            "reply": "OK cmd=WHEELS state=accepted",
+            "tag": [
+              "camera_velocity",
+              40,
+              191
+            ]
+          },
+          {
+            "t": 4474.515,
+            "event": "velocity_intent",
+            "body": "WHEELS -1000 1000 -1000 1000 4000",
+            "revision": 192,
+            "state": "tracking",
+            "polarities": [
+              -1,
+              1,
+              -1,
+              1
+            ]
+          },
+          {
+            "t": 4474.568,
+            "event": "query_ack",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-6 target_cd=0 error_cd=6 imu=1 move_id=133919839 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+            "revision": null
+          },
+          {
+            "t": 4474.569,
+            "event": "query",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "revision": 192
+          },
+          {
+            "t": 4474.62,
+            "event": "velocity_ack",
+            "body": "WHEELS -1000 1000 -1000 1000 4000",
+            "reply": "OK cmd=WHEELS state=accepted",
+            "tag": [
+              "camera_velocity",
+              40,
+              192
+            ]
+          },
+          {
+            "t": 4474.672,
+            "event": "query_ack",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-2 target_cd=0 error_cd=2 imu=1 move_id=133919839 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+            "revision": null
+          },
+          {
+            "t": 4474.672,
+            "event": "velocity_ack",
+            "body": "WHEELS -1000 1000 -1000 1000 4000",
+            "reply": "OK cmd=WHEELS state=accepted",
+            "tag": [
+              "camera_velocity",
+              40,
+              192
+            ]
+          },
+          {
+            "t": 4474.673,
+            "event": "query",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "revision": 192
+          },
+          {
+            "t": 4474.724,
+            "event": "query_ack",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-5 target_cd=0 error_cd=5 imu=1 move_id=133919839 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+            "revision": null
+          },
+          {
+            "t": 4474.776,
+            "event": "velocity_ack",
+            "body": "WHEELS -1000 1000 -1000 1000 4000",
+            "reply": "OK cmd=WHEELS state=accepted",
+            "tag": [
+              "camera_velocity",
+              40,
+              192
+            ]
+          },
+          {
+            "t": 4474.778,
+            "event": "query",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "revision": 192
+          },
+          {
+            "t": 4474.828,
+            "event": "velocity_ack",
+            "body": "WHEELS -1000 1000 -1000 1000 4000",
+            "reply": "OK cmd=WHEELS state=accepted",
+            "tag": [
+              "camera_velocity",
+              40,
+              192
+            ]
+          },
+          {
+            "t": 4474.933,
+            "event": "query_ack",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-12 target_cd=0 error_cd=12 imu=1 move_id=133919839 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+            "revision": null
+          },
+          {
+            "t": 4474.934,
+            "event": "velocity_ack",
+            "body": "WHEELS -1000 1000 -1000 1000 4000",
+            "reply": "OK cmd=WHEELS state=accepted",
+            "tag": [
+              "camera_velocity",
+              40,
+              192
+            ]
+          },
+          {
+            "t": 4474.935,
+            "event": "velocity_intent",
+            "body": "WHEELS 0 0 0 0 4000",
+            "revision": 193,
+            "state": "settling",
+            "polarities": [
+              -1,
+              1,
+              -1,
+              1
+            ]
+          },
+          {
+            "t": 4474.936,
+            "event": "query",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "revision": 193
+          },
+          {
+            "t": 4475.041,
+            "event": "velocity_ack",
+            "body": "WHEELS 0 0 0 0 4000",
+            "reply": "OK cmd=WHEELS state=accepted",
+            "tag": [
+              "camera_velocity",
+              40,
+              193
+            ]
+          },
+          {
+            "t": 4475.093,
+            "event": "velocity_ack",
+            "body": "WHEELS 0 0 0 0 4000",
+            "reply": "OK cmd=WHEELS state=accepted",
+            "tag": [
+              "camera_velocity",
+              40,
+              193
+            ]
+          },
+          {
+            "t": 4475.145,
+            "event": "query_ack",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-6 target_cd=0 error_cd=6 imu=1 move_id=133919839 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+            "revision": null
+          },
+          {
+            "t": 4475.147,
+            "event": "query",
+            "body": "CHASSIS STAT",
+            "purpose": "wheel_status",
+            "revision": 193
+          },
+          {
+            "t": 4475.197,
+            "event": "velocity_ack",
+            "body": "WHEELS 0 0 0 0 4000",
+            "reply": "OK cmd=WHEELS state=accepted",
+            "tag": [
+              "camera_velocity",
+              40,
+              193
+            ]
+          },
+          {
+            "t": 4475.198,
+            "event": "query_ack",
+            "body": "CHASSIS STAT",
+            "purpose": "wheel_status",
+            "reply": "OK cmd=CHASSIS state=done direction=BACK move_id=133920385 total=1000 remaining=0 active=15 invert=5 assist=1 target_cd=14327 error_cd=-15 fault=none",
+            "revision": 193
+          },
+          {
+            "t": 4475.249,
+            "event": "velocity_ack",
+            "body": "WHEELS 0 0 0 0 4000",
+            "reply": "OK cmd=WHEELS state=accepted",
+            "tag": [
+              "camera_velocity",
+              40,
+              193
+            ]
+          },
+          {
+            "t": 4475.251,
+            "event": "query",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "revision": 193
+          },
+          {
+            "t": 4475.353,
+            "event": "query_ack",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-12 target_cd=0 error_cd=12 imu=1 move_id=133919839 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+            "revision": null
+          },
+          {
+            "t": 4475.353,
+            "event": "velocity_ack",
+            "body": "WHEELS 0 0 0 0 4000",
+            "reply": "OK cmd=WHEELS state=accepted",
+            "tag": [
+              "camera_velocity",
+              40,
+              193
+            ]
+          },
+          {
+            "t": 4475.357,
+            "event": "query",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "revision": 193
+          },
+          {
+            "t": 4475.459,
+            "event": "velocity_ack",
+            "body": "WHEELS 0 0 0 0 4000",
+            "reply": "OK cmd=WHEELS state=accepted",
+            "tag": [
+              "camera_velocity",
+              40,
+              193
+            ]
+          },
+          {
+            "t": 4475.51,
+            "event": "query_ack",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-12 target_cd=0 error_cd=12 imu=1 move_id=133919839 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+            "revision": null
+          },
+          {
+            "t": 4475.512,
+            "event": "query",
+            "body": "CHASSIS STAT",
+            "purpose": "wheel_status",
+            "revision": 193
+          },
+          {
+            "t": 4475.562,
+            "event": "velocity_ack",
+            "body": "WHEELS 0 0 0 0 4000",
+            "reply": "OK cmd=WHEELS state=accepted",
+            "tag": [
+              "camera_velocity",
+              40,
+              193
+            ]
+          },
+          {
+            "t": 4475.616,
+            "event": "query_ack",
+            "body": "CHASSIS STAT",
+            "purpose": "wheel_status",
+            "reply": "OK cmd=CHASSIS state=done direction=BACK move_id=133920385 total=1000 remaining=0 active=0 invert=5 assist=1 target_cd=14327 error_cd=-15 fault=none",
+            "revision": 193
+          },
+          {
+            "t": 4475.616,
+            "event": "velocity_ack",
+            "body": "WHEELS 0 0 0 0 4000",
+            "reply": "OK cmd=WHEELS state=accepted",
+            "tag": [
+              "camera_velocity",
+              40,
+              193
+            ]
+          },
+          {
+            "t": 4475.617,
+            "event": "velocity_intent",
+            "body": "WHEELS 1000 -1000 1000 -1000 4000",
+            "revision": 194,
+            "state": "tracking",
+            "polarities": [
+              1,
+              -1,
+              1,
+              -1
+            ]
+          },
+          {
+            "t": 4475.617,
+            "event": "query",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "revision": 194
+          },
+          {
+            "t": 4475.668,
+            "event": "query_ack",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-13 target_cd=0 error_cd=13 imu=1 move_id=133919839 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+            "revision": null
+          },
+          {
+            "t": 4475.721,
+            "event": "query",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "revision": 194
+          },
+          {
+            "t": 4475.772,
+            "event": "velocity_ack",
+            "body": "WHEELS 1000 -1000 1000 -1000 4000",
+            "reply": "OK cmd=WHEELS state=accepted",
+            "tag": [
+              "camera_velocity",
+              40,
+              194
+            ]
+          },
+          {
+            "t": 4475.825,
+            "event": "query_ack",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-13 target_cd=0 error_cd=13 imu=1 move_id=133919839 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+            "revision": null
+          },
+          {
+            "t": 4475.825,
+            "event": "velocity_ack",
+            "body": "WHEELS 1000 -1000 1000 -1000 4000",
+            "reply": "OK cmd=WHEELS state=accepted",
+            "tag": [
+              "camera_velocity",
+              40,
+              194
+            ]
+          },
+          {
+            "t": 4475.827,
+            "event": "query",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "revision": 194
+          },
+          {
+            "t": 4475.929,
+            "event": "query_ack",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-13 target_cd=0 error_cd=13 imu=1 move_id=133919839 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+            "revision": null
+          },
+          {
+            "t": 4475.929,
+            "event": "velocity_ack",
+            "body": "WHEELS 1000 -1000 1000 -1000 4000",
+            "reply": "OK cmd=WHEELS state=accepted",
+            "tag": [
+              "camera_velocity",
+              40,
+              194
+            ]
+          },
+          {
+            "t": 4475.93,
+            "event": "query",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "revision": 194
+          },
+          {
+            "t": 4476.033,
+            "event": "velocity_ack",
+            "body": "WHEELS 1000 -1000 1000 -1000 4000",
+            "reply": "OK cmd=WHEELS state=accepted",
+            "tag": [
+              "camera_velocity",
+              40,
+              194
+            ]
+          },
+          {
+            "t": 4476.034,
+            "event": "velocity_intent",
+            "body": "WHEELS 0 0 0 0 4000",
+            "revision": 195,
+            "state": "tracking",
+            "polarities": [
+              1,
+              -1,
+              1,
+              -1
+            ]
+          },
+          {
+            "t": 4476.138,
+            "event": "query_ack",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-8 target_cd=0 error_cd=8 imu=1 move_id=133919839 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+            "revision": null
+          },
+          {
+            "t": 4476.139,
+            "event": "query",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "revision": 195
+          },
+          {
+            "t": 4476.265,
+            "event": "velocity_ack",
+            "body": "WHEELS 0 0 0 0 4000",
+            "reply": "OK cmd=WHEELS state=accepted",
+            "tag": [
+              "camera_velocity",
+              40,
+              195
+            ]
+          },
+          {
+            "t": 4476.266,
+            "event": "query_ack",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-10 target_cd=0 error_cd=10 imu=1 move_id=133919839 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+            "revision": null
+          },
+          {
+            "t": 4476.266,
+            "event": "velocity_ack",
+            "body": "WHEELS 0 0 0 0 4000",
+            "reply": "OK cmd=WHEELS state=accepted",
+            "tag": [
+              "camera_velocity",
+              40,
+              195
+            ]
+          },
+          {
+            "t": 4476.267,
+            "event": "velocity_intent",
+            "body": "WHEELS 1000 -1000 1000 -1000 4000",
+            "revision": 196,
+            "state": "tracking",
+            "polarities": [
+              1,
+              -1,
+              1,
+              -1
+            ]
+          },
+          {
+            "t": 4476.268,
+            "event": "query",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "revision": 196
+          },
+          {
+            "t": 4476.319,
+            "event": "velocity_ack",
+            "body": "WHEELS 1000 -1000 1000 -1000 4000",
+            "reply": "OK cmd=WHEELS state=accepted",
+            "tag": [
+              "camera_velocity",
+              40,
+              196
+            ]
+          },
+          {
+            "t": 4476.422,
+            "event": "query_ack",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-11 target_cd=0 error_cd=11 imu=1 move_id=133919839 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+            "revision": null
+          },
+          {
+            "t": 4476.424,
+            "event": "query",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "revision": 196
+          },
+          {
+            "t": 4476.474,
+            "event": "velocity_ack",
+            "body": "WHEELS 1000 -1000 1000 -1000 4000",
+            "reply": "OK cmd=WHEELS state=accepted",
+            "tag": [
+              "camera_velocity",
+              40,
+              196
+            ]
+          },
+          {
+            "t": 4476.476,
+            "event": "velocity_intent",
+            "body": "WHEELS 0 0 0 0 4000",
+            "revision": 197,
+            "state": "settling",
+            "polarities": [
+              1,
+              -1,
+              1,
+              -1
+            ]
+          },
+          {
+            "t": 4476.58,
+            "event": "velocity_ack",
+            "body": "WHEELS 0 0 0 0 4000",
+            "reply": "OK cmd=WHEELS state=accepted",
+            "tag": [
+              "camera_velocity",
+              40,
+              197
+            ]
+          },
+          {
+            "t": 4476.58,
+            "event": "query_ack",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-7 target_cd=0 error_cd=7 imu=1 move_id=133919839 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+            "revision": null
+          },
+          {
+            "t": 4476.581,
+            "event": "query",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "revision": 197
+          },
+          {
+            "t": 4476.684,
+            "event": "velocity_ack",
+            "body": "WHEELS 0 0 0 0 4000",
+            "reply": "OK cmd=WHEELS state=accepted",
+            "tag": [
+              "camera_velocity",
+              40,
+              197
+            ]
+          },
+          {
+            "t": 4476.737,
+            "event": "query_ack",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-11 target_cd=0 error_cd=11 imu=1 move_id=133919839 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+            "revision": null
+          },
+          {
+            "t": 4476.737,
+            "event": "velocity_ack",
+            "body": "WHEELS 0 0 0 0 4000",
+            "reply": "OK cmd=WHEELS state=accepted",
+            "tag": [
+              "camera_velocity",
+              40,
+              197
+            ]
+          },
+          {
+            "t": 4476.738,
+            "event": "query",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "revision": 197
+          },
+          {
+            "t": 4476.789,
+            "event": "query_ack",
+            "body": "TURN STAT",
+            "purpose": "heading",
+            "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-13 target_cd=0 error_cd=13 imu=1 move_id=133919839 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+            "revision": null
+          },
+          {
+            "t": 4476.841,
+            "event": "velocity_ack",
+            "body": "WHEELS 0 0 0 0 4000",
+            "reply": "ERR code=DISARMED_BUSY_OR_REVERSE",
+            "tag": [
+              "camera_velocity",
+              40,
+              197
+            ]
+          }
+        ]
+      },
+      "ring_sequence": {
+        "phase": "approach",
+        "expected": 1,
+        "position_steps": -1000,
+        "range_steps": 4000,
+        "total_steps": 6500,
+        "recognized": [],
+        "line": {
+          "points": [
+            [
+              200,
+              425
+            ],
+            [
+              847,
+              428
+            ]
+          ],
+          "error_deg": 0.2656663163967181
+        },
+        "visible_digits": [
+          {
+            "digit": "1",
+            "center": [
+              751,
+              417
+            ],
+            "confidence": 0.7012180387973785
+          }
+        ],
+        "wait_remaining_s": 0.0
+      },
+      "control": "ring_sequence"
+    },
+    "camera_alignment_config": {
+      "kind": "ring",
+      "target": "red",
+      "min_area": 500,
+      "black_max": 140,
+      "target_offset_px": [
+        -100,
+        -60
+      ],
+      "tracking": {
+        "sps": 3000,
+        "deadzone_px": 30,
+        "reverse_x": false,
+        "reverse_y": false,
+        "kp": 1.2,
+        "ki": 0,
+        "kd": 0.1,
+        "min_sps": 500,
+        "accel": 4000,
+        "camera_yaw_deg": 90
+      },
+      "ring_sequence": {
+        "range_steps": 4000,
+        "scan_step": 1000,
+        "sps": 2000,
+        "angle_tolerance_deg": 1,
+        "max_turn_deg": 30
+      }
+    },
+    "task_config": {
+      "timeout_s": 480,
+      "leg_timeout_s": 120,
+      "action_timeout_s": 30,
+      "vision_max_age_ms": 500,
+      "calibration": {
+        "verified": false,
+        "matrix": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "tolerance_px": 3,
+        "stable_frames": 3,
+        "max_iterations": 12,
+        "max_step": 100,
+        "sps": 100,
+        "accel": 1000
+      },
+      "legs": {}
+    },
+    "travel": 270.0,
+    "demo": false,
+    "imu": {
+      "state": "streaming",
+      "message": "H723 已握手 · 姿态数据有效",
+      "port": "/dev/ttyACM0",
+      "identity": {
+        "board": "DM-MC02",
+        "mcu": "STM32H723VGT6",
+        "sensor": "BMI088",
+        "protocol": "IMU1",
+        "fw": "1.1.1",
+        "uid": "002600483134510438373332"
+      },
+      "latest": {
+        "timestamp_ms": 4560402,
+        "sample_count": 9138581,
+        "ready": true,
+        "calibrated": true,
+        "accel_trusted": true,
+        "error": 0,
+        "calibration_count": 2000,
+        "roll_deg": -179.629,
+        "pitch_deg": 2.552,
+        "yaw_deg": -143.227,
+        "gyro_dps": [
+          -0.244,
+          0.003,
+          -0.122
+        ],
+        "accel_ms2": [
+          -0.4272,
+          -0.0521,
+          -9.7183
+        ],
+        "linear_accel_ms2": [
+          0.0094,
+          0.0113,
+          0.0453
+        ],
+        "temperature_c": 28.125,
+        "quaternion_wxyz": [
+          0.022183,
+          -0.315703,
+          0.946811,
+          0.003984
+        ],
+        "valid": true,
+        "time_s": 952.1824125510002
+      },
+      "generation": 1,
+      "rejected": 0,
+      "revision": 94512
+    },
+    "auto_devices": {
+      "enabled": true,
+      "message": "自动连接：H743 已连接 · H723 已连接",
+      "h743_uid": "3637333530335109002A003A",
+      "h723_uid": "002600483134510438373332"
+    }
+  },
+  "hashes": {
+    "host/__init__.py": "de6a97b2b28849916f27a28e5a523eb29a6cf5d58cceaf2482f91088475968d4",
+    "host/protocol.py": "fcd974ecc18be00337aadb55e7fdde1dbb9b27472517ca8a1dfc221131d6c06b",
+    "host/transport.py": "938a0e6105b61b6c3f64657aa5b108133a4878d4ff0b2383dc71665257042bba",
+    "host/simulator.py": "e75d767eb0252f9c5c3de973d0731a3241bb0aa43af231c9f889f45a43a2c5b8",
+    "host/servo_config.py": "032c9a8f9720ba24551c0e65a76fb29097cb7d4fae42234dcb7469a80f3069ef",
+    "host/mission.py": "73a91d01e7a208da8c43675c3840c2c396d64ecad72a2108af9d1b7be112c2ce",
+    "host/mission_vision.py": "46105bfd4492ba45da1fa8c61b9e13004a338f443db66b11543b2a2f186b02f7",
+    "host/navigation.py": "b027a31f8a76d80929ae79b000041307441be703c11dead6a36a28f10a181ff3",
+    "host/navigation_grid.py": "a7e1663f6750a0fe9ebbe3fccc8e844729a86828915a69bfe4e26356cdebbb51",
+    "host/navigation_sim.py": "6e81b2cbe01984dadf0602e744a970ddc032832229736b11496b1971cc509266",
+    "host/auxiliary.py": "72a87aecc1056c4c7d2bbc43765f1c6a437502d757a58e46f1b6174927e6a3e0",
+    "host/turn.py": "df507f56080d24a7e171fd1f08b34a83bc1862557c364281fcb3c0d5b5144629",
+    "host/turn_sim.py": "860a7ccf7d77d7a74c705dda0abf8cfd1b67f5db3d853d188e6631a2f1506019",
+    "host/straight.py": "7b6ae21b8c3a54dda3df7cedeac52fa0ad6687a23b11325cd03015223e8c620f",
+    "host/straight_sim.py": "16a1867f167e92c95a0285c371b16176cbc88f92418dd02416976edbce15ef79",
+    "host/optical_flow.py": "8bfa879c774ff5ef44cfa8a0f8e3a6b5587b90bfe60ff17078736e8a30e66c5b",
+    "host/agent.py": "baa8b8e50f176a8236c067eaa1801065e1fd0de524414019ca9cc667ebf0baa6",
+    "host/control.py": "e925297f2a8ad8440fc18b699e8a9a963f676ebd00fa98a76a20f574d0ab6de7",
+    "host/verify_link.py": "6d723ab9992cbe2059a291467f59cb502542712244cfa0bbcb8c9f5df5f072c5",
+    "host/webapp.py": "2a2c88cc43b95bd99df4f3c9e5d42945309cff697fe28cd1b3d12a603db8bb38",
+    "host/imu.py": "275760a0db549d44742c0ef83f9141e2c372fbb8aba9009004967ae4747e6f40",
+    "host/imu_protocol.py": "2de1813d2caed4bfe78d8e8a370ebf129b9a49d5649fd32489a67eea08a1022d",
+    "host/autolink.py": "9286986fbccf21e15915ae02578c25944cac4eb403d11f83004eb61f3b071365",
+    "host/camera.py": "253da90f407d3fdd820fa1b46c039629adc9f461690a6366825cde5434d7bcbf",
+    "host/webserver.py": "09c072d07d4c8171afa39452de3ac6f8cb4a8aff7015cfa7800a2cf5b11cf3ca",
+    "host/camera_vision.py": "35afc166e4a1d76d98e3fac366969da46a8a9e9aebd6732fa3e44826a65ea562",
+    "host/camera_alignment.py": "5ad2b43c91ac16ed47a35e382096e732fab3cde23c528dad554d18977ef80c39",
+    "host/camera_monitor.py": "fde3518a48243c4b9798714e272ea70331b1871a740ba0535c4f7e719785967a",
+    "host/vision_alignment.py": "278b1ca97891c8331f561408c5ea916bcbc521e69cb45c6e4fe59931fb770b35",
+    "host/ring_sequence.py": "d02e9026a9cc4a7a4f3b89e6c9d96527236b2e4d7edb92f64ffb5dfbfbc69bef",
+    "host/ring_perception.py": "597dd2aaff4534fd9e37063ed0d81174b003aaa18664d707eb554374e7f4f0c5",
+    "host/static/index.html": "fa16d4512ba0c1631c88f61038f55eafebb69bfc2a2aff63ff49d68aa68d155e",
+    "host/static/styles.css": "36b3617cc16891eba6183118ca61526babbe3034e6284ad4c2418445c9032da0",
+    "host/static/app.js": "bd6d828f1db48e9c8a9df8233cfab14b46003d31c0cab55a0899d3fa160759e2",
+    "host/static/imu.js": "2c4fc239bd45bc9efd723b515ed741e37f12fc6c96542008c3403c31667ca70b",
+    "host/static/camera.js": "58b0bb417427c428ec746d27065be503bc2afbac1b68e5c56dd8820c0353e80c",
+    "host/static/camera_alignment.js": "847b924c39bf3b0d33e5c0b300d230be83507bf82150dca3e58f7d690e7eae1e",
+    "tests/__init__.py": "35043b12b938e4a6123610ad1dce65bf4749f5dc3fb05a21ef4be8ea0efd63ec",
+    "tests/test_agent.py": "4e8689298b501dbb9e173eba924a45eb3beae3330f8c4d827990ed75fa22e62a",
+    "tests/test_control.py": "2dc67a1ac92c125e4203221b8a50472bc25ff44e3ce8bcd4878632d79c88ef5c",
+    "tests/test_webapp.py": "5625d716fe3ceef0fc1843a6ce2131ce0981912a404d44a3511cf2acb49620b4",
+    "tests/test_servo_connection.py": "724f65eb3cf772f723aa0a066aaf920eaf3e32a1309b13bc82b0996712749ee7",
+    "tests/test_host_restart.py": "7ec77453fe38376af9b68ce089882866b2ae6889d437a2f053aeb05f640392ad",
+    "tests/test_imu.py": "1e6663bcc598bf54d79b48d3357c98186243e8249cd34923f15677ee4911008f",
+    "tests/test_autolink.py": "98742beb313bf0a6c1da030a1b4c726e7c2a28b0d2f77b222a69be50040307ac",
+    "tests/test_camera.py": "ecbf5e25401f6014e9b53f08b713a1895ffbb4ed04267b6244a221d6ecdc2f59",
+    "tests/test_camera_alignment.py": "d30df326ff4e9f189f0a469aba765f338d72ccca1e39d333d9debbaac632ee1e",
+    "tests/test_camera_servo.py": "1c2726d7d968912ed10f11e41a633f1ad8eb61bc04918229d035b1af30e94d61",
+    "tests/test_visual_pid.py": "b110f7f0850b408da51874359350e082ca84379b3c35cdf352dc4f46df5321c5",
+    "tests/test_ring_sequence.py": "209b32b54bbbde4e0e7a53cfeed00490124509889b2c6dae01f40f686db2698d",
+    "tests/test_webpage.py": "388d3f73aeb6eb5bb0b9e14ff154226d611774fd21f7add225fe2507fc6ff675",
+    "tests/test_stations.py": "5fa32d04b1ef48dba1de58b62cc2ef74d4dc6be4ee3d9e869e2c0e41046bbf8e",
+    "tests/test_mission.py": "80b962da992ce940f3a288b7e28858d2a9b9b32b9f86e1c1d9ff73bbf0803fb4",
+    "tests/chassis_fixture.py": "c49d316129c9eba38e14d73b7adf0b2e778d07166fdc4c706b6dd642984e2feb",
+    "tests/imu_fixture_server.py": "ccbb386257dc4864cafcde3eade4c47a02f20f0918d3b52b140e89c405abc078",
+    "tests/pty_link_check.py": "e62911ac57118522d032ba8468d2dbe599304e4daf1bc21ad9ab7727dce5fdfb",
+    "tests/lease_stress.py": "16b4580c8dcb3449a345b939caa58be6e6b46bb827e4701acf5d40aea7f973d4",
+    "tests/test_flow_host.py": "f84994571149f000215e3dafee236124b9bb956d2725cd4b3ff19bffd47a1a23",
+    "tests/test_path_upload.py": "8bbc2a3f32ce28c7f8be16530588109f95f0f6866cf18e06819988be96d6d828",
+    "tests/test_control_fixes_host.py": "9e6b8452c9a82f70d3f9a81673ea5982d276a1e435293a3305dab1f3c265ece7",
+    "tests/test_heading_tuning_host.py": "6dc567a6f44a1146f3d66cb29637da1c396a3d9f8686f0695d0322cc4f30e1a1",
+    "tests/test_straight_host.py": "f63ddaae737afd47b44e240fc05f45ac201c297a0448c9738629ab03503af113",
+    "工创赛视觉识别/色块识别/color_block_center.py": "9119f332ad660419b7b7923eb26dc2cef4e47fc6b3fd592fb9e4ea1012fc3183",
+    "工创赛视觉识别/黑色圆环识别与数字识别/black_ring.py": "d0c071bbae581093b935336931310954618e1cee30bd04742cf711d533f5247b",
+    "工创赛视觉识别/黑色圆环识别与数字识别/ring_digit.py": "1179e5749a3a9b0c419565ff799d884c0e215e06c1d58d900c8bae5d7df38eb3",
+    "工创赛视觉识别/黑色圆环识别与数字识别/digit_core.py": "a63344123ccb32b69832398567e459df9a1f6e588043b8f81a51d4636a80384e",
+    "tools/nx_vision_live.py": "1a51cef71c9341d2538937ef1e7ce178525efc9e626d13ea06e9d47cd7bdf5d0",
+    "tools/nx_vision_ui.py": "b889b8e28151b127ac9829c39e654d2755fb0e7f3ca63506d93a3a343b49ba0d",
+    "tools/nx_vision_roi.py": "6c8a2789ef8d2d6a8b4115ea0b48909dadbc365ec2f6b9edc3ff6e23a1b9a91f",
+    "tools/nx_vision_color.py": "2d636961a2a193796b1a417d3895ef627f910b93638b5ae5155f746bab2eb6ed",
+    "tools/nx_vision_fast.py": "c2206d3a3648627bf788a21fb4c7e115f87f7d7899a9e0b83371aa99c0f3717d",
+    "tools/nx_vision_trt.py": "26b4fd9374de2d2d112a9b6f99fb7756b39b5dced251d15e6f9c6bf4c99b1116",
+    "tools/deploy_host.py": "2f17f4b6f089c74178d7f0170d9db985d1350866789847bdb4d17540d3a5b350",
+    "docs/CAMERA_ALIGNMENT.md": "236066d9fb99648f3e66ce95801f5646fc040d4fdd16a8db94b5ff8f904e523a",
+    "docs/JETSON.md": "5158e2b4d1b4d8142d9f52fa43b889024ea4cbd5575fd126005562700b5a1ebe",
+    "host/device_links.json": "45e195b775fd4a639345a20898aecc64d2eef0aed66c7b4d012aa8b29578b699",
+    "host/auxiliary.json": "868a99af7a7ab53bf0e4db5b1926e2041d4954538aa59a0df0ea1ba9e12c4fd5",
+    "host/navigation.json": "f6bee53206c49ea025b75d9e94a89e87ecefaeb21db5f7e7623339db446befd2",
+    "host/camera_alignment.json": "200b4d012a0422dfb3e72d315b9145e44d929982f5dc14800f81ba60a52717ca"
+  },
+  "missing_before": [],
+  "old_pid": "9324",
+  "manifest_sha256": {
+    "host/__init__.py": "de6a97b2b28849916f27a28e5a523eb29a6cf5d58cceaf2482f91088475968d4",
+    "host/protocol.py": "fcd974ecc18be00337aadb55e7fdde1dbb9b27472517ca8a1dfc221131d6c06b",
+    "host/transport.py": "c2260e009a2e328a12b4ca7dbbee4f340ef4294b7686a45c5246c823d7613003",
+    "host/simulator.py": "e75d767eb0252f9c5c3de973d0731a3241bb0aa43af231c9f889f45a43a2c5b8",
+    "host/servo_config.py": "032c9a8f9720ba24551c0e65a76fb29097cb7d4fae42234dcb7469a80f3069ef",
+    "host/mission.py": "73a91d01e7a208da8c43675c3840c2c396d64ecad72a2108af9d1b7be112c2ce",
+    "host/mission_vision.py": "46105bfd4492ba45da1fa8c61b9e13004a338f443db66b11543b2a2f186b02f7",
+    "host/navigation.py": "b027a31f8a76d80929ae79b000041307441be703c11dead6a36a28f10a181ff3",
+    "host/navigation_grid.py": "a7e1663f6750a0fe9ebbe3fccc8e844729a86828915a69bfe4e26356cdebbb51",
+    "host/navigation_sim.py": "6e81b2cbe01984dadf0602e744a970ddc032832229736b11496b1971cc509266",
+    "host/auxiliary.py": "72a87aecc1056c4c7d2bbc43765f1c6a437502d757a58e46f1b6174927e6a3e0",
+    "host/turn.py": "df507f56080d24a7e171fd1f08b34a83bc1862557c364281fcb3c0d5b5144629",
+    "host/turn_sim.py": "860a7ccf7d77d7a74c705dda0abf8cfd1b67f5db3d853d188e6631a2f1506019",
+    "host/straight.py": "7b6ae21b8c3a54dda3df7cedeac52fa0ad6687a23b11325cd03015223e8c620f",
+    "host/straight_sim.py": "16a1867f167e92c95a0285c371b16176cbc88f92418dd02416976edbce15ef79",
+    "host/optical_flow.py": "8bfa879c774ff5ef44cfa8a0f8e3a6b5587b90bfe60ff17078736e8a30e66c5b",
+    "host/agent.py": "baa8b8e50f176a8236c067eaa1801065e1fd0de524414019ca9cc667ebf0baa6",
+    "host/control.py": "e925297f2a8ad8440fc18b699e8a9a963f676ebd00fa98a76a20f574d0ab6de7",
+    "host/verify_link.py": "6d723ab9992cbe2059a291467f59cb502542712244cfa0bbcb8c9f5df5f072c5",
+    "host/webapp.py": "2a2c88cc43b95bd99df4f3c9e5d42945309cff697fe28cd1b3d12a603db8bb38",
+    "host/imu.py": "275760a0db549d44742c0ef83f9141e2c372fbb8aba9009004967ae4747e6f40",
+    "host/imu_protocol.py": "2de1813d2caed4bfe78d8e8a370ebf129b9a49d5649fd32489a67eea08a1022d",
+    "host/autolink.py": "9286986fbccf21e15915ae02578c25944cac4eb403d11f83004eb61f3b071365",
+    "host/camera.py": "253da90f407d3fdd820fa1b46c039629adc9f461690a6366825cde5434d7bcbf",
+    "host/webserver.py": "09c072d07d4c8171afa39452de3ac6f8cb4a8aff7015cfa7800a2cf5b11cf3ca",
+    "host/camera_vision.py": "35afc166e4a1d76d98e3fac366969da46a8a9e9aebd6732fa3e44826a65ea562",
+    "host/camera_alignment.py": "7026c6921fb54d10e1af918396fbf77403c05f777511061f48becd8d5012d867",
+    "host/camera_monitor.py": "fde3518a48243c4b9798714e272ea70331b1871a740ba0535c4f7e719785967a",
+    "host/vision_alignment.py": "278b1ca97891c8331f561408c5ea916bcbc521e69cb45c6e4fe59931fb770b35",
+    "host/ring_sequence.py": "d02e9026a9cc4a7a4f3b89e6c9d96527236b2e4d7edb92f64ffb5dfbfbc69bef",
+    "host/ring_perception.py": "597dd2aaff4534fd9e37063ed0d81174b003aaa18664d707eb554374e7f4f0c5",
+    "host/static/index.html": "fa16d4512ba0c1631c88f61038f55eafebb69bfc2a2aff63ff49d68aa68d155e",
+    "host/static/styles.css": "36b3617cc16891eba6183118ca61526babbe3034e6284ad4c2418445c9032da0",
+    "host/static/app.js": "bd6d828f1db48e9c8a9df8233cfab14b46003d31c0cab55a0899d3fa160759e2",
+    "host/static/imu.js": "2c4fc239bd45bc9efd723b515ed741e37f12fc6c96542008c3403c31667ca70b",
+    "host/static/camera.js": "58b0bb417427c428ec746d27065be503bc2afbac1b68e5c56dd8820c0353e80c",
+    "host/static/camera_alignment.js": "847b924c39bf3b0d33e5c0b300d230be83507bf82150dca3e58f7d690e7eae1e",
+    "tests/__init__.py": "35043b12b938e4a6123610ad1dce65bf4749f5dc3fb05a21ef4be8ea0efd63ec",
+    "tests/test_agent.py": "4e8689298b501dbb9e173eba924a45eb3beae3330f8c4d827990ed75fa22e62a",
+    "tests/test_control.py": "2dc67a1ac92c125e4203221b8a50472bc25ff44e3ce8bcd4878632d79c88ef5c",
+    "tests/test_webapp.py": "5625d716fe3ceef0fc1843a6ce2131ce0981912a404d44a3511cf2acb49620b4",
+    "tests/test_servo_connection.py": "724f65eb3cf772f723aa0a066aaf920eaf3e32a1309b13bc82b0996712749ee7",
+    "tests/test_host_restart.py": "7ec77453fe38376af9b68ce089882866b2ae6889d437a2f053aeb05f640392ad",
+    "tests/test_imu.py": "1e6663bcc598bf54d79b48d3357c98186243e8249cd34923f15677ee4911008f",
+    "tests/test_autolink.py": "98742beb313bf0a6c1da030a1b4c726e7c2a28b0d2f77b222a69be50040307ac",
+    "tests/test_camera.py": "ecbf5e25401f6014e9b53f08b713a1895ffbb4ed04267b6244a221d6ecdc2f59",
+    "tests/test_camera_alignment.py": "d30df326ff4e9f189f0a469aba765f338d72ccca1e39d333d9debbaac632ee1e",
+    "tests/test_camera_servo.py": "ad81a6c13db625b2b22f32f46a78ae9233e7b1f3782252ddfbd5794342b45b27",
+    "tests/test_visual_pid.py": "b110f7f0850b408da51874359350e082ca84379b3c35cdf352dc4f46df5321c5",
+    "tests/test_ring_sequence.py": "209b32b54bbbde4e0e7a53cfeed00490124509889b2c6dae01f40f686db2698d",
+    "tests/test_webpage.py": "388d3f73aeb6eb5bb0b9e14ff154226d611774fd21f7add225fe2507fc6ff675",
+    "tests/test_stations.py": "5fa32d04b1ef48dba1de58b62cc2ef74d4dc6be4ee3d9e869e2c0e41046bbf8e",
+    "tests/test_mission.py": "80b962da992ce940f3a288b7e28858d2a9b9b32b9f86e1c1d9ff73bbf0803fb4",
+    "tests/chassis_fixture.py": "c49d316129c9eba38e14d73b7adf0b2e778d07166fdc4c706b6dd642984e2feb",
+    "tests/imu_fixture_server.py": "ccbb386257dc4864cafcde3eade4c47a02f20f0918d3b52b140e89c405abc078",
+    "tests/pty_link_check.py": "e62911ac57118522d032ba8468d2dbe599304e4daf1bc21ad9ab7727dce5fdfb",
+    "tests/lease_stress.py": "16b4580c8dcb3449a345b939caa58be6e6b46bb827e4701acf5d40aea7f973d4",
+    "tests/test_flow_host.py": "f84994571149f000215e3dafee236124b9bb956d2725cd4b3ff19bffd47a1a23",
+    "tests/test_path_upload.py": "8bbc2a3f32ce28c7f8be16530588109f95f0f6866cf18e06819988be96d6d828",
+    "tests/test_control_fixes_host.py": "9e6b8452c9a82f70d3f9a81673ea5982d276a1e435293a3305dab1f3c265ece7",
+    "tests/test_heading_tuning_host.py": "6dc567a6f44a1146f3d66cb29637da1c396a3d9f8686f0695d0322cc4f30e1a1",
+    "tests/test_straight_host.py": "f63ddaae737afd47b44e240fc05f45ac201c297a0448c9738629ab03503af113",
+    "工创赛视觉识别/色块识别/color_block_center.py": "9119f332ad660419b7b7923eb26dc2cef4e47fc6b3fd592fb9e4ea1012fc3183",
+    "工创赛视觉识别/黑色圆环识别与数字识别/black_ring.py": "d0c071bbae581093b935336931310954618e1cee30bd04742cf711d533f5247b",
+    "工创赛视觉识别/黑色圆环识别与数字识别/ring_digit.py": "1179e5749a3a9b0c419565ff799d884c0e215e06c1d58d900c8bae5d7df38eb3",
+    "工创赛视觉识别/黑色圆环识别与数字识别/digit_core.py": "a63344123ccb32b69832398567e459df9a1f6e588043b8f81a51d4636a80384e",
+    "tools/nx_vision_live.py": "1a51cef71c9341d2538937ef1e7ce178525efc9e626d13ea06e9d47cd7bdf5d0",
+    "tools/nx_vision_ui.py": "b889b8e28151b127ac9829c39e654d2755fb0e7f3ca63506d93a3a343b49ba0d",
+    "tools/nx_vision_roi.py": "6c8a2789ef8d2d6a8b4115ea0b48909dadbc365ec2f6b9edc3ff6e23a1b9a91f",
+    "tools/nx_vision_color.py": "2d636961a2a193796b1a417d3895ef627f910b93638b5ae5155f746bab2eb6ed",
+    "tools/nx_vision_fast.py": "c2206d3a3648627bf788a21fb4c7e115f87f7d7899a9e0b83371aa99c0f3717d",
+    "tools/nx_vision_trt.py": "26b4fd9374de2d2d112a9b6f99fb7756b39b5dced251d15e6f9c6bf4c99b1116"
+  },
+  "restart": {
+    "pid": "12215",
+    "started_at": "2026-10-16T16:27:16.750713",
+    "camera": {
+      "state": "ready",
+      "message": "Nano 摄像头已打开，点击“拍照”获取一帧。",
+      "device": "/dev/video0",
+      "label": "USB 2.0 Camera: HD USB Camera",
+      "requested": "1280x720",
+      "width": 1280,
+      "height": 720,
+      "fps": 60.0,
+      "sequence": 0
+    }
+  },
+  "verification": {
+    "state": {
+      "type": "hello",
+      "link": "connected",
+      "port": "/dev/ttyUSB0",
+      "armed": false,
+      "wiring_ack": false,
+      "device": {
+        "fw": "0.2.21",
+        "protocol": "1",
+        "board": "H743_CB_V1.5",
+        "led_mask": "3",
+        "red": "fixed",
+        "chassis_max": "5000",
+        "aux_max": "3000",
+        "chassis": "1",
+        "servo": "2",
+        "servo_travel": "2700",
+        "servo1_travel": "2700",
+        "servo2_travel": "1800",
+        "serial": "dual",
+        "lift": "1",
+        "lift_max": "8000",
+        "nav": "1",
+        "nav_heading": "1",
+        "nav_grid": "1",
+        "nav_path": "1",
+        "turn": "1",
+        "aux_control": "1",
+        "flow": "1",
+        "servo1_pin": "PH9",
+        "servo2_pin": "PH6",
+        "turn_tuning": "1",
+        "aux_live": "1",
+        "turn_precision": "1",
+        "straight": "1",
+        "cpu_hz": "400000000",
+        "apb_hz": "100000000",
+        "timer_hz": "200000000",
+        "flash_kb": "2048",
+        "uid": "3637333530335109002A003A",
+        "reset": "0x00FE0000",
+        "rtos": "11.2.0",
+        "baud": "115200",
+        "stat": {
+          "cmd": "STAT",
+          "uptime_ms": "4838025",
+          "heap_free": "37488",
+          "heap_min": "37488",
+          "tasks": "4",
+          "stack_comm": "5120",
+          "stack_motion": "1860",
+          "stack_super": "1960",
+          "led": "0",
+          "armed": "0",
+          "rx": "6268862",
+          "rx_err": "0",
+          "tx_err": "0",
+          "bad": "0",
+          "replay": "15",
+          "timeout": "0",
+          "motion_fault": "0"
+        }
+      },
+      "axes": {
+        "1": {
+          "cmd": "AXIS",
+          "axis": "1",
+          "pos": "25914",
+          "sps": "0",
+          "remaining": "0",
+          "active": "0",
+          "move_id": "133923981"
+        },
+        "2": {
+          "cmd": "AXIS",
+          "axis": "2",
+          "pos": "-27439",
+          "sps": "0",
+          "remaining": "0",
+          "active": "0",
+          "move_id": "133923981"
+        },
+        "3": {
+          "cmd": "AXIS",
+          "axis": "3",
+          "pos": "28624",
+          "sps": "0",
+          "remaining": "0",
+          "active": "0",
+          "move_id": "133923981"
+        },
+        "4": {
+          "cmd": "AXIS",
+          "axis": "4",
+          "pos": "-24717",
+          "sps": "0",
+          "remaining": "0",
+          "active": "0",
+          "move_id": "133923981"
+        },
+        "5": {
+          "cmd": "AXIS",
+          "axis": "5",
+          "pos": "0",
+          "sps": "0",
+          "remaining": "0",
+          "active": "0",
+          "move_id": "0"
+        },
+        "6": {
+          "cmd": "AXIS",
+          "axis": "6",
+          "pos": "0",
+          "sps": "0",
+          "remaining": "0",
+          "active": "0",
+          "move_id": "0"
+        },
+        "7": {
+          "cmd": "AXIS",
+          "axis": "7",
+          "pos": "0",
+          "sps": "0",
+          "remaining": "0",
+          "active": "0",
+          "move_id": "0"
+        }
+      },
+      "servo": {
+        "cmd": "SERVO_STAT",
+        "raw": "OK cmd=SERVO_STAT ch=1 angle=180.0 us=1833 on=1 pin=PH9 timer=TIM12_CH2 OK cmd=SERVO_STAT ch=2 angle=0.0 us=500 on=1 pin=PH6 timer=TIM12_CH1"
+      },
+      "servo_channels": 2,
+      "chassis": {
+        "cmd": "CHASSIS",
+        "state": "stopped",
+        "direction": "BACK",
+        "move_id": "133923353",
+        "total": "1000",
+        "remaining": "0",
+        "active": "0",
+        "invert": "5",
+        "assist": "1",
+        "target_cd": "14278",
+        "error_cd": "-14",
+        "fault": "none"
+      },
+      "lift": {
+        "cmd": "LIFT_STAT",
+        "axis": "5",
+        "initialized": "1",
+        "down_sign": "0",
+        "pos": "0",
+        "max": "8000",
+        "up_room": "0",
+        "down_room": "8000",
+        "active": "0",
+        "min": "0"
+      },
+      "auxiliary": {
+        "5": {
+          "cmd": "AUX_STAT",
+          "axis": "5",
+          "pos": "0",
+          "min": "0",
+          "max": "8000",
+          "referenced": "1",
+          "configured": "1",
+          "active": "0"
+        },
+        "6": {
+          "cmd": "AUX_STAT",
+          "axis": "6",
+          "pos": "0",
+          "min": "0",
+          "max": "0",
+          "referenced": "0",
+          "configured": "0",
+          "active": "0"
+        }
+      },
+      "aux_settings": {
+        "5": {
+          "presets": [
+            0,
+            0
+          ],
+          "min": 0,
+          "max": 9400,
+          "sps": 1000,
+          "accel": 1000,
+          "step": 9300
+        },
+        "6": {
+          "presets": [
+            0,
+            -2950
+          ],
+          "min": -2950,
+          "max": 0,
+          "sps": 3000,
+          "accel": 6000,
+          "step": 50
+        }
+      },
+      "navigation": {
+        "cmd": "NAV_STAT",
+        "state": "stopped",
+        "ready": "0",
+        "x": "0",
+        "y": "0",
+        "station": "0",
+        "tx": "0",
+        "ty": "0",
+        "leg": "1",
+        "wait_ms": "0",
+        "move_id": "0",
+        "obstacle": "0",
+        "planner": "host_grid",
+        "heading_cd": "0",
+        "target_cd": "0",
+        "arrival_cd": "0",
+        "imu": "1",
+        "fault": "none",
+        "wx": "0",
+        "wy": "0",
+        "segment": "0",
+        "segments": "0",
+        "path_id": "0",
+        "route_ready": "0",
+        "legs": "0",
+        "stations": "0",
+        "held": "0"
+      },
+      "turn": {
+        "cmd": "TURN_STAT",
+        "state": "idle",
+        "mode": "REL",
+        "zero": "0",
+        "current_cd": "-133",
+        "target_cd": "0",
+        "error_cd": "133",
+        "imu": "1",
+        "move_id": "133919839",
+        "active": "0",
+        "fault": "none",
+        "kp_centi": "2000",
+        "tolerance_cd": "20"
+      },
+      "motion": {
+        "cmd": "MOTION_STAT",
+        "v": "1",
+        "latched": "0",
+        "total": "0",
+        "reason": "none",
+        "uncertain": "0",
+        "active": "0",
+        "armed": "0"
+      },
+      "flow": {
+        "cmd": "FLOW_CONFIG",
+        "x_um": "0",
+        "y_um": "0",
+        "rx_um": "0",
+        "ry_um": "0",
+        "marked": "0",
+        "recording": "0",
+        "start_ms": "0",
+        "end_ms": "0",
+        "now_ms": "4837868",
+        "online": "0",
+        "valid": "0",
+        "dt_us": "0",
+        "fx": "0",
+        "fy": "0",
+        "frames": "0",
+        "accepted": "0",
+        "bad": "0",
+        "low": "0",
+        "uart": "0",
+        "sat": "0",
+        "rev": "0",
+        "wx_um": "0",
+        "wy_um": "0",
+        "wrx_um": "0",
+        "wry_um": "0",
+        "heading": "0",
+        "locked": "1",
+        "gaps": "0",
+        "rgaps": "0",
+        "world_ms": "84538",
+        "epoch": "195872287",
+        "height_um": "30000",
+        "gx_ppm": "1000000",
+        "gy_ppm": "1000000",
+        "map": "0",
+        "angle_cd": "0",
+        "minq": "1"
+      },
+      "flow_settings": {
+        "height_mm": 30.0,
+        "gain_x": 1.0,
+        "gain_y": 1.0,
+        "map": 0,
+        "angle_deg": 0.0,
+        "min_quality": 1
+      },
+      "mission": {
+        "stations": [
+          {
+            "name": "O",
+            "x": 0,
+            "y": 0,
+            "heading": 0
+          },
+          {
+            "name": "A",
+            "x": 0,
+            "y": 14400,
+            "heading": 0
+          },
+          {
+            "name": "B",
+            "x": 14400,
+            "y": 0,
+            "heading": -90
+          },
+          {
+            "name": "C",
+            "x": 14400,
+            "y": 28800,
+            "heading": 90
+          },
+          {
+            "name": "D",
+            "x": 28800,
+            "y": 14400,
+            "heading": -180
+          }
+        ],
+        "route": [
+          {
+            "station": 1,
+            "hold": 0
+          },
+          {
+            "station": 2,
+            "hold": 0
+          },
+          {
+            "station": 3,
+            "hold": 1
+          },
+          {
+            "station": 4,
+            "hold": 1
+          },
+          {
+            "station": 1,
+            "hold": 0
+          },
+          {
+            "station": 0,
+            "hold": 0
+          }
+        ],
+        "grid": {
+          "x": [
+            0,
+            14400,
+            28800
+          ],
+          "y": [
+            0,
+            14400,
+            28800
+          ]
+        },
+        "sps": 2500,
+        "accel": 2000,
+        "dwell_ms": 3000
+      },
+      "task": {
+        "state": "idle",
+        "active": false,
+        "error": "",
+        "run_id": "",
+        "leg": 0,
+        "action": 1,
+        "request": null,
+        "scans": {}
+      },
+      "camera_alignment": {
+        "state": "idle",
+        "active": false,
+        "busy": false,
+        "error": "",
+        "vision": null,
+        "stable_frames": 0,
+        "iterations": 0,
+        "total_steps": 0,
+        "has_image": false,
+        "image_revision": 0,
+        "frame_age_ms": null,
+        "dropped_frames": 0,
+        "streaming": false,
+        "velocity": {
+          "right": 0,
+          "forward": 0,
+          "yaw": 0
+        },
+        "wheel_targets": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "fault_context": null,
+        "ring_sequence": null,
+        "control": "visual_pid_velocity"
+      },
+      "camera_alignment_config": {
+        "kind": "ring",
+        "target": "red",
+        "min_area": 500,
+        "black_max": 140,
+        "target_offset_px": [
+          -100,
+          -60
+        ],
+        "tracking": {
+          "sps": 3000,
+          "deadzone_px": 30,
+          "reverse_x": false,
+          "reverse_y": false,
+          "kp": 1.2,
+          "ki": 0,
+          "kd": 0.1,
+          "min_sps": 600,
+          "accel": 4000,
+          "camera_yaw_deg": 90
+        },
+        "ring_sequence": {
+          "range_steps": 4000,
+          "scan_step": 1000,
+          "sps": 2000,
+          "angle_tolerance_deg": 1,
+          "max_turn_deg": 30
+        }
+      },
+      "task_config": {
+        "timeout_s": 480,
+        "leg_timeout_s": 120,
+        "action_timeout_s": 30,
+        "vision_max_age_ms": 500,
+        "calibration": {
+          "verified": false,
+          "matrix": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              0
+            ]
+          ],
+          "tolerance_px": 3,
+          "stable_frames": 3,
+          "max_iterations": 12,
+          "max_step": 100,
+          "sps": 100,
+          "accel": 1000
+        },
+        "legs": {}
+      },
+      "travel": 270.0,
+      "demo": false,
+      "imu": {
+        "state": "streaming",
+        "message": "H723 已握手 · 姿态数据有效",
+        "port": "/dev/ttyACM0",
+        "identity": {
+          "board": "DM-MC02",
+          "mcu": "STM32H723VGT6",
+          "sensor": "BMI088",
+          "protocol": "IMU1",
+          "fw": "1.1.1",
+          "uid": "002600483134510438373332"
+        },
+        "latest": {
+          "timestamp_ms": 4838002,
+          "sample_count": 9694910,
+          "ready": true,
+          "calibrated": true,
+          "accel_trusted": true,
+          "error": 0,
+          "calibration_count": 2000,
+          "roll_deg": -179.65,
+          "pitch_deg": 2.525,
+          "yaw_deg": -141.645,
+          "gyro_dps": [
+            -0.12,
+            -0.246,
+            0.11
+          ],
+          "accel_ms2": [
+            -0.4505,
+            -0.0933,
+            -9.6977
+          ],
+          "linear_accel_ms2": [
+            -0.0185,
+            -0.0335,
+            0.0662
+          ],
+          "temperature_c": 28.25,
+          "quaternion_wxyz": [
+            0.021844,
+            -0.328788,
+            0.942353,
+            0.004386
+          ],
+          "valid": true,
+          "time_s": 93.16740064700025
+        },
+        "generation": 1,
+        "rejected": 0,
+        "revision": 9232
+      },
+      "auto_devices": {
+        "enabled": true,
+        "message": "自动连接：H743 已连接 · H723 已连接",
+        "h743_uid": "3637333530335109002A003A",
+        "h723_uid": "002600483134510438373332"
+      }
+    },
+    "camera": {
+      "state": "ready",
+      "message": "Nano 摄像头已打开，点击“拍照”获取一帧。",
+      "device": "/dev/video0",
+      "label": "USB 2.0 Camera: HD USB Camera",
+      "requested": "1280x720",
+      "width": 1280,
+      "height": 720,
+      "fps": 60.0,
+      "sequence": 0
+    },
+    "config": {
+      "kind": "ring",
+      "target": "red",
+      "min_area": 500,
+      "black_max": 140,
+      "target_offset_px": [
+        -100,
+        -60
+      ],
+      "tracking": {
+        "sps": 3000,
+        "deadzone_px": 30,
+        "reverse_x": false,
+        "reverse_y": false,
+        "kp": 1.2,
+        "ki": 0,
+        "kd": 0.1,
+        "min_sps": 600,
+        "accel": 4000,
+        "camera_yaw_deg": 90
+      },
+      "ring_sequence": {
+        "range_steps": 4000,
+        "scan_step": 1000,
+        "sps": 2000,
+        "angle_tolerance_deg": 1,
+        "max_turn_deg": 30
+      }
+    },
+    "settings_unchanged_since_backup": {
+      "host/device_links.json": true,
+      "host/auxiliary.json": true,
+      "host/navigation.json": true,
+      "host/camera_alignment.json": false
+    },
+    "settings_modified_during_deployment": [
+      "host/camera_alignment.json"
+    ],
+    "pid": "12215"
+  },
+  "verified_manifest_count": 72,
+  "tests": {
+    "local_full": 422,
+    "local_skipped": 1,
+    "targeted": 62,
+    "remote": 251,
+    "pty_stages": 3
+  },
+  "compiled_firmware_reproduction": {
+    "initial": "OK cmd=WHEELS state=accepted",
+    "first_zero": "OK cmd=WHEELS state=accepted",
+    "armed_before_rejection": 1,
+    "active_before_rejection": 15,
+    "faults_before_rejection": 0,
+    "repeat_zero_while_high_finishing": "ERR code=DISARMED_BUSY_OR_REVERSE",
+    "zero_after_falling_edges": "OK cmd=WHEELS state=accepted"
+  },
+  "actual_faults": [
+    {
+      "time": "2026-10-16 16:17:20",
+      "command": "WHEELS 0 0 0 0 2000",
+      "reply": "ERR code=DISARMED_BUSY_OR_REVERSE",
+      "state": "braking",
+      "sequence": {
+        "phase": "approach",
+        "expected": 2,
+        "position_steps": 1000,
+        "range_steps": 4000,
+        "total_steps": 3500,
+        "recognized": [
+          {
+            "digit": 1,
+            "center": [
+              722,
+              403
+            ],
+            "frame_id": 2351,
+            "position_steps": -2500,
+            "aligned": true
+          }
+        ],
+        "line": {
+          "points": [
+            [
+              132,
+              415
+            ],
+            [
+              760,
+              421
+            ]
+          ],
+          "error_deg": 0.5473952508777558
+        },
+        "visible_digits": [
+          {
+            "digit": "2",
+            "center": [
+              638,
+              415
+            ],
+            "confidence": 0.7304659783840179
+          }
+        ],
+        "wait_remaining_s": 0.0
+      },
+      "vision": {
+        "kind": "ring",
+        "target": "ring",
+        "found": true,
+        "center": [
+          638,
+          415
+        ],
+        "reference": [
+          640,
+          360
+        ],
+        "control_point": [
+          538,
+          355
+        ],
+        "width": 1280,
+        "height": 720,
+        "captured_at": 1792138639.8819344,
+        "error_dx": -102,
+        "error_dy": -5,
+        "rings": [
+          [
+            638,
+            415
+          ]
+        ],
+        "row_line": null,
+        "digits": [
+          {
+            "digit": "2",
+            "center": [
+              638,
+              415
+            ],
+            "confidence": 0.7304659783840179
+          }
+        ],
+        "expected_digit": "2",
+        "digit": "2",
+        "confidence": 0.7304659783840179,
+        "frame_id": 2712,
+        "captured_monotonic": 4117.465295306,
+        "stream_id": 7,
+        "processing_ms": 285.8
+      },
+      "polarities": [
+        -1,
+        1,
+        -1,
+        1
+      ],
+      "wheel_targets": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "velocity_revision": 84,
+      "zero_ack_revision": 84,
+      "armed": true,
+      "chassis": {
+        "cmd": "CHASSIS",
+        "state": "done",
+        "direction": "FWD",
+        "move_id": "133906855",
+        "total": "500",
+        "remaining": "0",
+        "active": "0",
+        "invert": "5",
+        "assist": "1",
+        "target_cd": "14354",
+        "error_cd": "-5",
+        "fault": "none"
+      },
+      "turn": {
+        "cmd": "TURN_STAT",
+        "state": "idle",
+        "mode": "REL",
+        "zero": "1",
+        "current_cd": "-7",
+        "target_cd": "0",
+        "error_cd": "7",
+        "imu": "1",
+        "move_id": "133903253",
+        "active": "0",
+        "fault": "none",
+        "kp_centi": "2000",
+        "tolerance_cd": "20"
+      },
+      "motion": {
+        "cmd": "MOTION_STAT",
+        "v": "1",
+        "latched": "0",
+        "total": "0",
+        "reason": "none",
+        "uncertain": "0",
+        "active": "15",
+        "armed": "1"
+      },
+      "trace": [
+        {
+          "t": 4115.069,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 81
+        },
+        {
+          "t": 4115.12,
+          "event": "velocity_ack",
+          "body": "WHEELS 500 -500 500 -500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            10,
+            81
+          ]
+        },
+        {
+          "t": 4115.172,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-6 target_cd=0 error_cd=6 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4115.174,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 81
+        },
+        {
+          "t": 4115.276,
+          "event": "velocity_ack",
+          "body": "WHEELS 500 -500 500 -500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            10,
+            81
+          ]
+        },
+        {
+          "t": 4115.409,
+          "event": "velocity_ack",
+          "body": "WHEELS 500 -500 500 -500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            10,
+            81
+          ]
+        },
+        {
+          "t": 4115.409,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-10 target_cd=0 error_cd=10 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4115.409,
+          "event": "velocity_ack",
+          "body": "WHEELS 500 -500 500 -500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            10,
+            81
+          ]
+        },
+        {
+          "t": 4115.411,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 81
+        },
+        {
+          "t": 4115.462,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-4 target_cd=0 error_cd=4 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4115.514,
+          "event": "velocity_ack",
+          "body": "WHEELS 500 -500 500 -500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            10,
+            81
+          ]
+        },
+        {
+          "t": 4115.515,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 81
+        },
+        {
+          "t": 4115.566,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-2 target_cd=0 error_cd=2 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4115.567,
+          "event": "velocity_intent",
+          "body": "WHEELS 0 0 0 0 2000",
+          "revision": 82,
+          "state": "settling",
+          "polarities": [
+            1,
+            -1,
+            1,
+            -1
+          ]
+        },
+        {
+          "t": 4115.625,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            10,
+            82
+          ]
+        },
+        {
+          "t": 4115.626,
+          "event": "query",
+          "body": "CHASSIS STAT",
+          "purpose": "wheel_status",
+          "revision": 82
+        },
+        {
+          "t": 4115.781,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            10,
+            82
+          ]
+        },
+        {
+          "t": 4115.781,
+          "event": "query_ack",
+          "body": "CHASSIS STAT",
+          "purpose": "wheel_status",
+          "reply": "OK cmd=CHASSIS state=done direction=FWD move_id=133906855 total=500 remaining=0 active=15 invert=5 assist=1 target_cd=14354 error_cd=-5 fault=none",
+          "revision": 82
+        },
+        {
+          "t": 4115.783,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 82
+        },
+        {
+          "t": 4115.833,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            10,
+            82
+          ]
+        },
+        {
+          "t": 4115.885,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-9 target_cd=0 error_cd=9 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4115.888,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 82
+        },
+        {
+          "t": 4115.939,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            10,
+            82
+          ]
+        },
+        {
+          "t": 4115.991,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-9 target_cd=0 error_cd=9 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4115.992,
+          "event": "query",
+          "body": "CHASSIS STAT",
+          "purpose": "wheel_status",
+          "revision": 82
+        },
+        {
+          "t": 4116.043,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            10,
+            82
+          ]
+        },
+        {
+          "t": 4116.095,
+          "event": "query_ack",
+          "body": "CHASSIS STAT",
+          "purpose": "wheel_status",
+          "reply": "OK cmd=CHASSIS state=done direction=FWD move_id=133906855 total=500 remaining=0 active=0 invert=5 assist=1 target_cd=14354 error_cd=-5 fault=none",
+          "revision": 82
+        },
+        {
+          "t": 4116.095,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            10,
+            82
+          ]
+        },
+        {
+          "t": 4116.096,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 82
+        },
+        {
+          "t": 4116.147,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-9 target_cd=0 error_cd=9 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4116.2,
+          "event": "query",
+          "body": "CHASSIS STAT",
+          "purpose": "wheel_status",
+          "revision": 82
+        },
+        {
+          "t": 4116.251,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            10,
+            82
+          ]
+        },
+        {
+          "t": 4116.303,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            10,
+            82
+          ]
+        },
+        {
+          "t": 4116.304,
+          "event": "velocity_intent",
+          "body": "WHEELS -500 500 -500 500 2000",
+          "revision": 83,
+          "state": "tracking",
+          "polarities": [
+            -1,
+            1,
+            -1,
+            1
+          ]
+        },
+        {
+          "t": 4116.36,
+          "event": "query_ack",
+          "body": "CHASSIS STAT",
+          "purpose": "wheel_status",
+          "reply": "OK cmd=CHASSIS state=done direction=FWD move_id=133906855 total=500 remaining=0 active=0 invert=5 assist=1 target_cd=14354 error_cd=-5 fault=none",
+          "revision": 82
+        },
+        {
+          "t": 4116.361,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 83
+        },
+        {
+          "t": 4116.412,
+          "event": "velocity_ack",
+          "body": "WHEELS -500 500 -500 500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            10,
+            83
+          ]
+        },
+        {
+          "t": 4116.464,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-8 target_cd=0 error_cd=8 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4116.465,
+          "event": "velocity_ack",
+          "body": "WHEELS -500 500 -500 500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            10,
+            83
+          ]
+        },
+        {
+          "t": 4116.466,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 83
+        },
+        {
+          "t": 4116.569,
+          "event": "velocity_ack",
+          "body": "WHEELS -500 500 -500 500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            10,
+            83
+          ]
+        },
+        {
+          "t": 4116.569,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-8 target_cd=0 error_cd=8 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4116.57,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 83
+        },
+        {
+          "t": 4116.621,
+          "event": "velocity_ack",
+          "body": "WHEELS -500 500 -500 500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            10,
+            83
+          ]
+        },
+        {
+          "t": 4116.674,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-9 target_cd=0 error_cd=9 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4116.676,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 83
+        },
+        {
+          "t": 4116.727,
+          "event": "velocity_ack",
+          "body": "WHEELS -500 500 -500 500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            10,
+            83
+          ]
+        },
+        {
+          "t": 4116.779,
+          "event": "velocity_ack",
+          "body": "WHEELS -500 500 -500 500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            10,
+            83
+          ]
+        },
+        {
+          "t": 4116.831,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-6 target_cd=0 error_cd=6 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4116.833,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 83
+        },
+        {
+          "t": 4116.883,
+          "event": "velocity_ack",
+          "body": "WHEELS -500 500 -500 500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            10,
+            83
+          ]
+        },
+        {
+          "t": 4116.936,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-6 target_cd=0 error_cd=6 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4116.937,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 83
+        },
+        {
+          "t": 4116.988,
+          "event": "velocity_ack",
+          "body": "WHEELS -500 500 -500 500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            10,
+            83
+          ]
+        },
+        {
+          "t": 4117.04,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-6 target_cd=0 error_cd=6 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4117.04,
+          "event": "velocity_ack",
+          "body": "WHEELS -500 500 -500 500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            10,
+            83
+          ]
+        },
+        {
+          "t": 4117.043,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 83
+        },
+        {
+          "t": 4117.094,
+          "event": "velocity_ack",
+          "body": "WHEELS -500 500 -500 500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            10,
+            83
+          ]
+        },
+        {
+          "t": 4117.145,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-9 target_cd=0 error_cd=9 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4117.147,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 83
+        },
+        {
+          "t": 4117.198,
+          "event": "velocity_ack",
+          "body": "WHEELS -500 500 -500 500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            10,
+            83
+          ]
+        },
+        {
+          "t": 4117.25,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-6 target_cd=0 error_cd=6 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4117.25,
+          "event": "velocity_ack",
+          "body": "WHEELS -500 500 -500 500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            10,
+            83
+          ]
+        },
+        {
+          "t": 4117.251,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 83
+        },
+        {
+          "t": 4117.419,
+          "event": "velocity_ack",
+          "body": "WHEELS -500 500 -500 500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            10,
+            83
+          ]
+        },
+        {
+          "t": 4117.42,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-3 target_cd=0 error_cd=3 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4117.42,
+          "event": "velocity_ack",
+          "body": "WHEELS -500 500 -500 500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            10,
+            83
+          ]
+        },
+        {
+          "t": 4117.421,
+          "event": "velocity_intent",
+          "body": "WHEELS 0 0 0 0 2000",
+          "revision": 84,
+          "state": "settling",
+          "polarities": [
+            -1,
+            1,
+            -1,
+            1
+          ]
+        },
+        {
+          "t": 4117.424,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 84
+        },
+        {
+          "t": 4117.526,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            10,
+            84
+          ]
+        },
+        {
+          "t": 4117.526,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-2 target_cd=0 error_cd=2 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4117.527,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 84
+        },
+        {
+          "t": 4117.578,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            10,
+            84
+          ]
+        },
+        {
+          "t": 4117.635,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-2 target_cd=0 error_cd=2 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4117.637,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 84
+        },
+        {
+          "t": 4117.687,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            10,
+            84
+          ]
+        },
+        {
+          "t": 4117.739,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-7 target_cd=0 error_cd=7 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4117.739,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            10,
+            84
+          ]
+        },
+        {
+          "t": 4117.741,
+          "event": "query",
+          "body": "CHASSIS STAT",
+          "purpose": "wheel_status",
+          "revision": 84
+        },
+        {
+          "t": 4117.844,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 2000",
+          "reply": "ERR code=DISARMED_BUSY_OR_REVERSE",
+          "tag": [
+            "camera_velocity",
+            10,
+            84
+          ]
+        }
+      ]
+    },
+    {
+      "time": "2026-10-16 16:18:10",
+      "command": "WHEELS 0 0 0 0 2000",
+      "reply": "ERR code=DISARMED_BUSY_OR_REVERSE",
+      "state": "braking",
+      "sequence": {
+        "phase": "approach",
+        "expected": 1,
+        "position_steps": 0,
+        "range_steps": 4000,
+        "total_steps": 966,
+        "recognized": [],
+        "line": {
+          "points": [
+            [
+              935,
+              407
+            ],
+            [
+              278,
+              406
+            ]
+          ],
+          "error_deg": 0.08720812065067207
+        },
+        "visible_digits": [
+          {
+            "digit": "1",
+            "center": [
+              703,
+              399
+            ],
+            "confidence": 0.7605518698692322
+          }
+        ],
+        "wait_remaining_s": 0.0
+      },
+      "vision": {
+        "kind": "ring",
+        "target": "ring",
+        "found": true,
+        "center": [
+          703,
+          399
+        ],
+        "reference": [
+          640,
+          360
+        ],
+        "control_point": [
+          603,
+          339
+        ],
+        "width": 1280,
+        "height": 720,
+        "captured_at": 1792138689.9502656,
+        "error_dx": -37,
+        "error_dy": -21,
+        "rings": [
+          [
+            703,
+            399
+          ]
+        ],
+        "row_line": null,
+        "digits": [
+          {
+            "digit": "1",
+            "center": [
+              703,
+              399
+            ],
+            "confidence": 0.7605518698692322
+          }
+        ],
+        "expected_digit": "1",
+        "digit": "1",
+        "confidence": 0.7605518698692322,
+        "frame_id": 3779,
+        "captured_monotonic": 4167.533627386,
+        "stream_id": 9,
+        "processing_ms": 280.7
+      },
+      "polarities": [
+        -1,
+        1,
+        -1,
+        1
+      ],
+      "wheel_targets": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "velocity_revision": 110,
+      "zero_ack_revision": 110,
+      "armed": true,
+      "chassis": {
+        "cmd": "CHASSIS",
+        "state": "stopped",
+        "direction": "BACK",
+        "move_id": "133908583",
+        "total": "1000",
+        "remaining": "0",
+        "active": "15",
+        "invert": "5",
+        "assist": "1",
+        "target_cd": "14321",
+        "error_cd": "-1",
+        "fault": "none"
+      },
+      "turn": {
+        "cmd": "TURN_STAT",
+        "state": "idle",
+        "mode": "REL",
+        "zero": "1",
+        "current_cd": "2",
+        "target_cd": "0",
+        "error_cd": "-2",
+        "imu": "1",
+        "move_id": "133903253",
+        "active": "0",
+        "fault": "none",
+        "kp_centi": "2000",
+        "tolerance_cd": "20"
+      },
+      "motion": {
+        "cmd": "MOTION_STAT",
+        "v": "1",
+        "latched": "0",
+        "total": "0",
+        "reason": "none",
+        "uncertain": "0",
+        "active": "15",
+        "armed": "1"
+      },
+      "trace": [
+        {
+          "t": 4165.19,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=7 target_cd=0 error_cd=-7 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4165.19,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            14,
+            106
+          ]
+        },
+        {
+          "t": 4165.191,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 106
+        },
+        {
+          "t": 4165.242,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=7 target_cd=0 error_cd=-7 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4165.294,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            14,
+            106
+          ]
+        },
+        {
+          "t": 4165.295,
+          "event": "query",
+          "body": "CHASSIS STAT",
+          "purpose": "wheel_status",
+          "revision": 106
+        },
+        {
+          "t": 4165.345,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            14,
+            106
+          ]
+        },
+        {
+          "t": 4165.4,
+          "event": "query_ack",
+          "body": "CHASSIS STAT",
+          "purpose": "wheel_status",
+          "reply": "OK cmd=CHASSIS state=stopped direction=BACK move_id=133908583 total=1000 remaining=0 active=0 invert=5 assist=1 target_cd=14321 error_cd=-1 fault=none",
+          "revision": 106
+        },
+        {
+          "t": 4165.402,
+          "event": "velocity_intent",
+          "body": "WHEELS 500 -500 500 -500 2000",
+          "revision": 107,
+          "state": "tracking",
+          "polarities": [
+            1,
+            -1,
+            1,
+            -1
+          ]
+        },
+        {
+          "t": 4165.402,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 107
+        },
+        {
+          "t": 4165.452,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            14,
+            106
+          ]
+        },
+        {
+          "t": 4165.504,
+          "event": "velocity_ack",
+          "body": "WHEELS 500 -500 500 -500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            14,
+            107
+          ]
+        },
+        {
+          "t": 4165.556,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=7 target_cd=0 error_cd=-7 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4165.559,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 107
+        },
+        {
+          "t": 4165.609,
+          "event": "velocity_ack",
+          "body": "WHEELS 500 -500 500 -500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            14,
+            107
+          ]
+        },
+        {
+          "t": 4165.661,
+          "event": "velocity_ack",
+          "body": "WHEELS 500 -500 500 -500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            14,
+            107
+          ]
+        },
+        {
+          "t": 4165.713,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=7 target_cd=0 error_cd=-7 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4165.714,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 107
+        },
+        {
+          "t": 4165.765,
+          "event": "velocity_ack",
+          "body": "WHEELS 500 -500 500 -500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            14,
+            107
+          ]
+        },
+        {
+          "t": 4165.818,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=7 target_cd=0 error_cd=-7 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4165.818,
+          "event": "velocity_ack",
+          "body": "WHEELS 500 -500 500 -500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            14,
+            107
+          ]
+        },
+        {
+          "t": 4165.82,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 107
+        },
+        {
+          "t": 4165.87,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=12 target_cd=0 error_cd=-12 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4165.922,
+          "event": "velocity_ack",
+          "body": "WHEELS 500 -500 500 -500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            14,
+            107
+          ]
+        },
+        {
+          "t": 4165.923,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 107
+        },
+        {
+          "t": 4165.974,
+          "event": "velocity_ack",
+          "body": "WHEELS 500 -500 500 -500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            14,
+            107
+          ]
+        },
+        {
+          "t": 4166.079,
+          "event": "velocity_ack",
+          "body": "WHEELS 500 -500 500 -500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            14,
+            107
+          ]
+        },
+        {
+          "t": 4166.215,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=10 target_cd=0 error_cd=-10 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4166.216,
+          "event": "velocity_ack",
+          "body": "WHEELS 500 -500 500 -500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            14,
+            107
+          ]
+        },
+        {
+          "t": 4166.216,
+          "event": "velocity_ack",
+          "body": "WHEELS 500 -500 500 -500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            14,
+            107
+          ]
+        },
+        {
+          "t": 4166.217,
+          "event": "velocity_intent",
+          "body": "WHEELS 0 0 0 0 2000",
+          "revision": 108,
+          "state": "settling",
+          "polarities": [
+            1,
+            -1,
+            1,
+            -1
+          ]
+        },
+        {
+          "t": 4166.219,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 108
+        },
+        {
+          "t": 4166.322,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            14,
+            108
+          ]
+        },
+        {
+          "t": 4166.374,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=5 target_cd=0 error_cd=-5 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4166.374,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            14,
+            108
+          ]
+        },
+        {
+          "t": 4166.375,
+          "event": "query",
+          "body": "CHASSIS STAT",
+          "purpose": "wheel_status",
+          "revision": 108
+        },
+        {
+          "t": 4166.426,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            14,
+            108
+          ]
+        },
+        {
+          "t": 4166.481,
+          "event": "query_ack",
+          "body": "CHASSIS STAT",
+          "purpose": "wheel_status",
+          "reply": "OK cmd=CHASSIS state=stopped direction=BACK move_id=133908583 total=1000 remaining=0 active=15 invert=5 assist=1 target_cd=14321 error_cd=-1 fault=none",
+          "revision": 108
+        },
+        {
+          "t": 4166.483,
+          "event": "query",
+          "body": "CHASSIS STAT",
+          "purpose": "wheel_status",
+          "revision": 108
+        },
+        {
+          "t": 4166.586,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            14,
+            108
+          ]
+        },
+        {
+          "t": 4166.637,
+          "event": "query_ack",
+          "body": "CHASSIS STAT",
+          "purpose": "wheel_status",
+          "reply": "OK cmd=CHASSIS state=stopped direction=BACK move_id=133908583 total=1000 remaining=0 active=0 invert=5 assist=1 target_cd=14321 error_cd=-1 fault=none",
+          "revision": 108
+        },
+        {
+          "t": 4166.639,
+          "event": "velocity_intent",
+          "body": "WHEELS -500 500 -500 500 2000",
+          "revision": 109,
+          "state": "tracking",
+          "polarities": [
+            -1,
+            1,
+            -1,
+            1
+          ]
+        },
+        {
+          "t": 4166.641,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 109
+        },
+        {
+          "t": 4166.691,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            14,
+            108
+          ]
+        },
+        {
+          "t": 4166.743,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=7 target_cd=0 error_cd=-7 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4166.744,
+          "event": "velocity_ack",
+          "body": "WHEELS -500 500 -500 500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            14,
+            109
+          ]
+        },
+        {
+          "t": 4166.745,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 109
+        },
+        {
+          "t": 4166.797,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=7 target_cd=0 error_cd=-7 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4166.849,
+          "event": "velocity_ack",
+          "body": "WHEELS -500 500 -500 500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            14,
+            109
+          ]
+        },
+        {
+          "t": 4166.851,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 109
+        },
+        {
+          "t": 4166.902,
+          "event": "velocity_ack",
+          "body": "WHEELS -500 500 -500 500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            14,
+            109
+          ]
+        },
+        {
+          "t": 4166.955,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=8 target_cd=0 error_cd=-8 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4166.958,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 109
+        },
+        {
+          "t": 4167.008,
+          "event": "velocity_ack",
+          "body": "WHEELS -500 500 -500 500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            14,
+            109
+          ]
+        },
+        {
+          "t": 4167.113,
+          "event": "velocity_ack",
+          "body": "WHEELS -500 500 -500 500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            14,
+            109
+          ]
+        },
+        {
+          "t": 4167.165,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=8 target_cd=0 error_cd=-8 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4167.169,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 109
+        },
+        {
+          "t": 4167.219,
+          "event": "velocity_ack",
+          "body": "WHEELS -500 500 -500 500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            14,
+            109
+          ]
+        },
+        {
+          "t": 4167.271,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=9 target_cd=0 error_cd=-9 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4167.272,
+          "event": "velocity_ack",
+          "body": "WHEELS -500 500 -500 500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            14,
+            109
+          ]
+        },
+        {
+          "t": 4167.273,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 109
+        },
+        {
+          "t": 4167.375,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=12 target_cd=0 error_cd=-12 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4167.378,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 109
+        },
+        {
+          "t": 4167.428,
+          "event": "velocity_ack",
+          "body": "WHEELS -500 500 -500 500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            14,
+            109
+          ]
+        },
+        {
+          "t": 4167.481,
+          "event": "velocity_ack",
+          "body": "WHEELS -500 500 -500 500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            14,
+            109
+          ]
+        },
+        {
+          "t": 4167.533,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=10 target_cd=0 error_cd=-10 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4167.534,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 109
+        },
+        {
+          "t": 4167.585,
+          "event": "velocity_ack",
+          "body": "WHEELS -500 500 -500 500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            14,
+            109
+          ]
+        },
+        {
+          "t": 4167.637,
+          "event": "velocity_ack",
+          "body": "WHEELS -500 500 -500 500 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            14,
+            109
+          ]
+        },
+        {
+          "t": 4167.638,
+          "event": "velocity_intent",
+          "body": "WHEELS 0 0 0 0 2000",
+          "revision": 110,
+          "state": "tracking",
+          "polarities": [
+            -1,
+            1,
+            -1,
+            1
+          ]
+        },
+        {
+          "t": 4167.744,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=3 target_cd=0 error_cd=-3 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4167.745,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            14,
+            110
+          ]
+        },
+        {
+          "t": 4167.746,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 110
+        },
+        {
+          "t": 4167.848,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=2 target_cd=0 error_cd=-2 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4167.849,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            14,
+            110
+          ]
+        },
+        {
+          "t": 4167.855,
+          "event": "query",
+          "body": "CHASSIS STAT",
+          "purpose": "wheel_status",
+          "revision": 110
+        },
+        {
+          "t": 4167.906,
+          "event": "query_ack",
+          "body": "CHASSIS STAT",
+          "purpose": "wheel_status",
+          "reply": "OK cmd=CHASSIS state=stopped direction=BACK move_id=133908583 total=1000 remaining=0 active=15 invert=5 assist=1 target_cd=14321 error_cd=-1 fault=none",
+          "revision": 110
+        },
+        {
+          "t": 4167.958,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 2000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            14,
+            110
+          ]
+        },
+        {
+          "t": 4167.96,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 110
+        },
+        {
+          "t": 4168.062,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 2000",
+          "reply": "ERR code=DISARMED_BUSY_OR_REVERSE",
+          "tag": [
+            "camera_velocity",
+            14,
+            110
+          ]
+        }
+      ]
+    },
+    {
+      "time": "2026-10-16 16:19:14",
+      "command": "WHEELS 0 0 0 0 4000",
+      "reply": "ERR code=DISARMED_BUSY_OR_REVERSE",
+      "state": "tracking",
+      "sequence": {
+        "phase": "approach",
+        "expected": 1,
+        "position_steps": 0,
+        "range_steps": 4000,
+        "total_steps": 0,
+        "recognized": [],
+        "line": {
+          "points": [
+            [
+              328,
+              401
+            ],
+            [
+              992,
+              401
+            ]
+          ],
+          "error_deg": 0.0
+        },
+        "visible_digits": [
+          {
+            "digit": "2",
+            "center": [
+              1101,
+              397
+            ],
+            "confidence": 0.8431651592254639
+          }
+        ],
+        "wait_remaining_s": 0.0
+      },
+      "vision": {
+        "kind": "ring",
+        "target": "ring",
+        "found": false,
+        "center": null,
+        "reference": [
+          640,
+          360
+        ],
+        "control_point": null,
+        "width": 1280,
+        "height": 720,
+        "captured_at": 1792138754.0021946,
+        "error_dx": null,
+        "error_dy": null,
+        "rings": [
+          [
+            450,
+            400
+          ],
+          [
+            1101,
+            397
+          ]
+        ],
+        "row_line": {
+          "points": [
+            [
+              450,
+              400
+            ],
+            [
+              1101,
+              397
+            ]
+          ],
+          "error_deg": -0.2640339812591037
+        },
+        "digits": [
+          {
+            "digit": "2",
+            "center": [
+              1101,
+              397
+            ],
+            "confidence": 0.8431651592254639
+          }
+        ],
+        "expected_digit": "1",
+        "digit": null,
+        "confidence": null,
+        "frame_id": 5142,
+        "captured_monotonic": 4231.585555731,
+        "stream_id": 12,
+        "processing_ms": 395.4
+      },
+      "polarities": [
+        1,
+        -1,
+        1,
+        -1
+      ],
+      "wheel_targets": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "velocity_revision": 115,
+      "zero_ack_revision": 115,
+      "armed": true,
+      "chassis": {
+        "cmd": "CHASSIS",
+        "state": "done",
+        "direction": "FWD",
+        "move_id": "133910962",
+        "total": "4000",
+        "remaining": "0",
+        "active": "0",
+        "invert": "5",
+        "assist": "0",
+        "target_cd": "14360",
+        "error_cd": "-17",
+        "fault": "none"
+      },
+      "turn": {
+        "cmd": "TURN_STAT",
+        "state": "idle",
+        "mode": "REL",
+        "zero": "1",
+        "current_cd": "14",
+        "target_cd": "0",
+        "error_cd": "-14",
+        "imu": "1",
+        "move_id": "133903253",
+        "active": "0",
+        "fault": "none",
+        "kp_centi": "2000",
+        "tolerance_cd": "20"
+      },
+      "motion": {
+        "cmd": "MOTION_STAT",
+        "v": "1",
+        "latched": "0",
+        "total": "0",
+        "reason": "none",
+        "uncertain": "0",
+        "active": "15",
+        "armed": "1"
+      },
+      "trace": [
+        {
+          "t": 4225.248,
+          "event": "query",
+          "body": "CHASSIS STAT",
+          "purpose": "setup",
+          "revision": 110
+        },
+        {
+          "t": 4225.728,
+          "event": "query_ack",
+          "body": "CHASSIS STAT",
+          "purpose": "setup",
+          "reply": "OK cmd=CHASSIS state=done direction=FWD move_id=133910962 total=4000 remaining=0 active=0 invert=5 assist=0 target_cd=14360 error_cd=-17 fault=none",
+          "revision": null
+        },
+        {
+          "t": 4225.729,
+          "event": "query",
+          "body": "TURN ZERO",
+          "purpose": "zero",
+          "revision": 110
+        },
+        {
+          "t": 4225.883,
+          "event": "query_ack",
+          "body": "TURN ZERO",
+          "purpose": "zero",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=0 target_cd=0 error_cd=0 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4225.883,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 110
+        },
+        {
+          "t": 4225.935,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=1 target_cd=0 error_cd=-1 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4230.025,
+          "event": "query",
+          "body": "TURN ZERO",
+          "purpose": "zero",
+          "revision": 110
+        },
+        {
+          "t": 4230.076,
+          "event": "query_ack",
+          "body": "TURN ZERO",
+          "purpose": "zero",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=0 target_cd=0 error_cd=0 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4230.076,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 110
+        },
+        {
+          "t": 4230.18,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=1 target_cd=0 error_cd=-1 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4230.185,
+          "event": "velocity_intent",
+          "body": "WHEELS 0 0 0 0 4000",
+          "revision": 111,
+          "state": "tracking",
+          "polarities": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "t": 4230.185,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 111
+        },
+        {
+          "t": 4230.236,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 4000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            21,
+            111
+          ]
+        },
+        {
+          "t": 4230.339,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 4000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            21,
+            111
+          ]
+        },
+        {
+          "t": 4230.34,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=1 target_cd=0 error_cd=-1 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4230.341,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 111
+        },
+        {
+          "t": 4230.392,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 4000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            21,
+            111
+          ]
+        },
+        {
+          "t": 4230.443,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=0 target_cd=0 error_cd=0 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4230.445,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 111
+        },
+        {
+          "t": 4230.547,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 4000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            21,
+            111
+          ]
+        },
+        {
+          "t": 4230.548,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=1 target_cd=0 error_cd=-1 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4230.549,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 111
+        },
+        {
+          "t": 4230.6,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 4000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            21,
+            111
+          ]
+        },
+        {
+          "t": 4230.703,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=1 target_cd=0 error_cd=-1 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4230.705,
+          "event": "velocity_intent",
+          "body": "WHEELS 536 -536 536 -536 4000",
+          "revision": 112,
+          "state": "tracking",
+          "polarities": [
+            1,
+            -1,
+            1,
+            -1
+          ]
+        },
+        {
+          "t": 4230.706,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 112
+        },
+        {
+          "t": 4230.757,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 4000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            21,
+            111
+          ]
+        },
+        {
+          "t": 4230.809,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=1 target_cd=0 error_cd=-1 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4230.809,
+          "event": "velocity_ack",
+          "body": "WHEELS 536 -536 536 -536 4000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            21,
+            112
+          ]
+        },
+        {
+          "t": 4230.81,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 112
+        },
+        {
+          "t": 4230.913,
+          "event": "velocity_ack",
+          "body": "WHEELS 536 -536 536 -536 4000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            21,
+            112
+          ]
+        },
+        {
+          "t": 4230.913,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=1 target_cd=0 error_cd=-1 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4230.915,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 112
+        },
+        {
+          "t": 4230.965,
+          "event": "velocity_ack",
+          "body": "WHEELS 536 -536 536 -536 4000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            21,
+            112
+          ]
+        },
+        {
+          "t": 4231.017,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=2 target_cd=0 error_cd=-2 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4231.021,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 112
+        },
+        {
+          "t": 4231.195,
+          "event": "velocity_ack",
+          "body": "WHEELS 536 -536 536 -536 4000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            21,
+            112
+          ]
+        },
+        {
+          "t": 4231.195,
+          "event": "velocity_ack",
+          "body": "WHEELS 536 -536 536 -536 4000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            21,
+            112
+          ]
+        },
+        {
+          "t": 4231.247,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=10 target_cd=0 error_cd=-10 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4231.247,
+          "event": "velocity_ack",
+          "body": "WHEELS 536 -536 536 -536 4000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            21,
+            112
+          ]
+        },
+        {
+          "t": 4231.249,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 112
+        },
+        {
+          "t": 4231.352,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=6 target_cd=0 error_cd=-6 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4231.352,
+          "event": "velocity_ack",
+          "body": "WHEELS 536 -536 536 -536 4000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            21,
+            112
+          ]
+        },
+        {
+          "t": 4231.353,
+          "event": "velocity_intent",
+          "body": "WHEELS 516 -516 516 -516 4000",
+          "revision": 113,
+          "state": "tracking",
+          "polarities": [
+            1,
+            -1,
+            1,
+            -1
+          ]
+        },
+        {
+          "t": 4231.358,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 113
+        },
+        {
+          "t": 4231.409,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=7 target_cd=0 error_cd=-7 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4231.461,
+          "event": "velocity_ack",
+          "body": "WHEELS 516 -516 516 -516 4000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            21,
+            113
+          ]
+        },
+        {
+          "t": 4231.462,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 113
+        },
+        {
+          "t": 4231.564,
+          "event": "velocity_ack",
+          "body": "WHEELS 516 -516 516 -516 4000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            21,
+            113
+          ]
+        },
+        {
+          "t": 4231.616,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=7 target_cd=0 error_cd=-7 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4231.616,
+          "event": "velocity_ack",
+          "body": "WHEELS 516 -516 516 -516 4000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            21,
+            113
+          ]
+        },
+        {
+          "t": 4231.618,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 113
+        },
+        {
+          "t": 4231.67,
+          "event": "velocity_intent",
+          "body": "WHEELS 500 -500 500 -500 4000",
+          "revision": 114,
+          "state": "tracking",
+          "polarities": [
+            1,
+            -1,
+            1,
+            -1
+          ]
+        },
+        {
+          "t": 4231.721,
+          "event": "velocity_ack",
+          "body": "WHEELS 500 -500 500 -500 4000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            21,
+            114
+          ]
+        },
+        {
+          "t": 4231.721,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=0 target_cd=0 error_cd=0 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4231.723,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 114
+        },
+        {
+          "t": 4231.825,
+          "event": "velocity_ack",
+          "body": "WHEELS 500 -500 500 -500 4000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            21,
+            114
+          ]
+        },
+        {
+          "t": 4231.877,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-2 target_cd=0 error_cd=2 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4231.877,
+          "event": "velocity_ack",
+          "body": "WHEELS 500 -500 500 -500 4000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            21,
+            114
+          ]
+        },
+        {
+          "t": 4231.879,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 114
+        },
+        {
+          "t": 4231.93,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=-2 target_cd=0 error_cd=2 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4231.982,
+          "event": "velocity_ack",
+          "body": "WHEELS 500 -500 500 -500 4000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            21,
+            114
+          ]
+        },
+        {
+          "t": 4231.985,
+          "event": "velocity_intent",
+          "body": "WHEELS 0 0 0 0 4000",
+          "revision": 115,
+          "state": "tracking",
+          "polarities": [
+            1,
+            -1,
+            1,
+            -1
+          ]
+        },
+        {
+          "t": 4231.988,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 115
+        },
+        {
+          "t": 4232.039,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=12 target_cd=0 error_cd=-12 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4232.091,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 4000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            21,
+            115
+          ]
+        },
+        {
+          "t": 4232.092,
+          "event": "query",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "revision": 115
+        },
+        {
+          "t": 4232.195,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 4000",
+          "reply": "OK cmd=WHEELS state=accepted",
+          "tag": [
+            "camera_velocity",
+            21,
+            115
+          ]
+        },
+        {
+          "t": 4232.248,
+          "event": "query_ack",
+          "body": "TURN STAT",
+          "purpose": "heading",
+          "reply": "OK cmd=TURN_STAT state=idle mode=REL zero=1 current_cd=14 target_cd=0 error_cd=-14 imu=1 move_id=133903253 active=0 fault=none kp_centi=2000 tolerance_cd=20",
+          "revision": null
+        },
+        {
+          "t": 4232.248,
+          "event": "velocity_ack",
+          "body": "WHEELS 0 0 0 0 4000",
+          "reply": "ERR code=DISARMED_BUSY_OR_REVERSE",
+          "tag": [
+            "camera_velocity",
+            21,
+            115
+          ]
+        }
+      ]
+    }
+  ],
+  "behavior": "Send current zero target until first successful ACK only, preserve lease and status checks, wait idle even before same-direction restart.",
+  "configuration_note": "Deployment does not copy JSON settings. Camera settings changed externally during this run; the latest saved values were retained.",
+  "physical_motion_started": false,
+  "firmware_flashed": false
+}

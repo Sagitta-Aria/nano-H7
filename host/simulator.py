@@ -25,6 +25,8 @@ class SimulatedBoard:
         self.rotation_referenced = self.rotation_configured = False
         self.led = 0
         self.rx = self.bad = self.replay_hits = self.timeouts = 0
+        self.motion_fault = self.motion_fault_total = self.uncertain_axes = 0
+        self.motion_reason = 'none'
         self.cache = OrderedDict()
         self.chassis_state = "idle"
         self.chassis_direction = "FWD"
@@ -52,7 +54,13 @@ class SimulatedBoard:
             self.timeouts += 1
         # Substeps keep the demo responsive when an update interval is irregular.
         dt = min(elapsed, 1.)
+        was_paused = self.turn.paused
+        if self.navigation.auto_imu and dt > 0:
+            self.navigation.feedback(self.navigation.absolute_heading, True, 1, now)
+        paused = self.turn.waiting(now)
+        chassis_dt = 0. if was_paused or paused else dt
         for index, axis in enumerate(self.axes):
+            if index < 4 and paused: continue
             if index < 4 and (self.navigation.busy() or self.turn.busy() or self.straight.busy()):
                 continue
             if not axis["active"]:
@@ -61,9 +69,10 @@ class SimulatedBoard:
             if axis["finite"]:
                 brake = math.sqrt(2 * axis["accel"] * axis["remaining"])
                 target = math.copysign(min(abs(target), max(1., brake)), target)
-            delta = max(-axis["accel"] * dt, min(axis["accel"] * dt, target - axis["velocity"]))
+            axis_dt = chassis_dt if index < 4 else dt
+            delta = max(-axis["accel"] * axis_dt, min(axis["accel"] * axis_dt, target - axis["velocity"]))
             axis["velocity"] += delta
-            axis["fraction"] += abs(axis["velocity"]) * dt
+            axis["fraction"] += abs(axis["velocity"]) * axis_dt
             steps = int(axis["fraction"])
             axis["fraction"] -= steps
             if axis["finite"]:
@@ -74,9 +83,9 @@ class SimulatedBoard:
                 axis["active"] = 0
                 axis["velocity"] = axis["target"] = 0
         self.last = now
-        self.navigation.update(now, dt)
-        self.turn.update(now, dt)
-        self.straight.update(now, dt)
+        self.navigation.update(now, chassis_dt)
+        self.turn.update(now, chassis_dt)
+        self.straight.update(now, chassis_dt)
         if self.chassis_state == "moving" and not any(a["active"] for a in self.axes[:4]):
             self.chassis_state = "done" if not any(a["remaining"] for a in self.axes[:4]) else "stopped"
 
@@ -93,10 +102,26 @@ class SimulatedBoard:
         """Demo equivalent of stopping M1..M4 without affecting auxiliary axes."""
         self.straight.stop()
         self.chassis_state = "stopped"
-        self.navigation.stop()
+        if self.navigation.state != "suspended":
+            self.navigation.stop()
         self.turn.stop()
         for axis in self.axes[:4]:
             axis.update(active=0, velocity=0., target=0)
+
+    def inject_motion_fault(self, reason='step_deadline'):
+        """SIM-only ISR fault injection: stop outputs and revoke moving references."""
+        self.motion_fault += 1; self.motion_fault_total += 1; self.motion_reason = reason
+        self.uncertain_axes |= sum(1 << i for i,a in enumerate(self.axes) if a['active'])
+        if self.uncertain_axes & 16:self.lift_initialized = False
+        if self.uncertain_axes & 32:self.rotation_referenced = False
+        self.stop()
+
+    def motion_report(self):
+        """History survives explicit idle/disarmed acknowledgement."""
+        active=sum(1 << i for i,a in enumerate(self.axes) if a['active'])
+        return (f'OK cmd=MOTION_STAT v=1 latched={int(bool(self.motion_fault))} '
+                f'total={self.motion_fault_total} reason={self.motion_reason} '
+                f'uncertain={self.uncertain_axes} active={active} armed={int(self.armed)}')
 
     def chassis_dispatch(self, sequence, args):
         matrix = {"FWD": (1, 1, 1, 1), "BACK": (-1, -1, -1, -1),
@@ -109,10 +134,10 @@ class SimulatedBoard:
             return "ERR code=CHASSIS_BUSY"
         if len(args) == 2 and args[0] == "CONFIG":
             mask = self.number(args[1], 0, 15)
-            if any(a["active"] for a in self.axes[:4]):
+            if self.navigation.state == 'suspended' or any(a["active"] for a in self.axes[:4]):
                 return "ERR code=CHASSIS_BUSY"
             self.invert = mask
-            self.navigation.ready = False
+            self.navigation.invalidate()
             args = ["STAT"]
         if args == ["STAT"]:
             remaining = max((a["remaining"] for a in self.axes[:4] if a["move_id"] == self.chassis_id), default=0)
@@ -120,7 +145,7 @@ class SimulatedBoard:
             return (f"OK cmd=CHASSIS_STAT state={self.chassis_state} direction={self.chassis_direction} "
                     f"move_id={self.chassis_id} total={self.chassis_total} remaining={remaining} active={active} invert={self.invert} "
                     f"assist={int(self.straight.assisted)} target_cd={round(self.straight.target*100)} "
-                    f"error_cd={round(self.straight.error*100)} fault={self.straight.fault}")
+                    f"error_cd={round(self.straight.error*100)} fault={self.straight.fault} paused={int(self.turn.paused)}")
         if not args or (args[0] in ("MOVE", "STRAIGHT") and len(args) != 5) or (args[0] == "JOG" and len(args) != 4):
             return "ERR code=BAD_ARGUMENT"
         if args[0] not in ("MOVE", "JOG", "STRAIGHT") or args[1] not in matrix:
@@ -150,7 +175,7 @@ class SimulatedBoard:
             self.straight.start(signs, yaw, steps, speed, accel, sequence)
         else:
             self.straight.assisted, self.straight.fault = False, 'none'
-        self.navigation.ready = False
+        self.navigation.invalidate()
         self.chassis_state = "moving" if finite else "jogging"
         self.chassis_total = steps
         self.jog_time = self.clock()
@@ -195,7 +220,7 @@ class SimulatedBoard:
         words = body.split()
         cmd, args = words[0], words[1:]
         if cmd == "HELLO" and not args:
-            return "OK cmd=HELLO fw=0.2.18 protocol=1 board=SIMULATOR led_mask=3 red=fixed chassis_max=5000 aux_max=3000 chassis=1 servo=2 servo_travel=2700 servo1_travel=2700 servo2_travel=1800 serial=dual lift=1 lift_max=8000 nav=1 nav_heading=1 nav_grid=1 nav_path=1 turn=1 aux_control=1 flow=1 servo1_pin=PH9 servo2_pin=PH6 turn_tuning=1 aux_live=1 turn_precision=1 straight=1"
+            return "OK cmd=HELLO fw=0.2.29 protocol=1 board=SIMULATOR led_mask=3 red=fixed chassis=1 servo=2 servo_travel=2700 servo1_travel=2700 servo2_travel=1800 serial=dual lift=1 lift_max=8000 nav=1 nav_heading=1 nav_grid=1 nav_path=1 turn=1 aux_control=1 flow=1 servo1_pin=PE4 servo2_pin=PH9 turn_tuning=1 aux_live=1 turn_precision=1 straight=1 turn_band=1 imu_pause=1"
         if cmd == "NAV":
             return self.navigation.dispatch(sequence, args)
         if cmd == "FLOW":
@@ -210,11 +235,21 @@ class SimulatedBoard:
             self.heartbeat = self.clock()
             return "OK cmd=PING"
         if cmd == "INFO" and not args:
-            return "OK cmd=INFO cpu_hz=400000000 apb_hz=100000000 timer_hz=200000000 flash_kb=2048 uid=SIMULATED reset=0x00000000 rtos=11.2.0 baud=115200"
+            return "OK cmd=INFO cpu_hz=400000000 apb_hz=100000000 timer_hz=200000000 flash_kb=2048 uid=SIMULATED reset=0x00000000 rtos=11.2.0 baud=115200 chassis_max=5000 aux_max=3000 nav_reference=1"
         if cmd == "STAT" and not args:
             return (f"OK cmd=STAT uptime_ms={int((self.clock()-self.start)*1000)} heap_free=37000 heap_min=37000 tasks=4 "
                     f"stack_comm=4096 stack_motion=1700 stack_super=1700 led={self.led} armed={int(self.armed)} "
-                    f"rx={self.rx} rx_err=0 tx_err=0 bad={self.bad} replay={self.replay_hits} timeout={self.timeouts} motion_fault=0")
+                    f"rx={self.rx} rx_err=0 tx_err=0 bad={self.bad} replay={self.replay_hits} timeout={self.timeouts} motion_fault={self.motion_fault}")
+        if cmd == 'MOTION' and args == ['STAT']:
+            return self.motion_report()
+        if cmd == 'MOTION' and args == ['CLEAR']:
+            if self.armed or any(a['active'] for a in self.axes):
+                return 'ERR code=MOTION_CLEAR_REQUIRES_DISARMED_IDLE'
+            self.motion_fault = 0
+            self.chassis_halt(); self.navigation.invalidate(); self.navigation.committed = False
+            self.navigation.state='stopped';self.navigation.fault='none'
+            self.turn.state='stopped';self.turn.fault='none';self.straight.fault='none'
+            return self.motion_report()
         if cmd == "LED" and len(args) == 2:
             green, blue = [self.number(a, 0, 1) for a in args]
             self.led = green | blue << 1
@@ -225,6 +260,8 @@ class SimulatedBoard:
                 self.stop()
             elif self.clock() - self.heartbeat >= 1:
                 return "ERR code=HEARTBEAT_REQUIRED"
+            elif self.motion_fault:
+                return 'ERR code=MOTION_FAULT_LATCHED'
             elif any(a["active"] for a in self.axes):
                 return "ERR code=BUSY_OR_FAULT"
             else:
@@ -245,6 +282,8 @@ class SimulatedBoard:
             sps = self.number(args[2], 1, 5000 if index < 4 else 3000)
             accel = self.number(args[3], 1, 20000)
             axis = self.axes[index]
+            if index == 5 and self.uncertain_axes & 32:
+                return 'ERR code=AUX_NOT_REFERENCED'
             if index == 4:
                 error = self.lift_error(steps)
                 if error:
@@ -257,7 +296,7 @@ class SimulatedBoard:
             axis.update(target=sps if steps > 0 else -sps, remaining=abs(steps), active=1,
                         finite=True, accel=accel, move_id=sequence, fraction=0., velocity=0.)
             if index < 4:
-                self.navigation.ready = False
+                self.navigation.invalidate()
             return f"OK cmd=MOVE state=accepted axis={index+1} move_id={sequence}"
         if cmd == "WHEELS" and len(args) == 5:
             if self.chassis_state in ("moving", "jogging") or self.navigation.busy() or self.turn.busy():
@@ -272,7 +311,7 @@ class SimulatedBoard:
             for axis, speed in zip(self.axes, speeds):
                 axis.update(target=speed, finite=False, accel=accel, move_id=sequence,
                             active=int(speed != 0 or axis["velocity"] != 0))
-            self.navigation.ready = False
+            self.navigation.invalidate()
             return "OK cmd=WHEELS state=accepted"
         if cmd == "AXIS" and len(args) == 1:
             index = self.number(args[0], 1, 7) - 1
@@ -325,12 +364,25 @@ class SimulatedBoard:
         if verb == "HALT" and len(args) == 2:
             a.update(active=0, velocity=0., target=0)
             return self.aux_report(axis)
+        if verb == 'REFERENCE' and len(args) == 3:
+            position=self.number(args[2],-1000000,1000000)
+            low,high=self.aux_ranges[axis-5]
+            if (self.armed or self.motion_fault or a['active'] or not self.uncertain_axes & (1 << (axis-1)) or
+                    sign not in (-1,1) or not low <= position <= high):
+                return 'ERR code=AUX_REFERENCE_REQUIRES_LOST_DISARMED_IDLE_IN_RANGE'
+            a['pos']=position*sign;self.uncertain_axes &= ~(1 << (axis-1))
+            if axis == 5:self.lift_initialized=True
+            else:self.rotation_referenced=True
+            return self.aux_report(axis)
         if verb == "ZERO" and len(args) == 2:
-            low, high = self.aux_ranges[1]
-            if axis != 6 or self.armed or a["active"] or (self.rotation_configured and not low <= 0 <= high):
-                return "ERR code=AUX_ZERO_REQUIRES_M6_DISARMED_IDLE"
+            low, high = self.aux_ranges[axis-5]
+            if (self.armed or self.motion_fault or a['active'] or not low <= 0 <= high or
+                    (axis == 5 and not self.uncertain_axes & 16)):
+                return "ERR code=AUX_ZERO_REQUIRES_DISARMED_IDLE"
             a["pos"] = 0
-            self.rotation_referenced = True
+            self.uncertain_axes &= ~(1 << (axis-1))
+            if axis == 5:self.lift_initialized = True
+            else:self.rotation_referenced = True
             return self.aux_report(axis)
         if verb == "CONFIG" and len(args) == 4:
             low, high = [self.number(v, -1000000, 1000000) for v in args[2:]]
@@ -361,7 +413,7 @@ class SimulatedBoard:
         """First INIT is top; repeated INIT preserves both position and direction."""
         axis = self.axes[4]
         if args == ["INIT"]:
-            if not self.lift_initialized:
+            if not self.lift_initialized and not (self.uncertain_axes & 16):
                 if axis["active"]:
                     return "ERR code=M5_BUSY"
                 axis["pos"] = 0
@@ -393,7 +445,7 @@ class SimulatedBoard:
         limit = self.servo_travel_steps[channel]
         pulse = 500 + (2000 * steps + limit // 2) // limit
         return (f"OK cmd={verb} ch={channel + 1} angle={self.angle_text(steps)} "
-                f"us={pulse} on=1 pin=PH{9 if channel == 0 else 6} timer=TIM12_CH{2 if channel == 0 else 1}")
+                f"us={pulse} on=1 pin={'PE4' if channel == 0 else 'PH9'} timer={'TIM15_CH1N' if channel == 0 else 'TIM12_CH2'}")
 
     def servo_dispatch(self, args):
         """Demo mirror of servo.c; the angle table is arithmetic here, data there."""
@@ -432,6 +484,12 @@ class SimulatedSerial:
     def _require_open(self):
         if not self.is_open:
             raise OSError("simulated port is closed")
+
+    @property
+    def in_waiting(self):
+        """Expose available bytes with the same semantics as pyserial."""
+        self._require_open()
+        return len(self.buffer)
 
     def write(self, data):
         self._require_open()
