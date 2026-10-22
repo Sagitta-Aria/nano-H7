@@ -2,6 +2,20 @@
 
 本页记录把上位机通信层搬到 Jetson 盒子后的状态、验证结果和待办。
 
+## 2026-10-22：任务码全屏卡部署
+
+通过 `nx-bird` 定向更新 4 个文件：`host/camera.py`、`host/camera_monitor.py`、`tests/test_task_code_overlay.py`、`docs/MATERIAL_FLOW.md`。两轮搬运锁定二维码任务码后，NX 本地 800×480 屏整屏切换为纯白底、黑色任务码卡片，任务结束自动恢复相机预览。
+
+- 备份 `~/h743/backups/task_code_card_20261022_1235/`（host、docs、tests，294 个文件）。
+- 4 个文件拷贝后 SHA-256 与本地一致，远端 `py_compile` 通过。
+- 服务重启 PID 1807→5467，active，12:36:13 启动；H743 已连接（**固件 0.2.29、`nav_reference=1`**）、H723 streaming、七轴静止未使能；二维码 worker（`/dev/video2`）自动恢复。
+- 远端回归：`tests.test_task_code_overlay` + `tests.test_camera_monitor_modes` 共 11 项通过。
+- 部署后 `RecognitionMonitor.draw()` 实测：有任务码时整屏纯白占比 96.6%、任务码单行居中、字高 55 px（下限 12 px）、占宽 696 px；清空任务码后回到正常预览（纯白占比 0.17%）。
+- 真机整屏截图未取得：NX 桌面当时挂着"软件更新器"弹窗占用前台，OpenCV 窗口未到最前。不影响功能，现场使用前建议关掉该弹窗。
+- 未烧录固件、未启动实车任务。
+
+验证记录见 [validation_nx_task_code_card_20261022.json](validation_nx_task_code_card_20261022.json)。
+
 ## 2026-10-21：坐标巡航草稿区移除与坐标编辑部署（补做中断的部署）
 
 通过 `nx-bird` 定向更新 6 个上位机文件：`host/navigation.py`、`host/navigation_runner.py`、`host/webapp.py`、`host/static/index.html`、`host/static/app.js`、`host/static/styles.css`。这轮原本是上一场会话结尾执行的部署，那次停在"开始定向部署"之后：文件已备好、哈希已核对，拷贝没有发生。本次补做。

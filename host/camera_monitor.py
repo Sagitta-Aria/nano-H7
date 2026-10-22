@@ -11,6 +11,60 @@ import time
 from collections import deque
 from pathlib import Path
 
+# Competition task code card:每个字符的字高不得低于 12 像素。
+TASK_CODE_MIN_PX = 12
+TASK_CODE_MARGIN = 24
+
+
+def task_code(state):
+    """Return the competition task code only while a task is running.
+
+    Reads one host state snapshot; never opens hardware, camera or motion. An
+    inactive task returns nothing even if a stale plan is still cached, so the
+    card disappears the moment the two-round flow finishes or stops.
+    """
+    if not isinstance(state, dict):
+        return ''
+    plan_owner = state.get('task')
+    if not isinstance(plan_owner, dict) or not plan_owner.get('active'):
+        return ''
+    plan = plan_owner.get('task_plan')
+    code = plan.get('code') if isinstance(plan, dict) else None
+    return code.strip() if isinstance(code, str) else ''
+
+
+def task_code_frame(code, size=(480, 800)):
+    """Full-screen pure white card with one centred black line of the code.
+
+    The string is never wrapped or truncated: the glyph scale shrinks until the
+    whole code fits the screen, and the 12 px minimum glyph height is enforced
+    by raising instead of silently drawing something unreadable.
+    """
+    import cv2
+    import numpy as np
+    height, width = size
+    frame = np.full((height, width, 3), 255, np.uint8)
+    text = '' if code is None else str(code).strip()
+    if not text:
+        return frame
+    scale, thickness = 8.0, 9
+    text_width = text_height = 0
+    while scale > 0.35:
+        thickness = max(1, int(round(scale * 1.15)))
+        (text_width, text_height), _ = cv2.getTextSize(
+            text, cv2.FONT_HERSHEY_DUPLEX, scale, thickness)
+        if (text_width <= width - 2 * TASK_CODE_MARGIN
+                and text_height <= height - 2 * TASK_CODE_MARGIN):
+            break
+        scale -= .1
+    if (text_height < TASK_CODE_MIN_PX
+            or text_width > width - 2 * TASK_CODE_MARGIN):
+        raise ValueError('任务码过长，无法以不低于 {} px 的字高全屏显示。'.format(TASK_CODE_MIN_PX))
+    origin = ((width - text_width) // 2, (height + text_height) // 2)
+    cv2.putText(frame, text, origin, cv2.FONT_HERSHEY_DUPLEX, scale,
+                (0, 0, 0), thickness, cv2.LINE_AA)
+    return frame
+
 
 class RecognitionMonitor:
     """Run perception off the GUI thread and render an 800x480 touch display."""
@@ -28,6 +82,12 @@ class RecognitionMonitor:
         self.error = ''
         self.frame_times = deque()
         self.processed_mode = None
+        self.task_code = ''
+
+    def update_task_code(self, code):
+        """Publish the card text; an empty string returns the camera preview."""
+        with self.lock:
+            self.task_code = code or ''
 
     def on_mouse(self, *args):
         self.controls.on_mouse(*args)
@@ -87,6 +147,12 @@ class RecognitionMonitor:
         with self.lock:
             report = alignment_report if tracking else self.report
             selected, error = self.requested, self.error
+            card = self.task_code
+        if card:
+            # Pure white full-screen card: the whole 800x480 display goes to the
+            # task code. The camera keeps streaming, so finishing the task
+            # restores the live preview on the next frame with no restart.
+            return task_code_frame(card, (480, 800))
         height, width = raw.shape[:2]
         image = cv2.resize(raw, (640, 360))
         canvas = np.zeros((480, 640, 3), np.uint8)

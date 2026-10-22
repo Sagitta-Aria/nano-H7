@@ -1,0 +1,60 @@
+{
+  "date": "2026-10-22",
+  "feature": "Full-screen task-code card on the NX touchscreen during the two-round material flow",
+  "scope": "Host only. Firmware untouched (board already reports 0.2.29 with nav_reference=1).",
+  "deploy": {
+    "transport": "ssh nx-bird (192.168.1.196)",
+    "root": "/home/a/h743",
+    "files": [
+      "host/camera.py",
+      "host/camera_monitor.py",
+      "tests/test_task_code_overlay.py",
+      "docs/MATERIAL_FLOW.md"
+    ],
+    "preflight": {
+      "service": "active, MainPID 1807",
+      "armed": false,
+      "axes": "seven axes stationary",
+      "task_active": false,
+      "competition_active": false,
+      "qr_worker": "vision-env python -m host.camera --worker /dev/video2 --qr"
+    },
+    "backup": "/home/a/h743/backups/task_code_card_20261022_1235/ (host, docs, tests; 294 files)",
+    "hash_verification": "all four files match local SHA-256",
+    "remote_syntax": "python3 -m py_compile passed"
+  },
+  "behaviour": {
+    "trigger": "GET /api/state reports task.active true and task.task_plan.code non-empty (after the three-frame QR confirmation)",
+    "display": "800x480 pure white frame, one centred black line, no wrap or truncation",
+    "glyph": "measured 55 px tall, 696 px wide for 156+123+516+231; hard minimum 12 px, otherwise ValueError",
+    "end": "task completion, stop or fault clears active, so the next frame returns to the camera preview",
+    "source": "camera subprocess polls http://127.0.0.1:8770/api/state every 0.5 s; H743_STATE_URL / --state-url override the port",
+    "stale_guard": "six consecutive poll failures (~3 s) clear the card"
+  },
+  "post_checks": {
+    "service": "active, MainPID 5467, started 2026-10-22 12:36:13 CST",
+    "devices": "H743 connected, firmware 0.2.29, nav_reference=1, nav_heading/nav_grid/nav_path=1; H723 streaming",
+    "armed": false,
+    "axes": "seven axes stationary",
+    "camera_worker": "restarted automatically on /dev/video2",
+    "draw_path": {
+      "with_code": "480x800x3, pure-white ratio 0.9663, text 55 px tall",
+      "without_code": "480x800x3, pure-white ratio 0.0017 (normal preview)"
+    },
+    "tests": {
+      "command": "python3 -m unittest tests.test_task_code_overlay tests.test_camera_monitor_modes -q",
+      "run": 11,
+      "passed": 11
+    }
+  },
+  "not_verified": [
+    "Real-screen screenshot blocked by an OS 'software updater' dialog holding the foreground; the OpenCV full-screen window did not come to the front during the check",
+    "No real two-round run executed, so the card has not yet been seen during an actual QR lock"
+  ],
+  "hardware_executed": false,
+  "flashed": false,
+  "known_unrelated_failures": [
+    "tests/test_center_navigation.py still calls planGridRoute, which the 2026-10-21 draft-map removal deleted from host/static/app.js",
+    "Three ARM-emulation tests expect an imu_stale fault where 0.2.28+ pauses instead"
+  ]
+}

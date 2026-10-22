@@ -15,6 +15,9 @@ import threading
 import time
 from pathlib import Path
 
+# The camera worker and the host share one box; the worker only reads state.
+STATE_URL = os.environ.get('H743_STATE_URL', 'http://127.0.0.1:8770/api/state')
+
 
 def device_identity(device):
     """Use udev links as persistent IDs; videoN alone is never a binding."""
@@ -569,7 +572,31 @@ def present_local_window():
         pass
 
 
-def worker(device, width, height, mjpeg, sensor_id=None, display=False, qr=False):
+def poll_task_code(monitor, url, stop, interval=.5):
+    """Feed the NX card the host's own task state; never touch robot I/O.
+
+    A short-lived host restart must not leave a stale white card on the screen,
+    so after ~3 s without an answer the card is cleared.
+    """
+    import json as _json
+    import urllib.request
+    from .camera_monitor import task_code
+    misses = 0
+    while not stop.is_set():
+        try:
+            with urllib.request.urlopen(url, timeout=1.5) as response:
+                code = task_code(_json.loads(response.read().decode('utf-8')))
+            misses = 0
+            monitor.update_task_code(code)
+        except Exception:
+            misses += 1
+            if misses >= 6:
+                monitor.update_task_code('')
+        stop.wait(interval)
+
+
+def worker(device, width, height, mjpeg, sensor_id=None, display=False, qr=False,
+           state_url=None):
     """Run local raw acquisition/recognition and an independent photo command.
 
     TRACK emits coordinates only. SNAP emits a photo only. Their consumers and
@@ -685,6 +712,9 @@ def worker(device, width, height, mjpeg, sensor_id=None, display=False, qr=False
             cv2.setWindowProperty('NX Camera 1',cv2.WND_PROP_FULLSCREEN,cv2.WINDOW_FULLSCREEN)
             cv2.setMouseCallback('NX Camera 1', monitor.on_mouse)
             source.stream(True)
+            threading.Thread(target=poll_task_code,
+                             args=(monitor, state_url or STATE_URL, monitor_stopped),
+                             daemon=True, name='nx-task-code').start()
             def monitor_frames():
                 """Keep idle recognition alive; alignment takes perception priority."""
                 from .camera_vision import VisionSettings
@@ -811,5 +841,8 @@ if __name__ == "__main__":
     parser.add_argument("--sensor-id", type=int)
     parser.add_argument("--display", action='store_true')
     parser.add_argument("--qr", action='store_true')
+    parser.add_argument("--state-url", default=STATE_URL,
+                        help="host state endpoint used for the task-code card")
     args = parser.parse_args()
-    worker(args.worker, args.width, args.height, args.mjpeg, args.sensor_id, args.display, args.qr)
+    worker(args.worker, args.width, args.height, args.mjpeg, args.sensor_id, args.display,
+           args.qr, args.state_url)
