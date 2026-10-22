@@ -689,7 +689,9 @@ class Handler(BaseHTTPRequestHandler):
         elif path == '/api/competition/start':
             if self.guard(payload) is None:
                 return
-            ok, message = self.session.console.competition.start(full_flow=payload.get('full_flow', False))
+            ok, message = self.session.console.competition.start(
+                full_flow=payload.get('full_flow', False),
+                start_station=payload.get('start_station'))
             self.json({'ok': ok, 'detail': message, 'error': None if ok else message})
         elif path == "/api/navigation/action":
             if self.guard(payload) is None:

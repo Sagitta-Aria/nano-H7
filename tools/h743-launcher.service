@@ -1,0 +1,15 @@
+[Unit]
+Description=H743 two-round touch launcher on the NX panel
+After=h743-web.service
+
+[Service]
+Type=simple
+Environment=DISPLAY=:0
+Environment=PYTHONUNBUFFERED=1
+WorkingDirectory=%h/h743
+ExecStart=/usr/bin/python3 -u -m host.launcher
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target

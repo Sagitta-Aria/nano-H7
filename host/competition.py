@@ -1,4 +1,5 @@
 """One operator start owns preparation through the saved route's completion."""
+import copy
 import time
 from .navigation import reference_command, validated
 
@@ -36,7 +37,34 @@ class Competition:
         if self.owner.connection: self.owner.connection.submit('STOP')
         self.owner.note('error', error)
 
-    def start(self, full_flow=False):
+    @staticmethod
+    def with_start_station(route, choice):
+        """Resolve the launcher's O/X choice into a route copy, never the file.
+
+        The saved configuration keeps its own default; a launch only replaces
+        the start station for this run, so the touch panel can choose between
+        O and X without editing the debug page.
+        """
+        stations = route.get('stations') or []
+        if isinstance(choice, str):
+            name = choice.strip().upper()
+            index = next((i for i, s in enumerate(stations)
+                          if str(s.get('name', '')).upper() == name), None)
+            if index is None:
+                raise ValueError('巡航配置里没有 {} 点，请先在调试页添加并保存。'.format(name or choice))
+        elif type(choice) is int:
+            if not 0 <= choice < len(stations):
+                raise ValueError('起点下标超出范围。')
+            index = choice
+        else:
+            raise ValueError('起点只能是 O 或 X。')
+        if index != 0 and str(stations[index].get('name', '')).upper() != 'X':
+            raise ValueError('一键启动的起点只能是 O 或 X。')
+        chosen = copy.deepcopy(route)
+        chosen['start_station'] = index
+        return chosen
+
+    def start(self, full_flow=False, start_station=None):
         """The button authorizes origin and ARM; no wiring checkbox is required."""
         c = self.owner
         with c.lock:
@@ -47,6 +75,11 @@ class Competition:
             if any(a.get('active') == '1' for a in c.axes.values()):
                 return False, '车辆仍在执行动作。'
             route, task_config = c.mission.snapshot(), c.task_settings.snapshot()
+            if start_station is not None:
+                try:
+                    route = self.with_start_station(route, start_station)
+                except ValueError as error:
+                    return False, str(error)
             if full_flow:
                 from .material_flow import build_plan
                 from .pick_place import stacked_config
