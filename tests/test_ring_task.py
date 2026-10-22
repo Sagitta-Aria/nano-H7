@@ -197,6 +197,17 @@ class RingTaskTests(unittest.TestCase):
         headings = [int(b.split()[7]) for b in self.link.sent if b.startswith('NAV EXEC ')]
         self.assertIn(9300, headings, headings)   # 配置的 90° + 3° 偏置
 
+    def test_new_origin_clears_the_vision_heading_bias(self):
+        self.configure(); self.start()
+        self.board.navigation.absolute_heading += 3.
+        self.finish()
+        self.assertEqual(self.console.navigator.bias_cd, 300)
+        self.console.submit('ARM 0'); self.flush()
+        ok, why = self.console.navigation_action('origin')
+        self.assertTrue(ok, why); self.flush()
+        # 重建坐标系会重新采集 yaw 原点，旧偏置必须作废。
+        self.assertEqual(self.console.navigator.bias_cd, 0)
+
     def test_slots_and_parameter_validation(self):
         self.configure()
         config=self.console.mission.snapshot()

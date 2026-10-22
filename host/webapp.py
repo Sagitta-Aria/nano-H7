@@ -271,6 +271,9 @@ class Console:
                 config = self.mission.snapshot()
                 if config.get('start_station', 0) and self.device.get('nav_reference') != '1':
                     return False, 'X 点建系需要支持 nav_reference=1 的 H743 固件。'
+                # A rebuilt frame captures a new yaw origin, so any vision-derived
+                # heading bias from the previous frame is no longer valid.
+                self.navigator.set_heading_bias(0)
                 return self.submit(navigation.reference_command(config))
             if action == "start":
                 if self.mission.snapshot().get('start_station', 0) and self.device.get('nav_reference') != '1':
