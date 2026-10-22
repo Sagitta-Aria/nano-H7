@@ -2,6 +2,21 @@
 
 本页记录把上位机通信层搬到 Jetson 盒子后的状态、验证结果和待办。
 
+## 2026-10-22：C/D 任务后位姿校准部署
+
+通过 `nx-bird` 定向更新 7 个文件：`host/mission.py`、`host/material_flow.py`、`host/navigation_runner.py`、`host/webapp.py`、`docs/MATERIAL_FLOW.md`、`tests/test_ring_task.py`、`tests/test_material_flow.py`。C/D 视觉任务结束后的位置与航向都按视觉实测重新校准。
+
+- 位置：接管导航权限时先发 `NAV POSE`（在视觉动作之前），摆正/靠近/抓放/转盘的全部指令脉冲由 H743 里程积分累计；任务结束按「到站点坐标 − 当前坐标」的实测差分段正交回位，残余 ≤20 脉冲后 `NAV RESTORE` 到站点。`right_steps` 不再参与退出（字段保留，退出点恒等于到站点）。
+- 航向：视觉平行后 `δ = heading_cd − 配置到达姿态`，`|δ| > 6°` 直接报错；否则 δ 加到后续每个 `NAV EXEC` 的下发角。板端地图原点与 yaw 原点不动，站点姿态表不变；无偏置时下发角与配置角完全一致。重建起点（NAV RESET）时偏置清零。
+- 备份 `~/h743/backups/pose_recalib_20261022_1322/`（host、docs、tests，296 个文件）。
+- 7 个文件 SHA-256 与本地一致，远端 `py_compile` 通过。
+- 服务重启 PID 5467→8729，active，13:27:02 启动；H743 已连接（0.2.29、`nav_reference=1`）、H723 streaming、七轴静止未使能；二维码 worker 自动恢复；`navigation_runner` 遥测已带 `bias_cd`（当前 0）。
+- 远端回归 83 项通过（`test_ring_task`、`test_material_flow`、`test_mission`、`test_competition`、`test_webapp`）。
+- 本地全量 698 项仅剩 6 个已知 `imu_stale`ARM 断言失败。
+- 未烧录固件、未执行实车任务。现场需确认两件事：C/D 收尾多出的回位段（1800/2150 脉冲量级）与每站的实际位姿是否吻合；视觉平行后的 δ 是否稳定落在 ±6° 内。
+
+验证记录见 [validation_nx_pose_recalib_20261022.json](validation_nx_pose_recalib_20261022.json)。
+
 ## 2026-10-22：任务码全屏卡部署
 
 通过 `nx-bird` 定向更新 4 个文件：`host/camera.py`、`host/camera_monitor.py`、`tests/test_task_code_overlay.py`、`docs/MATERIAL_FLOW.md`。两轮搬运锁定二维码任务码后，NX 本地 800×480 屏整屏切换为纯白底、黑色任务码卡片，任务结束自动恢复相机预览。

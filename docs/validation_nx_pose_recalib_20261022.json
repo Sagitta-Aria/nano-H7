@@ -1,0 +1,60 @@
+{
+  "date": "2026-10-22",
+  "feature": "C/D vision tasks recalibrate position (measured return to the arrival point) and heading (vision-derived bias)",
+  "scope": "Host only. Firmware untouched (board already reports 0.2.29 with nav_reference=1).",
+  "deploy": {
+    "transport": "ssh nx-bird (192.168.1.196)",
+    "root": "/home/a/h743",
+    "files": [
+      "host/mission.py",
+      "host/material_flow.py",
+      "host/navigation_runner.py",
+      "host/webapp.py",
+      "docs/MATERIAL_FLOW.md",
+      "tests/test_ring_task.py",
+      "tests/test_material_flow.py"
+    ],
+    "preflight": {
+      "service": "active, MainPID 5467",
+      "armed": false,
+      "axes": "seven axes stationary",
+      "task_active": false,
+      "firmware": "0.2.29",
+      "nav_reference": "1"
+    },
+    "backup": "/home/a/h743/backups/pose_recalib_20261022_1322/ (host, docs, tests; 296 files)",
+    "hash_verification": "all seven files match local SHA-256",
+    "remote_syntax": "python3 -m py_compile passed"
+  },
+  "behaviour": {
+    "position": "NAV POSE is sent before any vision motion; the board integrates every commanded pulse; the task ends with measured return to the arrival XY in <=20 pulses (max 8 moves) and NAV RESTORE at the station coordinate",
+    "right_steps": "no longer defines the exit (field kept for config compatibility, exit == arrival point)",
+    "heading": "delta = heading_cd - configured arrival heading; |delta| > 6 deg faults; otherwise delta is added to every later NAV EXEC angle",
+    "frame": "board map origin and yaw origin unchanged; station attitudes unchanged; with no bias the wire angle equals the configured angle (180 stays 180)",
+    "bias_reset": "NAV RESET (rebuild origin) clears the bias"
+  },
+  "post_checks": {
+    "service": "active, MainPID 8729, started 2026-10-22 13:27:02 CST",
+    "devices": "H743 connected (0.2.29, nav_reference=1), H723 streaming",
+    "armed": false,
+    "axes": "seven axes stationary",
+    "telemetry": "navigation_runner exposes bias_cd (0 when idle)",
+    "qr_worker": "restarted on /dev/video2",
+    "remote_tests": {
+      "command": "python3 -m unittest tests.test_ring_task tests.test_material_flow tests.test_mission tests.test_competition tests.test_webapp -q",
+      "run": 83,
+      "passed": 83
+    },
+    "local_suite": {
+      "run": 698,
+      "failures": 6,
+      "known": "ARM-emulation tests expect an imu_stale fault where 0.2.28+ pauses instead"
+    }
+  },
+  "not_verified": [
+    "No real C/D run: the extra return move (~1800/2150 pulses) and the vision heading bias have not been observed on the vehicle",
+    "Bias magnitude tolerance of 6 deg is a design choice, not yet measured in the field"
+  ],
+  "hardware_executed": false,
+  "flashed": false
+}
