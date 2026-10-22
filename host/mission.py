@@ -267,7 +267,6 @@ class Mission:
         Station heading is a planning reference, never a new IMU yaw origin.
         Grid cruise requires the exit to remain on a lane.
         """
-        from .navigation_grid import on_grid, round_pulse
         from .navigation import arrival
         if not 1 <= leg <= len(self.route['route']):
             raise ValueError('圆列动作引用了不存在的路线段。')
@@ -332,10 +331,6 @@ class Mission:
                 self.state='ring_fix'
                 self.last_query=0.
                 return
-        elif self.state == 'ring_exit':
-            if now-self.last_query >= .1:
-                self.last_query=now;self.send('CHASSIS STAT','ring_exit_status')
-            return
         elif self.state == 'ring_upload':
             if self.ring_upload:
                 body=self.ring_upload.pop(0);self.send(body,'ring_upload')
