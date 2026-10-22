@@ -222,9 +222,11 @@ class MaterialStation:
         if after == 'cycle':
             self.cycle()
         elif after == 'finish':
+            # POSE was declared before the vision phase; the mission now measures
+            # how far the car actually moved and drives it back to the arrival XY.
             self.owner.state = 'ring_fix'
             self.owner.stage_started = time.monotonic()
-            self.owner.send(self.owner.ring_pose_command('POSE', self.options['reference']), 'ring_fix')
+            self.owner.last_query = 0.
         else:
             self.send('NAV STAT', 'return_pose')
 
@@ -265,11 +267,14 @@ class MaterialStation:
                 self.phase = 'handoff_ready'
         elif purpose == 'suspended':
             self.check_pose(fields)
-            if self.station == 'B':
-                self.send(o.ring_pose_command('POSE', self.options['reference']), 'tracking')
-            else:
-                self.align()
+            # Declare the arrival pose before the vision phase moves the car so
+            # the board integrates the whole calibration; the return afterwards
+            # is measured instead of predicted.
+            self.send(o.ring_pose_command('POSE', self.options['reference']), 'tracking')
         elif purpose == 'tracking':
+            if self.station != 'B':
+                self.align()
+                return
             camera = self.c.task_cameras.snapshot()
             if (camera.get('state') != 'ready' or camera.get('slot') != '1' or
                     self.c.task_cameras.slots.hubs['1'].snapshot().get('state') != 'ready'):

@@ -147,6 +147,9 @@ class MaterialFlowTests(unittest.TestCase):
                     if delta:
                         expected_moves.append(['FWD' if delta > 0 else 'BACK', str(abs(delta))])
                     position = OFFSETS[target]
+                # 任务收尾的实测回位：从点2回到到站点。
+                if position:
+                    expected_moves.append(['BACK' if position > 0 else 'FWD', str(abs(position))])
         self.assertEqual(moves, expected_moves)
         self.assertTrue(any(b == 'AUX GOTO 5 60 3000 1000' for b in self.link.sent))
         self.assertEqual(self.link.sent.count('AUX ZERO 6'), 1)
@@ -235,17 +238,23 @@ class MaterialFlowTests(unittest.TestCase):
         self.console.material_settings.value.update(point2_steps=2200, point3_steps=4400)
         self.finish()
         moves = [b.split()[2:4] for b in self.link.sent if b.startswith('CHASSIS STRAIGHT')]
+        # 每个 C/D 结束时都在点2，任务收尾按实测里程回到到站点（BACK 1800），
+        # 之后重新规划的路线仍从站点坐标出发，不再带着点2的偏移继续。
         self.assertEqual(moves, [[direction, str(steps)] for direction, steps in [
-            # First C: place at 1/3/2, collect at 1/2/3, finish at 2.
+            # First C: place at 1/3/2, collect at 1/2/3, finish at 2, return to arrival.
             ('FWD',3900), ('BACK',2100), ('BACK',1800),
             ('FWD',1800), ('FWD',2100), ('BACK',2100),
-            # First D: place at 1/3/2, already at the final reference.
+            ('BACK',1800),
+            # First D: place at 1/3/2, finish at 2, return to arrival.
             ('FWD',3900), ('BACK',2100),
-            # Second C: place at 2/1/3, collect at 1/2/3, finish at 2.
+            ('BACK',1800),
+            # Second C: place at 2/1/3, collect at 1/2/3, finish at 2, return.
             ('FWD',1800), ('BACK',1800), ('FWD',3900), ('BACK',3900),
             ('FWD',1800), ('FWD',2100), ('BACK',2100),
-            # Second D: identify 1, calibrate 2, place at 2/1/3, finish at 2.
-            ('FWD',1800), ('BACK',1800), ('FWD',3900), ('BACK',2100)]])
+            ('BACK',1800),
+            # Second D: identify 1, calibrate 2, place at 2/1/3, finish at 2, return.
+            ('FWD',1800), ('BACK',1800), ('FWD',3900), ('BACK',2100),
+            ('BACK',1800)]])
         self.assertEqual(len(self.jobs), 24)
 
     def test_replaced_row_movement_cannot_start_next_mechanism(self):

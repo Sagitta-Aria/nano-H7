@@ -48,14 +48,24 @@ class NavigationRunner:
     def __init__(self, owner):
         self.owner=owner; self.generation=0; self.state='idle'; self.pending=None
         self.error=''; self.phase=''; self.leg=0; self.op=0; self.path_id=None
+        # Vision gives an absolute heading at C/D; the difference to the board's
+        # own yaw bookkeeping becomes a bias applied to every commanded angle.
+        # It is recomputed per vision calibration, never accumulated, and it
+        # never changes the board's map frame.
+        self.bias_cd=0
 
     @property
     def active(self):
         return self.state not in ('idle','done','stopped','fault')
 
+    def set_heading_bias(self, bias_cd):
+        """Adopt a vision-verified heading bias for all later turn targets."""
+        self.bias_cd=int(bias_cd)
+
     def snapshot(self):
         return dict(state=self.state,phase=self.phase,leg=self.leg+1,
-                    op_id=self.op,path_id=self.path_id,error=self.error,active=self.active)
+                    op_id=self.op,path_id=self.path_id,error=self.error,active=self.active,
+                    bias_cd=self.bias_cd)
 
     def start(self, config, path_id):
         """Pin saved settings only after START HOST was acknowledged."""
@@ -210,5 +220,11 @@ class NavigationRunner:
             if self.phase in ('inward','travel','arrival','leave','done') or (self.phase in ('turn','correct') and previous_phase!='inward'):
                 self.group_started=now
             self.op+=1
+            # The queue stores configured map angles; only the wire value
+            # carries the vision-derived bias, so telemetry stays comparable.
+            # With no bias the configured angle is sent verbatim (180 stays
+            # 180, not -180) so existing telemetry and tests are unchanged.
+            angle = heading if not self.bias_cd else wrap(heading+self.bias_cd)
             self.send('NAV EXEC {} {} {} {} {} {} {} {}'.format(
-                self.path_id,self.op,self.kind,x,y,heading,self.config['sps'],self.config['accel']),'accept')
+                self.path_id,self.op,self.kind,x,y,angle,
+                self.config['sps'],self.config['accel']),'accept')

@@ -286,22 +286,41 @@ class Mission:
         vectors = {'RIGHT':right, 'LEFT':tuple(-v for v in right),
                    'FWD':forward, 'BACK':tuple(-v for v in forward)}
         direction = max(vectors, key=lambda k:sum(a*b for a,b in zip(vectors[k],outward)))
-        exit_xy = [round_pulse(x+right[0]*action['right_steps']),round_pulse(y+right[1]*action['right_steps'])]
-        if not on_grid(exit_xy,grid):
-            raise ValueError('第 {} 段右移后的坐标 {} 不在地图通道内，请调整站点姿态或右移脉冲。'.format(leg,exit_xy))
+        # 退出点就是到站点本身：视觉阶段实际移动了多少由板端里程积分给出，
+        # 上位机按实测差回位后再声明坐标，不再用固定右移脉冲去预测。
+        exit_xy = [x, y]
+        self.ring_return_attempts = 0
         return dict(outward_steps=action['outward_steps'],right_steps=action['right_steps'],
                     outward_direction=direction,reference=[x,y],exit=exit_xy,
                     arrival_heading_deg=angle_deg)
 
     def ring_tick(self, now):
-        """Coordinate the real camera executor, acknowledged exit and remaining route."""
+        """Coordinate the real camera executor, measured return and remaining route."""
         c = self.console
         if now-self.stage_started > 360:
             self.fail('圆列子任务超时。'); return
         if self.state == 'ring_start':
-            try:c.camera_alignment.start(task_options=self.ring_options)
-            except ValueError as error:self.fail(str(error));return
-            self.state='ring_vision';return
+            # Declare the arrival pose BEFORE any vision motion, so the board's
+            # own odometry integrates the whole calibration phase and the return
+            # below is measured rather than predicted.
+            self.state='ring_pose'
+            self.send(self.ring_pose_command('POSE',self.ring_options['reference']),'ring_pose')
+            return
+        if self.state == 'ring_pose':
+            if now-self.last_query >= .25:
+                self.last_query=now
+                self.send('NAV STAT','ring_pose_check')
+            return
+        if self.state == 'ring_fix':
+            if now-self.last_query >= .25:
+                self.last_query=now
+                self.send('NAV STAT','ring_return')
+            return
+        if self.state == 'ring_return_move':
+            if now-self.last_query >= .1:
+                self.last_query=now
+                self.send('CHASSIS STAT','ring_return_status')
+            return
         if self.state == 'ring_vision':
             a = c.camera_alignment
             if a.state in ('fault','stopped'):
@@ -311,7 +330,7 @@ class Mission:
                 if not seq or [r['digit'] for r in seq.recognized] != [1,2,3,2] or not all(r['aligned'] for r in seq.recognized):
                     self.fail('圆列子任务尚未完成 1→2→3→2 定位。'); return
                 self.state='ring_fix'
-                self.send(self.ring_pose_command('POSE',self.ring_options['reference']),'ring_fix')
+                self.last_query=0.
                 return
         elif self.state == 'ring_exit':
             if now-self.last_query >= .1:
@@ -332,6 +351,57 @@ class Mission:
         """Commit only the accepted finite exit endpoint, then allow replanning."""
         self.state='ring_end'
         self.send(self.ring_pose_command('RESTORE',self.ring_options['exit']),'ring_end')
+
+    RING_RETURN_TOLERANCE_PULSES = 20
+    RING_HEADING_BIAS_LIMIT_CD = 600
+
+    def ring_return_pose(self, f):
+        """Drive back to the arrival point from the board's own odometry.
+
+        The vision phase moves the car, so the exit cannot be predicted from a
+        fixed right-shift. Everything after the early POSE is integrated by the
+        board; this loop removes the measured difference with body-frame axis
+        moves, then declares the arrival XY.
+        """
+        if (f.get('state')!='suspended' or f.get('ready')!='1' or
+                f.get('path_id')!=self.path_id or f.get('imu')!='1'):
+            self.fail('视觉定位后的导航交接状态无效。');return
+        x,y=int(f['x']),int(f['y'])
+        dx,dy=self.ring_options['reference'][0]-x,self.ring_options['reference'][1]-y
+        if max(abs(dx),abs(dy))<=self.RING_RETURN_TOLERANCE_PULSES:
+            self.ring_heading_bias(f);return
+        self.ring_return_attempts=getattr(self,'ring_return_attempts',0)+1
+        if self.ring_return_attempts>8:
+            self.fail('视觉任务后的回位脉冲积分未收敛。');return
+        angle=math.radians(int(f['heading_cd'])/100)
+        forward=round(dx*math.sin(angle)+dy*math.cos(angle))
+        right=round(dx*math.cos(angle)-dy*math.sin(angle))
+        if abs(forward)>=abs(right):
+            direction,steps=('FWD' if forward>0 else 'BACK'),abs(forward)
+        else:
+            direction,steps=('RIGHT' if right>0 else 'LEFT'),abs(right)
+        if not steps:
+            self.ring_heading_bias(f);return
+        cfg=self.console.camera_alignment.config
+        self.state='ring_return_accept'
+        self.last_query=0.
+        self.send('CHASSIS STRAIGHT {} {} {} {}'.format(
+            direction,steps,cfg['ring_sequence']['sps'],cfg['tracking']['accel']),'ring_return_accept')
+
+    def ring_heading_bias(self, f):
+        """Adopt the vision-verified heading for every later turn target.
+
+        The map frame and the board's yaw origin are untouched; only the angle
+        handed to each NAV EXEC carries the bias, so later legs stop drifting
+        with the accumulated yaw error.
+        """
+        expected=round(self.ring_options['arrival_heading_deg']*100)
+        delta=(int(f['heading_cd'])-expected+18000)%36000-18000
+        if abs(delta)>self.RING_HEADING_BIAS_LIMIT_CD:
+            self.fail('视觉平行后的航向偏差 {:.2f}° 超过 ±{:.0f}°，请检查圆列布局与到达姿态。'.format(
+                delta/100,self.RING_HEADING_BIAS_LIMIT_CD/100));return
+        self.console.navigator.set_heading_bias(delta)
+        self.ring_restore()
 
     def target(self,action):
         """Resolve a configured QR character mapping, never infer color rules."""
@@ -503,44 +573,26 @@ The plan survives closing the QR process and stays fixed until the next run.
             self.qr_search.reply(purpose, f); return
         if purpose=='ring_begin':
             self.state='ring_start';self.send('NAV STAT','query');return
-        if purpose=='ring_fix':
-            self.send('NAV STAT','ring_reference');return
-        if purpose=='ring_reference':
-            # Visual row alignment must not silently redefine map north. Check
-            # its real map heading before starting a nominal lane-axis exit.
-            if f.get('state')!='suspended' or f.get('ready')!='1' or f.get('path_id')!=self.path_id or f.get('imu')!='1':
-                self.fail('视觉定位后的导航交接状态无效。');return
-            steps=self.ring_options['right_steps']
-            if not steps:
-                self.ring_restore()
-            else:
-                angle=math.radians(int(f['heading_cd'])/100)
-                x,y=self.ring_options['reference']
-                predicted=(x+steps*math.cos(angle),y-steps*math.sin(angle))
-                if max(abs(a-b) for a,b in zip(predicted,self.ring_options['exit'])) > 2+steps*.02:
-                    self.fail('圆列方向与地图右移方向不一致；请检查站点到达姿态和圆列布局，地图航向未重置。');return
-                self.state='ring_exit_accept'
-                cfg=self.console.camera_alignment.config
-                self.send('CHASSIS STRAIGHT RIGHT {} {} {}'.format(steps,cfg['ring_sequence']['sps'],cfg['tracking']['accel']),'ring_exit_accept')
-            return
-        if purpose=='ring_exit_accept':
+        if purpose=='ring_pose_check':
+            if (f.get('state')!='suspended' or f.get('ready')!='1' or
+                    f.get('path_id')!=self.path_id or f.get('imu')!='1'):
+                self.fail('视觉定位前的导航交接状态无效。');return
+            try:self.console.camera_alignment.start(task_options=self.ring_options)
+            except ValueError as error:self.fail(str(error));return
+            self.state='ring_vision';return
+        if purpose=='ring_return':
+            self.ring_return_pose(f);return
+        if purpose=='ring_return_accept':
             self.ring_move_id=f.get('move_id')
-            if self.ring_move_id is None:self.fail('右移缺少运动编号。');return
-            self.state='ring_exit';return
-        if purpose=='ring_exit_status':
+            if self.ring_move_id is None:self.fail('回位移动缺少运动编号。');return
+            self.state='ring_return_move';self.last_query=0.;return
+        if purpose=='ring_return_status':
             if f.get('move_id') != self.ring_move_id or f.get('fault','none') != 'none' or f.get('state') in ('stopped','fault'):
-                self.fail('右移运动被中断或发生故障。');return
+                self.fail('回位移动被中断或发生故障。');return
             if f.get('state')=='done' and f.get('active')=='0':
-                if f.get('remaining')!='0':self.fail('右移未完成全部脉冲。');return
-                self.send('NAV STAT','ring_exit_pose')
+                if f.get('remaining')!='0':self.fail('回位移动未走完全部脉冲。');return
+                self.last_query=0.;self.send('NAV STAT','ring_return')
             return
-        if purpose=='ring_exit_pose':
-            if f.get('state')!='suspended' or f.get('ready')!='1' or f.get('path_id')!=self.path_id:
-                self.fail('右移完成后的导航交接状态无效。');return
-            actual=(int(f['x']),int(f['y']))
-            if max(abs(a-b) for a,b in zip(actual,self.ring_options['exit'])) > 2+self.ring_options['right_steps']*.02:
-                self.fail('右移脉冲积分与地图退出坐标不一致，停止续航。');return
-            self.ring_restore();return
         if purpose=='ring_end':
             self.state='ring_replan';self.send('NAV STAT','ring_replan');return
         if purpose=='ring_replan':
