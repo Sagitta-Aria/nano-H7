@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-22",
+  "feature": "NX panel one-button launcher for the two-round material flow with an O/X start choice",
+  "scope": "Host only. Firmware untouched (0.2.29).",
+  "deploy": {
+    "transport": "ssh nx-bird (192.168.1.196)",
+    "root": "/home/a/h743",
+    "files": [
+      "host/launcher.py",
+      "host/competition.py",
+      "host/webserver.py",
+      "tests/test_launcher.py",
+      "tools/h743-launcher.service",
+      "docs/LAUNCHER.md"
+    ],
+    "backup": "/home/a/h743/backups/launcher_20261022_1414/ (host, docs, tests, tools; 323 files)",
+    "hash_verification": "all six files match local SHA-256",
+    "remote_tests": {
+      "command": "python3 -m unittest tests.test_launcher tests.test_competition -q",
+      "run": 16,
+      "passed": 16
+    },
+    "units": {
+      "h743-web.service": "active, MainPID 4273",
+      "h743-launcher.service": "enabled + active, Environment DISPLAY=:0, Restart=always"
+    }
+  },
+  "behaviour": {
+    "boot": "the panel starts full-screen 800x480 as a user systemd unit and stays topmost while idle",
+    "start_station": "POST /api/competition/start accepts start_station O/X, resolved by name, applied to this run only",
+    "session": "the panel registers /api/events with its own token and heartbeats every 1.5 s; a browser page can still claim control while idle and the panel re-claims on the next press",
+    "layering": "while running the panel drops topmost and lowers itself so the camera preview and the task-code card stay visible",
+    "stop": "the stop button sends STOP then the task stop action through the same session"
+  },
+  "verification": {
+    "screen": "gnome-screenshot on DISPLAY=:0 shows the full-screen panel with 'H743 已连接 · 未使能 · 固件 0.2.29'",
+    "safe_start_probe": "join -> claim -> start X returned '巡航配置里没有 X 点…'; competition stayed idle, armed false, seven axes stationary",
+    "x_button": "greyed out because the box configuration currently has only O/A/B/C/D"
+  },
+  "not_verified": [
+    "No real launch was executed; pressing 开始 with a valid configuration has not been run on the vehicle",
+    "Camera preview / task-code card layering during a real run is untested (only the idle layering was observed)"
+  ],
+  "hardware_executed": false,
+  "flashed": false
+}

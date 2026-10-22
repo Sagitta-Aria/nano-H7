@@ -14,7 +14,9 @@ import json
 import sys
 import threading
 import time
+import urllib.error
 import urllib.request
+import uuid
 
 import tkinter as tk
 from tkinter import font as tkfont
@@ -69,12 +71,22 @@ MATERIAL_PHASES = {
 
 
 def api(base, path, payload=None, timeout=4.):
-    """One request against the local console; raises on transport errors."""
+    """One request against the local console; raises on transport errors.
+
+    A refused mutation (4xx) returns the console's JSON body instead of raising
+    so the panel can show the reason, for example a second controller.
+    """
     data = None if payload is None else json.dumps(payload).encode('utf-8')
     request = urllib.request.Request(base + path, data=data,
                                      headers={'Content-Type': 'application/json'})
-    with urllib.request.urlopen(request, timeout=timeout) as response:
-        return json.loads(response.read().decode('utf-8'))
+    try:
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            return json.loads(response.read().decode('utf-8'))
+    except urllib.error.HTTPError as error:
+        try:
+            return json.loads(error.read().decode('utf-8'))
+        except Exception:
+            return {'ok': False, 'error': '上位机返回 {}'.format(error.code)}
 
 
 def station_name(state):
@@ -153,6 +165,7 @@ class Launcher:
         self.state = {}
         self.message = ''
         self._busy = None
+        self.token = uuid.uuid4().hex
         self.stop = threading.Event()
         self.root = tk.Tk()
         self.root.title('两轮搬运 · 一键启动')
@@ -164,7 +177,9 @@ class Launcher:
         self.root.attributes('-topmost', True)
         self.family = self._family()
         self._build()
+        self.stream = None
         threading.Thread(target=self._poll, name='launcher-poll', daemon=True).start()
+        threading.Thread(target=self._session, name='launcher-session', daemon=True).start()
         self.root.after(400, self._tick)
         if snapshot:
             self.root.after(1500, lambda: self._snapshot(snapshot))
@@ -252,7 +267,7 @@ class Launcher:
 
         def work():
             try:
-                result = api(self.url, '/api/competition/start', payload)
+                result = self._mutate('/api/competition/start', payload)
                 self.message = result.get('detail') or result.get('error') or ''
             except Exception as error:
                 self.message = '启动失败：' + str(error)
@@ -267,15 +282,53 @@ class Launcher:
 
         def work():
             try:
-                api(self.url, '/api/command', {'body': 'STOP'})
-                api(self.url, '/api/mission/action', {'action': 'stop'})
-                self.message = '已发送停止。'
+                result = self._mutate('/api/command', {'body': 'STOP'})
+                if not result.get('ok'):
+                    self.message = result.get('error') or '停止被拒绝。'
+                else:
+                    self._mutate('/api/mission/action', {'action': 'stop'})
+                    self.message = '已发送停止。'
             except Exception as error:
                 self.message = '停止请求失败：' + str(error)
             self._refresh()
         threading.Thread(target=work, name='launcher-stop', daemon=True).start()
 
     # ---- polling ---------------------------------------------------------
+    def _session(self):
+        """Join the console as a page and keep its control lease fresh.
+
+        The panel is the standing operator interface, so it registers once and
+        renews the lease; a browser debug page still can take control while the
+        robot is idle, and the panel re-claims on its next press.
+        """
+        while not self.stop.is_set():
+            try:
+                if self.stream is None:
+                    self.stream = urllib.request.urlopen(
+                        self.url + '/api/events?token=' + self.token, timeout=8.)
+                    api(self.url, '/api/session/claim', {'token': self.token}, timeout=4.)
+                else:
+                    api(self.url, '/api/session/heartbeat', {'token': self.token}, timeout=2.)
+            except Exception:
+                try:
+                    if self.stream is not None:
+                        self.stream.close()
+                except Exception:
+                    pass
+                self.stream = None
+            time.sleep(1.5)
+
+    def _mutate(self, path, payload):
+        """Send a mutation as the panel session, reclaiming control once if needed."""
+        data = dict(payload, token=self.token)
+        result = api(self.url, path, data)
+        if not result.get('ok') and '正在控制' in (result.get('error') or ''):
+            claim = api(self.url, '/api/session/claim', {'token': self.token})
+            if not claim.get('ok'):
+                return claim
+            result = api(self.url, path, data)
+        return result
+
     def _poll(self):
         while not self.stop.is_set():
             try:

@@ -2,6 +2,21 @@
 
 本页记录把上位机通信层搬到 Jetson 盒子后的状态、验证结果和待办。
 
+## 2026-10-22：NX 面板一键启动部署
+
+NX 上电整屏直接进入两轮搬运启动页，可选 O/X 起点，一个按钮跑完整流程，不再需要浏览器或调试页。
+
+- 新增 `host/launcher.py`（800×480 Tk 全屏启动页：O/X 选择、开始/停止、连接与阶段状态）、`tools/h743-launcher.service`（用户级 systemd，`DISPLAY=:0`，`Restart=always`）、`docs/LAUNCHER.md`、`tests/test_launcher.py`。
+- `/api/competition/start` 新增 `start_station`，按名字解析 O/X，只作用于本次运行，不改写 `navigation.json` 的 `start_station`。
+- 会话：启动页用独立 token 打开 `/api/events` 注册并每 1.5 s 心跳，持有控制权；浏览器调试页在空闲时仍可“接管控制”，面板下次按键会重新 claim。运行期间启动页取消置顶并下沉，把最前层让给摄像头预览与任务码卡，结束/故障后自动回到最前。
+- 备份 `~/h743/backups/launcher_20261022_1414/`（host、docs、tests、tools，323 个文件）。
+- 部署 6 个文件（`host/launcher.py`、`host/competition.py`、`host/webserver.py`、`tests/test_launcher.py`、`tools/h743-launcher.service`、`docs/LAUNCHER.md`），SHA-256 与本地一致，远端 `py_compile` 通过；远端 `test_launcher` + `test_competition` 共 16 项通过。
+- 服务：`h743-web.service` 重启 PID 4273；`h743-launcher.service` enabled + active，实屏截图确认整屏启动页，右上角显示“H743 已连接 · 未使能 · 固件 0.2.29”。
+- 安全验证：按面板同一调用链（join → claim → start X）返回“巡航配置里没有 X 点，请先在调试页添加并保存”，`competition` 仍为 idle、未使能、七轴静止；未启动实车任务。
+- 待办：盒子上巡航配置目前只有 O/A/B/C/D，没有 X 站点，所以启动页的 X 按钮灰显；需要在调试页“添加 X 点”再保存（或按同一接口添加）后才会可选。
+
+验证记录见 [validation_nx_launcher_20261022.json](validation_nx_launcher_20261022.json)。
+
 ## 2026-10-22：C/D 任务后位姿校准部署
 
 通过 `nx-bird` 定向更新 7 个文件：`host/mission.py`、`host/material_flow.py`、`host/navigation_runner.py`、`host/webapp.py`、`docs/MATERIAL_FLOW.md`、`tests/test_ring_task.py`、`tests/test_material_flow.py`。C/D 视觉任务结束后的位置与航向都按视觉实测重新校准。
