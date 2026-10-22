@@ -1,9 +1,6 @@
 """Center route preferences at the planner and NX action scheduling boundary."""
 import copy
-import json
-from pathlib import Path
-import shutil
-import subprocess
+import itertools
 import unittest
 from types import SimpleNamespace
 
@@ -13,30 +10,45 @@ from host.navigation_runner import NavigationRunner
 
 
 class CenterNavigationTests(unittest.TestCase):
-    @unittest.skipUnless(shutil.which('node'), 'Node.js is required for preview parity')
-    def test_browser_preview_matches_nx_on_shifted_and_unequal_grids(self):
-        """Exercise the actual JS preview, including starts between crossings."""
-        cases = []
+    def test_shifted_and_unequal_grids_keep_lane_invariants(self):
+        """Every planned route stays on lanes, moves on one axis, ends at the goal.
+
+        The browser-side preview planner (`planGridRoute` in app.js) was removed
+        together with the draft map, so the旧的 JS/Python 逐例对照 no longer has a
+        counterpart. The Python planner is still the only one that produces the
+        uploaded route, so its lane invariants are asserted directly over the
+        same shifted, unequal and negative grids, including starts between
+        crossings.
+        """
         for grid in [dict(x=[0, 14, 28], y=[0, 14, 28]),
                      dict(x=[-30, -10, 50], y=[-40, 20, 60]),
                      dict(x=[0, 1, 80], y=[-100, -1, 0])]:
             points = [(x, y) for x in grid['x'] for y in grid['y']]
             points += [(grid['x'][0], (grid['y'][0]+grid['y'][1])//2),
                        ((grid['x'][1]+grid['x'][2])//2, grid['y'][2])]
-            cases.extend(dict(start=start, goal=goal, grid=grid) for start in points for goal in points)
-        script = """
-const fs = require('node:fs'), vm = require('node:vm');
-const source = fs.readFileSync('host/static/app.js', 'utf8');
-const context = vm.createContext({crypto: require('node:crypto').webcrypto, structuredClone});
-vm.runInContext(source.slice(0, source.indexOf('applyTheme(document.documentElement')).replace(/^import .*;\\r?$/gm, ''), context);
-context.cases = JSON.parse(fs.readFileSync(0, 'utf8'));
-process.stdout.write(JSON.stringify(vm.runInContext('cases.map(c => planGridRoute(c.start,c.goal,c.grid))', context)));
-"""
-        result = subprocess.run(['node', '-e', script], input=json.dumps(cases),
-                                text=True, capture_output=True, check=True,
-                                cwd=Path(__file__).resolve().parents[1])
-        expected = [[list(p) for p in plan_route(**case)] for case in cases]
-        self.assertEqual(json.loads(result.stdout), expected)
+            for start, goal in itertools.product(points, points):
+                with self.subTest(grid=grid, start=start, goal=goal):
+                    route = plan_route(start, goal, grid)
+                    if start == goal:
+                        self.assertEqual(route, [])
+                        continue
+                    self.assertEqual(tuple(route[-1]), goal)
+                    previous = tuple(start)
+                    for step in route:
+                        self.assertNotEqual(tuple(step), previous)
+                        changed = sum(1 for a, b in zip(previous, step) if a != b)
+                        self.assertEqual(changed, 1, '通道段只能是横或竖')
+                        if step[0] != previous[0]:
+                            # 横移段贴着一条横通道，纵坐标保持不变
+                            self.assertEqual(step[1], previous[1])
+                            self.assertIn(previous[1], grid['y'])
+                        else:
+                            # 纵移段贴着一条竖通道，横坐标保持不变
+                            self.assertEqual(step[0], previous[0])
+                            self.assertIn(previous[0], grid['x'])
+                        self.assertTrue(grid['x'][0] <= step[0] <= grid['x'][2])
+                        self.assertTrue(grid['y'][0] <= step[1] <= grid['y'][2])
+                        previous = tuple(step)
 
     def test_equal_distance_routes_turn_at_center_in_both_directions(self):
         grid = dict(x=[0, 14, 28], y=[0, 14, 28])
